@@ -28,3 +28,21 @@ respective docs.
 - [Next.js](https://nextjs.org)
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
+
+### Changelog
+
+### Version 1.0.1
+
+- Added main content in user's UI
+- Added components
+- Added notication alert
+
+### Upcoming Changes
+
+- Make it functional
+- Add more content
+
+### Version 1.0.0
+
+- Created Admin's UI
+- Created navbar and sidebar of User's UI

@@ -1,48 +1,65 @@
-import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
-import Link from 'next/link';
-
-import { api } from '~/utils/api';
+import NavBar from '../components/navigation-bar';
+import OrganizationAvatar from '../components/organization-avatar';
+import SideBarMenu from '../components/side-bar-menu';
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: 'from tRPC' });
-
   return (
     <>
       <Head>
         <title>SD Services MIS</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            SD <span className="text-[hsl(280,100%,70%)]">Services</span> MIS
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://nextjs.org/docs/getting-started/project-structure"
-              target="_blank"
+
+      {/* NAVIGATION BAR */}
+      <NavBar />
+
+      <main className="flex">
+        {/* SIDE BAR MENU */}
+        <div
+          id="side-bar"
+          className="sticky top-20 my-4 ml-3 h-[87vh] w-16 bg-[#2A9134] p-1 md:w-16"
+        >
+          <SideBarMenu />
+        </div>
+        <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
+          <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
+
+          {/* Student Govern Body */}
+          <div id="student-govern-body">
+            <h1 className="mb-1 mt-[-10px] text-lg font-bold md:text-xl lg:text-2xl">
+              Student Governing Body
+            </h1>
+            <div
+              id="student-govern"
+              className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7"
             >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://nextjs.org/docs"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">Learn more about Next.js, and how to deploy it.</div>
-            </Link>
+              <OrganizationAvatar />
+            </div>
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : 'Loading tRPC query...'}
-            </p>
-            <AuthShowcase />
+
+          <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
+          {/* Academic Organization */}
+          <h1 className="mb-1 mt-[-10px] text-lg font-bold md:text-xl lg:text-2xl">
+            Academic Organizations
+          </h1>
+          <div
+            id="acad-orgs"
+            className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7"
+          >
+            <OrganizationAvatar />
+          </div>
+
+          <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
+          {/* Academic Organization */}
+          <h1 className="mb-1 mt-[-10px] text-lg font-bold md:text-xl lg:text-2xl">
+            Non-Academic Organizations
+          </h1>
+          <div
+            id="non-acad-orgs"
+            className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7"
+          >
+            <OrganizationAvatar />
           </div>
         </div>
       </main>
@@ -50,26 +67,26 @@ export default function Home() {
   );
 }
 
-function AuthShowcase() {
-  const { data: sessionData } = useSession();
+// function AuthShowcase() {
+//   const { data: sessionData } = useSession();
 
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  );
+//   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
+//     undefined, // no input
+//     { enabled: sessionData?.user !== undefined }
+//   );
 
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? 'Sign out' : 'Sign in'}
-      </button>
-    </div>
-  );
-}
+//   return (
+//     <div className="flex flex-col items-center justify-center gap-4">
+//       <p className="text-center text-2xl text-white">
+//         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+//         {secretMessage && <span> - {secretMessage}</span>}
+//       </p>
+//       <button
+//         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+//         onClick={sessionData ? () => void signOut() : () => void signIn()}
+//       >
+//         {sessionData ? 'Sign out' : 'Sign in'}
+//       </button>
+//     </div>
+//   );
+// }
