@@ -14,9 +14,13 @@ export default function NavBar() {
               </div>
             </div>
           </div>
-          <div id="notification">
-            <img className="h-10 md:h-12" src="notification_icon.svg" alt="Notification Bell" />
-          </div>
+          <button id="notification">
+            <img
+              className="h-10 text-black md:h-12"
+              src="notification_icon.svg"
+              alt="Notification Bell"
+            />
+          </button>
         </div>
       </nav>
     </>

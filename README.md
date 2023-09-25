@@ -31,12 +31,18 @@ respective docs.
 
 ### Changelog
 
-### Version 1.0.0
-- Created Admin's UI
-- Created navbar and sidebar of User's UI
+### Version 1.0.1
+
+- Added main content in user's UI
+- Added components
+- Added notication alert
 
 ### Upcoming Changes
-- Add notication alert
-- Complete User's UI
+
 - Make it functional
 - Add more content
+
+### Version 1.0.0
+
+- Created Admin's UI
+- Created navbar and sidebar of User's UI

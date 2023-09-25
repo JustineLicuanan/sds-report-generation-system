@@ -1,50 +1,26 @@
 import Head from 'next/head';
-
 import NavBar from '../components/navigation-bar';
+import OrganizationAvatar from '../components/organization-avatar';
+import SideBarMenu from '../components/side-bar-menu';
 
 export default function Home() {
-  const data = [
-    { id: 1, name: 'Item 1', imageLink: '' },
-    { id: 2, name: 'Item 2', imageLink: '' },
-    { id: 3, name: 'Item 3', imageLink: '' },
-    { id: 4, name: 'Item 3', imageLink: '' },
-    { id: 5, name: 'Item 3', imageLink: '' },
-    { id: 6, name: 'Item 3', imageLink: '' },
-    { id: 7, name: 'Item 3', imageLink: '' },
-    { id: 8, name: 'Item 3', imageLink: '' },
-  ];
-
   return (
     <>
       <Head>
         <title>SD Services MIS</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
       {/* NAVIGATION BAR */}
       <NavBar />
 
       <main className="flex">
+        {/* SIDE BAR MENU */}
         <div
           id="side-bar"
-          className="sticky top-20 my-4 ml-3 h-[87vh] w-16 bg-[#2A9134] p-2 md:w-20 md:p-3 "
+          className="sticky top-20 my-4 ml-3 h-[87vh] w-16 bg-[#2A9134] p-1 md:w-16"
         >
-          <div
-            id="child"
-            className=" mb-2 h-12 w-12 rounded-md bg-[#D9D9D9] md:mb-3  md:h-14 md:w-14"
-          ></div>
-          <div
-            id="child"
-            className=" mb-2 h-12 w-12 rounded-md bg-[#D9D9D9] md:mb-3  md:h-14 md:w-14"
-          ></div>
-          <div
-            id="child"
-            className=" mb-2 h-12 w-12 rounded-md bg-[#D9D9D9] md:mb-3  md:h-14 md:w-14"
-          ></div>
-          <div
-            id="child"
-            className=" mb-2 h-12 w-12 rounded-md bg-[#D9D9D9] md:mb-3  md:h-14 md:w-14"
-          ></div>
+          <SideBarMenu />
         </div>
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
           <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
@@ -58,12 +34,7 @@ export default function Home() {
               id="student-govern"
               className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7"
             >
-              {data.map((item) => (
-                <div
-                  key={item.id}
-                  className="mb-2 me-1 h-20 w-20 rounded-full bg-[#2A9134] md:h-24 md:w-24 lg:h-28 lg:w-28"
-                ></div>
-              ))}
+              <OrganizationAvatar />
             </div>
           </div>
 
@@ -76,12 +47,7 @@ export default function Home() {
             id="acad-orgs"
             className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7"
           >
-            {data.map((item) => (
-              <div
-                key={item.id}
-                className="mb-2 me-1 h-20 w-20 rounded-full bg-[#2A9134] md:h-24 md:w-24 lg:h-28 lg:w-28"
-              ></div>
-            ))}
+            <OrganizationAvatar />
           </div>
 
           <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
@@ -93,12 +59,7 @@ export default function Home() {
             id="non-acad-orgs"
             className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7"
           >
-            {data.map((item) => (
-              <div
-                key={item.id}
-                className="mb-2 me-1 h-20 w-20 rounded-full bg-[#2A9134] md:h-24 md:w-24 lg:h-28 lg:w-28"
-              ></div>
-            ))}
+            <OrganizationAvatar />
           </div>
         </div>
       </main>
