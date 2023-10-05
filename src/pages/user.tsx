@@ -18,7 +18,7 @@ export default function User() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <NavBar showNotificationButton={true} />
 
       <main className="">
         <div id="container" className="flex">

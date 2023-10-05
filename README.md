@@ -31,16 +31,20 @@ respective docs.
 
 ### Changelog
 
-### Version 1.0.1
+### Version 1.0.2
 
-- Added main content in user's UI
-- Added components
-- Added notication alert
+- Added sign in with Google
 
 ### Upcoming Changes
 
 - Make it functional
 - Add more content
+
+### Version 1.0.1
+
+- Added main content in user's UI
+- Added components
+- Added notification alert
 
 ### Version 1.0.0
 

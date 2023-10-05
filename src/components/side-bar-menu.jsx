@@ -35,7 +35,7 @@ export function Subject({ onButtonClick }) {
       {subjects.map((subject) => (
         <button
           key={subject.id}
-          className="relative mb-2 h-12 w-full rounded-md bg-[#D9D9D9] p-1 hover:bg-[#f7b205] md:h-12"
+          className="relative mb-2 h-12 w-full rounded-md bg-[#D9D9D9] p-1 hover:bg-[#f7b205] focus:bg-[#f7b205] md:h-12"
           onClick={() => handleButtonClick(subject.subject, subject.date)}
         >
           <h1 className=" text-left text-sm font-semibold md:text-base">{subject.subject}</h1>
