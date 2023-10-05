@@ -33,6 +33,8 @@ respective docs.
 
 ### Version 1.0.2
 
+- Updated organization and side bar component
+
 ### Upcoming Changes
 
 - Make it functional
