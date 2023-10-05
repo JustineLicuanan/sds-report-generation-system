@@ -1,17 +1,23 @@
 export default function SideBarMenu() {
   const sidebarMenu = [
-    { id: 1, name: 'Item 1' },
-    { id: 2, name: 'Item 2' },
-    { id: 3, name: 'Item 3' },
-    { id: 4, name: 'Item 4' },
+    { id: 1, name: 'Home', imageLink: 'home_icon.svg' },
+    { id: 2, name: 'Log', imageLink: 'log_icon.svg' },
+    { id: 3, name: 'Create', imageLink: 'create_icon.svg' },
   ];
   return (
     <>
       {sidebarMenu.map((item) => (
-        <button
-          key={item.id}
-          className=" m-1 mb-2 h-12 w-12 rounded-md bg-[#D9D9D9]  hover:bg-[#f7b205] md:mx-1"
-        ></button>
+        <>
+          <button
+            key={item.id}
+            className="group relative   m-1 mb-2 flex h-12 w-12  items-center justify-center rounded-md bg-[#D9D9D9] hover:bg-[#f7b205] md:mx-1"
+          >
+            <img src={item.imageLink} alt={item.name} className="h-12" />
+            <div className=" absolute left-16  hidden rounded-md bg-[#D9D9D9] px-2 py-1 text-left text-xl font-medium group-hover:block">
+              {item.name}
+            </div>
+          </button>
+        </>
       ))}
     </>
   );
