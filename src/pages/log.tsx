@@ -7,18 +7,19 @@ import SideBarMenu from '~/components/side-bar-menu';
 export default function Log() {
   const [searchInput, setSearchInput] = useState('');
 
+// To be able to type in search bar
   const handleChange = (e) => {
     setSearchInput(e.target.value);
   };
 
-  function myFunction() {
-    // Declare variables
-    var i, txtValue;
+  // Search Bar query
+  function searchBar() {
+    let i, txtValue;
     const filter = searchInput.toUpperCase();
     const table = document.getElementById('myTable');
     const tr = table.getElementsByTagName('tr');
 
-    // Loop through all table rows, and hide those who don't match the search query
+    // search all it matches
     for (i = 0; i < tr.length; i++) {
       const td = tr[i].getElementsByTagName('td')[1];
       if (td) {
@@ -66,7 +67,7 @@ export default function Log() {
                   placeholder="Search organization"
                   className="h-7 border-[1px] border-[#2A9134] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
                   onChange={handleChange}
-                  onKeyUp={myFunction}
+                  onKeyUp={searchBar}
                   value={searchInput}
                 />
               </div>
