@@ -34,6 +34,8 @@ respective docs.
 ### Version 1.0.2
 
 - Added sign in with Google
+- Updated organization and side bar component
+
 
 ### Upcoming Changes
 
@@ -44,7 +46,8 @@ respective docs.
 
 - Added main content in user's UI
 - Added components
-- Added notification alert
+- Added notication alert
+
 
 ### Version 1.0.0
 
