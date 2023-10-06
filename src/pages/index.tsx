@@ -12,7 +12,7 @@ export default function Home() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <NavBar showNotificationButton={true} />
 
       <main className="flex">
         {/* SIDE BAR MENU */}
