@@ -24,19 +24,14 @@ export default function User() {
         <div id="container" className="flex">
           {/* SIDE BAR MENU */}
           <aside>
-            <div
-              id="side-bar"
-              className="sticky top-20 my-4 ml-3 grid h-32 w-32 grid-cols-2 bg-[#2A9134] p-1 md:h-16 md:w-60 md:grid-cols-4 "
-            >
-              <SideBarMenu />
-            </div>
+            <SideBarMenu />
 
             {/* SIDE BAR SUBJECTS */}
             <div
               id="side-bar"
               className="sticky top-20 my-4 ml-3 h-[67vh] w-32 bg-[#2A9134] p-2 md:h-[75vh] md:w-60 md:p-3"
             >
-              <Subject onButtonClick={handleButtonClick} />
+              <Subject />
             </div>
           </aside>
 

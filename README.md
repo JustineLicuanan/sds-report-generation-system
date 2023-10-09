@@ -31,16 +31,23 @@ respective docs.
 
 ### Changelog
 
-### Version 1.0.2
+### Version 1.0.3
 
-- Added sign in with Google
-- Updated organization and side bar component
+- Added a table
+- Added a search and sort by date and pending
+- Search is functional
 
 
 ### Upcoming Changes
 
-- Make it functional
-- Add more content
+- Make sort functional
+- Create Org
+- Edit info
+
+### Version 1.0.2
+
+- Added sign in with Google
+- Updated organization and side bar component
 
 ### Version 1.0.1
 
