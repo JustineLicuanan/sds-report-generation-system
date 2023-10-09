@@ -76,7 +76,7 @@ export default function CreateOrganization() {
             </h1>
             <div className="h-[1px] w-full bg-black "></div>
             <div className="align-center mt-[30px] flex  justify-center px-10">
-              <img src="default-logo.png" alt="Avatar Logo" className="h-[200px] w-[200px]" />
+              <img src="default_logo.png" alt="Avatar Logo" className="h-[200px] w-[200px]" />
             </div>
             <div className="flex justify-center">
               <label

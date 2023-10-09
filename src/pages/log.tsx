@@ -7,7 +7,7 @@ import SideBarMenu from '~/components/side-bar-menu';
 export default function Log() {
   const [searchInput, setSearchInput] = useState('');
 
-// To be able to type in search bar
+  // To be able to type in search bar
   const handleChange = (e) => {
     setSearchInput(e.target.value);
   };
@@ -48,7 +48,7 @@ export default function Log() {
 
         {/* MAIN CONTENT */}
 
-        <div className="mx-3 mt-4 h-[87vh] w-full overflow-hidden">
+        <div className="mx-3 mt-4 h-[87vh] w-full ">
           <div className="mx-auto my-0 h-[87vh] max-w-5xl   rounded-3xl px-5 py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] md:px-9">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Log</h1>
             <div className="my-4 flex flex-col md:my-6 md:flex-row">

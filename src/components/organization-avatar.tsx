@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState } from 'react'; // Import useState
+import { useState } from 'react'
 
 export default function OrganizationAvatar() {
   const [showEditInfo, setShowEditInfo] = useState(false); // Initialize showEditInfo state
