@@ -1,7 +1,7 @@
 export default function NavBar({ showNotificationButton }) {
   return (
     <>
-      <nav className="sticky top-0 ">
+      <nav className="sticky top-0 z-[10] ">
         <div id="nav-container" className="flex justify-between px-3 py-3 md:px-7 md:py-2">
           <div id="titles" className="flex">
             <div id="logo" className="h-10 w-10 rounded-full bg-[#D9D9D9] md:h-12  md:w-12"></div>

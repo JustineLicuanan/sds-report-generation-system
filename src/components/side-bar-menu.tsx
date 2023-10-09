@@ -22,7 +22,7 @@ export default function SideBarMenu() {
             key={item.id}
             id="btn-menu"
             className={`group relative m-1 mb-2 flex h-12 w-12 items-center justify-center rounded-md  hover:bg-[#f7b205] md:mx-1 ${
-              asPath === item.urlLink ? 'bg-yellow-500' : 'bg-[#D9D9D9]' // Check if the current route matches the item's urlLink
+              asPath === item.urlLink ? 'bg-[#f7b205]' : 'bg-[#D9D9D9]' // Check if the current route matches the item's urlLink
             }`}
           >
             <img src={item.imageLink} alt={item.name} className="h-12" />

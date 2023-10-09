@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import CreateOrganization from '~/components/create-organization';
 import NavBar from '../components/navigation-bar';
 import OrganizationAvatar from '../components/organization-avatar';
 import SideBarMenu from '../components/side-bar-menu';
@@ -59,6 +60,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <CreateOrganization />
     </>
   );
 }
