@@ -12,16 +12,12 @@ export default function Home() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <NavBar showNotificationButton={true} />
 
       <main className="flex">
         {/* SIDE BAR MENU */}
-        <div
-          id="side-bar"
-          className="sticky top-20 my-4 ml-3 h-[87vh] w-16 bg-[#2A9134] p-1 md:w-16"
-        >
-          <SideBarMenu />
-        </div>
+
+        <SideBarMenu />
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
           <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
 

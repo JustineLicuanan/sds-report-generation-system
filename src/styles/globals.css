@@ -7,14 +7,14 @@
 *,
 *::before,
 *::after {
-    font-family: 'Rubik', sans-serif;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    font-size: 14px;
+  font-family: 'Rubik', sans-serif;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
 }
 
 nav {
-    background: #2A9134;
-    background: -moz-linear-gradient(left, #2a9134 1%, #3fa34d 53%, #2a9134 100%);
+  background: #2a9134;
+  background: -moz-linear-gradient(left, #2a9134 1%, #3fa34d 53%, #2a9134 100%);
 }

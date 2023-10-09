@@ -1,7 +1,7 @@
-export default function NavBar() {
+export default function NavBar({ showNotificationButton }) {
   return (
     <>
-      <nav className=" sticky top-0 h-16">
+      <nav className="sticky top-0 ">
         <div id="nav-container" className="flex justify-between px-3 py-3 md:px-7 md:py-2">
           <div id="titles" className="flex">
             <div id="logo" className="h-10 w-10 rounded-full bg-[#D9D9D9] md:h-12  md:w-12"></div>
@@ -14,13 +14,15 @@ export default function NavBar() {
               </div>
             </div>
           </div>
-          <button id="notification">
-            <img
-              className="h-10 text-black md:h-12"
-              src="notification_icon.svg"
-              alt="Notification Bell"
-            />
-          </button>
+          {showNotificationButton && (
+            <button id="notification">
+              <img
+                className="h-10 text-black md:h-12"
+                src="notification_icon.svg"
+                alt="Notification Bell"
+              />
+            </button>
+          )}
         </div>
       </nav>
     </>
