@@ -1,15 +1,19 @@
+import { useState } from 'react';
+
 export default function CreateOrganization() {
+  const [showOrgazationName, setOrganizationName] = useState(false);
+
   return (
     <>
       {/* CREATE ORGANIZATION */}
-      <div className=" z-2 fixed left-0 top-0 flex  h-full w-full items-center justify-center  bg-black/[.50]">
+      <div className=" fixed left-0 top-0 z-[3] flex  h-full w-full items-center justify-center  bg-black/[.50]">
         <div className="relative h-[433px] w-[450px] rounded-3xl bg-white shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] ">
           <h1 className="py-3 text-center text-3xl font-bold tracking-tight">
             Create new Organization
           </h1>
           <div className="h-[1px] w-full bg-black "></div>
 
-          <div className="px-10 py-5">
+          <div className={`px-10 py-5  ${showOrgazationName ? 'block' : 'hidden'}`}>
             <label htmlFor="organization-name" className=" text-xl font-medium ">
               Organization Name
             </label>
@@ -56,7 +60,7 @@ export default function CreateOrganization() {
               name="email-address"
               id="email-address"
               className=" mt-1 h-9 border-[1px] border-[#2A9134] px-2  py-1 text-lg outline-none"
-            />{' '}
+            />
             <div className="absolute bottom-0 right-7">
               <button
                 type="button"
@@ -143,9 +147,10 @@ export default function CreateOrganization() {
           </div>
         </div>
       </div>
-
+      <button type="button" className="fixed right-2 top-16 z-[3] text-3xl font-black">
+        X
+      </button>
       {/* CLOSE MODAL */}
-      <div className="absolute right-2 top-16 cursor-pointer text-3xl font-black">X</div>
     </>
   );
 }

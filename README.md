@@ -31,18 +31,37 @@ respective docs.
 
 ### Changelog
 
+### Version 1.1.3
+
+- Added User's User Interface
+- View and delete subjects button for User's UI
+- Added a function to admin's UI
+
+### Upcoming Changes
+
+- Make sort functional
+- Make it more mobile responsive
+- Change the web page link for user and admin in some pages e.g logs.
+- Add a pdf viewer with features (Full screen, download)
+
+### Version 1.1.2
+
+- Added Logs
+
+### Version 1.1.1
+
+- Added edit info
+
+### Version 1.1.0
+
+- Added Create Org modal
+- Added View Org's Request web page
+
 ### Version 1.0.3
 
 - Added a table
 - Added a search and sort by date and pending
 - Search is functional
-
-
-### Upcoming Changes
-
-- Make sort functional
-- Create Org
-- Edit info
 
 ### Version 1.0.2
 
@@ -54,7 +73,6 @@ respective docs.
 - Added main content in user's UI
 - Added components
 - Added notication alert
-
 
 ### Version 1.0.0
 
