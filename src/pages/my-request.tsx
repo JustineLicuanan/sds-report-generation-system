@@ -2,7 +2,7 @@ import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 
-export default function OrganizationRequest() {
+export default function MyRequest() {
   return (
     <>
       <Head>
@@ -19,9 +19,7 @@ export default function OrganizationRequest() {
         {/* MAIN CONTENT */}
         <div className="mx-3 mt-4 flex h-[87vh] w-full">
           <div className="ms-5 h-[87vh] w-3/4  rounded-3xl px-5 py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] md:px-9">
-            <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
-              Organization Name - Category
-            </h1>
+            <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">My Request</h1>
 
             <div className="mt-7 flex justify-between text-xl font-medium">
               <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
@@ -42,7 +40,7 @@ export default function OrganizationRequest() {
             <h2 className=" mb-5 text-center text-2xl font-medium">Comments</h2>
             <div className="flex flex-col px-5">
               <div className="my-1 text-center text-xs font-light">10:50 pm</div>
-              <div className="font-bold">Organization Name</div>
+              <div className="font-bold">Admin</div>
               <div className="w-3/4">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, expedita!
               </div>
@@ -83,13 +81,13 @@ export default function OrganizationRequest() {
             <div className="absolute bottom-4 right-3">
               <button
                 type="button"
-                className="me-2 rounded-md bg-[#DC3545] px-4 py-2 text-lg font-medium"
+                className="me-2 rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium"
               >
-                Reject
+                Edit Request
               </button>
               <button
                 type="button"
-                className="rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium"
+                className="hidden rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium"
               >
                 Approve
               </button>

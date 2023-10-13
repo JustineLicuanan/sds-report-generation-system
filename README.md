@@ -31,11 +31,10 @@ respective docs.
 
 ### Changelog
 
-### Version 1.1.3
+### Version 1.1.4
 
-- Added User's User Interface
-- View and delete subjects button for User's UI
-- Added a function to admin's UI
+- Added a Create New Subject Web Page
+- Added a View My Request Web Page
 
 ### Upcoming Changes
 
@@ -43,6 +42,12 @@ respective docs.
 - Make it more mobile responsive
 - Change the web page link for user and admin in some pages e.g logs.
 - Add a pdf viewer with features (Full screen, download)
+
+### Version 1.1.3
+
+- Added User's User Interface
+- View and delete subjects button for User's UI
+- Added a function to admin's UI
 
 ### Version 1.1.2
 
