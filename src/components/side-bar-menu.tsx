@@ -36,7 +36,7 @@ export default function SideBarMenu() {
               asPath === item.urlLink ? 'bg-[#f7b205]' : 'bg-[#D9D9D9]' // Check if the current route matches the item's urlLink
             }`}
           >
-            <img src={item.imageLink} alt={item.name} className="h-12" />
+            <img src={item.imageLink} alt={item.name} className="h-12  hover:scale-105" />
             <div className="absolute left-16 hidden rounded-md bg-[#D9D9D9] px-2 py-1 text-left text-xl font-medium group-hover:block">
               {item.name}
             </div>
