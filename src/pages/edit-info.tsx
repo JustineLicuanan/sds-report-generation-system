@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
@@ -29,10 +30,12 @@ export default function EditInfo() {
             <div className="mx-auto my-0 flex max-w-2xl flex-col ">
               {/* ORGANIZATION'S LOGO */}
               <div className="mb-2 mt-2 flex flex-col items-center">
-                <img
-                  src="default_logo.png"
+                <Image
+                  src="/default_logo.png"
                   alt="Organization's Logo"
-                  className=":w-28 mb-3 me-1  flex h-28 rounded-full bg-[#2A9134]"
+                  width={112}
+                  height={112}
+                  className="mb-3 me-1 flex  h-28 w-28 rounded-full bg-[#2A9134]"
                 />
                 <h2 className="mb-2 text-xl font-bold">Logo</h2>
               </div>

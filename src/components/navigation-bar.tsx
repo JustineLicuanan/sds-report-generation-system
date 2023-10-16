@@ -1,4 +1,4 @@
-export default function NavBar({ showNotificationButton }) {
+export default function NavBar({ showNotificationButton }: { showNotificationButton: boolean }) {
   return (
     <>
       <nav className="sticky top-0 z-[10] h-[8vh] ">

@@ -7,11 +7,6 @@ import SideBarMenu from '~/components/side-bar-menu';
 export default function Log() {
   const [searchInput, setSearchInput] = useState('');
 
-  // To be able to type in search bar
-  const handleChange = (e) => {
-    setSearchInput(e.target.value);
-  };
-
   // Search Bar query
   function searchBar() {
     let i, txtValue;
@@ -31,7 +26,7 @@ export default function Log() {
         }
       }
     }
-  }
+  } //
   return (
     <>
       {/* HEADER */}
@@ -66,7 +61,7 @@ export default function Log() {
                   id="search-item"
                   placeholder="Search organization"
                   className="h-7 border-[1px] border-[#2A9134] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
-                  onChange={handleChange}
+                  onChange={(e) => setSearchInput(e.target.value)}
                   onKeyUp={searchBar}
                   value={searchInput}
                 />

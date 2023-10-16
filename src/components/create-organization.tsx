@@ -123,8 +123,8 @@ export default function CreateOrganization() {
                 name="organization-description"
                 id="org-description"
                 placeholder="Tell me about this organization"
-                cols="30"
-                rows="7"
+                cols={30}
+                rows={7}
                 className="border border-[#2A9134] px-2 py-1 text-lg"
               ></textarea>
             </div>

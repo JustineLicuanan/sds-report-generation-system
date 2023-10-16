@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import NavBar from '../components/navigation-bar';
+import NavBar from '~/components/navigation-bar';
 
 export default function Home() {
   return (

@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import NavBar from '../components/navigation-bar';
-import OrganizationAvatar from '../components/organization-avatar';
-import SideBarMenu from '../components/side-bar-menu';
+import NavBar from '~/components/navigation-bar';
+import OrganizationAvatar from '~/components/organization-avatar';
+import SideBarMenu from '~/components/side-bar-menu';
 
 export default function Home() {
   const organization = [

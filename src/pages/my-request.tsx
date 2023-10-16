@@ -80,7 +80,7 @@ export default function OrganizationRequest() {
               <textarea
                 name="comment"
                 id="comment"
-                rows="2"
+                rows={2}
                 placeholder="Add a comment"
                 className="mt-2 w-full border-[1px] border-[#2A9134] px-3 py-1 text-lg outline-none"
               ></textarea>

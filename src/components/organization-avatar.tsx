@@ -1,6 +1,14 @@
 import Link from 'next/link';
+type Organization = {
+  id: number;
+  name: string;
+  imageLink: string;
+  category: string;
+  email: string;
+  description: string;
+};
 
-export default function OrganizationAvatar({ organization }) {
+export default function OrganizationAvatar({ organization }: { organization: Organization[] }) {
   return (
     <>
       {organization.map((item) => (

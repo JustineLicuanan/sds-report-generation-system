@@ -11,9 +11,9 @@ export default function Subject() {
   ];
 
   const [showOptions, setShowOptions] = useState({});
-  const [activeSubject, setActiveSubject] = useState(null);
+  const [activeSubject, setActiveSubject] = useState<number | null>(null);
 
-  const toggleShowOption = (id) => {
+  const toggleShowOption = (id: number) => {
     if (activeSubject === id) {
       // Clicking the same button again, hide the div
       setActiveSubject(null);
@@ -58,7 +58,7 @@ export default function Subject() {
                 Open
               </Link>
               <Link href="#" className=" rounded bg-slate-300 px-5 py-2 hover:bg-[#f7b205]">
-                Delete
+                Archive
               </Link>
             </div>
           )}

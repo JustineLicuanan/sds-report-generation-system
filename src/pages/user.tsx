@@ -1,7 +1,7 @@
 import Head from 'next/head';
+import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
-import NavBar from '../components/navigation-bar';
-import Subject from '../components/subject';
+import Subject from '~/components/subject';
 
 export default function User() {
   return (

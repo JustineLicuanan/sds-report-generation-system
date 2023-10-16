@@ -7,11 +7,6 @@ import UserLogData from '~/components/user-log-data';
 export default function UserLog() {
   const [searchInput, setSearchInput] = useState('');
 
-  // To be able to type in search bar
-  const handleChange = (e) => {
-    setSearchInput(e.target.value);
-  };
-
   // Search Bar query
   function searchBar() {
     let i, txtValue;
@@ -66,7 +61,7 @@ export default function UserLog() {
                   id="search-item"
                   placeholder="Search subject name"
                   className="h-7 border-[1px] border-[#2A9134] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
-                  onChange={handleChange}
+                  onChange={(e) => setSearchInput(e.target.value)}
                   onKeyUp={searchBar}
                   value={searchInput}
                 />
