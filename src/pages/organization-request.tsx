@@ -1,8 +1,12 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 
 export default function OrganizationRequest() {
+  const router = useRouter();
+  const { organizationName, categoryName } = router.query;
+
   return (
     <>
       <Head>
@@ -17,10 +21,10 @@ export default function OrganizationRequest() {
         <SideBarMenu />
 
         {/* MAIN CONTENT */}
-        <div className="mx-3 mt-4 flex h-[87vh] w-full">
-          <div className="ms-5 h-[87vh] w-3/4  rounded-3xl px-5 py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] md:px-9">
+        <div className="mx-3 mt-4 flex  w-full flex-col md:flex-row">
+          <div className="ms-1 h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
             <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
-              Organization Name - Category
+              {organizationName || 'Empty'} - {categoryName || 'Empty'}
             </h1>
 
             <div className="mt-7 flex justify-between text-xl font-medium">
@@ -38,20 +42,36 @@ export default function OrganizationRequest() {
           </div>
 
           {/* COMMENTS */}
-          <div className="relative ms-3 h-[87vh] w-1/4  rounded-3xl py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
-            <h2 className=" mb-5 text-center text-2xl font-medium">Comments</h2>
-            <div className="flex flex-col px-5">
-              <div className="my-1 text-center text-xs font-light">10:50 pm</div>
-              <div className="font-bold">Organization Name</div>
-              <div className="w-3/4">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, expedita!
+          <div className="relative mb-10 ms-1 h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
+            <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
+            <div className="h-[55%] overflow-y-auto ">
+              <div className="flex flex-col px-5">
+                <div className="my-1 text-center text-xs font-light">10:50 pm</div>
+                <div className="font-bold">Organization Name</div>
+                <div className="w-3/4">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, expedita!
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col px-5 text-right">
-              <div className="my-1 text-center text-xs font-light">10:51 pm</div>
-              <div className="font-bold">You</div>
-              <div className="w-3/4 self-end ">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis enim vitae sed!
+              <div className="flex flex-col px-5">
+                <div className="my-1 text-center text-xs font-light">10:50 pm</div>
+                <div className="font-bold">Organization Name</div>
+                <div className="w-3/4">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, rem?
+                </div>
+              </div>
+              <div className="flex flex-col px-5">
+                <div className="my-1 text-center text-xs font-light">10:50 pm</div>
+                <div className="font-bold">Organization Name</div>
+                <div className="w-3/4">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+              <div className="flex flex-col px-5 text-right">
+                <div className="my-1 text-center text-xs font-light">10:51 pm</div>
+                <div className="font-bold">You</div>
+                <div className="w-3/4 self-end ">
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis enim vitae sed!
+                </div>
               </div>
             </div>
             {/* ADD A COMMENT */}

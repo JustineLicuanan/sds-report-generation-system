@@ -54,7 +54,7 @@ export default function Subject() {
           )}
           {activeSubject === subject.id && (
             <div className="absolute left-full top-1/2 z-[1] flex flex-col bg-[#d9d9d9] py-1">
-              <Link href="#" className="bg-slate-300 px-5 py-2 hover:bg-[#f7b205] ">
+              <Link href="/my-request" className="bg-slate-300 px-5 py-2 hover:bg-[#f7b205] ">
                 Open
               </Link>
               <Link href="#" className=" rounded bg-slate-300 px-5 py-2 hover:bg-[#f7b205]">

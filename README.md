@@ -31,17 +31,24 @@ respective docs.
 
 ### Changelog
 
+### Version 1.1.5
+
+- Admin UI is functional now.
+- It can also pass the data (to edit info and/or view organization's request) now when clicking the
+  avatar.
+- It only displays now the current avatar of their respective category
+
+### Upcoming Changes
+
+- Make sort functional for other web pages
+- Make it more mobile responsive
+- Change the web page link for user and admin in some pages e.g logs.
+- Add a pdf viewer with features (Full screen, download)
+
 ### Version 1.1.4
 
 - Added a Create New Subject Web Page
 - Added a View My Request Web Page
-
-### Upcoming Changes
-
-- Make sort functional
-- Make it more mobile responsive
-- Change the web page link for user and admin in some pages e.g logs.
-- Add a pdf viewer with features (Full screen, download)
 
 ### Version 1.1.3
 
