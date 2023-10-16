@@ -12,7 +12,7 @@ export default function Home() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <NavBar showNotificationButton={false} />
 
       {/* MAIN CONTENT */}
       <main className="flex h-[90vh]  flex-col items-center px-2 md:flex-row md:items-center md:justify-around">
@@ -23,23 +23,29 @@ export default function Home() {
         ></img>
 
         {/* GOOGLE FORM */}
-        <div id="google-form" className="flex max-w-[426px] flex-col items-center px-3">
+        <div id="google-form" className="flex w-3/4 flex-col items-center  px-3 md:max-w-[426px]">
           <div className="pb-7 text-center text-2xl font-medium tracking-tight md:pb-14 md:text-3xl lg:text-4xl">
             Sign in on your account!
+          </div>
+
+          <div className="flex w-full flex-col ">
+            <label htmlFor="email-address" className="text-lg font-medium md:text-xl">
+              Email
+            </label>
+            <input
+              type="text"
+              name="email-address"
+              id="email-address"
+              className="mt-1  rounded border-[1px] border-[#2A9134] px-2 py-1  text-lg outline-none lg:text-2xl"
+              placeholder="john.doe@gmail.com"
+            />
           </div>
           <Link
             href="#"
             id="raise"
-            className="inline-block w-fit rounded-2xl px-7 py-3 shadow-md hover:translate-y-[-0.25em] active:translate-y-0 lg:px-11 lg:py-6"
+            className="mt-3 inline-block w-full rounded px-7 py-3 text-center text-xl shadow-[0_4px_10px_0px_rgba(0,0,0,0.25)] hover:translate-y-[-0.10em] active:translate-y-0 lg:px-11 lg:py-4 lg:text-2xl"
           >
-            <div className=" flex items-center">
-              <img
-                src="google_icon.png"
-                alt="Google Icon"
-                className="me-4 h-4 rounded md:h-5 lg:me-7 lg:h-7"
-              />
-              <span className="text-xl lg:text-3xl">Sign in with Google</span>
-            </div>
+            Sign in with Email
           </Link>
         </div>
       </main>
