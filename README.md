@@ -15,8 +15,9 @@ $ cp .env.example .env
 # STEP 2: Install dependencies with pnpm
 $ pnpm i
 
-# STEP 3: Migrate the database
+# STEP 3: Migrate & seed the database
 $ pnpm db:push
+$ pnpm db:seed
 
 # STEP 4: Congratulations! Now, you can run the dev server
 $ pnpm dev
