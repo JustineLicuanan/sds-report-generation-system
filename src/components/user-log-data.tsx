@@ -22,7 +22,6 @@ export default function UserLogData() {
       status: 'Approved',
     },
   ];
-
   return (
     <>
       <tbody>

@@ -1,13 +1,19 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 
 export default function EditInfo() {
   const router = useRouter();
   const { organizationName, categoryName, email, description } = router.query;
-
+  const [newOrganizationName, setNewOrganizationName] = useState(organizationName);
+  const [newCategory, setNewCategory] = useState(categoryName);
+  const [newEmail, setNewEmail] = useState(email);
+  const [newDescription, setNewDescription] = useState(description);
+  const [visibility, setVisibility] = useState(true);
+  console.log(visibility);
   return (
     <>
       {/* HEADER */}
@@ -48,8 +54,12 @@ export default function EditInfo() {
                 type="text"
                 name="email-address"
                 id="email-address"
-                className=" mt-1 h-8 w-full border-[1px] border-[#2A9134] px-2 py-1  outline-none md:w-3/4"
-                value={organizationName}
+                className={` ${
+                  visibility ? 'bg-[#d9d9d9]' : ''
+                } mt-1 h-8 w-full border-[1px] border-[#2A9134] px-2 py-1  outline-none md:w-3/4`}
+                value={newOrganizationName}
+                onChange={(e) => setNewOrganizationName(e.target.value)}
+                readOnly={visibility}
               />
 
               {/* CATEGORY */}
@@ -59,19 +69,23 @@ export default function EditInfo() {
               <select
                 name="sort-date"
                 id="sort-date"
-                className="me-2 h-8 w-full border-[1px] border-[#2A9134] bg-white px-2 py-1 md:w-2/4  "
-                value={categoryName}
+                className={`${
+                  visibility ? 'bg-[#d9d9d9]' : 'bg-[#ffffff]'
+                } me-2 h-8 w-full border-[1px] border-[#2A9134]  px-2 py-1 md:w-2/4`}
+                defaultValue={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+                disabled={visibility}
               >
-                <option selected value="" disabled className="text-sm ">
+                <option value="" disabled className="">
                   Select a category
                 </option>
-                <option value="" className="text-sm ">
+                <option value="" className=" ">
                   Student Governing Body
                 </option>
-                <option value="" className="text-sm ">
+                <option value="" className=" ">
                   Academic Organization
                 </option>
-                <option value="" className="text-sm">
+                <option value="" className="">
                   Non-Academic Organization
                 </option>
               </select>
@@ -93,8 +107,12 @@ export default function EditInfo() {
                 type="text"
                 name="email-address"
                 id="email-address"
-                className=" mt-1 h-8 w-full border-[1px] border-[#2A9134] px-2 py-1  outline-none md:w-3/4"
-                value={email}
+                className={` ${
+                  visibility ? 'bg-[#d9d9d9]' : ''
+                } mt-1 h-8 w-full border-[1px] border-[#2A9134] px-2 py-1  outline-none md:w-3/4`}
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                readOnly={visibility}
               />
 
               <label htmlFor="text-description" className="mt-1 text-lg font-bold">
@@ -104,17 +122,33 @@ export default function EditInfo() {
                 <textarea
                   name="text-description"
                   id="text-description"
-                  className=" mt-1   border-[1px] border-[#2A9134] px-2  py-1 outline-none"
+                  className={` ${
+                    visibility ? 'bg-[#d9d9d9]' : ''
+                  } mt-1   border-[1px] border-[#2A9134] px-2  py-1 outline-none`}
                   rows={2}
-                  value={description}
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  readOnly={visibility}
                 >
                   {' '}
                 </textarea>
                 <button
                   type="button"
-                  className="bottom-2 right-2 my-2 w-fit self-end rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium"
+                  className={`${
+                    visibility ? '' : 'hidden'
+                  } bottom-2  right-2 my-2 w-fit self-end rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium`}
+                  onClick={() => setVisibility(!visibility)}
                 >
                   Edit Info
+                </button>
+                <button
+                  type="button"
+                  className={`${
+                    visibility ? 'hidden' : ''
+                  } bottom-2  right-2 my-2 w-fit self-end rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium`}
+                  onClick={() => setVisibility(!visibility)}
+                >
+                  Save Changes
                 </button>
               </div>
             </div>

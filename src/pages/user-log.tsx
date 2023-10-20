@@ -2,31 +2,34 @@ import Head from 'next/head';
 import { useState } from 'react';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
-import UserLogData from '~/components/user-log-data';
 
 export default function UserLog() {
-  const [searchInput, setSearchInput] = useState('');
+  const [search, setSearch] = useState('');
 
-  // Search Bar query
-  function searchBar() {
-    let i, txtValue;
-    const filter = searchInput.toUpperCase();
-    const table = document.getElementById('myTable');
-    const tr = table.getElementsByTagName('tr');
+  const userLogData = [
+    {
+      subjectId: 2023001,
+      admin: 'Admin Name',
+      subject: 'Subject 1',
+      date: '09/20/23',
+      status: 'For approval',
+    },
+    {
+      subjectId: 2023002,
+      admin: 'Admin Name',
+      subject: 'Subject 2',
+      date: '09/21/23',
+      status: 'Rejected',
+    },
+    {
+      subjectId: 2023003,
+      admin: 'Admin Name',
+      subject: 'Subject 3',
+      date: '09/22/23',
+      status: 'Approved',
+    },
+  ];
 
-    // search all it matches
-    for (i = 0; i < tr.length; i++) {
-      const td = tr[i].getElementsByTagName('td')[2];
-      if (td) {
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = '';
-        } else {
-          tr[i].style.display = 'none';
-        }
-      }
-    }
-  }
   return (
     <>
       {/* HEADER */}
@@ -61,9 +64,7 @@ export default function UserLog() {
                   id="search-item"
                   placeholder="Search subject name"
                   className="h-7 border-[1px] border-[#2A9134] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  onKeyUp={searchBar}
-                  value={searchInput}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
               {/* SORT BY DATE */}
@@ -72,15 +73,16 @@ export default function UserLog() {
                   name="sort-date"
                   id="sort-date"
                   className="me-2 h-7 border-[1px] border-[#2A9134] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  defaultValue="sort"
                 >
-                  <option selected value="" disabled className="text-sm md:text-base">
+                  <option value="sort" disabled className="text-sm md:text-base">
                     Sort by Date
                   </option>
                   <option value="" className="text-sm md:text-base">
                     Latest
                   </option>
                   <option value="" className="text-sm md:text-base">
-                    Old
+                    Oldest
                   </option>
                 </select>
 
@@ -89,8 +91,9 @@ export default function UserLog() {
                   name="sort-status"
                   id="sort-status"
                   className="h-7 border-[1px] border-[#2A9134] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  defaultValue="sort"
                 >
-                  <option selected value="" disabled className="text-sm md:text-base">
+                  <option value="sort" disabled className="text-sm md:text-base">
                     Sort by Status
                   </option>
                   <option value="" className="text-sm md:text-base">
@@ -130,7 +133,45 @@ export default function UserLog() {
                     </th>
                   </tr>
                 </thead>
-                <UserLogData />
+                <tbody>
+                  {userLogData
+                    .filter((item) => {
+                      return search.toLowerCase() === ''
+                        ? item
+                        : item.subject.toLowerCase().includes(search);
+                    })
+                    .map((data) => (
+                      <tr key={data.subjectId} className=" even:bg-[#808080]/20">
+                        <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
+                          {data.subjectId}
+                        </td>
+                        <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
+                          {data.admin}
+                        </td>
+                        <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
+                          {data.subject}
+                        </td>
+                        <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
+                          {data.date}
+                        </td>
+                        {(data.status === 'Rejected' && (
+                          <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#FF0000]">
+                            {data.status}
+                          </td>
+                        )) ||
+                          (data.status === 'Approved' && (
+                            <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#00FF00]">
+                              {data.status}
+                            </td>
+                          )) ||
+                          (data.status === 'For approval' && (
+                            <td className="border border-x-0 border-black px-2 py-4 ">
+                              {data.status}
+                            </td>
+                          ))}
+                      </tr>
+                    ))}
+                </tbody>
               </table>
             </div>
           </div>

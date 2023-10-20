@@ -1,28 +1,12 @@
-export default function LogData() {
-  const logData = [
-    {
-      subjectId: 2023001,
-      organizationName: 'HGA',
-      subject: 'Subject 1',
-      date: '09/20/23',
-      status: 'For approval',
-    },
-    {
-      subjectId: 2023002,
-      organizationName: 'SDS',
-      subject: 'Subject 2',
-      date: '09/21/23',
-      status: 'Rejected',
-    },
-    {
-      subjectId: 2023003,
-      organizationName: 'BITS',
-      subject: 'Subject 3',
-      date: '09/22/23',
-      status: 'Approved',
-    },
-  ];
+type LogData = {
+  subjectId: number;
+  organizationName: string;
+  subject: string;
+  date: string;
+  status: string;
+};
 
+export default function LogData({ logData }: { logData: LogData[] }) {
   return (
     <>
       <tbody>
