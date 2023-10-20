@@ -1,7 +1,7 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
+import EmailProvider from 'next-auth/providers/email';
 
 import { env } from '~/env.mjs';
 import { db } from '~/server/db';
@@ -40,14 +40,21 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db),
   providers: [
-    GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    EmailProvider({
+      server: env.EMAIL_SERVER,
+      from: env.EMAIL_FROM,
+      ...(env.NODE_ENV !== 'production'
+        ? {
+            sendVerificationRequest({ identifier: email, url, provider: { from } }) {
+              console.log(`\n\nFrom: ${from}\nTo: ${email}\nURL: ${url}\n\n\n---`);
+            },
+          }
+        : {}),
     }),
     /**
      * ...add more providers here.
      *
-     * Most other providers require a bit more work than the Google provider. For example, the
+     * Most other providers require a bit more work than the Email provider. For example, the
      * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
      * model.
      */
