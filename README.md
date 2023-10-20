@@ -41,11 +41,16 @@ respective docs.
 
 ## Changelog
 
+### Version 0.2.1
+
+- Disable sign up.
+- Add `role` property to user session object.
+
 ### Version 0.2.0
 
 - Replace Google auth to email-only auth.
 - Replace SQLite db to MySQL.
-- Add role column to User table.
+- Add `role` column to User table.
 - Create admin db seeder.
 - Install react-hook-form.
 - Update README.md.

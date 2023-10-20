@@ -6,6 +6,11 @@ import EmailProvider from 'next-auth/providers/email';
 import { env } from '~/env.mjs';
 import { db } from '~/server/db';
 
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  STUDENT_LEADER = 'STUDENT_LEADER',
+}
+
 /**
  * Module augmentation for auth types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -15,14 +20,14 @@ declare module 'next-auth' {
     user: DefaultSession['user'] & {
       id: string;
       // ...other properties
-      // role: UserRole;
+      role: UserRole;
     };
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    role: UserRole;
+  }
 }
 
 /**
@@ -35,8 +40,14 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        role: user.role,
       },
     }),
+    async signIn({ user }) {
+      const userExists = !!(await db.user.count({ where: { email: user.email ?? '' } }));
+
+      return userExists;
+    },
   },
   adapter: PrismaAdapter(db),
   providers: [
