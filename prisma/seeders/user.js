@@ -8,6 +8,7 @@ exports.userSeeder = async () => {
       name: 'Admin',
       email: 'admin@example.com',
       role: 'ADMIN',
+      status: 'ACTIVE',
     },
   });
 };

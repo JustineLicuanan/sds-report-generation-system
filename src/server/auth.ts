@@ -11,6 +11,12 @@ export enum UserRole {
   STUDENT_LEADER = 'STUDENT_LEADER',
 }
 
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  ARCHIVED = 'ARCHIVED',
+  DELETED = 'DELETED',
+}
+
 /**
  * Module augmentation for auth types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -21,12 +27,14 @@ declare module 'next-auth' {
       id: string;
       // ...other properties
       role: UserRole;
+      status: UserStatus;
     };
   }
 
   interface User {
     // ...other properties
     role: UserRole;
+    status: UserStatus;
   }
 }
 
@@ -41,10 +49,13 @@ export const authOptions: NextAuthOptions = {
         ...session.user,
         id: user.id,
         role: user.role,
+        status: user.status,
       },
     }),
     async signIn({ user }) {
-      const userExists = !!(await db.user.count({ where: { email: user.email ?? '' } }));
+      const userExists = !!(await db.user.count({
+        where: { email: user.email ?? '', status: 'ACTIVE' },
+      }));
 
       return userExists;
     },

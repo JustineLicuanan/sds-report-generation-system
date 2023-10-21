@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.3.0
+
+- Create 'admin procedure'.
+- Create org router & its Zod schemas.
+- Add `status` column to User table.
+
 ### Version 0.2.2
 
 - Changed the button in User UI from delete to hide
@@ -57,7 +63,7 @@ respective docs.
 - Replace SQLite db to MySQL.
 - Add `role` column to User table.
 - Create admin db seeder.
-- Install react-hook-form.
+- Install `react-hook-form`.
 - Update README.md.
 
 ### Version 0.1.7
