@@ -9,6 +9,7 @@ export default function Log() {
       subjectId: 2023001,
       organizationName: 'HGA',
       subject: 'Subject 1',
+      dateCreated: '2023-10-01',
       date: '2023-10-20',
       status: 'For approval',
     },
@@ -16,6 +17,7 @@ export default function Log() {
       subjectId: 2023002,
       organizationName: 'SDS',
       subject: 'Subject 2',
+      dateCreated: '2023-10-01',
       date: '2023-10-11',
       status: 'Rejected',
     },
@@ -23,6 +25,7 @@ export default function Log() {
       subjectId: 2023003,
       organizationName: 'BITS',
       subject: 'Subject 3',
+      dateCreated: '2023-10-01',
       date: '2023-10-20',
       status: 'Approved',
     },
@@ -30,6 +33,7 @@ export default function Log() {
       subjectId: 2023004,
       organizationName: 'ADS',
       subject: 'Subject 1',
+      dateCreated: '2023-10-01',
       date: '2023-10-22',
       status: 'For approval',
     },
@@ -37,6 +41,7 @@ export default function Log() {
       subjectId: 2023005,
       organizationName: 'TRE',
       subject: 'Subject 2',
+      dateCreated: '2023-10-01',
       date: '2023-10-03',
       status: 'Rejected',
     },
@@ -44,6 +49,7 @@ export default function Log() {
       subjectId: 2023006,
       organizationName: 'QWE',
       subject: 'Subject 3',
+      dateCreated: '2023-10-01',
       date: '2023-10-20',
       status: 'Approved',
     },
@@ -160,6 +166,9 @@ export default function Log() {
                       Subject
                     </th>
                     <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                      Created on
+                    </th>
+                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Date
                     </th>
                     <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
@@ -178,6 +187,9 @@ export default function Log() {
                       </td>
                       <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
                         {data.subject}
+                      </td>
+                      <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
+                        {data.dateCreated}
                       </td>
                       <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
                         {data.date}

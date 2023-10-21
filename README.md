@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.2.2
+
+- Changed the button in User UI from delete to hide
+- Added a sort by status and date, and search bar in User's Log
+
 ### Version 0.2.1
 
 - Disable sign up.
