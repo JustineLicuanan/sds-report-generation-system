@@ -1,6 +1,6 @@
+import { UserStatus } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
-import { UserStatus } from '~/server/auth';
 import {
   archiveOrgSchema,
   createOrgSchema,
