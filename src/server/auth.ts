@@ -1,21 +1,11 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import type { UserCategory, UserRole, UserStatus } from '@prisma/client';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 
 import { env } from '~/env.mjs';
 import { db } from '~/server/db';
-
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  STUDENT_LEADER = 'STUDENT_LEADER',
-}
-
-export enum UserStatus {
-  ACTIVE = 'ACTIVE',
-  ARCHIVED = 'ARCHIVED',
-  DELETED = 'DELETED',
-}
 
 /**
  * Module augmentation for auth types. Allows us to add custom properties to the `session`
@@ -26,6 +16,8 @@ declare module 'next-auth' {
     user: DefaultSession['user'] & {
       id: string;
       // ...other properties
+      description?: string;
+      category?: UserCategory;
       role: UserRole;
       status: UserStatus;
     };
@@ -33,6 +25,8 @@ declare module 'next-auth' {
 
   interface User {
     // ...other properties
+    description?: string;
+    category?: UserCategory;
     role: UserRole;
     status: UserStatus;
   }
@@ -48,6 +42,8 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        description: user.description,
+        category: user.category,
         role: user.role,
         status: user.status,
       },
