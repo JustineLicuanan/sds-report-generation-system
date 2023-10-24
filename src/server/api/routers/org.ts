@@ -1,37 +1,22 @@
 import { UserStatus } from '@prisma/client';
-import { TRPCError } from '@trpc/server';
 import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
-import {
-  archiveOrgSchema,
-  createOrgSchema,
-  getOrgSchema,
-  updateOrgSchema,
-} from '~/zod-schemas/org';
+import { orgSchemas } from '~/zod-schemas/org';
 
 export const orgRouter = createTRPCRouter({
-  create: adminProcedure.input(createOrgSchema).mutation(({ ctx, input }) => {
+  create: adminProcedure.input(orgSchemas.create).mutation(({ ctx, input }) => {
     return ctx.db.user.create({ data: input });
   }),
 
-  get: adminProcedure.input(getOrgSchema).query(async ({ ctx, input }) => {
-    if (!input.all && !!input.id) {
-      return [await ctx.db.user.findUnique({ where: { id: input.id } })];
-    }
-
-    if (input.all && !input.id) {
-      return ctx.db.user.findMany();
-    }
-
-    throw new TRPCError({ code: 'BAD_REQUEST' });
+  get: adminProcedure.input(orgSchemas.get).query(async ({ ctx, input }) => {
+    return ctx.db.user.findMany({ where: { id: input.id } });
   }),
 
-  update: adminProcedure.input(updateOrgSchema).mutation(({ ctx, input }) => {
+  update: adminProcedure.input(orgSchemas.update).mutation(({ ctx, input }) => {
     const { id, ...data } = input;
-
     return ctx.db.user.update({ where: { id }, data });
   }),
 
-  archive: adminProcedure.input(archiveOrgSchema).mutation(({ ctx, input }) => {
+  archive: adminProcedure.input(orgSchemas.archive).mutation(({ ctx, input }) => {
     return ctx.db.user.update({ where: { id: input.id }, data: { status: UserStatus.ARCHIVED } });
 
     // TODO: Archive related too

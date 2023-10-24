@@ -41,6 +41,13 @@ respective docs.
 
 ## Changelog
 
+### Version 0.3.1
+
+- Optimize org router & schemas.
+- Integrate `react-hook-form` & auth to sign in page.
+- Rename `sign-in.tsx` to `signin.tsx`.
+- Create `meta.ts` file.
+
 ### Version 0.3.0
 
 - Create 'admin procedure'.
