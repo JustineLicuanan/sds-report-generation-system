@@ -41,7 +41,7 @@ respective docs.
 
 ## Changelog
 
-### Version 0.3.2
+### Version 0.5.0
 
 - Fixed the hydration error in `index.tsx`.
 - Removed all favicon to all pages except on `_app.tsx`.
@@ -50,6 +50,12 @@ respective docs.
 - Changed some of the names of function names of pages.
 - Changed the terms of request and subjects to report.
 - Changed img tag to Image tag
+
+### Version 0.4.0
+
+- Create Announcement, Report & complete Comment table.
+- Rename `UserStatus` enum to `CommonStatus`.
+- Separate admin & org tRPC routers.
 
 ### Version 0.3.1
 

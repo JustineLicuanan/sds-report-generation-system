@@ -1,5 +1,5 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import type { UserCategory, UserRole, UserStatus } from '@prisma/client';
+import type { CommonStatus, UserCategory, UserRole } from '@prisma/client';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
@@ -19,7 +19,7 @@ declare module 'next-auth' {
       description?: string;
       category?: UserCategory;
       role: UserRole;
-      status: UserStatus;
+      status: CommonStatus;
     };
   }
 
@@ -28,7 +28,7 @@ declare module 'next-auth' {
     description?: string;
     category?: UserCategory;
     role: UserRole;
-    status: UserStatus;
+    status: CommonStatus;
   }
 }
 
