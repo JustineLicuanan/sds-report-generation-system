@@ -48,8 +48,8 @@ model Report {
     createdAt DateTime     @default(now())
     updatedAt DateTime     @updatedAt
 
-    announcement   Announcement @relation(fields: [announcementId], references: [id])
-    announcementId String
+    announcement   Announcement? @relation(fields: [announcementId], references: [id])
+    announcementId String?
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
@@ -63,11 +63,11 @@ model Comment {
     createdAt DateTime        @default(now())
     updatedAt DateTime        @updatedAt
 
-    announcement   Announcement @relation(fields: [announcementId], references: [id])
-    announcementId String
+    announcement   Announcement? @relation(fields: [announcementId], references: [id])
+    announcementId String?
 
-    report   Report @relation(fields: [reportId], references: [id])
-    reportId String
+    report   Report? @relation(fields: [reportId], references: [id])
+    reportId String?
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String

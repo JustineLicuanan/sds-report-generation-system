@@ -41,12 +41,18 @@ respective docs.
 
 ## Changelog
 
+### Version 0.5.1
+
+- Create org report router & its Zod schemas.
+- Add `clear all sessions` procedure in admin org router.
+- Make some relation columns nullable.
+
 ### Version 0.5.0
 
 - Fixed the hydration error in `index.tsx`.
 - Removed all favicon to all pages except on `_app.tsx`.
 - Changed the title of every pages.
-- Changed the folder in `src/pages `structure.
+- Changed the `src/pages` folder structure.
 - Changed some of the names of function names of pages.
 - Changed the terms of request and subjects to report.
 - Changed img tag to Image tag

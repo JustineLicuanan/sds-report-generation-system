@@ -12,7 +12,7 @@ export const orgSchemas = {
     category: z.nativeEnum(UserCategory),
   }),
 
-  get: z.object({ id: z.string().cuid().optional() }),
+  get: z.object({ id: z.string().cuid().optional(), withReports: z.literal(true).optional() }),
 
   update: z.object({
     id: z.string().cuid(),
@@ -22,6 +22,8 @@ export const orgSchemas = {
     description: z.string().trim().optional(),
     category: z.nativeEnum(UserCategory).optional(),
   }),
+
+  clearAllSessions: z.object({ id: z.string().cuid() }),
 
   archive: z.object({ id: z.string().cuid() }),
 };

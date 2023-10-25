@@ -8,7 +8,10 @@ export const orgRouter = createTRPCRouter({
   }),
 
   get: adminProcedure.input(orgSchemas.get).query(async ({ ctx, input }) => {
-    return ctx.db.user.findMany({ where: { id: input.id } });
+    return ctx.db.user.findMany({
+      where: { id: input.id },
+      include: { reports: input.withReports },
+    });
   }),
 
   update: adminProcedure.input(orgSchemas.update).mutation(({ ctx, input }) => {
@@ -16,9 +19,11 @@ export const orgRouter = createTRPCRouter({
     return ctx.db.user.update({ where: { id }, data });
   }),
 
+  clearAllSessions: adminProcedure.input(orgSchemas.clearAllSessions).mutation(({ ctx, input }) => {
+    return ctx.db.session.deleteMany({ where: { user: { id: input.id } } });
+  }),
+
   archive: adminProcedure.input(orgSchemas.archive).mutation(({ ctx, input }) => {
     return ctx.db.user.update({ where: { id: input.id }, data: { status: CommonStatus.ARCHIVED } });
-
-    // TODO: Archive related too
   }),
 });
