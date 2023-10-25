@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.4.0
+
+- Create Announcement, Report & complete Comment table.
+- Rename `UserStatus` enum to `CommonStatus`.
+- Separate admin & org tRPC routers.
+
 ### Version 0.3.1
 
 - Optimize org router & schemas.

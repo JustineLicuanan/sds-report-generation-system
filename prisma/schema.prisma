@@ -22,11 +22,52 @@ model Example {
     @@index([name])
 }
 
+model Announcement {
+    id         String       @id @default(cuid())
+    subject    String
+    message    String
+    start      DateTime?
+    due        DateTime?
+    withReport Boolean      @default(false)
+    status     CommonStatus @default(ACTIVE)
+    audience   User[]
+    comments   Comment[]
+    reports    Report[]
+    createdAt  DateTime     @default(now())
+    updatedAt  DateTime     @updatedAt
+}
+
+model Report {
+    id        String       @id @default(cuid())
+    subject   String
+    message   String
+    file      String?
+    schedule  DateTime?
+    status    ReportStatus @default(PENDING)
+    comments  Comment[]
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
+
+    announcement   Announcement @relation(fields: [announcementId], references: [id])
+    announcementId String
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
+}
+
 model Comment {
-    id        String   @id @default(cuid())
+    id        String          @id @default(cuid())
     content   String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    location  CommentLocation
+    status    CommonStatus    @default(ACTIVE)
+    createdAt DateTime        @default(now())
+    updatedAt DateTime        @updatedAt
+
+    announcement   Announcement @relation(fields: [announcementId], references: [id])
+    announcementId String
+
+    report   Report @relation(fields: [reportId], references: [id])
+    reportId String
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
@@ -60,18 +101,20 @@ model Session {
 }
 
 model User {
-    id            String        @id @default(cuid())
+    id            String         @id @default(cuid())
     name          String
-    email         String        @unique
+    email         String         @unique
     emailVerified DateTime?
     image         String?
     description   String?
     category      UserCategory?
-    role          UserRole      @default(STUDENT_LEADER)
-    status        UserStatus    @default(ACTIVE)
+    role          UserRole       @default(STUDENT_LEADER)
+    status        CommonStatus   @default(ACTIVE)
     accounts      Account[]
     sessions      Session[]
+    reports       Report[]
     comments      Comment[]
+    announcements Announcement[]
 }
 
 model VerificationToken {
@@ -80,6 +123,12 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum CommonStatus {
+    ACTIVE
+    ARCHIVED
+    DELETED
 }
 
 enum UserCategory {
@@ -93,8 +142,16 @@ enum UserRole {
     STUDENT_LEADER
 }
 
-enum UserStatus {
-    ACTIVE
+enum ReportStatus {
+    PENDING
+    CANCELLED
+    APPROVED
+    REJECTED
     ARCHIVED
     DELETED
+}
+
+enum CommentLocation {
+    ANNOUNCEMENT
+    REPORT
 }
