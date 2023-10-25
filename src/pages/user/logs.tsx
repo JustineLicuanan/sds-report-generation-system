@@ -1,76 +1,55 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import { useState } from 'react';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
+import { meta } from '~/meta';
 
-export default function Log() {
-  const logData = [
+export default function UserLog() {
+  const userLogData = [
     {
       subjectId: 2023001,
-      organizationName: 'HGA',
-      subject: 'Subject 1',
+      subject: 'Technology',
       dateCreated: '2023-10-01',
-      date: '2023-10-20',
+      date: '09/20/23',
       status: 'For approval',
     },
     {
       subjectId: 2023002,
-      organizationName: 'SDS',
-      subject: 'Subject 2',
+      subject: 'Music',
       dateCreated: '2023-10-01',
-      date: '2023-10-11',
+      date: '09/21/23',
       status: 'Rejected',
     },
     {
       subjectId: 2023003,
-      organizationName: 'BITS',
-      subject: 'Subject 3',
+      subject: 'Games',
       dateCreated: '2023-10-01',
-      date: '2023-10-20',
-      status: 'Approved',
-    },
-    {
-      subjectId: 2023004,
-      organizationName: 'ADS',
-      subject: 'Subject 1',
-      dateCreated: '2023-10-01',
-      date: '2023-10-22',
-      status: 'For approval',
-    },
-    {
-      subjectId: 2023005,
-      organizationName: 'TRE',
-      subject: 'Subject 2',
-      dateCreated: '2023-10-01',
-      date: '2023-10-03',
-      status: 'Rejected',
-    },
-    {
-      subjectId: 2023006,
-      organizationName: 'QWE',
-      subject: 'Subject 3',
-      dateCreated: '2023-10-01',
-      date: '2023-10-20',
+      date: '09/22/23',
       status: 'Approved',
     },
   ];
+
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [date, setDate] = useState('');
 
+  userLogData.sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
   if (date.toLowerCase() === 'oldest') {
-    logData.sort((a, b) => {
+    userLogData.sort((a, b) => {
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
   } else if (date.toLowerCase() === 'latest') {
-    logData.sort((a, b) => {
+    userLogData.sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
   }
-  const filtedData = logData.filter((item) => {
+  const filtedData = userLogData.filter((item) => {
     return (
       (status.toLowerCase() === '' || item.status.toLowerCase().includes(status)) &&
-      (search.toLowerCase() === '' || item.organizationName.toLowerCase().includes(search))
+      (search.toLowerCase() === '' || item.subject.toLowerCase().includes(search))
     );
   });
 
@@ -78,8 +57,7 @@ export default function Log() {
     <>
       {/* HEADER */}
       <Head>
-        <title>SD Services MIS</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{`Logs ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -90,7 +68,7 @@ export default function Log() {
 
         {/* MAIN CONTENT */}
 
-        <div className="mx-3 mt-4 h-[87vh] w-full overflow-hidden ">
+        <div className="mx-3 mt-4 h-[87vh] w-full overflow-hidden">
           <div className="mx-auto my-0 h-[87vh] max-w-5xl   rounded-3xl px-5 py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] md:px-9">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Log</h1>
             <div className="my-4 flex flex-col md:my-6 md:flex-row">
@@ -100,12 +78,19 @@ export default function Log() {
                   htmlFor="search-item"
                   className="flex h-7 w-7  items-center border-[1px]  border-r-0 border-[#2A9134] px-2 md:h-9 md:w-9 lg:h-11 lg:w-11"
                 >
-                  <img src="search_icon.svg" className="md:h-full " alt="Search Icon" />
+                  <Image
+                    width={100}
+                    height={100}
+                    src="/search_icon.svg"
+                    className="w-fit md:h-full"
+                    alt="Search Icon"
+                  />
                 </label>
                 <input
+                  type="text"
                   name="search"
                   id="search-item"
-                  placeholder="Search organization"
+                  placeholder="Search subject name"
                   className="h-7 border-[1px] border-[#2A9134] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -160,9 +145,6 @@ export default function Log() {
                       Subject Id
                     </th>
                     <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
-                      Organization Name
-                    </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Subject
                     </th>
                     <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
@@ -183,12 +165,9 @@ export default function Log() {
                         {data.subjectId}
                       </td>
                       <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                        {data.organizationName}
-                      </td>
-                      <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
                         {data.subject}
                       </td>
-                      <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
+                      <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
                         {data.dateCreated}
                       </td>
                       <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">

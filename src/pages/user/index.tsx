@@ -1,10 +1,11 @@
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
+import Report from '~/components/report';
 import SideBarMenu from '~/components/side-bar-menu';
-import Subject from '~/components/subject';
+import { meta } from '~/meta';
 
-export default function User() {
-  const subjects = [
+export default function OrganizationPage() {
+  const reports = [
     { id: 1, subject: 'Subject 1', date: '02/03/23', status: 'For approval', isHidden: false },
     { id: 2, subject: 'Subject 2', date: '02/04/23', status: 'Approved', isHidden: false },
     { id: 3, subject: 'Subject 3', date: '02/05/23', status: 'Approved', isHidden: false },
@@ -14,8 +15,7 @@ export default function User() {
   return (
     <>
       <Head>
-        <title>SD Services MIS</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{`Home ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -38,8 +38,8 @@ export default function User() {
           </div>
           <div className="my-2 h-2 rounded-md bg-[#2A9134]"> </div>
           <div>
-            <h1 className=" my-2 text-3xl font-bold tracking-tight">Requests</h1>
-            <Subject subjects={subjects} />
+            <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
+            <Report reports={reports} />
           </div>
           <div className="my-2 h-2 rounded-md bg-[#2A9134]"> </div>
         </div>

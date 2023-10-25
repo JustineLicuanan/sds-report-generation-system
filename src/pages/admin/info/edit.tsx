@@ -19,7 +19,6 @@ export default function EditInfo() {
       {/* HEADER */}
       <Head>
         <title>SD Services MIS</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -79,7 +78,7 @@ export default function EditInfo() {
                 <option value="" disabled className="">
                   Select a category
                 </option>
-                <option value="" className=" ">
+                <option value="" className="">
                   Student Governing Body
                 </option>
                 <option value="" className=" ">

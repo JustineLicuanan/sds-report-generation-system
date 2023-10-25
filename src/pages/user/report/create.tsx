@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
+import { meta } from '~/meta';
 
-export default function CreateSubject() {
+export default function CreateReportPage() {
   return (
     <>
       <Head>
-        <title>SD Services MIS</title>
+        <title>{`Create Report ${meta.SEPARATOR} ${meta.NAME}`}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -21,7 +22,7 @@ export default function CreateSubject() {
         <div className="mx-3 mt-4 h-[87vh] w-full ">
           <div className="mx-auto my-0 flex h-[87vh] max-w-5xl flex-col rounded-3xl px-5 py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] md:px-9">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
-              Create New Subject
+              Create New Report
             </h1>
             <label htmlFor="organization-name" className="mt-3 text-lg font-medium">
               Organization Name
@@ -49,8 +50,8 @@ export default function CreateSubject() {
             </label>
             <input type="file" name="upload-pdf" id="upload-pdf" accept="pdf" className="hidden" />
             <textarea
-              name="subject-message"
-              id="subject-message"
+              name="report-message"
+              id="report-message"
               className=" mt-2 w-full border-[1px] border-[#2A9134] px-2 text-lg outline-none"
               rows={2}
               placeholder="Message"

@@ -1,11 +1,16 @@
+import Image from 'next/image';
+
 export default function NavBar({ showNotificationButton }: { showNotificationButton: boolean }) {
   return (
     <>
       <nav className="sticky top-0 z-[10] h-[8vh] ">
         <div id="nav-container" className="flex justify-between px-3 py-3 md:px-7 md:py-2">
           <div id="titles" className="flex">
-            <img
-              src="cvsu_logo.png"
+            <Image
+              src="/cvsu_logo.png"
+              alt="CVSU Logo"
+              height={100}
+              width={100}
               id="logo"
               className="h-10 w-10 rounded-full md:h-12  md:w-12"
             />
@@ -20,10 +25,12 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
           </div>
           {showNotificationButton && (
             <button id="notification">
-              <img
+              <Image
                 className="h-10 text-black md:h-12"
-                src="notification_icon.svg"
+                src="/notification_icon.svg"
                 alt="Notification Bell"
+                height={100}
+                width={100}
               />
             </button>
           )}

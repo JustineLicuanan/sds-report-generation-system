@@ -1,11 +1,14 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { useState } from 'react';
+import { paths } from '~/meta';
 
 export default function SideBarMenu() {
   const sidebarMenu = [
-    { id: 1, name: 'Home', imageLink: 'home_icon.svg', urlLink: '/' },
-    { id: 2, name: 'Log', imageLink: 'log_icon.svg', urlLink: '/log' },
+    { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ADMIN}/` },
+    { id: 2, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}/log` },
   ];
 
   const { asPath } = useRouter();
@@ -24,7 +27,7 @@ export default function SideBarMenu() {
     setVisibilityOrganization(true);
 
     setVisibilityUpload(false);
-    setUploadPhoto('default_logo.png'); // Set the default logo
+    setUploadPhoto('/default_logo.png'); // Set the default logo
 
     setVisibilityDescription(false);
   };
@@ -51,7 +54,13 @@ export default function SideBarMenu() {
               asPath === item.urlLink ? 'bg-[#f7b205]' : 'bg-[#D9D9D9]' // Check if the current route matches the item's urlLink
             }`}
           >
-            <img src={item.imageLink} alt={item.name} className="h-12  hover:scale-105" />
+            <Image
+              width={100}
+              height={100}
+              src={item.imageLink}
+              alt={item.name}
+              className="h-12 w-fit hover:scale-105"
+            />
             <div className="absolute left-16 hidden rounded-md bg-[#D9D9D9] px-2 py-1 text-left text-xl font-medium group-hover:block">
               {item.name}
             </div>
@@ -62,7 +71,13 @@ export default function SideBarMenu() {
           onClick={toggleCreateComponent}
           className="group relative m-1 mb-2 flex h-12 w-12 items-center justify-center  rounded-md bg-[#D9D9D9] hover:bg-[#f7b205] md:mx-1"
         >
-          <img src="create_icon.svg" alt="Create" className="h-12  hover:scale-105" />
+          <Image
+            width={100}
+            height={100}
+            src="/create_icon.svg"
+            alt="Create"
+            className="h-12 w-fit hover:scale-105"
+          />
           <div className="absolute left-16 hidden rounded-md bg-[#D9D9D9] px-2 py-1 text-left text-xl font-medium group-hover:block">
             Create
           </div>
@@ -164,7 +179,13 @@ export default function SideBarMenu() {
             </h1>
             <div className="h-[1px] w-full bg-black "></div>
             <div className="align-center mt-[30px] flex  justify-center px-10">
-              <img src={uploadPhoto} alt="Avatar Logo" className="h-[200px] w-[200px]" />
+              <Image
+                width={100}
+                height={100}
+                src={uploadPhoto}
+                alt="Avatar Logo"
+                className="h-[200px] w-[200px]"
+              />
             </div>
             <div className="flex justify-center">
               <label

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import NavBar from '~/components/navigation-bar';
@@ -35,10 +36,12 @@ export default function SignInPage() {
 
       {/* MAIN CONTENT */}
       <main className="flex h-[90vh] flex-col items-center px-2 md:flex-row md:items-center md:justify-around">
-        <img
-          src="login.svg"
+        <Image
+          width={100}
+          height={100}
+          src="/login.svg"
           alt="Undraw Illustration Image"
-          className="mb-4 mt-3 h-3/5 md:mb-0 md:h-3/5"
+          className="mb-4 mt-3 h-3/5 w-fit md:mb-0 md:h-3/5"
         />
 
         {/* GOOGLE FORM */}

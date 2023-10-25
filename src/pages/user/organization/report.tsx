@@ -1,13 +1,13 @@
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
+import { meta } from '~/meta';
 
-export default function OrganizationRequest() {
+export default function UserOrganizationReport() {
   return (
     <>
       <Head>
-        <title>SD Services MIS</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{`My Report ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -19,7 +19,7 @@ export default function OrganizationRequest() {
         {/* MAIN CONTENT */}
         <div className="mx-3 mt-4 flex  w-full flex-col md:flex-row">
           <div className="ms-1 h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
-            <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">My Request</h1>
+            <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">My Report</h1>
 
             <div className="mt-7 flex justify-between text-xl font-medium">
               <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>

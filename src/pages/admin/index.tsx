@@ -4,7 +4,7 @@ import OrganizationAvatar from '~/components/organization-avatar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 
-export default function Home() {
+export default function AdminPage() {
   const organization = [
     {
       id: 1,
@@ -85,7 +85,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>{meta.NAME}</title>
+        <title>{`Home ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}

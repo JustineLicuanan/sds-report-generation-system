@@ -2,16 +2,16 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
+import { meta } from '~/meta';
 
-export default function OrganizationRequest() {
+export default function AdminOrganizationReport() {
   const router = useRouter();
   const { organizationName, categoryName } = router.query;
 
   return (
     <>
       <Head>
-        <title>SD Services MIS</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{`Organization Report ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}

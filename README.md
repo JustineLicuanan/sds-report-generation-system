@@ -41,6 +41,16 @@ respective docs.
 
 ## Changelog
 
+### Version 0.3.2
+
+- Fixed the hydration error in `index.tsx`.
+- Removed all favicon to all pages except on `_app.tsx`.
+- Changed the title of every pages.
+- Changed the folder in `src/pages `structure.
+- Changed some of the names of function names of pages.
+- Changed the terms of request and subjects to report.
+- Changed img tag to Image tag
+
 ### Version 0.3.1
 
 - Optimize org router & schemas.
