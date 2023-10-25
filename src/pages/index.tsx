@@ -2,6 +2,7 @@ import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
 import OrganizationAvatar from '~/components/organization-avatar';
 import SideBarMenu from '~/components/side-bar-menu';
+import { meta } from '~/meta';
 
 export default function Home() {
   const organization = [
@@ -84,8 +85,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>SD Services MIS</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{meta.NAME}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
