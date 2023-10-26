@@ -26,8 +26,8 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
           {showNotificationButton && (
             <button id="notification">
               <Image
-                className="h-10 text-black md:h-12"
                 src="/notification_icon.svg"
+                className="h-10 text-black md:h-12"
                 alt="Notification Bell"
                 height={100}
                 width={100}

@@ -8,7 +8,7 @@ import { paths } from '~/meta';
 export default function SideBarMenu() {
   const sidebarMenu = [
     { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ADMIN}/` },
-    { id: 2, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}/log` },
+    { id: 2, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}/logs` },
   ];
 
   const { asPath } = useRouter();

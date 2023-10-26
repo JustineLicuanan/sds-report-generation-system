@@ -2,7 +2,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
 import NavBar from '~/components/navigation-bar';
+import Pagination from '~/components/pagination';
 import SideBarMenu from '~/components/side-bar-menu';
+import Table from '~/components/table';
 import { meta } from '~/meta';
 
 export default function AdminLogPage() {
@@ -69,13 +71,31 @@ export default function AdminLogPage() {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
   }
-  const filtedData = logData.filter((item) => {
+
+  const filteredData = logData.filter((item) => {
     return (
       (status.toLowerCase() === '' || item.status.toLowerCase().includes(status)) &&
       (search.toLowerCase() === '' || item.organizationName.toLowerCase().includes(search))
     );
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const tableHeader = [
+    'Subject Id',
+    'Organization Name',
+    'Subject',
+    'Created on',
+    'Date',
+    'Status',
+  ];
   return (
     <>
       {/* HEADER */}
@@ -157,69 +177,13 @@ export default function AdminLogPage() {
             </div>
 
             <div className="overflow-x-scroll sm:overflow-hidden">
-              <table
-                id="myTable"
-                className="w-full min-w-max border-collapse  border border-black text-center "
-              >
-                <thead>
-                  <tr>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
-                      Subject Id
-                    </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
-                      Organization Name
-                    </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
-                      Subject
-                    </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
-                      Created on
-                    </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
-                      Date
-                    </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtedData.map((data) => (
-                    <tr key={data.subjectId} className=" even:bg-[#808080]/20">
-                      <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                        {data.subjectId}
-                      </td>
-                      <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                        {data.organizationName}
-                      </td>
-                      <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                        {data.subject}
-                      </td>
-                      <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
-                        {data.dateCreated}
-                      </td>
-                      <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
-                        {data.date}
-                      </td>
-                      {(data.status === 'Rejected' && (
-                        <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#FF0000]">
-                          {data.status}
-                        </td>
-                      )) ||
-                        (data.status === 'Approved' && (
-                          <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#00FF00]">
-                            {data.status}
-                          </td>
-                        )) ||
-                        (data.status === 'For approval' && (
-                          <td className="border border-x-0 border-black px-2 py-4 ">
-                            {data.status}
-                          </td>
-                        ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <Table data={currentData} tableHeader={tableHeader} />
+              <Pagination
+                itemsPerPage={itemsPerPage}
+                totalItems={filteredData.length}
+                currentPage={currentPage}
+                paginate={paginate}
+              />
             </div>
           </div>
         </div>

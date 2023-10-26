@@ -41,6 +41,16 @@ respective docs.
 
 ## Changelog
 
+### Version 0.6.0
+
+- Added a pagination in logs.
+- Added a `pagination.tsx` and `table.tsx` components.
+- Deleted the file `log-data.tsx` and `user-log-data.tsx` components.
+
+### Version 0.5.2
+
+- Made some changes to folder structure
+
 ### Version 0.5.1
 
 - Create org report router & its Zod schemas.
