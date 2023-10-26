@@ -5,7 +5,7 @@ import { useState } from 'react';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 
-export default function EditInfo() {
+export default function EditInfoPage() {
   const router = useRouter();
   const { organizationName, categoryName, email, description } = router.query;
   const [newOrganizationName, setNewOrganizationName] = useState(organizationName);

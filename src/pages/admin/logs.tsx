@@ -5,7 +5,7 @@ import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 
-export default function AdminLog() {
+export default function AdminLogPage() {
   const logData = [
     {
       subjectId: 2023001,
