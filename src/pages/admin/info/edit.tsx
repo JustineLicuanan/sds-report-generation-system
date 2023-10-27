@@ -8,12 +8,19 @@ import SideBarMenu from '~/components/side-bar-menu';
 export default function EditInfoPage() {
   const router = useRouter();
   const { organizationName, categoryName, email, description } = router.query;
+
+  // ORGS INFORMATION
   const [newOrganizationName, setNewOrganizationName] = useState(organizationName);
   const [newCategory, setNewCategory] = useState(categoryName);
   const [newEmail, setNewEmail] = useState(email);
   const [newDescription, setNewDescription] = useState(description);
+
+  // VISIBILITY OF BUTTON
   const [visibility, setVisibility] = useState(true);
-  console.log(visibility);
+
+  const [showSignOut, setShowSignOut] = useState(false);
+
+  const [confirmSignout, setConfirmSignOut] = useState('');
   return (
     <>
       {/* HEADER */}
@@ -131,24 +138,108 @@ export default function EditInfoPage() {
                 >
                   {' '}
                 </textarea>
-                <button
-                  type="button"
-                  className={`${
-                    visibility ? '' : 'hidden'
-                  } bottom-2  right-2 my-2 w-fit self-end rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium`}
-                  onClick={() => setVisibility(!visibility)}
-                >
-                  Edit Info
-                </button>
-                <button
-                  type="button"
-                  className={`${
-                    visibility ? 'hidden' : ''
-                  } bottom-2  right-2 my-2 w-fit self-end rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium`}
-                  onClick={() => setVisibility(!visibility)}
-                >
-                  Save Changes
-                </button>
+                <div className="bottom-2 right-2 my-2 flex justify-between">
+                  <button
+                    type="button"
+                    className={`w-fit rounded-md bg-[#bb2124] px-4 py-2 text-lg font-medium text-white`}
+                    onClick={() => setShowSignOut(true)}
+                  >
+                    Sign-out all devices
+                  </button>
+
+                  {/* SIGN OUT MODAL */}
+                  {/*  */}
+
+                  <div
+                    className={`fixed left-0 top-0 z-[3]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
+                      showSignOut ? '' : 'invisible opacity-0'
+                    }`}
+                  >
+                    <div className="relative h-[433px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
+                      <h1 className="py-3 text-center text-3xl font-bold tracking-tight text-[#bb2124]">
+                        {/*  */}
+                        Sign-out all devices
+                      </h1>
+                      <div className="h-[1px] w-full bg-black "></div>
+                      <div className="mt-5 flex flex-col items-center px-2">
+                        <div className="rounded-full bg-[#bb2124]/20 p-3 ">
+                          <Image
+                            src="/danger_icon.png"
+                            alt="Danger Icon"
+                            width={50}
+                            height={50}
+                            className="-mt-2"
+                          />
+                        </div>
+                        <div className="mt-2 px-5 text-2xl font-bold">Are you sure?</div>
+                        <div className="text-center text-xl font-medium text-black/70">
+                          If you select yes, all the devices will be sign-out.
+                        </div>
+                        <label
+                          htmlFor="signout-confirmation"
+                          className="mt-10 text-center text-xl font-medium"
+                        >
+                          To continue, please type{' '}
+                          <span className="text-xl font-bold text-[#bb2124]">
+                            "{newOrganizationName}"
+                          </span>
+                        </label>
+                        <input
+                          type="text"
+                          name="signout-confirmation"
+                          id="signout-confirmation"
+                          className="mt-2 w-3/4 border border-[#2A9134] px-2 py-1 text-xl outline-none"
+                          onChange={(e) => setConfirmSignOut(e.target.value)}
+                          value={confirmSignout}
+                        />
+                      </div>
+                      <div className="absolute bottom-0 left-7">
+                        <button
+                          type="button"
+                          className="my-6 rounded-md bg-[#f7b205] px-8 py-2 text-lg font-medium"
+                          onClick={() => {
+                            setConfirmSignOut('');
+                            setShowSignOut(false);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div className="absolute bottom-0 right-7">
+                        <button
+                          type="button"
+                          className={`${
+                            confirmSignout === organizationName
+                              ? 'bg-[#bb2124] text-white'
+                              : 'bg-[#bb2124]/40 text-white/50'
+                          } my-6 rounded-md px-8 py-2 text-lg font-medium `}
+                          disabled={!(confirmSignout === organizationName)}
+                        >
+                          Sign out
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className={`${
+                      visibility ? '' : 'hidden'
+                    } w-fit  rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium`}
+                    onClick={() => setVisibility(!visibility)}
+                  >
+                    Edit Info
+                  </button>
+                  <button
+                    type="button"
+                    className={`${
+                      visibility ? 'hidden' : ''
+                    } w-fit  rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium`}
+                    onClick={() => setVisibility(!visibility)}
+                  >
+                    Save Changes
+                  </button>
+                </div>
               </div>
             </div>
           </div>
