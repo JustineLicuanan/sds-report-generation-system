@@ -41,6 +41,7 @@ respective docs.
 
 ## Changelog
 
+<<<<<<< HEAD
 ### Version 0.6.2
 
 - Added a cancel button instead of "X" button in Create Organization Modal.
@@ -51,6 +52,13 @@ respective docs.
 ### Version 0.6.1
 
 - Added a sign-out all devices button in `edit-info.tsx`.
+=======
+### Version 0.6.1
+
+- Move `/admin/info/edit.tsx` to `/admin/organizations/[id]/edit.tsx`.
+- Integrate `react-hook-form` to 'org edit' page.
+- Update 'org' zod schemas.
+>>>>>>> 79dd84d03b622cd9b301792114d777dedae910fe
 
 ### Version 0.6.0
 

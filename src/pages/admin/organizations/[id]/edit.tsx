@@ -1,19 +1,30 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UserCategory } from '@prisma/client';
+import { useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '@trpc/react-query';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
+import { meta } from '~/meta';
+import { api } from '~/utils/api';
+import { orgSchemas } from '~/zod-schemas/org';
+
+type Inputs = z.infer<typeof orgSchemas.update>;
 
 export default function EditInfoPage() {
   const router = useRouter();
-  const { organizationName, categoryName, email, description } = router.query;
-
-  // ORGS INFORMATION
-  const [newOrganizationName, setNewOrganizationName] = useState(organizationName);
-  const [newCategory, setNewCategory] = useState(categoryName);
-  const [newEmail, setNewEmail] = useState(email);
-  const [newDescription, setNewDescription] = useState(description);
+  const queryClient = useQueryClient();
+  const getOrgQuery = api.admin.org.get.useQuery({ id: router.query.id as Inputs['id'] });
+  const updateOrgMutation = api.admin.org.update.useMutation({
+    onSuccess: (data) => {
+      queryClient.setQueryData(getQueryKey(api.admin.org.get, { id: data.id }, 'query'), data);
+    },
+  });
 
   // VISIBILITY OF BUTTON
   const [visibility, setVisibility] = useState(true);
@@ -21,11 +32,29 @@ export default function EditInfoPage() {
   const [showSignOut, setShowSignOut] = useState(false);
 
   const [confirmSignout, setConfirmSignOut] = useState('');
+
+  const editInfoForm = useForm<Inputs>({
+    resolver: zodResolver(orgSchemas.update),
+    values: {
+      id: getOrgQuery.data?.[0]?.id as Inputs['id'],
+      name: getOrgQuery.data?.[0]?.name,
+      email: getOrgQuery.data?.[0]?.email,
+      image: getOrgQuery.data?.[0]?.image,
+      description: getOrgQuery.data?.[0]?.description,
+      category: getOrgQuery.data?.[0]?.category as Inputs['category'],
+    },
+  });
+
+  const onSubmit: SubmitHandler<Inputs> = async (values) => {
+    await updateOrgMutation.mutateAsync(values);
+    alert('Org updated successfully!');
+  };
+
   return (
     <>
       {/* HEADER */}
       <Head>
-        <title>SD Services MIS</title>
+        <title>{`Edit Info ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -39,11 +68,14 @@ export default function EditInfoPage() {
         <div className="mx-2 mt-4 h-[87vh] w-full ">
           <div className="relative mx-auto my-0  h-[87vh] max-w-5xl  rounded-3xl px-5 py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] md:px-9 ">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Edit Info</h1>
-            <div className="mx-auto my-0 flex max-w-2xl flex-col ">
+            <form
+              className="mx-auto my-0 flex max-w-2xl flex-col"
+              onSubmit={editInfoForm.handleSubmit(onSubmit, (err) => console.log(err))}
+            >
               {/* ORGANIZATION'S LOGO */}
               <div className="mb-2 mt-2 flex flex-col items-center">
                 <Image
-                  src="/default_logo.png"
+                  src={editInfoForm.watch('image') ?? '/default_logo.png'}
                   alt="Organization's Logo"
                   width={112}
                   height={112}
@@ -53,47 +85,39 @@ export default function EditInfoPage() {
               </div>
 
               {/* ORGANIZATION NAME */}
-              <label htmlFor="email-address" className=" text-lg font-bold">
+              <label htmlFor="name" className=" text-lg font-bold">
                 Organization Name
               </label>
               <input
                 type="text"
-                name="email-address"
-                id="email-address"
+                id="name"
                 className={` ${
                   visibility ? 'bg-[#d9d9d9]' : ''
                 } mt-1 h-8 w-full border-[1px] border-[#2A9134] px-2 py-1  outline-none md:w-3/4`}
-                value={newOrganizationName}
-                onChange={(e) => setNewOrganizationName(e.target.value)}
                 readOnly={visibility}
+                {...editInfoForm.register('name')}
               />
 
               {/* CATEGORY */}
-              <label htmlFor="email-address" className="mt-1 text-lg font-bold">
+              <label htmlFor="category" className="mt-1 text-lg font-bold">
                 Category
               </label>
               <select
-                name="sort-date"
-                id="sort-date"
+                id="category"
                 className={`${
                   visibility ? 'bg-[#d9d9d9]' : 'bg-[#ffffff]'
                 } me-2 h-8 w-full border-[1px] border-[#2A9134]  px-2 py-1 md:w-2/4`}
-                defaultValue={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
                 disabled={visibility}
+                {...editInfoForm.register('category')}
               >
-                <option value="" disabled className="">
+                <option value="" disabled>
                   Select a category
                 </option>
-                <option value="" className="">
-                  Student Governing Body
-                </option>
-                <option value="" className=" ">
-                  Academic Organization
-                </option>
-                <option value="" className="">
-                  Non-Academic Organization
-                </option>
+                {Object.values(UserCategory).map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
               </select>
 
               {/* NOTE */}
@@ -110,15 +134,13 @@ export default function EditInfoPage() {
                 Email
               </label>
               <input
-                type="text"
-                name="email-address"
+                type="email"
                 id="email-address"
                 className={` ${
                   visibility ? 'bg-[#d9d9d9]' : ''
                 } mt-1 h-8 w-full border-[1px] border-[#2A9134] px-2 py-1  outline-none md:w-3/4`}
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
                 readOnly={visibility}
+                {...editInfoForm.register('email')}
               />
 
               <label htmlFor="text-description" className="mt-1 text-lg font-bold">
@@ -126,18 +148,14 @@ export default function EditInfoPage() {
               </label>
               <div className="flex w-full flex-col md:w-4/5">
                 <textarea
-                  name="text-description"
                   id="text-description"
                   className={` ${
                     visibility ? 'bg-[#d9d9d9]' : ''
                   } mt-1   border-[1px] border-[#2A9134] px-2  py-1 outline-none`}
                   rows={2}
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
                   readOnly={visibility}
-                >
-                  {' '}
-                </textarea>
+                  {...editInfoForm.register('description')}
+                ></textarea>
                 <div className="bottom-2 right-2 my-2 flex justify-between">
                   <button
                     type="button"
@@ -181,7 +199,7 @@ export default function EditInfoPage() {
                         >
                           To continue, please type{' '}
                           <span className="text-xl font-bold text-[#bb2124]">
-                            "{newOrganizationName}"
+                            &quot;{getOrgQuery.data?.[0]?.name}&quot;
                           </span>
                         </label>
                         <input
@@ -209,11 +227,11 @@ export default function EditInfoPage() {
                         <button
                           type="button"
                           className={`${
-                            confirmSignout === organizationName
+                            confirmSignout === getOrgQuery.data?.[0]?.name
                               ? 'bg-[#bb2124] text-white'
                               : 'bg-[#bb2124]/40 text-white/50'
                           } my-6 rounded-md px-8 py-2 text-lg font-medium `}
-                          disabled={!(confirmSignout === organizationName)}
+                          disabled={!(confirmSignout === getOrgQuery.data?.[0]?.name)}
                         >
                           Sign out
                         </button>
@@ -231,7 +249,7 @@ export default function EditInfoPage() {
                     Edit Info
                   </button>
                   <button
-                    type="button"
+                    type="submit"
                     className={`${
                       visibility ? 'hidden' : ''
                     } w-fit  rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium`}
@@ -241,7 +259,7 @@ export default function EditInfoPage() {
                   </button>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </main>

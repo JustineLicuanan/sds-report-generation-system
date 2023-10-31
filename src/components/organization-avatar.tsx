@@ -21,7 +21,18 @@ export default function OrganizationAvatar({ organization }: { organization: Use
             {/* Your button content */}
           </button>
           <div className="group/button absolute right-0 top-0 z-[4] hidden h-fit items-center  group-hover/avatar:flex">
-            <Link href={`${paths.ADMIN}${paths.EDIT_INFO}`} className="rounded-full bg-[#f7b205] ">
+            <Link
+              href={{
+                pathname: `${paths.ADMIN}/organizations/id123/edit`,
+                query: {
+                  organizationName: item.name,
+                  categoryName: item.category,
+                  email: item.email,
+                  description: item.description,
+                },
+              }}
+              className="rounded-full bg-[#f7b205] "
+            >
               <Image
                 src="/edit_info_icon.svg"
                 alt="Edit Info"

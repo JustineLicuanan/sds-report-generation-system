@@ -9,8 +9,8 @@ export const orgRouter = createTRPCRouter({
 
   get: adminProcedure.input(orgSchemas.get).query(async ({ ctx, input }) => {
     return ctx.db.user.findMany({
-      where: { id: input.id },
-      include: { reports: input.withReports },
+      where: { id: input?.id },
+      include: { reports: input?.withReports },
     });
   }),
 
