@@ -3,9 +3,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
+import { z } from 'zod';
 import { paths } from '~/meta';
+import { api } from '~/utils/api';
+import { orgSchemas } from '~/zod-schemas/org';
+
+type Inputs = z.infer<typeof orgSchemas.create>;
 
 export default function SideBarMenu() {
+  const createOrgMutation = api.admin.org.create.useMutation();
+
   const sidebarMenu = [
     { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ADMIN}/` },
     { id: 2, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}/logs` },
@@ -23,13 +30,6 @@ export default function SideBarMenu() {
 
   const toggleCreateComponent = () => {
     setCreateOrganization(!createOrganization);
-    setVisibilityOrganization(false); //reset the inputs
-    setVisibilityOrganization(true);
-
-    setVisibilityUpload(false);
-    setUploadPhoto('/default_logo.png'); // Set the default logo
-
-    setVisibilityDescription(false);
   };
 
   function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
@@ -151,6 +151,15 @@ export default function SideBarMenu() {
               placeholder="e.g music.organization@sample.com"
               className=" mt-1 h-9 w-3/4 border-[1px] border-[#2A9134] px-2  py-1 text-lg outline-none"
             />
+            <div className="absolute bottom-0 left-7">
+              <button
+                type="button"
+                className="my-6 cursor-pointer rounded-md bg-[#f7b205] px-8 py-2 text-lg font-medium"
+                onClick={toggleCreateComponent}
+              >
+                Cancel
+              </button>
+            </div>
             <div className="absolute bottom-0 right-7">
               <button
                 type="button"
@@ -274,14 +283,6 @@ export default function SideBarMenu() {
             </div>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={toggleCreateComponent}
-          className="fixed right-2 top-16 z-[3] text-3xl font-black"
-        >
-          X
-        </button>
       </div>
     </>
   );

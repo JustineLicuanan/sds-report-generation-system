@@ -41,6 +41,17 @@ respective docs.
 
 ## Changelog
 
+### Version 0.6.2
+
+- Added a cancel button instead of "X" button in Create Organization Modal.
+- Added a function to comment in `admin\reports\[id]\index.tsx` and
+  `organization\reports\[id]\index.tsx`.
+- Added an alert box to `sign.in.tsx`
+
+### Version 0.6.1
+
+- Added a sign-out all devices button in `edit-info.tsx`.
+
 ### Version 0.6.0
 
 - Added a pagination in logs.
