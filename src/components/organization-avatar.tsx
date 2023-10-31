@@ -30,7 +30,7 @@ export default function OrganizationAvatar({ organization }: { organization: Org
           <div className="group/button absolute right-0 top-0 z-[4] hidden h-fit items-center  group-hover/avatar:flex">
             <Link
               href={{
-                pathname: `${paths.ADMIN}/info/edit`,
+                pathname: `${paths.ADMIN}/organizations/id123/edit`,
                 query: {
                   organizationName: item.name,
                   categoryName: item.category,

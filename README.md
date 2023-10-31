@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.6.1
+
+- Move `/admin/info/edit.tsx` to `/admin/organizations/[id]/edit.tsx`.
+- Integrate `react-hook-form` to 'org edit' page.
+- Update 'org' zod schemas.
+
 ### Version 0.6.0
 
 - Added a pagination in logs.
