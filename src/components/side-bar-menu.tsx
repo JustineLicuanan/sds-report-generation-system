@@ -12,8 +12,13 @@ export default function SideBarMenu() {
 
   const sidebarMenu = [
     { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ADMIN}` },
-    { id: 3, name: 'Organizations', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}${paths.ORGANIZATIONS}` },
-    { id: 2, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}${paths.LOGS}` },
+    {
+      id: 2,
+      name: 'Organizations',
+      imageLink: '/organizations_icon.svg',
+      urlLink: `${paths.ADMIN}${paths.ORGANIZATIONS}`,
+    },
+    { id: 3, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}${paths.LOGS}` },
   ];
 
   const { asPath } = useRouter();
@@ -64,6 +69,21 @@ export default function SideBarMenu() {
             </div>
           </Link>
         ))}
+        <button
+          type="button"
+          className="group relative m-1 mb-2 flex h-12 w-12 items-center justify-center  rounded-md bg-[#D9D9D9] hover:bg-[#f7b205] md:mx-1"
+        >
+          <Image
+            width={100}
+            height={100}
+            src="/announcement_icon.svg"
+            alt="Announcement"
+            className="h-12 w-fit hover:scale-105"
+          />
+          <div className="absolute left-16 hidden rounded-md bg-[#D9D9D9] px-2 py-1 text-left text-xl font-medium group-hover:block">
+            Announcement
+          </div>
+        </button>
         <button
           type="button"
           onClick={toggleCreateComponent}
