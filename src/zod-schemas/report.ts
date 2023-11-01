@@ -10,11 +10,13 @@ export const reportSchemas = {
     announcementId: z.string().cuid().optional(),
   }),
 
-  get: z.object({
-    id: z.string().cuid().optional(),
-    withComments: z.literal(true).optional(),
-    withAnnouncement: z.literal(true).optional(),
-  }),
+  get: z
+    .object({
+      id: z.string().cuid().optional(),
+      withComments: z.literal(true).optional(),
+      withAnnouncement: z.literal(true).optional(),
+    })
+    .optional(),
 
   update: z.object({
     id: z.string().cuid(),

@@ -19,6 +19,10 @@ export const orgRouter = createTRPCRouter({
     return ctx.db.user.update({ where: { id }, data });
   }),
 
+  countSessions: adminProcedure.input(orgSchemas.countSessions).query(({ ctx, input }) => {
+    return ctx.db.session.count({ where: { user: { id: input.id } } });
+  }),
+
   clearAllSessions: adminProcedure.input(orgSchemas.clearAllSessions).mutation(({ ctx, input }) => {
     return ctx.db.session.deleteMany({ where: { user: { id: input.id } } });
   }),
