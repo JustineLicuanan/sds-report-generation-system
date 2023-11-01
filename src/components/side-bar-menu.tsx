@@ -3,19 +3,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
-import { z } from 'zod';
 import { paths } from '~/meta';
-import { api } from '~/utils/api';
-import { orgSchemas } from '~/zod-schemas/org';
 
-type Inputs = z.infer<typeof orgSchemas.create>;
+// type Inputs = z.infer<typeof orgSchemas.create>;
 
 export default function SideBarMenu() {
-  const createOrgMutation = api.admin.org.create.useMutation();
+  // const createOrgMutation = api.admin.org.create.useMutation();
 
   const sidebarMenu = [
-    { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ADMIN}/` },
-    { id: 2, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}/logs` },
+    { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ADMIN}` },
+    { id: 3, name: 'Organizations', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}${paths.ORGANIZATIONS}` },
+    { id: 2, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}${paths.LOGS}` },
   ];
 
   const { asPath } = useRouter();
@@ -24,7 +22,7 @@ export default function SideBarMenu() {
   const [visibilityOrganization, setVisibilityOrganization] = useState(true);
 
   const [visibilityUpload, setVisibilityUpload] = useState(false);
-  const [uploadPhoto, setUploadPhoto] = useState('');
+  const [uploadPhoto, setUploadPhoto] = useState('/default_logo.png');
 
   const [visibilityDescription, setVisibilityDescription] = useState(false);
 

@@ -17,11 +17,9 @@ export default function Report({ reports }: { reports: Report[] }) {
     if (activeReport === id) {
       // Clicking the same button again, hide the div
       setActiveReport(null);
-      console.log(activeReport, id);
     } else {
       // Clicking a new button, show the div and hide others
       setActiveReport(id);
-      console.log(setActiveReport(id));
     }
   };
 
@@ -71,7 +69,7 @@ export default function Report({ reports }: { reports: Report[] }) {
           {activeReport === report.id && (
             <div className="absolute left-full top-1/2 z-[1] flex flex-col bg-[#d9d9d9] py-1">
               <Link
-                href={`${paths.ORGANIZATION}/${paths.ORGANIZATION_REPORTS}/${report.id}`}
+                href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${report.id}`}
                 className="bg-slate-300 px-5 py-2 hover:bg-[#f7b205] "
               >
                 Open

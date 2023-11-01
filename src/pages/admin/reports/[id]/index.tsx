@@ -81,15 +81,15 @@ export default function AdminOrgReportPage() {
           <div className="relative mb-10 ms-1 h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
             <div className="h-[55%] overflow-y-auto" ref={containerRef}>
-              {orgComment.map((data) => (
-                <div className="flex flex-col px-5">
+              {orgComment.map((data, index) => (
+                <div key={index} className="flex flex-col px-5">
                   <div className="my-1 text-center text-xs font-light">{data.time}</div>
                   <div className="font-bold">Organization Name</div>
                   <div className="w-3/4">{data.comment}</div>
                 </div>
               ))}
-              {currentComment.map((data) => (
-                <div className="flex flex-col px-5 text-right">
+              {currentComment.map((data, index) => (
+                <div key={index} className="flex flex-col px-5 text-right">
                   <div className="my-1 text-center text-xs font-light">{data.time}</div>
                   <div className="font-bold">You</div>
                   <div className="w-3/4 self-end ">{data.comment}</div>

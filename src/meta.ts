@@ -8,6 +8,8 @@ export const paths = {
   ADMIN: '/admin',
   REPORT: '/report',
   ORGANIZATION: '/organization',
+  ORGANIZATIONS: '/organizations',
   ORGANIZATION_REPORTS: '/reports',
-  EDIT_INFO: `/info/edit`
+  ORGANIZATION_EDIT: '/edit',
+  LOGS: '/logs',
 };

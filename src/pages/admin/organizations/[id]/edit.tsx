@@ -18,25 +18,27 @@ type Inputs = z.infer<typeof orgSchemas.update>;
 
 export default function EditInfoPage() {
   const router = useRouter();
+
+  const [visibility, setVisibility] = useState(true); // VISIBILITY OF BUTTON
+  const [showSignOut, setShowSignOut] = useState(false); // ENABLE OR DISABLED SIGNOUT BUTTON
+  const [confirmSignout, setConfirmSignOut] = useState(''); // CHECK IF THE INPUT BOX IS CORRECT
+  const [successAlert, setSuccessAlert] = useState(false); // SHOW SUCCESS ALERT
+
   const queryClient = useQueryClient();
   const getOrgQuery = api.admin.org.get.useQuery({ id: router.query.id as Inputs['id'] });
   const updateOrgMutation = api.admin.org.update.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData(getQueryKey(api.admin.org.get, { id: data.id }, 'query'), data);
+      setSuccessAlert(true);
     },
   });
-
-  // VISIBILITY OF BUTTON
-  const [visibility, setVisibility] = useState(true);
-
-  const [showSignOut, setShowSignOut] = useState(false);
-
-  const [confirmSignout, setConfirmSignOut] = useState('');
-
+  const hasSessionsOrgQuery = api.admin.org.countSessions.useQuery({
+    id: router.query.id as Inputs['id'],
+  });
   const editInfoForm = useForm<Inputs>({
     resolver: zodResolver(orgSchemas.update),
     values: {
-      id: getOrgQuery.data?.[0]?.id as Inputs['id'],
+      id: router.query.id as Inputs['id'],
       name: getOrgQuery.data?.[0]?.name,
       email: getOrgQuery.data?.[0]?.email,
       image: getOrgQuery.data?.[0]?.image,
@@ -47,14 +49,13 @@ export default function EditInfoPage() {
 
   const onSubmit: SubmitHandler<Inputs> = async (values) => {
     await updateOrgMutation.mutateAsync(values);
-    alert('Org updated successfully!');
   };
 
   return (
     <>
       {/* HEADER */}
       <Head>
-        <title>{`Edit Info ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Organization Info ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -67,10 +68,12 @@ export default function EditInfoPage() {
 
         <div className="mx-2 mt-4 h-[87vh] w-full ">
           <div className="relative mx-auto my-0  h-[87vh] max-w-5xl  rounded-3xl px-5 py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] md:px-9 ">
-            <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Edit Info</h1>
+            <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
+              Organization Profile
+            </h1>
             <form
               className="mx-auto my-0 flex max-w-2xl flex-col"
-              onSubmit={editInfoForm.handleSubmit(onSubmit, (err) => console.log(err))}
+              onSubmit={editInfoForm.handleSubmit(onSubmit)}
             >
               {/* ORGANIZATION'S LOGO */}
               <div className="mb-2 mt-2 flex flex-col items-center">
@@ -159,19 +162,23 @@ export default function EditInfoPage() {
                 <div className="bottom-2 right-2 my-2 flex justify-between">
                   <button
                     type="button"
-                    className={`w-fit rounded-md bg-[#bb2124] px-4 py-2 text-lg font-medium text-white`}
+                    className={`${
+                      hasSessionsOrgQuery.data === 0
+                        ? 'bg-[#bb2124]/40 text-white/50'
+                        : 'bg-[#bb2124] text-white'
+                    } w-fit rounded-md bg-[#bb2124] px-4 py-2 text-lg font-medium text-white`}
                     onClick={() => setShowSignOut(true)}
+                    disabled={!hasSessionsOrgQuery.data}
                   >
                     Sign-out all devices
                   </button>
 
                   {/* SIGN OUT MODAL */}
-                  {/*  */}
 
                   <div
-                    className={`fixed left-0 top-0 z-[3]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
+                    className={`${
                       showSignOut ? '' : 'invisible opacity-0'
-                    }`}
+                    } fixed left-0 top-0 z-[3]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out `}
                   >
                     <div className="relative h-[433px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
                       <h1 className="py-3 text-center text-3xl font-bold tracking-tight text-[#bb2124]">
@@ -262,6 +269,49 @@ export default function EditInfoPage() {
             </form>
           </div>
         </div>
+        {successAlert && (
+          <div
+            id="alert-3"
+            className="absolute bottom-[5%] left-[2%] z-[2] mb-4 flex items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
+            role="alert"
+          >
+            <svg
+              className="h-4 w-4 flex-shrink-0"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <span className="sr-only">Info</span>
+            <div className="ml-3 text-sm font-medium">Organization Updated Successfully</div>
+            <button
+              type="button"
+              className="-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 p-1.5 text-green-500 hover:bg-green-200 focus:ring-2 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+              data-dismiss-target="#alert-3"
+              aria-label="Close"
+              onClick={() => setSuccessAlert(false)}
+            >
+              <span className="sr-only">Close</span>
+              <svg
+                className="h-3 w-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
       </main>
     </>
   );

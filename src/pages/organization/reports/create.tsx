@@ -8,7 +8,6 @@ export default function CreateReportPage() {
     <>
       <Head>
         <title>{`Create Report ${meta.SEPARATOR} ${meta.NAME}`}</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {/* NAVIGATION BAR */}

@@ -3,7 +3,7 @@ type Data = {
   organizationName: string;
   subject: string;
   date: string;
-  dateCreated: String;
+  dateCreated: string;
   status: string;
 };
 type YourComponentProps = {

@@ -3,7 +3,7 @@ import { signIn } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { SubmitErrorHandler, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import NavBar from '~/components/navigation-bar';
 import { meta } from '~/meta';
@@ -25,6 +25,12 @@ export default function SignInPage() {
     setAlertMessage('success');
   };
 
+  const onSubmitError: SubmitErrorHandler<Inputs> = async (error) => {
+    if (error.email) {
+      setAlertMessage('invalid');
+      return;
+    }
+  };
   return (
     <>
       {/* HEAD */}
@@ -49,9 +55,9 @@ export default function SignInPage() {
         <form
           id="google-form"
           className="flex w-3/4 flex-col items-center px-3 md:max-w-[426px]"
-          onSubmit={signInForm.handleSubmit(onSubmit)}
+          onSubmit={signInForm.handleSubmit(onSubmit, onSubmitError)}
         >
-          {(signInForm.formState.errors.email && (
+          {alertMessage === 'invalid' && (
             <div
               className="mb-4 flex w-full items-center rounded-lg bg-red-50 p-4 text-base text-red-800 dark:bg-gray-800 dark:text-red-400"
               role="alert"
@@ -70,51 +76,50 @@ export default function SignInPage() {
                 Your email is invalid! Please enter again.
               </div>
             </div>
-          )) ||
-            (alertMessage === 'error' && (
-              <div
-                className="mb-4 flex w-full items-center rounded-lg bg-red-50 p-4 text-base text-red-800 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
+          )}
+          {alertMessage === 'error' && (
+            <div
+              className="mb-4 flex w-full items-center rounded-lg bg-red-50 p-4 text-base text-red-800 dark:bg-gray-800 dark:text-red-400"
+              role="alert"
+            >
+              <svg
+                className="mr-3 inline h-4 w-4 flex-shrink-0"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
               >
-                <svg
-                  className="mr-3 inline h-4 w-4 flex-shrink-0"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                </svg>
-                <div className="font-medium">
-                  <span className="font-bold">Access Denied! </span>
-                  You do not have permission to sign in.
-                </div>
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+              </svg>
+              <div className="font-medium">
+                <span className="font-bold">Access Denied! </span>
+                You do not have permission to sign in.
               </div>
-            )) ||
-            (alertMessage === 'success' && (
-              <div
-                className="mb-4 flex items-center rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-800 dark:border-green-800 dark:bg-gray-800 dark:text-green-400"
-                role="alert"
+            </div>
+          )}
+          {alertMessage === 'success' && (
+            <div
+              className="mb-4 flex items-center rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-800 dark:border-green-800 dark:bg-gray-800 dark:text-green-400"
+              role="alert"
+            >
+              <svg
+                className="mr-3 inline h-4 w-4 flex-shrink-0"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
               >
-                <svg
-                  className="mr-3 inline h-4 w-4 flex-shrink-0"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                </svg>
-                <div className="font-medium">
-                  <span className="font-bold">Sign in success!</span> A sign in link has been sent
-                  to your email address.
-                </div>
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+              </svg>
+              <div className="font-medium">
+                <span className="font-bold">Sign in success!</span> A sign in link has been sent to
+                your email address.
               </div>
-            ))}
+            </div>
+          )}
           <div className="pb-7 text-center text-2xl font-medium tracking-tight md:pb-14 md:text-3xl lg:text-4xl">
             Sign in to your account!
           </div>
-
           <div className="flex w-full flex-col">
             <label htmlFor="email-address" className="text-lg font-medium md:text-xl">
               Email
@@ -134,7 +139,6 @@ export default function SignInPage() {
               </span>
             )} */}
           </div>
-
           <button
             type="submit"
             id="raise"
