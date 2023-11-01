@@ -41,7 +41,7 @@ respective docs.
 
 ## Changelog
 
-### Version 0.6.4
+### Version 0.6.5
 
 - Added am alert box when successfully updated the info in `admin\reports\[id]\index.tsx`
 - Changed the name of `Edit Info` to `Organization Info`
@@ -49,14 +49,14 @@ respective docs.
   `admin\organizations\index.tsx`.
 - Added a two new side bar menus (Organizations, Announcements).
 
-### Version 0.6.3
+### Version 0.6.4
 
 - Added a cancel button instead of "X" button in Create Organization Modal.
 - Added a function to comment in `admin\reports\[id]\index.tsx` and
   `organization\reports\[id]\index.tsx`.
 - Added an alert box to `sign.in.tsx`
 
-### Version 0.6.2
+### Version 0.6.3
 
 - Added a sign-out all devices button in `edit-info.tsx`.
 
