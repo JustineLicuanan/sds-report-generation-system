@@ -1,6 +1,6 @@
 import { adminRouter } from '~/server/api/routers/admin';
 import { exampleRouter } from '~/server/api/routers/example';
-import { organizationRouter } from '~/server/api/routers/organization';
+import { sharedRouter } from '~/server/api/routers/shared';
 import { createTRPCRouter } from '~/server/api/trpc';
 
 /**
@@ -11,7 +11,7 @@ import { createTRPCRouter } from '~/server/api/trpc';
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
   admin: adminRouter,
-  organization: organizationRouter,
+  shared: sharedRouter,
 });
 
 // export type definition of API

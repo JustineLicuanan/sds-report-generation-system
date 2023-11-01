@@ -7,12 +7,12 @@ import { SubmitErrorHandler, useForm, type SubmitHandler } from 'react-hook-form
 import { type z } from 'zod';
 import NavBar from '~/components/navigation-bar';
 import { meta } from '~/meta';
-import { orgSchemas } from '~/zod-schemas/org';
+import { userSchemas } from '~/zod-schemas/shared/user';
 
-type Inputs = z.infer<typeof orgSchemas.signIn>;
+type Inputs = z.infer<typeof userSchemas.signIn>;
 
 export default function SignInPage() {
-  const signInForm = useForm<Inputs>({ resolver: zodResolver(orgSchemas.signIn) });
+  const signInForm = useForm<Inputs>({ resolver: zodResolver(userSchemas.signIn) });
   const [alertMessage, setAlertMessage] = useState('');
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email }) => {
@@ -31,6 +31,7 @@ export default function SignInPage() {
       return;
     }
   };
+
   return (
     <>
       {/* HEAD */}

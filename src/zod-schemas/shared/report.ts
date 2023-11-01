@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
 export const reportSchemas = {
-  signIn: z.object({ email: z.string().trim().toLowerCase().email() }),
-
   create: z.object({
     subject: z.string().trim().min(1),
     message: z.string().trim().min(1),

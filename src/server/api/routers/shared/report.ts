@@ -1,6 +1,6 @@
 import { ReportStatus } from '@prisma/client';
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
-import { reportSchemas } from '~/zod-schemas/report';
+import { reportSchemas } from '~/zod-schemas/shared/report';
 
 export const reportRouter = createTRPCRouter({
   create: protectedProcedure.input(reportSchemas.create).mutation(({ ctx, input }) => {

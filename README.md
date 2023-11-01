@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.7.0
+
+- Rename 'organization' router with 'shared'.
+- Separate 'admin' & 'shared' Zod schemas.
+
 ### Version 0.6.5
 
 - Added am alert box when successfully updated the info in `admin\reports\[id]\index.tsx`

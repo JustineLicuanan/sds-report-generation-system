@@ -12,7 +12,7 @@ import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 import { api } from '~/utils/api';
-import { orgSchemas } from '~/zod-schemas/org';
+import { orgSchemas } from '~/zod-schemas/admin/org';
 
 type Inputs = z.infer<typeof orgSchemas.update>;
 

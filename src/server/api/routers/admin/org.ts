@@ -1,6 +1,6 @@
 import { CommonStatus } from '@prisma/client';
 import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
-import { orgSchemas } from '~/zod-schemas/org';
+import { orgSchemas } from '~/zod-schemas/admin/org';
 
 export const orgRouter = createTRPCRouter({
   create: adminProcedure.input(orgSchemas.create).mutation(({ ctx, input }) => {
