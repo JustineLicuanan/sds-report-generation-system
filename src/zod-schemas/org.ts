@@ -25,6 +25,8 @@ export const orgSchemas = {
     category: z.nativeEnum(UserCategory).optional(),
   }),
 
+  countSessions: z.object({ id: z.string().cuid() }),
+
   clearAllSessions: z.object({ id: z.string().cuid() }),
 
   archive: z.object({ id: z.string().cuid() }),

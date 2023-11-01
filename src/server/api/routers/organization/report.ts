@@ -16,8 +16,8 @@ export const reportRouter = createTRPCRouter({
 
   get: protectedProcedure.input(reportSchemas.get).query(async ({ ctx, input }) => {
     return ctx.db.report.findMany({
-      where: { id: input.id, createdBy: { id: ctx.session.user.id } },
-      include: { comments: input.withComments, announcement: input.withAnnouncement },
+      where: { id: input?.id, createdBy: { id: ctx.session.user.id } },
+      include: { comments: input?.withComments, announcement: input?.withAnnouncement },
     });
   }),
 
