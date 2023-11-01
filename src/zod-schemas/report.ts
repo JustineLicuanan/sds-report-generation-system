@@ -6,8 +6,8 @@ export const reportSchemas = {
   create: z.object({
     subject: z.string().trim().min(1),
     message: z.string().trim().min(1),
-    file: z.string().url().optional(),
-    announcementId: z.string().cuid().optional(),
+    file: z.string().url().nullable().optional(),
+    announcementId: z.string().cuid().nullable().optional(),
   }),
 
   get: z
@@ -22,8 +22,8 @@ export const reportSchemas = {
     id: z.string().cuid(),
     subject: z.string().trim().min(1).optional(),
     message: z.string().trim().min(1).optional(),
-    file: z.string().url().optional(),
-    announcementId: z.string().cuid().optional(),
+    file: z.string().url().nullable().optional(),
+    announcementId: z.string().cuid().nullable().optional(),
   }),
 
   archive: z.object({ id: z.string().cuid() }),

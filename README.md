@@ -41,11 +41,16 @@ respective docs.
 
 ## Changelog
 
+### Version 0.6.2
+
+- Create 'announcement' router.
+- Update 'report' Zod schemas.
+
 ### Version 0.6.1
 
 - Move `/admin/info/edit.tsx` to `/admin/organizations/[id]/edit.tsx`.
 - Integrate `react-hook-form` to 'org edit' page.
-- Update 'org' zod schemas.
+- Update 'org' Zod schemas.
 
 ### Version 0.6.0
 

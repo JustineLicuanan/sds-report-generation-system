@@ -8,7 +8,7 @@ export const reportRouter = createTRPCRouter({
     return ctx.db.report.create({
       data: {
         ...data,
-        announcement: { connect: { id: announcementId } },
+        announcement: { connect: { id: announcementId! } },
         createdBy: { connect: { id: ctx.session.user.id } },
       },
     });
@@ -25,7 +25,7 @@ export const reportRouter = createTRPCRouter({
     const { id, announcementId, ...data } = input;
     return ctx.db.report.update({
       where: { id, createdBy: { id: ctx.session.user.id } },
-      data: { ...data, announcement: { connect: { id: announcementId } } },
+      data: { ...data, announcement: { connect: { id: announcementId! } } },
     });
   }),
 
