@@ -129,7 +129,7 @@ export default function SignInPage() {
             <input
               type="text"
               id="email-address"
-              className="mt-1 rounded border-[1px] border-[#2A9134] px-2 py-1 text-lg outline-none lg:text-2xl"
+              className="border-green mt-1 rounded border-[1px] px-2 py-1 text-lg outline-none lg:text-2xl"
               placeholder="john.doe@gmail.com"
               {...signInForm.register('email')}
             />

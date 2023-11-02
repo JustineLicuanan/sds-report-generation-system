@@ -69,14 +69,14 @@ export default function UserLogPage() {
         {/* MAIN CONTENT */}
 
         <div className="mx-3 mt-4 h-[87vh] w-full overflow-hidden">
-          <div className="mx-auto my-0 h-[87vh] max-w-5xl   rounded-3xl px-5 py-5 shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)] md:px-9">
+          <div className="mx-auto my-0 h-[87vh] max-w-5xl   rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Log</h1>
             <div className="my-4 flex flex-col md:my-6 md:flex-row">
               {/* SEARCH */}
               <div className="flex">
                 <label
                   htmlFor="search-item"
-                  className="flex h-7 w-7  items-center border-[1px]  border-r-0 border-[#2A9134] px-2 md:h-9 md:w-9 lg:h-11 lg:w-11"
+                  className="border-green flex h-7  w-7 items-center  border-[1px] border-r-0 px-2 md:h-9 md:w-9 lg:h-11 lg:w-11"
                 >
                   <Image
                     width={100}
@@ -91,7 +91,7 @@ export default function UserLogPage() {
                   name="search"
                   id="search-item"
                   placeholder="Search subject name"
-                  className="h-7 border-[1px] border-[#2A9134] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
+                  className="border-green h-7 border-[1px] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
@@ -100,7 +100,7 @@ export default function UserLogPage() {
                 <select
                   name="sort-date"
                   id="sort-date"
-                  className="me-2 h-7 border-[1px] border-[#2A9134] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  className="border-green me-2 h-7 border-[1px] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
                   onChange={(e) => setDate(e.target.value)}
                 >
                   <option value="latest" className="text-sm md:text-base">
@@ -115,7 +115,7 @@ export default function UserLogPage() {
                 <select
                   name="sort-status"
                   id="sort-status"
-                  className="h-7 border-[1px] border-[#2A9134] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  className="border-green h-7 border-[1px] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
                   onChange={(e) => setStatus(e.target.value)}
                 >
                   <option value="" className="text-sm md:text-base">
@@ -141,19 +141,19 @@ export default function UserLogPage() {
               >
                 <thead>
                   <tr>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Subject Id
                     </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Subject
                     </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Created on
                     </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Date
                     </th>
-                    <th className=" border-r-0 border-black bg-[#2A9134] px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Status
                     </th>
                   </tr>

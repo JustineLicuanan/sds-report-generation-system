@@ -26,9 +26,9 @@ export default function OrganizationPage() {
         <SideBarMenu />
 
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
-          <div className="my-2 h-2 rounded-md bg-[#2A9134]"> </div>
+          <div className="bg-green my-2 h-2 rounded-md"> </div>
           <div className="flex">
-            <div className=" my-4 me-1 h-20 w-20 rounded-full bg-[#2A9134] md:h-24 md:w-24 lg:h-28 lg:w-28"></div>
+            <div className=" bg-green my-4 me-1 h-20 w-20 rounded-full md:h-24 md:w-24 lg:h-28 lg:w-28"></div>
             <div className="self-center">
               <div className="ms-4 text-base font-extrabold md:text-lg lg:text-xl">
                 Organization Name
@@ -36,12 +36,12 @@ export default function OrganizationPage() {
               <div className="ms-12 text-base font-extrabold md:text-lg lg:text-xl">Category</div>
             </div>
           </div>
-          <div className="my-2 h-2 rounded-md bg-[#2A9134]"> </div>
+          <div className="bg-green my-2 h-2 rounded-md"> </div>
           <div>
             <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
             <Report reports={reports} />
           </div>
-          <div className="my-2 h-2 rounded-md bg-[#2A9134]"> </div>
+          <div className="bg-green my-2 h-2 rounded-md"> </div>
         </div>
       </main>
     </>

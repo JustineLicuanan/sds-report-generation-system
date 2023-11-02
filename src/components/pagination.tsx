@@ -27,7 +27,7 @@ export default function Pagination({ itemsPerPage, totalItems, currentPage, pagi
         <button
           type="button"
           onClick={() => paginate(currentPage - 1)}
-          className={`me-10 mt-1 border border-black/50 bg-[#d9d9d9] px-2 py-2 ${
+          className={`bg-gray me-10 mt-1 border border-black/50 px-2 py-2 ${
             currentPage === 1 ? 'text-black/50' : ''
           }`}
           disabled={currentPage === 1}
@@ -42,7 +42,7 @@ export default function Pagination({ itemsPerPage, totalItems, currentPage, pagi
             type="button"
             onClick={() => paginate(number)}
             className={`mx-1 mt-1 border px-3 py-2  ${
-              currentPage === number ? 'border-black bg-[#f7b205] font-bold' : 'border-black/50'
+              currentPage === number ? 'bg-yellow border-black font-bold' : 'border-black/50'
             }`}
           >
             {number}
@@ -54,7 +54,7 @@ export default function Pagination({ itemsPerPage, totalItems, currentPage, pagi
         <button
           type="button"
           onClick={() => paginate(currentPage + 1)}
-          className={`ms-10 mt-1 border border-black/50 bg-[#d9d9d9] px-2 py-2 ${
+          className={`bg-gray ms-10 mt-1 border border-black/50 px-2 py-2 ${
             currentPage === totalPages ? 'text-black/50' : ''
           }`}
           disabled={currentPage === totalPages}

@@ -58,7 +58,7 @@ export default function AdminOrgReportPage() {
 
         {/* MAIN CONTENT */}
         <div className="mx-3 mt-4 flex  w-full flex-col md:flex-row">
-          <div className="ms-1 h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
+          <div className="ms-1 h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
               {organizationName ?? 'Empty'} - {categoryName ?? 'Empty'}
             </h1>
@@ -66,7 +66,7 @@ export default function AdminOrgReportPage() {
             <div className="mt-7 flex justify-between text-xl font-medium">
               <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
             </div>
-            <div className="mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] border-[#2A9134] text-4xl">
+            <div className="border-green mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] text-4xl">
               PDF
             </div>
             <div>
@@ -78,7 +78,7 @@ export default function AdminOrgReportPage() {
           </div>
 
           {/* COMMENTS */}
-          <div className="relative mb-10 ms-1 h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_25px_0px_rgba(0,0,0,0.25)]">
+          <div className="relative mb-10 ms-1 h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
             <div className="h-[55%] overflow-y-auto" ref={containerRef}>
               {orgComment.map((data, index) => (
@@ -102,7 +102,7 @@ export default function AdminOrgReportPage() {
               {/* <input
                 type="text"
                 placeholder="Add a comment"
-                className="mt-2 h-14 w-3/4 border-[1px] border-[#2A9134] px-3 py-1 text-lg outline-none"
+                className="mt-2 h-14 w-3/4 border-[1px] border-green px-3 py-1 text-lg outline-none"
               /> */}
 
               <textarea
@@ -110,14 +110,14 @@ export default function AdminOrgReportPage() {
                 id="comment"
                 rows={2}
                 placeholder="Add a comment"
-                className="mt-2 w-full border-[1px] border-[#2A9134] px-3 py-1 text-lg outline-none"
+                className="border-green mt-2 w-full border-[1px] px-3 py-1 text-lg outline-none"
                 onChange={(e) => setComment(e.target.value)}
                 value={comment}
               ></textarea>
               <div className="flex justify-end">
                 <button
                   type="button"
-                  className="mt-2 rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium"
+                  className="bg-yellow mt-2 rounded-md px-4 py-2 text-lg font-medium"
                   onClick={() => {
                     if (!comment) {
                     } else {
@@ -131,7 +131,7 @@ export default function AdminOrgReportPage() {
                   Comment
                 </button>
               </div>
-              <div className="mt-2 h-[1px] bg-[#D9D9D9]"></div>
+              <div className="bg-gray mt-2 h-[1px]"></div>
             </div>
             <div className="absolute bottom-4 right-3">
               <button
@@ -140,10 +140,7 @@ export default function AdminOrgReportPage() {
               >
                 Reject
               </button>
-              <button
-                type="button"
-                className="rounded-md bg-[#f7b205] px-4 py-2 text-lg font-medium"
-              >
+              <button type="button" className="bg-yellow rounded-md px-4 py-2 text-lg font-medium">
                 Approve
               </button>
             </div>

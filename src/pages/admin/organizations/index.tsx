@@ -12,7 +12,7 @@ export default function AdminPage() {
   return (
     <>
       <Head>
-        <title>{`Home ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Organizations ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -23,7 +23,7 @@ export default function AdminPage() {
 
         <SideBarMenu />
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
-          <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
+          <div className="bg-green my-4 h-2 rounded-md"> </div>
 
           {/* Student Govern Body */}
           <div id="student-govern-body">
@@ -44,7 +44,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
+          <div className="bg-green my-4 h-2 rounded-md"> </div>
           {/* Academic Organization */}
           <h1 className="mb-1 mt-[-10px] text-lg font-bold md:text-xl lg:text-2xl">
             Academic Organizations
@@ -62,7 +62,7 @@ export default function AdminPage() {
             />
           </div>
 
-          <div className="my-4 h-2 rounded-md bg-[#2A9134]"> </div>
+          <div className="bg-green my-4 h-2 rounded-md"> </div>
           {/* Academic Organization */}
           <h1 className="mb-1 mt-[-10px] text-lg font-bold md:text-xl lg:text-2xl">
             Non-Academic Organizations

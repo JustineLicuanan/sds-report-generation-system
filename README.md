@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.7.1
+
+- Added an admin dashboard.
+- Added a three colors (green, yellow and gray) in `tailwind.config.ts` themes.
+
 ### Version 0.7.0
 
 - Rename 'organization' router with 'shared'.
