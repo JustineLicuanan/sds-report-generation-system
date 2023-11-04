@@ -38,7 +38,7 @@ export default function AdminDashboardPage() {
           id="main-content"
           className="mx-5 grid grid-cols-3 grid-rows-6 gap-9  md:mx-10 md:my-4 md:w-full"
         >
-          <div className="bg-gray col-span-3 row-span-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="col-span-3 row-span-2 bg-gray shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <Carousel className="h-full w-full" autoplay={true} autoplayDelay={4000} loop={true}>
               {groupedData.map((group, index) => (
                 <div key={index} className="flex h-[90%] w-full items-center justify-around px-14">
@@ -46,20 +46,20 @@ export default function AdminDashboardPage() {
                     <div key={itemIndex} className=" h-[80%] min-w-[350px] rounded-md bg-white ">
                       <div className="my-1 text-center text-lg font-bold">{item.name}</div>
                       <div className="flex h-[80%] min-w-[350px] items-center justify-center">
-                        <div className="bg-green mx-5 h-28 w-28 rounded-full"></div>
+                        <div className="mx-5 h-28 w-28 rounded-full bg-green"></div>
                         <div className="mx-5">
                           <div className="border-b-2 border-b-black px-1 text-center text-lg font-medium">
                             Pending Appointment <br />
-                            <span className="text-yellow text-2xl font-semibold">0</span>
+                            <span className="text-2xl font-semibold text-yellow">0</span>
                           </div>
                           <div className="flex  text-center ">
                             <div className="border-r-2 border-r-black  px-1 text-lg font-medium">
                               Approved <br />
-                              <span className="text-yellow text-2xl font-semibold">5</span>
+                              <span className="text-2xl font-semibold text-yellow">5</span>
                             </div>
                             <div className="px-1 text-center text-lg font-medium">
                               Total Reports <br />
-                              <span className="text-yellow text-2xl font-semibold">6</span>
+                              <span className="text-2xl font-semibold text-yellow">6</span>
                             </div>
                           </div>
                         </div>
@@ -70,17 +70,17 @@ export default function AdminDashboardPage() {
               ))}
             </Carousel>
           </div>
-          <div className="bg-gray/30 col-span-2 row-span-4 p-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="col-span-2 row-span-4 bg-gray/30 p-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <Calendar />
           </div>
-          <div className="bg-gray row-span-2 px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="row-span-2 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <div className="flex items-center ">
               <h1 className=" py-2 text-2xl font-bold">Appointments</h1>
               <Image width={30} height={30} src="/appointment_icon.svg" alt="Appointment Icon" />
             </div>
             <div className="text-lg font-medium ">No pending appointment(s) today.</div>
           </div>
-          <div className="bg-gray row-span-2 px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="row-span-2 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <div className="flex items-center">
               <h1 className=" py-2 text-2xl font-bold">Announcements</h1>
               <Image width={30} height={30} src="/announcement_icon.svg" alt="Announcement Icon" />

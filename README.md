@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.7.2
+
+- Added a create new announcement modal in `side-bar-menu.tsx`.
+- Added a `truncate-word.tsx` for truncating words.
+- Added a notification function.
+
 ### Version 0.7.1
 
 - Added an admin dashboard.
