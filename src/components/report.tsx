@@ -62,22 +62,22 @@ export default function Report({ reports }: { reports: Report[] }) {
               <Image width={100} height={100} src="/rejected_icon.png" alt="Rejected Icon" />
             </div>
           ) : (
-            <div className="bg-yellow absolute -right-2 -top-2 h-6 w-6 rounded-full border-2 border-black font-bold">
+            <div className="absolute -right-2 -top-2 h-6 w-6 rounded-full border-2 border-black bg-yellow font-bold">
               <Image width={100} height={100} src="/pending_icon.png" alt="Pending Icon" />
             </div>
           )}
           {activeReport === report.id && (
-            <div className="bg-gray absolute left-full top-1/2 z-[1] flex flex-col py-1">
+            <div className="absolute left-full top-1/2 z-[1] flex flex-col bg-gray py-1">
               <Link
                 href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${report.id}`}
-                className="hover:bg-yellow bg-slate-300 px-5 py-2 "
+                className="bg-slate-300 px-5 py-2 hover:bg-yellow "
               >
                 Open
               </Link>
               <button
                 type="button"
                 onClick={() => toggleHide(report.isHidden, report.id)}
-                className=" hover:bg-yellow rounded bg-slate-300 px-5 py-2"
+                className=" bg-slate-300 rounded px-5 py-2 hover:bg-yellow"
               >
                 Hide
               </button>

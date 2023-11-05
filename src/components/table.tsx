@@ -23,7 +23,7 @@ export default function Table({ data, tableHeader }: YourComponentProps) {
             {tableHeader.map((header, index) => (
               <th
                 key={index}
-                className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl"
+                className=" border-r-0 border-black bg-green px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl"
               >
                 {header}
               </th>

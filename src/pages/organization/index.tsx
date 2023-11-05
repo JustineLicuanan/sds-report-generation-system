@@ -1,8 +1,22 @@
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
 import Report from '~/components/report';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
+import { authRedirects } from '~/utils/auth-redirects';
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  const authRedirect = authRedirects.organization(authSession);
+
+  // if(!authRedirect.props) {
+  //   return authRedirect;
+  // }
+
+  return authRedirect;
+}) satisfies GetServerSideProps;
 
 export default function OrganizationPage() {
   const reports = [
@@ -15,7 +29,7 @@ export default function OrganizationPage() {
   return (
     <>
       <Head>
-        <title>{`Home ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Dashboard ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -26,9 +40,9 @@ export default function OrganizationPage() {
         <SideBarMenu />
 
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
-          <div className="bg-green my-2 h-2 rounded-md"> </div>
+          <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div className="flex">
-            <div className=" bg-green my-4 me-1 h-20 w-20 rounded-full md:h-24 md:w-24 lg:h-28 lg:w-28"></div>
+            <div className=" my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"></div>
             <div className="self-center">
               <div className="ms-4 text-base font-extrabold md:text-lg lg:text-xl">
                 Organization Name
@@ -36,12 +50,12 @@ export default function OrganizationPage() {
               <div className="ms-12 text-base font-extrabold md:text-lg lg:text-xl">Category</div>
             </div>
           </div>
-          <div className="bg-green my-2 h-2 rounded-md"> </div>
+          <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
             <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
             <Report reports={reports} />
           </div>
-          <div className="bg-green my-2 h-2 rounded-md"> </div>
+          <div className="my-2 h-2 rounded-md bg-green"> </div>
         </div>
       </main>
     </>

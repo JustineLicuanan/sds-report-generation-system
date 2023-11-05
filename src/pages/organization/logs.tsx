@@ -76,7 +76,7 @@ export default function UserLogPage() {
               <div className="flex">
                 <label
                   htmlFor="search-item"
-                  className="border-green flex h-7  w-7 items-center  border-[1px] border-r-0 px-2 md:h-9 md:w-9 lg:h-11 lg:w-11"
+                  className="flex h-7 w-7  items-center border-[1px]  border-r-0 border-green px-2 md:h-9 md:w-9 lg:h-11 lg:w-11"
                 >
                   <Image
                     width={100}
@@ -91,7 +91,7 @@ export default function UserLogPage() {
                   name="search"
                   id="search-item"
                   placeholder="Search subject name"
-                  className="border-green h-7 border-[1px] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
+                  className="h-7 border-[1px] border-green px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
@@ -100,7 +100,7 @@ export default function UserLogPage() {
                 <select
                   name="sort-date"
                   id="sort-date"
-                  className="border-green me-2 h-7 border-[1px] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  className="me-2 h-7 border-[1px] border-green bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
                   onChange={(e) => setDate(e.target.value)}
                 >
                   <option value="latest" className="text-sm md:text-base">
@@ -115,7 +115,7 @@ export default function UserLogPage() {
                 <select
                   name="sort-status"
                   id="sort-status"
-                  className="border-green h-7 border-[1px] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  className="h-7 border-[1px] border-green bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
                   onChange={(e) => setStatus(e.target.value)}
                 >
                   <option value="" className="text-sm md:text-base">
@@ -141,19 +141,19 @@ export default function UserLogPage() {
               >
                 <thead>
                   <tr>
-                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" border-r-0 border-black bg-green px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Subject Id
                     </th>
-                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" border-r-0 border-black bg-green px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Subject
                     </th>
-                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" border-r-0 border-black bg-green px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Created on
                     </th>
-                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" border-r-0 border-black bg-green px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Date
                     </th>
-                    <th className=" bg-green border-r-0 border-black px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
+                    <th className=" border-r-0 border-black bg-green px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                       Status
                     </th>
                   </tr>

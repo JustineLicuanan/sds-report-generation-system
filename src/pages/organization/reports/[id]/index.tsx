@@ -60,7 +60,7 @@ export default function UserOrgReportPage() {
             <div className="mt-7 flex justify-between text-xl font-medium">
               <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
             </div>
-            <div className="border-green mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] text-4xl">
+            <div className="mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] border-green text-4xl">
               PDF
             </div>
             <div>
@@ -92,13 +92,13 @@ export default function UserOrgReportPage() {
             </div>
             {/* ADD A COMMENT */}
             <div className="mx-3 mt-6">
-              <div className="bg-gray h-[1px]"></div>
+              <div className="h-[1px] bg-gray"></div>
               <textarea
                 name="comment"
                 id="comment"
                 rows={2}
                 placeholder="Add a comment"
-                className="border-green mt-2 w-full border-[1px] px-3 py-1 text-lg outline-none"
+                className="mt-2 w-full border-[1px] border-green px-3 py-1 text-lg outline-none"
                 onChange={(e) => {
                   setComment(e.target.value);
                   comment ? setCommentButton(true) : setCommentButton(false);
@@ -108,7 +108,7 @@ export default function UserOrgReportPage() {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  className="bg-yellow mt-2 rounded-md px-4 py-2 text-lg font-medium"
+                  className="mt-2 rounded-md bg-yellow px-4 py-2 text-lg font-medium"
                   onClick={() => {
                     if (!comment) {
                     } else {
@@ -123,7 +123,7 @@ export default function UserOrgReportPage() {
                   Comment
                 </button>
               </div>
-              <div className="bg-gray mt-2 h-[1px]"></div>
+              <div className="mt-2 h-[1px] bg-gray"></div>
             </div>
             <div className="absolute bottom-4 right-3">
               <button
@@ -132,7 +132,7 @@ export default function UserOrgReportPage() {
               >
                 Reject
               </button>
-              <button type="button" className="bg-yellow rounded-md px-4 py-2 text-lg font-medium">
+              <button type="button" className="rounded-md bg-yellow px-4 py-2 text-lg font-medium">
                 Approve
               </button>
             </div>

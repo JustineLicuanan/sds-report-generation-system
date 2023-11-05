@@ -1,11 +1,25 @@
 import { Carousel } from '@material-tailwind/react';
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Calendar from '~/components/calendar';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
+import { authRedirects } from '~/utils/auth-redirects';
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  const authRedirect = authRedirects.admin(authSession);
+
+  // if(!authRedirect.props) {
+  //   return authRedirect;
+  // }
+
+  return authRedirect;
+}) satisfies GetServerSideProps;
 
 export default function AdminDashboardPage() {
   const getOrgQuery = api.admin.org.get.useQuery({});
