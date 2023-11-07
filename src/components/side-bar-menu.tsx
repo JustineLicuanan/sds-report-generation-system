@@ -31,6 +31,29 @@ export default function SideBarMenu() {
   const [uploadPhoto, setUploadPhoto] = useState('/default_logo.png');
   const [visibilityDescription, setVisibilityDescription] = useState(false);
 
+  const [logout, setLogout] = useState(false);
+
+  const sideBarButtons = [
+    {
+      name: 'Announcement',
+      imageLink: '/announcement_icon.svg',
+      value: createAnnouncement,
+      function: setCreateAnnouncement,
+    },
+    {
+      name: 'Create',
+      imageLink: '/create_icon.svg',
+      value: createOrganization,
+      function: setCreateOrganization,
+    },
+    {
+      name: 'Logout',
+      imageLink: '/logout_icon.svg',
+      value: logout,
+      function: setLogout,
+    },
+  ];
+
   function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
@@ -40,12 +63,17 @@ export default function SideBarMenu() {
 
   return (
     <>
-      <div id="side-bar" className="sticky top-20 z-[1] my-4 ml-3 h-[87vh] w-16 bg-green px-1">
+      {/* BUTTONS AND LINKS */}
+      <div
+        id="side-bar"
+        className="sticky top-20 z-[1] my-2 ml-1 flex h-[90vh] w-16 flex-col bg-green px-1 md:my-3 md:ml-2 md:h-[87vh] lg:my-4 lg:ml-3"
+      >
+        {/* SIDE BAR LINKS */}
         {sidebarMenu.map((item) => (
           <Link
             href={item.urlLink}
             key={item.id}
-            className={`group relative m-2 mb-2 flex h-12 w-12 items-center justify-center rounded-md  hover:bg-yellow md:mx-1 ${
+            className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md hover:bg-yellow md:mx-1 lg:mt-2  lg:h-12 lg:w-12 ${
               asPath === item.urlLink ? 'bg-yellow' : 'bg-gray' // Check if the current route matches the item's urlLink
             }`}
           >
@@ -54,46 +82,40 @@ export default function SideBarMenu() {
               height={100}
               src={item.imageLink}
               alt={item.name}
-              className="h-12 w-fit hover:scale-105"
+              className="h-10 w-fit hover:scale-105 lg:h-12"
             />
-            <div className="absolute left-16 hidden rounded-md bg-gray px-2 py-1 text-left text-xl font-medium group-hover:block">
+            <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
               {item.name}
             </div>
           </Link>
         ))}
-        <button
-          type="button"
-          className="group relative m-1 mb-2 flex h-12 w-12 items-center justify-center  rounded-md bg-gray hover:bg-yellow md:mx-1"
-          onClick={() => setCreateAnnouncement(!createAnnouncement)}
-        >
-          <Image
-            width={100}
-            height={100}
-            src="/announcement_icon.svg"
-            alt="Announcement"
-            className="h-12 w-fit hover:scale-105"
-          />
-          <div className="absolute left-16 hidden rounded-md bg-gray px-2 py-1 text-left text-xl font-medium group-hover:block">
-            Announcement
-          </div>
-        </button>
-        {/* Announcement */}
-        <button
-          type="button"
-          onClick={() => setCreateOrganization(!createOrganization)}
-          className="group relative m-1 mb-2 flex h-12 w-12 items-center justify-center  rounded-md bg-gray hover:bg-yellow md:mx-1"
-        >
-          <Image
-            width={100}
-            height={100}
-            src="/create_icon.svg"
-            alt="Create"
-            className="h-12 w-fit hover:scale-105"
-          />
-          <div className="absolute left-16 hidden rounded-md bg-gray px-2 py-1 text-left text-xl font-medium group-hover:block">
-            Create
-          </div>
-        </button>
+
+        {/* SIDE BAR BUTTONS */}
+        {sideBarButtons.map((item) => {
+          return (
+            <>
+              {item.name === 'Logout' && (
+                <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
+              )}
+              <button
+                type="button"
+                className="group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray hover:bg-yellow  md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
+                onClick={() => item.function(!item.value)}
+              >
+                <Image
+                  width={100}
+                  height={100}
+                  src={item.imageLink}
+                  alt={item.name}
+                  className="h-12 w-fit hover:scale-105"
+                />
+                <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
+                  {item.name}
+                </div>
+              </button>
+            </>
+          );
+        })}
       </div>
 
       {/* ANNOUNCEMENT */}
@@ -200,6 +222,7 @@ export default function SideBarMenu() {
         </div>
       </div>
 
+      {/* MODALS */}
       {/* CREATE ORGANIZATION */}
       <div
         className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
@@ -400,7 +423,43 @@ export default function SideBarMenu() {
         </div>
       </div>
 
-      
+      {/* LOGOUT */}
+      <div
+        className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
+          logout ? '' : 'invisible opacity-0'
+        }`}
+      >
+        <div className="relative h-[200px] w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Logout</h1>
+          <div className="h-[1px] w-full bg-black "></div>
+          <div className="flex items-center justify-around p-2">
+            <Image
+              src="/logout_danger_icon.svg"
+              width={50}
+              height={50}
+              alt="Logout Danger"
+              className=""
+            />
+            <div className="py-3 text-center text-2xl font-medium">
+              Are you sure you want to logout?
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-7">
+            <button
+              type="button"
+              className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+              onClick={() => setLogout(!logout)}
+            >
+              Cancel
+            </button>
+          </div>
+          <div className="absolute bottom-0 right-7">
+            <button type="button" className="my-6 rounded-md bg-red px-8 py-2 text-lg font-medium">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

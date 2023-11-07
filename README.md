@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.7.7
+
+- Added a logout button in `side-bar-menu.tsx`.
+- Fixed the responsiveness of navigation and side bar.
+- Improved the code for side bar buttons in `side-bar-menu.tsx`.
+
 ### Version 0.7.6
 
 - Create auth redirects.

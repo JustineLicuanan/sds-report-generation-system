@@ -128,7 +128,7 @@ export default function UserOrgReportPage() {
             <div className="absolute bottom-4 right-3">
               <button
                 type="button"
-                className="me-2 rounded-md bg-[#DC3545] px-4 py-2 text-lg font-medium"
+                className="bg-red me-2 rounded-md px-4 py-2 text-lg font-medium"
               >
                 Reject
               </button>
