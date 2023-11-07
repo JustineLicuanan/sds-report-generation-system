@@ -40,15 +40,12 @@ export default function SideBarMenu() {
 
   return (
     <>
-      <div
-        id="side-bar"
-        className="sticky top-20 z-[1] my-4 ml-3 h-[87vh] w-16 bg-green px-2 md:w-16"
-      >
+      <div id="side-bar" className="sticky top-20 z-[1] my-4 ml-3 h-[87vh] w-16 bg-green px-1">
         {sidebarMenu.map((item) => (
           <Link
             href={item.urlLink}
             key={item.id}
-            className={`group relative m-1 mb-2 flex h-12 w-12 items-center justify-center rounded-md  hover:bg-yellow md:mx-1 ${
+            className={`group relative m-2 mb-2 flex h-12 w-12 items-center justify-center rounded-md  hover:bg-yellow md:mx-1 ${
               asPath === item.urlLink ? 'bg-yellow' : 'bg-gray' // Check if the current route matches the item's urlLink
             }`}
           >
@@ -109,7 +106,7 @@ export default function SideBarMenu() {
           className={`relative z-[5] h-[450px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
         >
           <h1 className="py-3 text-center text-3xl font-bold tracking-tight">
-            Create new Organization
+            Create new Announcement
           </h1>
           <div className="h-[1px] w-full bg-black "></div>
           <div className="flex flex-col px-10 py-5 ">
