@@ -77,7 +77,7 @@ export default function SideBarMenu() {
             Announcement
           </div>
         </button>
-
+        {/* Announcement */}
         <button
           type="button"
           onClick={() => setCreateOrganization(!createOrganization)}
@@ -397,6 +397,8 @@ export default function SideBarMenu() {
           </div>
         </div>
       </div>
+
+      
     </>
   );
 }
