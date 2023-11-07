@@ -41,6 +41,13 @@ respective docs.
 
 ## Changelog
 
+### Version 0.7.6
+
+- Create auth redirects.
+- Move `signin.tsx` file to `/auth/sign-in.tsx`.
+- Format files.
+- Fix some linting errors.
+
 ### Version 0.7.2
 
 - Added a create new announcement modal in `side-bar-menu.tsx`.

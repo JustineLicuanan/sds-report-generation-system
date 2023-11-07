@@ -82,7 +82,7 @@ export default function EditInfoPage() {
                   alt="Organization's Logo"
                   width={112}
                   height={112}
-                  className="bg-green mb-3 me-1  flex h-28 w-28 rounded-full"
+                  className="mb-3 me-1 flex  h-28 w-28 rounded-full bg-green"
                 />
                 <h2 className="mb-2 text-xl font-bold">Logo</h2>
               </div>
@@ -96,7 +96,7 @@ export default function EditInfoPage() {
                 id="name"
                 className={` ${
                   visibility ? 'bg-gray' : ''
-                } border-green mt-1 h-8 w-full border-[1px] px-2 py-1  outline-none md:w-3/4`}
+                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1  outline-none md:w-3/4`}
                 readOnly={visibility}
                 {...editInfoForm.register('name')}
               />
@@ -109,7 +109,7 @@ export default function EditInfoPage() {
                 id="category"
                 className={`${
                   visibility ? 'bg-gray' : 'bg-[#ffffff]'
-                } border-green me-2 h-8 w-full border-[1px]  px-2 py-1 md:w-2/4`}
+                } me-2 h-8 w-full border-[1px] border-green  px-2 py-1 md:w-2/4`}
                 disabled={visibility}
                 {...editInfoForm.register('category')}
               >
@@ -141,7 +141,7 @@ export default function EditInfoPage() {
                 id="email-address"
                 className={` ${
                   visibility ? 'bg-gray' : ''
-                } border-green mt-1 h-8 w-full border-[1px] px-2 py-1  outline-none md:w-3/4`}
+                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1  outline-none md:w-3/4`}
                 readOnly={visibility}
                 {...editInfoForm.register('email')}
               />
@@ -154,7 +154,7 @@ export default function EditInfoPage() {
                   id="text-description"
                   className={` ${
                     visibility ? 'bg-gray' : ''
-                  } border-green   mt-1 border-[1px] px-2  py-1 outline-none`}
+                  } mt-1   border-[1px] border-green px-2  py-1 outline-none`}
                   rows={2}
                   readOnly={visibility}
                   {...editInfoForm.register('description')}
@@ -213,7 +213,7 @@ export default function EditInfoPage() {
                           type="text"
                           name="signout-confirmation"
                           id="signout-confirmation"
-                          className="border-green mt-2 w-3/4 border px-2 py-1 text-xl outline-none"
+                          className="mt-2 w-3/4 border border-green px-2 py-1 text-xl outline-none"
                           onChange={(e) => setConfirmSignOut(e.target.value)}
                           value={confirmSignout}
                         />
@@ -221,7 +221,7 @@ export default function EditInfoPage() {
                       <div className="absolute bottom-0 left-7">
                         <button
                           type="button"
-                          className="bg-yellow my-6 rounded-md px-8 py-2 text-lg font-medium"
+                          className="my-6 rounded-md bg-yellow px-8 py-2 text-lg font-medium"
                           onClick={() => {
                             setConfirmSignOut('');
                             setShowSignOut(false);
@@ -250,7 +250,7 @@ export default function EditInfoPage() {
                     type="button"
                     className={`${
                       visibility ? '' : 'hidden'
-                    } bg-yellow  w-fit rounded-md px-4 py-2 text-lg font-medium`}
+                    } w-fit  rounded-md bg-yellow px-4 py-2 text-lg font-medium`}
                     onClick={() => setVisibility(!visibility)}
                   >
                     Edit Info
@@ -259,7 +259,7 @@ export default function EditInfoPage() {
                     type="submit"
                     className={`${
                       visibility ? 'hidden' : ''
-                    } bg-yellow  w-fit rounded-md px-4 py-2 text-lg font-medium`}
+                    } w-fit  rounded-md bg-yellow px-4 py-2 text-lg font-medium`}
                     onClick={() => setVisibility(!visibility)}
                   >
                     Save Changes
@@ -272,7 +272,7 @@ export default function EditInfoPage() {
         {successAlert && (
           <div
             id="alert-3"
-            className="absolute bottom-[5%] left-[2%] z-[2] mb-4 flex items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
+            className="bg-green-50 text-green-800 dark:bg-gray-800 dark:text-green-400 absolute bottom-[5%] left-[2%] z-[2] mb-4 flex items-center rounded-lg p-4"
             role="alert"
           >
             <svg
@@ -288,7 +288,7 @@ export default function EditInfoPage() {
             <div className="ml-3 text-sm font-medium">Organization Updated Successfully</div>
             <button
               type="button"
-              className="-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 p-1.5 text-green-500 hover:bg-green-200 focus:ring-2 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+              className="bg-green-50 text-green-500 hover:bg-green-200 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 -mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg p-1.5 focus:ring-2"
               data-dismiss-target="#alert-3"
               aria-label="Close"
               onClick={() => setSuccessAlert(false)}

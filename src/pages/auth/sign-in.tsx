@@ -1,13 +1,30 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { UserRole } from '@prisma/client';
+import { type GetServerSideProps } from 'next';
 import { signIn } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
-import { SubmitErrorHandler, useForm, type SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitErrorHandler, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import NavBar from '~/components/navigation-bar';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
 import { userSchemas } from '~/zod-schemas/shared/user';
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+
+  if (authSession?.user?.role === UserRole.STUDENT_LEADER) {
+    return { redirect: { destination: paths.ORGANIZATION, permanent: false } };
+  }
+
+  if (authSession?.user?.role === UserRole.ADMIN) {
+    return { redirect: { destination: paths.ADMIN, permanent: false } };
+  }
+
+  return { props: {} };
+}) satisfies GetServerSideProps;
 
 type Inputs = z.infer<typeof userSchemas.signIn>;
 
@@ -25,7 +42,7 @@ export default function SignInPage() {
     setAlertMessage('success');
   };
 
-  const onSubmitError: SubmitErrorHandler<Inputs> = async (error) => {
+  const onSubmitError: SubmitErrorHandler<Inputs> = (error) => {
     if (error.email) {
       setAlertMessage('invalid');
       return;
@@ -60,7 +77,7 @@ export default function SignInPage() {
         >
           {alertMessage === 'invalid' && (
             <div
-              className="mb-4 flex w-full items-center rounded-lg bg-red-50 p-4 text-base text-red-800 dark:bg-gray-800 dark:text-red-400"
+              className="dark:bg-gray-800 mb-4 flex w-full items-center rounded-lg bg-red-50 p-4 text-base text-red-800 dark:text-red-400"
               role="alert"
             >
               <svg
@@ -80,7 +97,7 @@ export default function SignInPage() {
           )}
           {alertMessage === 'error' && (
             <div
-              className="mb-4 flex w-full items-center rounded-lg bg-red-50 p-4 text-base text-red-800 dark:bg-gray-800 dark:text-red-400"
+              className="dark:bg-gray-800 mb-4 flex w-full items-center rounded-lg bg-red-50 p-4 text-base text-red-800 dark:text-red-400"
               role="alert"
             >
               <svg
@@ -100,7 +117,7 @@ export default function SignInPage() {
           )}
           {alertMessage === 'success' && (
             <div
-              className="mb-4 flex items-center rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-800 dark:border-green-800 dark:bg-gray-800 dark:text-green-400"
+              className="border-green-300 bg-green-50 text-green-800 dark:border-green-800 dark:bg-gray-800 dark:text-green-400 mb-4 flex items-center rounded-lg border p-4 text-sm"
               role="alert"
             >
               <svg
@@ -129,7 +146,7 @@ export default function SignInPage() {
             <input
               type="text"
               id="email-address"
-              className="border-green mt-1 rounded border-[1px] px-2 py-1 text-lg outline-none lg:text-2xl"
+              className="mt-1 rounded border-[1px] border-green px-2 py-1 text-lg outline-none lg:text-2xl"
               placeholder="john.doe@gmail.com"
               {...signInForm.register('email')}
             />

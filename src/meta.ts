@@ -1,7 +1,7 @@
 export const meta = {
   NAME: 'SDS Scheduling System',
   SEPARATOR: '|',
-};
+} as const;
 
 export const paths = {
   SIGN_IN: '/auth/sign-in',
@@ -12,4 +12,4 @@ export const paths = {
   ORGANIZATION_REPORTS: '/reports',
   ORGANIZATION_EDIT: '/edit',
   LOGS: '/logs',
-};
+} as const;

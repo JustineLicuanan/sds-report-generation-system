@@ -30,7 +30,7 @@ export default function CreateReportPage() {
               type="text"
               name="organization-name"
               id="organization-name"
-              className=" border-green mt-1 h-8 w-2/5 border-[1px] px-2  py-1 outline-none"
+              className=" mt-1 h-8 w-2/5 border-[1px] border-green px-2  py-1 outline-none"
             />
             <label htmlFor="date" className="mt-1 text-lg font-medium">
               Date
@@ -39,11 +39,11 @@ export default function CreateReportPage() {
               type="date"
               name="date"
               id="date"
-              className=" border-green mt-1 h-9 w-1/5 border-[1px] px-2 text-lg outline-none"
+              className=" mt-1 h-9 w-1/5 border-[1px] border-green px-2 text-lg outline-none"
             />
             <label
               htmlFor="upload-pdf"
-              className="border-green  hover:border-green/50 mt-2 flex h-[50vh] w-full cursor-pointer items-center justify-center border-[5px] py-3 text-4xl font-medium"
+              className="mt-2  flex h-[50vh] w-full cursor-pointer items-center justify-center border-[5px] border-green py-3 text-4xl font-medium hover:border-green/50"
             >
               Click me to upload your file!
             </label>
@@ -51,14 +51,14 @@ export default function CreateReportPage() {
             <textarea
               name="report-message"
               id="report-message"
-              className=" border-green mt-2 w-full border-[1px] px-2 text-lg outline-none"
+              className=" mt-2 w-full border-[1px] border-green px-2 text-lg outline-none"
               rows={2}
               placeholder="Message"
             ></textarea>
             <div className="flex justify-end">
               <button
                 type="button"
-                className="bg-yellow mt-2 rounded-md px-4 py-1 text-lg font-medium"
+                className="mt-2 rounded-md bg-yellow px-4 py-1 text-lg font-medium"
               >
                 Send
               </button>

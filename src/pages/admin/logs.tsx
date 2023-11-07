@@ -119,7 +119,7 @@ export default function AdminLogPage() {
               <div className="flex">
                 <label
                   htmlFor="search-item"
-                  className="border-green flex h-7  w-7 items-center  border-[1px] border-r-0 px-2 md:h-9 md:w-9 lg:h-11 lg:w-11"
+                  className="flex h-7 w-7  items-center border-[1px]  border-r-0 border-green px-2 md:h-9 md:w-9 lg:h-11 lg:w-11"
                 >
                   <Image
                     width={100}
@@ -133,7 +133,7 @@ export default function AdminLogPage() {
                   name="search"
                   id="search-item"
                   placeholder="Search organization"
-                  className="border-green h-7 border-[1px] px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
+                  className="h-7 border-[1px] border-green px-2 py-1 outline-none md:h-9 md:text-lg lg:h-11 lg:text-xl"
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
@@ -142,7 +142,7 @@ export default function AdminLogPage() {
                 <select
                   name="sort-date"
                   id="sort-date"
-                  className="border-green me-2 h-7 border-[1px] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  className="me-2 h-7 border-[1px] border-green bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
                   onChange={(e) => setDate(e.target.value)}
                 >
                   <option value="latest" className="text-sm md:text-base">
@@ -157,7 +157,7 @@ export default function AdminLogPage() {
                 <select
                   name="sort-status"
                   id="sort-status"
-                  className="border-green h-7 border-[1px] bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  className="h-7 border-[1px] border-green bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
                   onChange={(e) => setStatus(e.target.value)}
                 >
                   <option value="" className="text-sm md:text-base">

@@ -122,8 +122,10 @@ export default function SideBarMenu() {
               <option value="sort" disabled>
                 Select an audience
               </option>
-              {organizationList.map((org) => (
-                <option value="">{org.name}</option>
+              {organizationList.map((org, idx) => (
+                <option key={idx} value="">
+                  {org.name}
+                </option>
               ))}
             </select>
             <div className="mt-1 flex  justify-between">
