@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.7.8
+
+- Added a two dropdown which is view and create on Announcements in `side-bar-menu.tsx` .
+- Added an Announcement page in admin.
+
 ### Version 0.7.7
 
 - Added a logout button in `side-bar-menu.tsx`.

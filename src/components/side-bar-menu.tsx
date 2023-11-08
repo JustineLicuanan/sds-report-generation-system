@@ -24,7 +24,7 @@ export default function SideBarMenu() {
   const { asPath } = useRouter();
 
   const [createAnnouncement, setCreateAnnouncement] = useState(false); // Show Create Announcement Modal
-
+  const [announcementDropdown, setAnnouncementDropdown] = useState(false);
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
   const [visibilityOrganization, setVisibilityOrganization] = useState(true);
   const [visibilityUpload, setVisibilityUpload] = useState(false);
@@ -37,8 +37,8 @@ export default function SideBarMenu() {
     {
       name: 'Announcement',
       imageLink: '/announcement_icon.svg',
-      value: createAnnouncement,
-      function: setCreateAnnouncement,
+      value: announcementDropdown,
+      function: setAnnouncementDropdown,
     },
     {
       name: 'Create',
@@ -97,27 +97,54 @@ export default function SideBarMenu() {
               {item.name === 'Logout' && (
                 <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
               )}
-              <button
-                type="button"
-                className="group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray hover:bg-yellow  md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
-                onClick={() => item.function(!item.value)}
-              >
-                <Image
-                  width={100}
-                  height={100}
-                  src={item.imageLink}
-                  alt={item.name}
-                  className="h-12 w-fit hover:scale-105"
-                />
-                <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
-                  {item.name}
-                </div>
-              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  className="group  mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray hover:bg-yellow  md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
+                  onClick={() => item.function(!item.value)}
+                >
+                  <Image
+                    width={100}
+                    height={100}
+                    src={item.imageLink}
+                    alt={item.name}
+                    className="h-12 w-fit hover:scale-105"
+                  />
+                  <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
+                    {item.name}
+                  </div>
+                </button>
+                {announcementDropdown && item.name === 'Announcement' && (
+                  <div className="absolute -bottom-[75%] left-12 z-[100] flex flex-col bg-gray  text-left text-lg font-medium">
+                    <Link
+                      href={`${paths.ADMIN}${paths.ANNOUNCEMENT}`}
+                      type="button"
+                      className="px-2 py-1 text-lg font-medium hover:bg-yellow"
+                    >
+                      View
+                    </Link>
+                    <button
+                      type="button"
+                      className="px-2 py-1 text-lg font-medium hover:bg-yellow"
+                      onClick={() => {
+                        return (
+                          setCreateAnnouncement(!createAnnouncement),
+                          setAnnouncementDropdown(!announcementDropdown)
+                        );
+                      }}
+                    >
+                      Create
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           );
         })}
       </div>
 
+      {/* ANNOUNCEMENT DROP DOWN */}
+      {/* MODALS */}
       {/* ANNOUNCEMENT */}
       <div
         className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
@@ -222,7 +249,6 @@ export default function SideBarMenu() {
         </div>
       </div>
 
-      {/* MODALS */}
       {/* CREATE ORGANIZATION */}
       <div
         className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${

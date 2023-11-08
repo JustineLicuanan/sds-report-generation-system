@@ -12,4 +12,5 @@ export const paths = {
   ORGANIZATION_REPORTS: '/reports',
   ORGANIZATION_EDIT: '/edit',
   LOGS: '/logs',
+  ANNOUNCEMENT: "/announcement",
 } as const;
