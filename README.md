@@ -43,6 +43,10 @@ respective docs.
 
 ### Version 0.7.8
 
+- I modified the side bar to be mobile and tablet view responsiveness.
+
+### Version 0.7.8
+
 - Added a two dropdown which is view and create on Announcements in `side-bar-menu.tsx` .
 - Added an Announcement page in admin.
 

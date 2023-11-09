@@ -23,8 +23,10 @@ export default function SideBarMenu() {
 
   const { asPath } = useRouter();
 
+  const [showSidebar, setShowSidebar] = useState(true); // Toggle Sidebar
+
   const [createAnnouncement, setCreateAnnouncement] = useState(false); // Show Create Announcement Modal
-  const [announcementDropdown, setAnnouncementDropdown] = useState(false);
+  const [announcementDropdown, setAnnouncementDropdown] = useState(false); // Show options for announcement
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
   const [visibilityOrganization, setVisibilityOrganization] = useState(true);
   const [visibilityUpload, setVisibilityUpload] = useState(false);
@@ -63,10 +65,37 @@ export default function SideBarMenu() {
 
   return (
     <>
+      {/* HAMBURGER MENU */}
+      <button
+        type="button"
+        onClick={() => setShowSidebar(!showSidebar)}
+        className={`${
+          !showSidebar ? 'right-7 translate-x-5 duration-300' : 'left-4 -translate-x-5 duration-300'
+        } fixed bottom-5 z-[999] ms-3 mt-3 rounded-full bg-[#e0e0e0]  p-1 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)] md:hidden`}
+      >
+        {showSidebar ? (
+          <Image src="/menu_icon.svg" alt="Hamburger Menu" width={30} height={30} className="" />
+        ) : (
+          <Image
+            src="/close_menu_icon.svg"
+            alt="Close Hamburger Menu"
+            width={30}
+            height={30}
+            className=""
+          />
+        )}
+      </button>
       {/* BUTTONS AND LINKS */}
       <div
+        className={`${
+          showSidebar ? 'hidden' : ''
+        } fixed z-[99] h-full w-full bg-black/50 duration-300 md:hidden`}
+      ></div>
+      <div
         id="side-bar"
-        className="sticky top-20 z-[1] my-2 ml-1 flex h-[90vh] w-16 flex-col bg-green px-1 md:my-3 md:ml-2 md:h-[87vh] lg:my-4 lg:ml-3"
+        className={`${
+          showSidebar ? 'hidden duration-300 md:flex' : 'flex'
+        } fixed z-[100] my-2 ml-1 h-[90vh] flex-col items-center bg-green px-1 md:sticky md:my-3 md:ml-2  md:h-[87vh] lg:my-4 lg:ml-3`}
       >
         {/* SIDE BAR LINKS */}
         {sidebarMenu.map((item) => (
