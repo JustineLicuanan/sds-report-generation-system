@@ -1,4 +1,5 @@
-import { Carousel } from '@material-tailwind/react';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -50,54 +51,64 @@ export default function AdminDashboardPage() {
         <SideBarMenu />
         <div
           id="main-content"
-          className="mx-5 grid grid-cols-3 grid-rows-6 gap-9  md:mx-10 md:my-4 md:w-full"
+          className="mx-5 my-5 grid w-full grid-cols-3 grid-rows-5 gap-9 md:mx-10  md:my-4 md:grid-rows-6"
         >
-          <div className="col-span-3 row-span-2 bg-gray shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
-            <Carousel
-              className="w-full"
-              //  autoplay={true} autoplayDelay={4000} loop={true}
+          <div className="col-span-3 row-span-1 flex w-full flex-col  justify-center bg-gray py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:row-span-2">
+            <Splide
+              aria-label="My Favorite Images"
+              options={{
+                perPage: 3,
+                focus: 'center',
+                pagination: false,
+                autoplay: true,
+                breakpoints: {
+                  1024: {
+                    perPage: 1,
+                    padding: '2rem',
+                  },
+                },
+              }}
+              data-splide='{"type":"loop"}'
             >
-              {groupedData.map((group, index) => (
-                <div key={index} className="mt-1 flex w-full items-center justify-around">
-                  {group.map((item, itemIndex) => (
-                    <div key={itemIndex} className="mx-2 min-w-[350px] rounded-md bg-white">
-                      <div className="my-1 text-center text-lg font-bold">{item.name}</div>
-                      <div className="flex h-[80%] min-w-[350px] items-center justify-center">
-                        <div className="mx-5 h-28 w-28 rounded-full bg-green"></div>
-                        <div className="mx-5">
-                          <div className="border-b-2 border-b-black px-1 text-center text-lg font-medium">
-                            Pending Appointment <br />
-                            <span className="text-2xl font-semibold text-yellow">0</span>
+              {data.map((item, itemIndex) => (
+                <SplideSlide>
+                  <div key={itemIndex} className="mx-2 rounded-md bg-white py-2">
+                    <div className="my-1 text-center text-lg font-bold">{item.name}</div>
+                    <div className="flex  items-center justify-center">
+                      <div className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"></div>
+                      <div className="mx-5">
+                        <div className="border-b-2 border-b-black px-1 text-center text-lg font-medium">
+                          Pending Appointment <br />
+                          <span className="text-2xl font-semibold text-yellow">0</span>
+                        </div>
+                        <div className="flex  text-center ">
+                          <div className="border-r-2 border-r-black  px-1 text-lg font-medium">
+                            Approved <br />
+                            <span className="text-2xl font-semibold text-yellow">5</span>
                           </div>
-                          <div className="flex  text-center ">
-                            <div className="border-r-2 border-r-black  px-1 text-lg font-medium">
-                              Approved <br />
-                              <span className="text-2xl font-semibold text-yellow">5</span>
-                            </div>
-                            <div className="px-1 text-center text-lg font-medium">
-                              Total Reports <br />
-                              <span className="text-2xl font-semibold text-yellow">6</span>
-                            </div>
+                          <div className="px-1 text-center text-lg font-medium">
+                            Total Reports <br />
+                            <span className="text-2xl font-semibold text-yellow">6</span>
                           </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                </SplideSlide>
               ))}
-            </Carousel>
+            </Splide>
           </div>
-          <div className="col-span-2 row-span-4 bg-gray/30 p-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="col-span-3 row-span-2 bg-gray/30 p-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-2 md:row-span-4">
             <Calendar />
           </div>
-          <div className="row-span-2 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="col-span-3 row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2">
             <div className="flex items-center ">
               <h1 className=" py-2 text-2xl font-bold">Appointments</h1>
               <Image width={30} height={30} src="/appointment_icon.svg" alt="Appointment Icon" />
             </div>
             <div className="text-lg font-medium ">No pending appointment(s) today.</div>
           </div>
-          <div className="row-span-2 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="col-span-3 row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2">
             <div className="flex items-center">
               <h1 className=" py-2 text-2xl font-bold">Announcements</h1>
               <Image width={30} height={30} src="/announcement_icon.svg" alt="Announcement Icon" />

@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.7.9
+
+- I added a mobile and tablet responsive to admin dashboard.
+
 ### Version 0.7.8
 
 - I modified the side bar to be mobile and tablet view responsiveness.

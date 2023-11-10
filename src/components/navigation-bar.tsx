@@ -6,7 +6,7 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
   const [showNotification, setShowNotification] = useState(false);
   return (
     <>
-      <nav className="sticky top-0 z-[10] flex max-h-[12vh] min-h-[4vh] items-center">
+      <nav className="sticky top-0 z-[999] flex max-h-[12vh] min-h-[4vh] items-center">
         <div
           id="nav-container"
           className="flex w-full items-center justify-between py-1 md:px-7 md:py-2"
