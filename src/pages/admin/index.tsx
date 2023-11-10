@@ -27,7 +27,7 @@ export default function AdminDashboardPage() {
   const data = getOrgQuery.data ?? []; // Assuming getOrgQuery.data is an array of your data
 
   // Calculate the number of items per group
-  const itemsPerGroup = 3;
+  const itemsPerGroup = 2;
 
   const groupedData = [];
   for (let i = 0; i < data.length; i += itemsPerGroup) {
@@ -53,11 +53,14 @@ export default function AdminDashboardPage() {
           className="mx-5 grid grid-cols-3 grid-rows-6 gap-9  md:mx-10 md:my-4 md:w-full"
         >
           <div className="col-span-3 row-span-2 bg-gray shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
-            <Carousel className="h-full w-full" autoplay={true} autoplayDelay={4000} loop={true}>
+            <Carousel
+              className="w-full"
+              //  autoplay={true} autoplayDelay={4000} loop={true}
+            >
               {groupedData.map((group, index) => (
-                <div key={index} className="flex h-[90%] w-full items-center justify-around px-14">
+                <div key={index} className="mt-1 flex w-full items-center justify-around">
                   {group.map((item, itemIndex) => (
-                    <div key={itemIndex} className=" h-[80%] min-w-[350px] rounded-md bg-white ">
+                    <div key={itemIndex} className="mx-2 min-w-[350px] rounded-md bg-white">
                       <div className="my-1 text-center text-lg font-bold">{item.name}</div>
                       <div className="flex h-[80%] min-w-[350px] items-center justify-center">
                         <div className="mx-5 h-28 w-28 rounded-full bg-green"></div>
