@@ -41,20 +41,25 @@ respective docs.
 
 ## Changelog
 
-### Version 0.7.9
+### Version 0.7.15
+
+- Setup storage provider.
+- Create upload button component & its example.
+
+### Version 0.7.13
 
 - I added a mobile and tablet responsive to admin dashboard.
 
-### Version 0.7.8
+### Version 0.7.12
 
 - I modified the side bar to be mobile and tablet view responsiveness.
 
-### Version 0.7.8
+### Version 0.7.11
 
 - Added a two dropdown which is view and create on Announcements in `side-bar-menu.tsx` .
 - Added an Announcement page in admin.
 
-### Version 0.7.7
+### Version 0.7.9
 
 - Added a logout button in `side-bar-menu.tsx`.
 - Fixed the responsiveness of navigation and side bar.
