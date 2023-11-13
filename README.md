@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.1
+
+- Added a `logout.tsx` page.
+- Added a `500.tsx` page.
+
 ### Version 0.8.0
 
 - Create Log model.
