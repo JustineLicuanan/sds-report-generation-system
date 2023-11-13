@@ -41,6 +41,13 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.0
+
+- Create Log model.
+- Add logging in 'create report' procedure.
+- Create 'cancel report' procedure with logging & its schema.
+- Filter admin 'get org' to only return student leaders.
+
 ### Version 0.7.15
 
 - Setup storage provider.

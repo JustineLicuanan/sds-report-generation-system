@@ -1,4 +1,4 @@
-import { CommonStatus } from '@prisma/client';
+import { CommonStatus, UserRole } from '@prisma/client';
 import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
 import { orgSchemas } from '~/zod-schemas/admin/org';
 
@@ -9,7 +9,7 @@ export const orgRouter = createTRPCRouter({
 
   get: adminProcedure.input(orgSchemas.get).query(async ({ ctx, input }) => {
     return ctx.db.user.findMany({
-      where: { id: input?.id },
+      where: { id: input?.id, role: UserRole.STUDENT_LEADER },
       include: { reports: input?.withReports },
     });
   }),
