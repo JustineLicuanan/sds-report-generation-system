@@ -41,6 +41,13 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.0
+
+- I added a list of report of organizations in `admin/organizations/[id]/index.tsx`.
+- I changed the edit info page's path from `admin/organizations/[id]/index.tsx` to
+  `admin/organizations/[id]/edit.tsx`
+- I added a modal for viewing the notifications.
+
 ### Version 0.7.9
 
 - I added a mobile and tablet responsive to admin dashboard.

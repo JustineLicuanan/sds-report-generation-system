@@ -29,7 +29,6 @@ export default function Table({ data, tableHeader }: YourComponentProps) {
               </th>
             ))}
           </tr>
-          ;
         </thead>
         <tbody>
           {data.length === 0 ? ( // Check if data is empty

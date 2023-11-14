@@ -14,7 +14,7 @@ export default function OrganizationAvatar({ organization }: { organization: Use
           className="group/avatar relative mb-2 me-1 flex h-20 w-20 rounded-full bg-green  md:mb-3 md:h-24 md:w-24 lg:h-28 lg:w-28"
         >
           <button
-            onClick={() => router.push(`${paths.ADMIN}${paths.ORGANIZATION_REPORTS}/${item.id}`)}
+            onClick={() => router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}`)}
             className="mb-2 me-1 flex h-20 w-20 rounded-full bg-green  md:mb-3 md:h-24 md:w-24 lg:h-28 lg:w-28"
           >
             {/* Your button content */}

@@ -1,30 +1,17 @@
-import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import NavBar from '~/components/navigation-bar';
-import Report from '~/components/report';
+import ReportList from '~/components/report-list';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
-import { getServerAuthSession } from '~/server/auth';
-import { authRedirects } from '~/utils/auth-redirects';
 
-export const getServerSideProps = (async (ctx) => {
-  const authSession = await getServerAuthSession(ctx);
-  const authRedirect = authRedirects.organization(authSession);
-
-  // if(!authRedirect.props) {
-  //   return authRedirect;
-  // }
-
-  return authRedirect;
-}) satisfies GetServerSideProps;
-
-export default function OrganizationPage() {
+export default function ListOfReportPage() {
   const reports = [
-    { id: 1, subject: 'Subject 1', date: '02/03/23', status: 'For approval', isHidden: false },
-    { id: 2, subject: 'Subject 2', date: '02/04/23', status: 'Approved', isHidden: false },
-    { id: 3, subject: 'Subject 3', date: '02/05/23', status: 'Approved', isHidden: false },
-    { id: 4, subject: 'Subject 4', date: '02/06/23', status: 'Rejected', isHidden: false },
-    { id: 5, subject: 'Subject 5', date: '02/07/23', status: 'Rejected', isHidden: false },
+    { id: 1, subject: 'Subject 1', date: '02/03/23', status: 'For approval' },
+    { id: 2, subject: 'Subject 2', date: '02/04/23', status: 'Approved' },
+    { id: 3, subject: 'Subject 3', date: '02/05/23', status: 'Approved' },
+    { id: 4, subject: 'Subject 4', date: '02/06/23', status: 'Rejected' },
+    { id: 5, subject: 'Subject 5', date: '02/07/23', status: 'Rejected' },
   ];
 
   reports.sort((a, b) => {
@@ -34,7 +21,7 @@ export default function OrganizationPage() {
   return (
     <>
       <Head>
-        <title>{`Dashboard ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`List of Reports ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -58,9 +45,21 @@ export default function OrganizationPage() {
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
             <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
-            <Report reports={reports} />
+            {reports.some((report) => report.status === 'For approval') ? (
+              <ReportList reports={reports.filter((report) => report.status === 'For approval')} />
+            ) : (
+              <h3 className="flex items-center justify-center text-lg font-semibold text-black/80">
+                There is no pending report.
+                <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />
+              </h3>
+            )}
           </div>
           <div className="my-2 h-2 rounded-md bg-green"> </div>
+          <ReportList
+            reports={reports.filter(
+              (report) => report.status === 'Approved' || report.status === 'Rejected'
+            )}
+          />
         </div>
       </main>
     </>

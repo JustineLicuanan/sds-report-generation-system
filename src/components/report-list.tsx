@@ -8,11 +8,9 @@ type Report = {
   subject: string;
   date: string;
   status: string;
-  isHidden: boolean;
 };
-export default function Report({ reports }: { reports: Report[] }) {
+export default function ReportList({ reports }: { reports: Report[] }) {
   const [activeReport, setActiveReport] = useState<number | null>(null);
-  const [reportsState, setReportsState] = useState(reports);
   const toggleShowOption = (id: number) => {
     if (activeReport === id) {
       // Clicking the same button again, hide the div
@@ -23,30 +21,13 @@ export default function Report({ reports }: { reports: Report[] }) {
     }
   };
 
-  const toggleHide = (isHidden: boolean, id: number) => {
-    const updatedReports = reportsState.map((report) => {
-      if (report.id === id) {
-        return {
-          ...report,
-          isHidden: !isHidden,
-        };
-      }
-      return report;
-    });
-    setReportsState(updatedReports);
-  };
-
-  const filteredData = reportsState.filter((item) => !item.isHidden);
-
   return (
     <>
-      {filteredData.map((report) => (
+      {reports.map((report) => (
         <button
           onClick={() => toggleShowOption(report.id)}
           key={report.id}
-          className={`${
-            report.isHidden ? 'hidden' : ''
-          }relative mb-2 mt-2 h-16 w-full rounded-md border border-[green] p-1 shadow-[0_2px_4px_0px_rgba(0,0,0,0.25)] ${
+          className={`relative mb-2 mt-2 h-16 w-full rounded-md border border-[green] p-1 shadow-[0_2px_4px_0px_rgba(0,0,0,0.25)] ${
             activeReport === report.id ? 'bg-yellow' : 'bg-[#ffffff]'
           }  hover:bg-yellow`}
         >
@@ -74,13 +55,6 @@ export default function Report({ reports }: { reports: Report[] }) {
               >
                 Open
               </Link>
-              <button
-                type="button"
-                onClick={() => toggleHide(report.isHidden, report.id)}
-                className=" rounded bg-slate-300 px-5 py-2 hover:bg-yellow"
-              >
-                Hide
-              </button>
             </div>
           )}
         </button>
