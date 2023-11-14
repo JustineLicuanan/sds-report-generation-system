@@ -48,12 +48,6 @@ export default function SideBarMenu() {
       value: createOrganization,
       function: setCreateOrganization,
     },
-    {
-      name: 'Logout',
-      imageLink: '/logout_icon.svg',
-      value: logout,
-      function: setLogout,
-    },
   ];
 
   function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
@@ -95,7 +89,7 @@ export default function SideBarMenu() {
         id="side-bar"
         className={`${
           showSidebar ? 'hidden duration-300 md:flex' : 'flex'
-        } fixed z-[100] my-2 ml-1 h-[90vh] flex-col items-center bg-green px-1 md:sticky md:my-3 md:ml-2  md:h-[87vh] lg:my-4 lg:ml-3`}
+        } fixed z-[100] my-2 ml-1 h-[90vh] flex-col items-center bg-green px-1 md:sticky md:my-3 md:ml-2  md:h-[87vh] lg:ml-3`}
       >
         {/* SIDE BAR LINKS */}
         {sidebarMenu.map((item) => (
@@ -123,9 +117,6 @@ export default function SideBarMenu() {
         {sideBarButtons.map((item) => {
           return (
             <>
-              {item.name === 'Logout' && (
-                <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
-              )}
               <div className="relative">
                 <button
                   type="button"
@@ -170,6 +161,22 @@ export default function SideBarMenu() {
             </>
           );
         })}
+        <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
+        <Link
+          href={paths.LOGOUT}
+          className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray hover:bg-yellow md:mx-1  lg:mt-2 lg:h-12 lg:w-12`}
+        >
+          <Image
+            width={100}
+            height={100}
+            src="/logout_icon.svg"
+            alt="Logout Icon"
+            className="h-10 w-fit hover:scale-105 lg:h-12"
+          />
+          <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
+            Logout
+          </div>
+        </Link>
       </div>
 
       {/* ANNOUNCEMENT DROP DOWN */}
@@ -474,44 +481,6 @@ export default function SideBarMenu() {
                 Create
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* LOGOUT */}
-      <div
-        className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
-          logout ? '' : 'invisible opacity-0'
-        }`}
-      >
-        <div className="relative h-[200px] w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
-          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Logout</h1>
-          <div className="h-[1px] w-full bg-black "></div>
-          <div className="flex items-center justify-around p-2">
-            <Image
-              src="/logout_danger_icon.svg"
-              width={50}
-              height={50}
-              alt="Logout Danger"
-              className=""
-            />
-            <div className="py-3 text-center text-2xl font-medium">
-              Are you sure you want to logout?
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-7">
-            <button
-              type="button"
-              className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-              onClick={() => setLogout(!logout)}
-            >
-              Cancel
-            </button>
-          </div>
-          <div className="absolute bottom-0 right-7">
-            <button type="button" className="my-6 rounded-md bg-red px-8 py-2 text-lg font-medium">
-              Logout
-            </button>
           </div>
         </div>
       </div>

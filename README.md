@@ -41,27 +41,44 @@ respective docs.
 
 ## Changelog
 
-### Version 0.8.0
+### Version 0.8.2
 
 - I added a list of report of organizations in `admin/organizations/[id]/index.tsx`.
 - I changed the edit info page's path from `admin/organizations/[id]/index.tsx` to
   `admin/organizations/[id]/edit.tsx`
 - I added a modal for viewing the notifications.
 
-### Version 0.7.9
+### Version 0.8.1
+
+- Added a `logout.tsx` page.
+- Added a `500.tsx` page.
+
+### Version 0.8.0
+
+- Create Log model.
+- Add logging in 'create report' procedure.
+- Create 'cancel report' procedure with logging & its schema.
+- Filter admin 'get org' to only return student leaders.
+
+### Version 0.7.15
+
+- Setup storage provider.
+- Create upload button component & its example.
+
+### Version 0.7.13
 
 - I added a mobile and tablet responsive to admin dashboard.
 
-### Version 0.7.8
+### Version 0.7.12
 
 - I modified the side bar to be mobile and tablet view responsiveness.
 
-### Version 0.7.8
+### Version 0.7.11
 
 - Added a two dropdown which is view and create on Announcements in `side-bar-menu.tsx` .
 - Added an Announcement page in admin.
 
-### Version 0.7.7
+### Version 0.7.9
 
 - Added a logout button in `side-bar-menu.tsx`.
 - Fixed the responsiveness of navigation and side bar.

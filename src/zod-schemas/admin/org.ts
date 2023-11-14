@@ -7,7 +7,8 @@ export const orgSchemas = {
   create: z.object({
     name: z.string().trim().min(1),
     email: z.string().trim().toLowerCase().email(),
-    image: z.string().url().nullable(),
+    image: z.string().url().nullable().optional(),
+    imageId: z.string().nullable().optional(),
     description: z.string().trim().optional(),
     category: z.nativeEnum(UserCategory),
   }),
@@ -21,6 +22,7 @@ export const orgSchemas = {
     name: z.string().trim().min(1).optional(),
     email: z.string().trim().toLowerCase().email().optional(),
     image: z.string().url().nullable().optional(),
+    imageId: z.string().nullable().optional(),
     description: z.string().trim().optional(),
     category: z.nativeEnum(UserCategory).optional(),
   }),

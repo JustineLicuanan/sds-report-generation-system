@@ -42,6 +42,7 @@ export default function EditInfoPage() {
       name: getOrgQuery.data?.[0]?.name,
       email: getOrgQuery.data?.[0]?.email,
       image: getOrgQuery.data?.[0]?.image,
+      imageId: getOrgQuery.data?.[0]?.imageId,
       description: getOrgQuery.data?.[0]?.description,
       category: getOrgQuery.data?.[0]?.category as Inputs['category'],
     },

@@ -45,6 +45,7 @@ model Report {
     schedule  DateTime?
     status    ReportStatus @default(PENDING)
     comments  Comment[]
+    logs      Log[]
     createdAt DateTime     @default(now())
     updatedAt DateTime     @updatedAt
 
@@ -71,6 +72,19 @@ model Comment {
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
+}
+
+model Log {
+    id        String   @id @default(cuid())
+    userId    String
+    userName  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
+
+    report       Report?      @relation(fields: [reportId], references: [id])
+    reportId     String?
+    subject      String
+    reportStatus ReportStatus @default(PENDING)
 }
 
 // Necessary for auth
@@ -106,6 +120,7 @@ model User {
     email         String         @unique
     emailVerified DateTime?
     image         String?
+    imageId       String?
     description   String         @default("")
     category      UserCategory?
     role          UserRole       @default(STUDENT_LEADER)

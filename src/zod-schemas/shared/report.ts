@@ -24,5 +24,11 @@ export const reportSchemas = {
     announcementId: z.string().cuid().nullable().optional(),
   }),
 
+  cancel: z.object({
+    id: z.string().cuid(),
+    createdAt: z.string().datetime({ offset: true }),
+    subject: z.string().trim().min(1),
+  }),
+
   archive: z.object({ id: z.string().cuid() }),
 };
