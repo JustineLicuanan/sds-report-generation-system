@@ -71,8 +71,8 @@ export default function AdminDashboardPage() {
               data-splide='{"type":"loop"}'
             >
               {data.map((item, itemIndex) => (
-                <SplideSlide>
-                  <div key={itemIndex} className="mx-2 rounded-md bg-white py-2">
+                <SplideSlide key={itemIndex}>
+                  <div className="mx-2 rounded-md bg-white py-2">
                     <div className="my-1 text-center text-lg font-bold">{item.name}</div>
                     <div className="flex  items-center justify-center">
                       <div className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"></div>

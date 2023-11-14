@@ -1,10 +1,10 @@
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
-import { GetServerSideProps } from 'next';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -55,8 +55,8 @@ export default function AnnouncementPage() {
             </h1>
             {/* LIST OF ANNOUNCEMENTS */}
             <div className="my-5 w-full">
-              {listOfAnnouncements.map((data) => (
-                <div className="mb-4 bg-gray px-3 py-2">
+              {listOfAnnouncements.map((data, idx) => (
+                <div className="mb-4 bg-gray px-3 py-2" key={idx}>
                   <div className="flex justify-between py-2">
                     <div>
                       <h4 className="text-2xl font-semibold">{data.organization}</h4>

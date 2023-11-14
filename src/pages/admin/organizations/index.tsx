@@ -1,5 +1,5 @@
 import { UserCategory } from '@prisma/client';
-import { GetServerSideProps } from 'next';
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
 import OrganizationAvatar from '~/components/organization-avatar';

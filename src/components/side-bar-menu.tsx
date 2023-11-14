@@ -33,8 +33,6 @@ export default function SideBarMenu() {
   const [uploadPhoto, setUploadPhoto] = useState('/default_logo.png');
   const [visibilityDescription, setVisibilityDescription] = useState(false);
 
-  const [logout, setLogout] = useState(false);
-
   const sideBarButtons = [
     {
       name: 'Announcement',
