@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -6,6 +7,19 @@ import Pagination from '~/components/pagination';
 import SideBarMenu from '~/components/side-bar-menu';
 import Table from '~/components/table';
 import { meta } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
+import { authRedirects } from '~/utils/auth-redirects';
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  const authRedirect = authRedirects.admin(authSession);
+
+  // if(!authRedirect.props) {
+  //   return authRedirect;
+  // }
+
+  return authRedirect;
+}) satisfies GetServerSideProps;
 
 export default function AdminLogPage() {
   const logData = [
@@ -80,7 +94,7 @@ export default function AdminLogPage() {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(3);
+  const [itemsPerPage] = useState(10);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -111,8 +125,8 @@ export default function AdminLogPage() {
 
         {/* MAIN CONTENT */}
 
-        <div className="mx-3 mt-4 h-[87vh] w-full overflow-hidden ">
-          <div className="mx-auto my-0 h-[87vh] max-w-5xl   rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
+        <div className="mx-3 my-4 w-full">
+          <div className="mx-auto my-0 min-h-[87vh] max-w-5xl rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Log</h1>
             <div className="my-4 flex flex-col md:my-6 md:flex-row">
               {/* SEARCH */}

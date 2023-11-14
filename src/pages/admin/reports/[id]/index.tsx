@@ -1,9 +1,23 @@
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
+import { authRedirects } from '~/utils/auth-redirects';
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  const authRedirect = authRedirects.admin(authSession);
+
+  // if(!authRedirect.props) {
+  //   return authRedirect;
+  // }
+
+  return authRedirect;
+}) satisfies GetServerSideProps;
 
 export default function AdminOrgReportPage() {
   const orgComment = [
@@ -136,7 +150,7 @@ export default function AdminOrgReportPage() {
             <div className="absolute bottom-4 right-3">
               <button
                 type="button"
-                className="bg-red me-2 rounded-md px-4 py-2 text-lg font-medium"
+                className="me-2 rounded-md bg-red px-4 py-2 text-lg font-medium"
               >
                 Reject
               </button>

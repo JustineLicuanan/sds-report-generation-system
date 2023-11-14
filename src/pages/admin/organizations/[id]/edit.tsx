@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { UserCategory } from '@prisma/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '@trpc/react-query';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -11,8 +12,21 @@ import { type z } from 'zod';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
+import { authRedirects } from '~/utils/auth-redirects';
 import { orgSchemas } from '~/zod-schemas/admin/org';
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  const authRedirect = authRedirects.admin(authSession);
+
+  // if(!authRedirect.props) {
+  //   return authRedirect;
+  // }
+
+  return authRedirect;
+}) satisfies GetServerSideProps;
 
 type Inputs = z.infer<typeof orgSchemas.update>;
 

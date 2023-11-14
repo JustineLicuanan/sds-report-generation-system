@@ -1,7 +1,21 @@
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
+import { authRedirects } from '~/utils/auth-redirects';
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  const authRedirect = authRedirects.organization(authSession);
+
+  // if(!authRedirect.props) {
+  //   return authRedirect;
+  // }
+
+  return authRedirect;
+}) satisfies GetServerSideProps;
 
 export default function CreateReportPage() {
   return (

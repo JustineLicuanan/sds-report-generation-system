@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.3
+
+- Added an authentication redirect to all pages of `\admin` and `\organization`.
+
 ### Version 0.8.2
 
 - I added a list of report of organizations in `admin/organizations/[id]/index.tsx`.

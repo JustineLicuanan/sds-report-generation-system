@@ -22,46 +22,48 @@ export default function Pagination({ itemsPerPage, totalItems, currentPage, pagi
   }
 
   return (
-    <ul className="flex justify-center">
-      <li className="inline">
-        <button
-          type="button"
-          onClick={() => paginate(currentPage - 1)}
-          className={`me-10 mt-1 border border-black/50 bg-gray px-2 py-2 ${
-            currentPage === 1 ? 'text-black/50' : ''
-          }`}
-          disabled={currentPage === 1}
-        >
-          &#11207;
-        </button>
-      </li>
-
-      {pageNumbers.map((number) => (
-        <li key={number} className="inline">
+    <>
+      <ul className="flex justify-center">
+        <li className="inline">
           <button
             type="button"
-            onClick={() => paginate(number)}
-            className={`mx-1 mt-1 border px-3 py-2  ${
-              currentPage === number ? 'border-black bg-yellow font-bold' : 'border-black/50'
+            onClick={() => paginate(currentPage - 1)}
+            className={`me-10 mt-1 border border-black/50 bg-gray px-2 py-2 ${
+              currentPage === 1 ? 'text-black/50' : ''
             }`}
+            disabled={currentPage === 1}
           >
-            {number}
+            &#11207;
           </button>
         </li>
-      ))}
 
-      <li className="inline">
-        <button
-          type="button"
-          onClick={() => paginate(currentPage + 1)}
-          className={`ms-10 mt-1 border border-black/50 bg-gray px-2 py-2 ${
-            currentPage === totalPages ? 'text-black/50' : ''
-          }`}
-          disabled={currentPage === totalPages}
-        >
-          &#11208;
-        </button>
-      </li>
-    </ul>
+        {pageNumbers.map((number) => (
+          <li key={number} className="inline">
+            <button
+              type="button"
+              onClick={() => paginate(number)}
+              className={`mx-1 mt-1 border px-3 py-2  ${
+                currentPage === number ? 'border-black bg-yellow font-bold' : 'border-black/50'
+              }`}
+            >
+              {number}
+            </button>
+          </li>
+        ))}
+
+        <li className="inline">
+          <button
+            type="button"
+            onClick={() => paginate(currentPage + 1)}
+            className={`ms-10 mt-1 border border-black/50 bg-gray px-2 py-2 ${
+              currentPage === totalPages ? 'text-black/50' : ''
+            }`}
+            disabled={currentPage === totalPages}
+          >
+            &#11208;
+          </button>
+        </li>
+      </ul>
+    </>
   );
 }
