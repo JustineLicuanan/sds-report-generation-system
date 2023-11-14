@@ -41,7 +41,7 @@ respective docs.
 
 ## Changelog
 
-### Version 0.8.4
+### Version 0.8.5
 
 - Move `logout.tsx` file to `/auth`.
 - Create 'get logs' procedure.
