@@ -41,9 +41,14 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.4
+
+- Move `logout.tsx` file to `/auth`.
+- Create 'get logs' procedure.
+
 ### Version 0.8.3
 
-- Added an authentication redirect to all pages of `\admin` and `\organization`.
+- Added an authentication redirect to all pages of `/admin` and `/organization`.
 
 ### Version 0.8.2
 

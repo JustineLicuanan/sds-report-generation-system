@@ -1,3 +1,4 @@
+import { signOut } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,9 +32,12 @@ export default function LogoutPage() {
             </Link>
           </div>
           <div className="absolute bottom-3 right-7">
-            <Link href={paths.SIGN_IN} className="rounded-md bg-red px-8 py-2 text-lg font-medium">
+            <button
+              className="rounded-md bg-red px-8 py-2 text-lg font-medium"
+              onClick={() => signOut({ callbackUrl: paths.SIGN_IN })}
+            >
               Logout
-            </Link>
+            </button>
           </div>
         </div>
       </main>

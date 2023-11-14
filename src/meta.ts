@@ -13,5 +13,5 @@ export const paths = {
   ORGANIZATION_EDIT: '/edit',
   LOGS: '/logs',
   ANNOUNCEMENT: '/announcement',
-  LOGOUT: '/logout',
+  LOGOUT: '/auth/logout',
 } as const;
