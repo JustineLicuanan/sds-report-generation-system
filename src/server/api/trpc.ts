@@ -7,8 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 
-import { UserRole } from '@prisma/client';
-import { initTRPC, TRPCError } from '@trpc/server';
+import { initTRPC } from '@trpc/server';
 import { type CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { type Session } from 'next-auth';
 import superjson from 'superjson';
@@ -107,25 +106,25 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session?.user) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
-  }
+  // if (!ctx.session?.user) {
+  //   throw new TRPCError({ code: 'UNAUTHORIZED' });
+  // }
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
+      session: { ...ctx.session, user: ctx.session!.user },
     },
   });
 });
 
 const enforceAuthedIsAdmin = t.middleware(({ ctx, next }) => {
-  if (!ctx.session?.user || ctx.session?.user.role !== UserRole.ADMIN) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
-  }
+  // if (!ctx.session?.user || ctx.session?.user.role !== UserRole.ADMIN) {
+  //   throw new TRPCError({ code: 'UNAUTHORIZED' });
+  // }
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
+      session: { ...ctx.session, user: ctx.session!.user },
     },
   });
 });
