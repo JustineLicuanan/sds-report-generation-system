@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.6
+
+- Changed "Report Management System" to "Scheduling System".
+- Made some changes to `side-bar-menu.tsx`.
+- Truncated a words in message of an organization and added a modal in `/admin/announcement.tsx`.
+
 ### Version 0.8.5
 
 - Move `logout.tsx` file to `/auth`.

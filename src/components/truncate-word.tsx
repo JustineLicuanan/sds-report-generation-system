@@ -1,9 +1,17 @@
-export default function TruncateWord({ text, maxLength }: { text: string; maxLength: number }) {
+export default function TruncateWord({
+  text,
+  maxLength,
+  fontSize,
+}: {
+  text: string;
+  maxLength: number;
+  fontSize: string;
+}) {
   if (text.length <= maxLength) {
-    return <span>{text}</span>;
+    return <span className={`${fontSize}`}>{text}</span>;
   } else {
     const truncatedText =
       text.slice(0, maxLength) + '...' + text.slice(text.length - 5, text.length);
-    return <span>{truncatedText}</span>;
+    return <span className={`${fontSize}`}>{truncatedText}</span>;
   }
 }

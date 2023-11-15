@@ -52,7 +52,7 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
                 Office of Student Development Services
               </div>
               <div id="sub-title" className="ms-14">
-                Report Management System
+                Scheduling System
               </div>
             </div>
           </div>
@@ -100,9 +100,9 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
                         selectedNotification === index
                           ? 'font-medium text-black/60'
                           : 'font-bold text-black/80 '
-                      } -mt-4 px-2 py-2 text-center text-xl tracking-tight`}
+                      } -mt-4 px-2 py-2 text-center  tracking-tight`}
                     >
-                      <TruncateWord text={notif.subject} maxLength={33} />
+                      <TruncateWord text={notif.subject} maxLength={33} fontSize="text-lg" />
                     </div>
                   </button>
                 ))}

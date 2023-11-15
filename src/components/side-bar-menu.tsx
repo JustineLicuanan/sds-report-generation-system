@@ -1,16 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserCategory } from '@prisma/client';
+import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { type SubmitHandler, useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import { paths } from '~/meta';
 import { api } from '~/utils/api';
 import { orgSchemas } from '~/zod-schemas/admin/org';
-import { type OnSuccessUpload, ResourceType, UploadButton } from './upload-button';
-import { CldImage } from 'next-cloudinary';
+import { ResourceType, UploadButton, type OnSuccessUpload } from './upload-button';
 
 type Inputs = z.infer<typeof orgSchemas.create>;
 
@@ -106,7 +106,7 @@ export default function SideBarMenu() {
           <Link
             href={item.urlLink}
             key={item.id}
-            className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md hover:bg-yellow md:mx-1 lg:mt-2  lg:h-12 lg:w-12 ${
+            className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md p-1 hover:bg-yellow md:mx-1 lg:mt-2  lg:h-12 lg:w-12 ${
               asPath === item.urlLink ? 'bg-yellow' : 'bg-gray' // Check if the current route matches the item's urlLink
             }`}
           >
@@ -130,7 +130,7 @@ export default function SideBarMenu() {
               <div className="relative">
                 <button
                   type="button"
-                  className="group  mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray hover:bg-yellow  md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
+                  className="group  mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
                   onClick={() => item.function(!item.value)}
                 >
                   <Image
@@ -174,7 +174,7 @@ export default function SideBarMenu() {
         <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
         <Link
           href={paths.LOGOUT}
-          className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray hover:bg-yellow md:mx-1  lg:mt-2 lg:h-12 lg:w-12`}
+          className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1  lg:mt-2 lg:h-12 lg:w-12`}
         >
           <Image
             width={100}
@@ -334,12 +334,12 @@ export default function SideBarMenu() {
               className="transparent mt-1 h-9 border-[1px] border-green px-2 py-1  text-lg outline-none"
               {...createOrgForm.register('category')}
             >
-              <option disabled>
-                Select a category
-              </option>
+              <option disabled>Select a category</option>
               <option value={UserCategory.STUDENT_GOVERNING_BODY}>Student Governing Body</option>
               <option value={UserCategory.ACADEMIC_ORGANIZATION}>Academic Organization</option>
-              <option value={UserCategory.NON_ACADEMIC_ORGANIZATION}>Non Academic Organization</option>
+              <option value={UserCategory.NON_ACADEMIC_ORGANIZATION}>
+                Non Academic Organization
+              </option>
             </select>
           </div>
           <div className="h-[1px] w-full bg-black "></div>
@@ -397,30 +397,34 @@ export default function SideBarMenu() {
               Upload Organization Logo
             </h1>
             <div className="h-[1px] w-full bg-black "></div>
-            
+
             <div className="align-center mt-[30px] flex  justify-center px-10">
-            {createOrgForm.watch('imageId') ? (
-          <CldImage
-            width="200"
-            height="200"
-            src={createOrgForm.watch('imageId')!}
-            alt="Avatar logo"
-          />
-        ) : <Image
-        width={100}
-        height={100}
-        src="/default_logo.png"
-        alt="Avatar Logo"
-        className="h-[200px] w-[200px]"
-      />}
+              {createOrgForm.watch('imageId') ? (
+                <CldImage
+                  width="200"
+                  height="200"
+                  src={createOrgForm.watch('imageId')!}
+                  alt="Avatar logo"
+                />
+              ) : (
+                <Image
+                  width={100}
+                  height={100}
+                  src="/default_logo.png"
+                  alt="Avatar Logo"
+                  className="h-[200px] w-[200px]"
+                />
+              )}
             </div>
             <div className="flex justify-center">
-            <UploadButton className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-          folder="org-logos"
-          resourceType={ResourceType.IMAGE}
-          onSuccess={onSuccessUpload}>
-              Upload
-            </UploadButton>
+              <UploadButton
+                className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+                folder="org-logos"
+                resourceType={ResourceType.IMAGE}
+                onSuccess={onSuccessUpload}
+              >
+                Upload
+              </UploadButton>
             </div>
             <div className="absolute bottom-0 left-7">
               <button
