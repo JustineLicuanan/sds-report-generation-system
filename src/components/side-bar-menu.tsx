@@ -1,13 +1,22 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UserCategory } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import type { ChangeEvent } from 'react';
 import { useState } from 'react';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { type z } from 'zod';
 import { paths } from '~/meta';
 import { api } from '~/utils/api';
+import { orgSchemas } from '~/zod-schemas/admin/org';
+import { type OnSuccessUpload, ResourceType, UploadButton } from './upload-button';
+import { CldImage } from 'next-cloudinary';
+
+type Inputs = z.infer<typeof orgSchemas.create>;
 
 export default function SideBarMenu() {
   const getOrgQuery = api.admin.org.get.useQuery({});
+  const createOrgMutation = api.admin.org.create.useMutation();
   const organizationList = getOrgQuery.data ?? [];
 
   const sidebarMenu = [
@@ -30,7 +39,6 @@ export default function SideBarMenu() {
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
   const [visibilityOrganization, setVisibilityOrganization] = useState(true);
   const [visibilityUpload, setVisibilityUpload] = useState(false);
-  const [uploadPhoto, setUploadPhoto] = useState('/default_logo.png');
   const [visibilityDescription, setVisibilityDescription] = useState(false);
 
   const sideBarButtons = [
@@ -48,12 +56,16 @@ export default function SideBarMenu() {
     },
   ];
 
-  function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setUploadPhoto(selectedFile.name);
-    }
-  }
+  const createOrgForm = useForm<Inputs>({ resolver: zodResolver(orgSchemas.create) });
+
+  const onSuccessUpload: OnSuccessUpload = (result) => {
+    createOrgForm.setValue('image', result.info?.secure_url);
+    createOrgForm.setValue('imageId', result.info?.public_id);
+  };
+
+  const onSubmit: SubmitHandler<Inputs> = async (values) => {
+    await createOrgMutation.mutateAsync(values);
+  };
 
   return (
     <>
@@ -254,11 +266,11 @@ export default function SideBarMenu() {
               Message
             </label>
             <textarea
-              name="organization-description"
               id="org-description"
               placeholder="Announcement message"
               rows={3}
               className="border border-green px-2 py-1 text-lg"
+              {...createOrgForm.register('description')}
             ></textarea>
           </div>
           <div className="absolute bottom-0 left-7">
@@ -284,10 +296,11 @@ export default function SideBarMenu() {
       </div>
 
       {/* CREATE ORGANIZATION */}
-      <div
+      <form
         className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
           createOrganization ? '' : 'invisible opacity-0'
         }`}
+        onSubmit={createOrgForm.handleSubmit(onSubmit)}
       >
         <div
           className={` relative h-[433px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  ease-in-out ${
@@ -306,10 +319,10 @@ export default function SideBarMenu() {
             <br />
             <input
               type="text"
-              name="organization-name"
               id="organization-name"
               placeholder="e.g Music Organization"
               className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
+              {...createOrgForm.register('name')}
             />
             <br />
             <label htmlFor="org-category" className="text-xl font-bold">
@@ -317,17 +330,16 @@ export default function SideBarMenu() {
             </label>
             <br />
             <select
-              name="category"
               id="org-category"
               className="transparent mt-1 h-9 border-[1px] border-green px-2 py-1  text-lg outline-none"
-              defaultValue="sort"
+              {...createOrgForm.register('category')}
             >
-              <option value="sort" disabled>
+              <option disabled>
                 Select a category
               </option>
-              <option value="">Student Governing Body</option>
-              <option value="">Academic Organization</option>
-              <option value="">Non Academic Organization</option>
+              <option value={UserCategory.STUDENT_GOVERNING_BODY}>Student Governing Body</option>
+              <option value={UserCategory.ACADEMIC_ORGANIZATION}>Academic Organization</option>
+              <option value={UserCategory.NON_ACADEMIC_ORGANIZATION}>Non Academic Organization</option>
             </select>
           </div>
           <div className="h-[1px] w-full bg-black "></div>
@@ -345,10 +357,10 @@ export default function SideBarMenu() {
             <br />
             <input
               type="text"
-              name="email-address"
               id="email-address"
               placeholder="e.g music.organization@sample.com"
               className=" mt-1 h-9 w-3/4 border-[1px] border-green px-2  py-1 text-lg outline-none"
+              {...createOrgForm.register('email')}
             />
             <div className="absolute bottom-0 left-7">
               <button
@@ -385,30 +397,30 @@ export default function SideBarMenu() {
               Upload Organization Logo
             </h1>
             <div className="h-[1px] w-full bg-black "></div>
+            
             <div className="align-center mt-[30px] flex  justify-center px-10">
-              <Image
-                width={100}
-                height={100}
-                src={uploadPhoto}
-                alt="Avatar Logo"
-                className="h-[200px] w-[200px]"
-              />
+            {createOrgForm.watch('imageId') ? (
+          <CldImage
+            width="200"
+            height="200"
+            src={createOrgForm.watch('imageId')!}
+            alt="Avatar logo"
+          />
+        ) : <Image
+        width={100}
+        height={100}
+        src="/default_logo.png"
+        alt="Avatar Logo"
+        className="h-[200px] w-[200px]"
+      />}
             </div>
             <div className="flex justify-center">
-              <label
-                htmlFor="avatar-logo"
-                className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium  "
-              >
-                Upload
-              </label>
-              <input
-                type="file"
-                name="avatar"
-                id="avatar-logo"
-                accept="image/jpeg image/png"
-                className="hidden"
-                onChange={handleFileSelect}
-              />
+            <UploadButton className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+          folder="org-logos"
+          resourceType={ResourceType.IMAGE}
+          onSuccess={onSuccessUpload}>
+              Upload
+            </UploadButton>
             </div>
             <div className="absolute bottom-0 left-7">
               <button
@@ -481,7 +493,7 @@ export default function SideBarMenu() {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </>
   );
 }
