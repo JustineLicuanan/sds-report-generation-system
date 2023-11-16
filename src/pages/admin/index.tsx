@@ -23,7 +23,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AdminDashboardPage() {
-  const getOrgQuery = api.admin.org.get.useQuery({});
+  const getOrgQuery = api.admin.org.get.useQuery();
 
   const data = getOrgQuery.data ?? []; // Assuming getOrgQuery.data is an array of your data
 

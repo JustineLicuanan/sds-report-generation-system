@@ -15,7 +15,7 @@ import { ResourceType, UploadButton, type OnSuccessUpload } from './upload-butto
 type Inputs = z.infer<typeof orgSchemas.create>;
 
 export default function SideBarMenu() {
-  const getOrgQuery = api.admin.org.get.useQuery({});
+  const getOrgQuery = api.admin.org.get.useQuery();
   const createOrgMutation = api.admin.org.create.useMutation();
   const organizationList = getOrgQuery.data ?? [];
 
