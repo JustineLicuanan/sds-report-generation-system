@@ -8,19 +8,19 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
       subject: 'File a report today.',
       date: '10/05/23',
       isRead: false,
-      message: 'File a report today for your organization.',
+      description: 'File a report today for your organization.',
     },
     {
       subject: 'File a report tomorrow.',
       date: '10/04/23',
       isRead: false,
-      message: 'File a report tomorrow for your organization.',
+      description: 'File a report tomorrow for your organization.',
     },
     {
       subject: 'File a report from yesterday.',
       date: '10/06/23',
       isRead: false,
-      message: 'File a report from yesterday for your organization.',
+      description: 'File a report from yesterday for your organization.',
     },
   ];
 
@@ -136,9 +136,9 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
                 </div>
               </div>
               <div className="flex py-2 text-xl">
-                <h4 className="font-semibold">Message:</h4>
+                <h4 className="font-semibold">Description:</h4>
                 <div className="ms-1 text-xl font-medium">
-                  {notification[selectedNotification]?.message}
+                  {notification[selectedNotification]?.description}
                 </div>
               </div>
             </div>

@@ -24,50 +24,44 @@ export const getServerSideProps = (async (ctx) => {
 export default function AdminLogPage() {
   const logData = [
     {
-      subjectId: 2023001,
+      reportId: 2023001,
       organizationName: 'HGA',
-      subject: 'Subject 1',
-      dateCreated: '2023-10-01',
+      category: 'Subject 1',
       date: '2023-10-20',
-      status: 'For approval',
+      status: 'Pending',
     },
     {
-      subjectId: 2023002,
+      reportId: 2023002,
       organizationName: 'SDS',
-      subject: 'Subject 2',
-      dateCreated: '2023-10-01',
+      category: 'Subject 2',
       date: '2023-10-11',
       status: 'Rejected',
     },
     {
-      subjectId: 2023003,
+      reportId: 2023003,
       organizationName: 'BITS',
-      subject: 'Subject 3',
-      dateCreated: '2023-10-01',
+      category: 'Subject 3',
       date: '2023-10-20',
       status: 'Approved',
     },
     {
-      subjectId: 2023004,
+      reportId: 2023004,
       organizationName: 'ADS',
-      subject: 'Subject 1',
-      dateCreated: '2023-10-01',
+      category: 'Subject 1',
       date: '2023-10-22',
-      status: 'For approval',
+      status: 'Pending',
     },
     {
-      subjectId: 2023005,
+      reportId: 2023005,
       organizationName: 'TRE',
-      subject: 'Subject 2',
-      dateCreated: '2023-10-01',
+      category: 'Subject 2',
       date: '2023-10-03',
       status: 'Rejected',
     },
     {
-      subjectId: 2023006,
+      reportId: 2023006,
       organizationName: 'QWE',
-      subject: 'Subject 3',
-      dateCreated: '2023-10-01',
+      category: 'Subject 3',
       date: '2023-10-20',
       status: 'Approved',
     },
@@ -102,14 +96,7 @@ export default function AdminLogPage() {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const tableHeader = [
-    'Subject Id',
-    'Organization Name',
-    'Subject',
-    'Created on',
-    'Date',
-    'Status',
-  ];
+  const tableHeader = ['Organization Name', 'Category', 'Date', 'Status'];
   return (
     <>
       {/* HEADER */}
@@ -177,7 +164,7 @@ export default function AdminLogPage() {
                   <option value="" className="text-sm md:text-base">
                     Filter Status (All)
                   </option>
-                  <option value="for approval" className="text-sm md:text-base">
+                  <option value="pending" className="text-sm md:text-base">
                     Pending
                   </option>
                   <option value="approved" className="text-sm md:text-base">

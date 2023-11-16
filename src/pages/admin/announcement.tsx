@@ -25,13 +25,14 @@ export default function AnnouncementPage() {
       organization: 'Music Organization',
       subject: 'Event Report',
       date: '11/05/23',
-      message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, deleniti!',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, deleniti!',
     },
     {
       organization: 'Science Organization',
       subject: 'Financial Report',
       date: '11/07/23',
-      message:
+      description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit perspiciatis molestias odit, dolorum ipsam asperiores laborum accusamus.',
     },
   ];
@@ -83,9 +84,9 @@ export default function AnnouncementPage() {
                     <div className="ms-1 text-xl font-medium">{data.subject}</div>
                   </div>
                   <div className="flex py-2 text-xl">
-                    <h4 className="font-semibold">Message:</h4>
+                    <h4 className="font-semibold">Description:</h4>
                     <div className="ms-1  font-medium">
-                      <TruncateWord text={data.message} maxLength={70} fontSize="text-xl" />
+                      <TruncateWord text={data.description} maxLength={70} fontSize="text-xl" />
                     </div>
                   </div>
                 </button>
@@ -118,9 +119,9 @@ export default function AnnouncementPage() {
                 </div>
               </div>
               <div className="flex py-2 text-xl">
-                <h4 className="font-semibold">Message:</h4>
+                <h4 className="font-semibold">Description:</h4>
                 <div className="ms-1 text-xl font-medium">
-                  {listOfAnnouncements[selectedNotification]?.message}
+                  {listOfAnnouncements[selectedNotification]?.description}
                 </div>
               </div>
             </div>

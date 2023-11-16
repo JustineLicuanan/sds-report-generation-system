@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.7
+
+- Removed "Date Created" and "Subject" is changed to "Category".
+- Modified the Create Organization modal.
+
 ### Version 0.8.6
 
 - Changed "Report Management System" to "Scheduling System".

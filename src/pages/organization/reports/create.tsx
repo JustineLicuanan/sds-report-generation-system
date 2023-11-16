@@ -63,11 +63,11 @@ export default function CreateReportPage() {
             </label>
             <input type="file" name="upload-pdf" id="upload-pdf" accept="pdf" className="hidden" />
             <textarea
-              name="report-message"
-              id="report-message"
+              name="report-description"
+              id="report-description"
               className=" mt-2 w-full border-[1px] border-green px-2 text-lg outline-none"
               rows={2}
-              placeholder="Message"
+              placeholder="Description"
             ></textarea>
             <div className="flex justify-end">
               <button

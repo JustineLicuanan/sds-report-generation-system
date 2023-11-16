@@ -1,9 +1,8 @@
 type Data = {
-  subjectId: number;
+  reportId: number;
   organizationName: string;
-  subject: string;
+  category: string;
   date: string;
-  dateCreated: string;
   status: string;
 };
 type YourComponentProps = {
@@ -37,18 +36,12 @@ export default function Table({ data, tableHeader }: YourComponentProps) {
             </tr>
           ) : (
             data.map((data) => (
-              <tr key={data.subjectId} className=" even:bg-[#808080]/20">
-                <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                  {data.subjectId}
-                </td>
+              <tr key={data.reportId} className=" even:bg-[#808080]/20">
                 <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
                   {data.organizationName}
                 </td>
                 <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                  {data.subject}
-                </td>
-                <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
-                  {data.dateCreated}
+                  {data.category}
                 </td>
                 <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
                   {data.date}
@@ -63,7 +56,7 @@ export default function Table({ data, tableHeader }: YourComponentProps) {
                       {data.status}
                     </td>
                   )) ||
-                  (data.status === 'For approval' && (
+                  (data.status === 'Pending' && (
                     <td className="border border-x-0 border-black px-2 py-4 ">{data.status}</td>
                   ))}
               </tr>

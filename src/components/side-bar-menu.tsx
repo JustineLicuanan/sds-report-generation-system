@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import { paths } from '~/meta';
 import { api } from '~/utils/api';
@@ -37,9 +37,6 @@ export default function SideBarMenu() {
   const [createAnnouncement, setCreateAnnouncement] = useState(false); // Show Create Announcement Modal
   const [announcementDropdown, setAnnouncementDropdown] = useState(false); // Show options for announcement
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
-  const [visibilityOrganization, setVisibilityOrganization] = useState(true);
-  const [visibilityUpload, setVisibilityUpload] = useState(false);
-  const [visibilityDescription, setVisibilityDescription] = useState(false);
 
   const sideBarButtons = [
     {
@@ -57,6 +54,21 @@ export default function SideBarMenu() {
   ];
 
   const createOrgForm = useForm<Inputs>({ resolver: zodResolver(orgSchemas.create) });
+
+  const {
+    register,
+    formState: { errors },
+    control,
+  } = useForm({
+    defaultValues: {
+      organization: [{ email: '', position: '' }],
+    },
+  });
+  const { fields, append, remove } = useFieldArray({
+    name: 'organization',
+    control,
+  });
+  console.log(fields);
 
   const onSuccessUpload: OnSuccessUpload = (result) => {
     createOrgForm.setValue('image', result.info?.secure_url);
@@ -262,12 +274,12 @@ export default function SideBarMenu() {
               placeholder="Subject"
               className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
             />
-            <label htmlFor="announcement-message" className=" mb-2 text-xl font-bold">
-              Message
+            <label htmlFor="announcement-description" className=" mb-2 text-xl font-bold">
+              Description
             </label>
             <textarea
               id="org-description"
-              placeholder="Announcement message"
+              placeholder="Announcement description"
               rows={3}
               className="border border-green px-2 py-1 text-lg"
               {...createOrgForm.register('description')}
@@ -302,17 +314,41 @@ export default function SideBarMenu() {
         }`}
         onSubmit={createOrgForm.handleSubmit(onSubmit)}
       >
-        <div
-          className={` relative h-[433px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  ease-in-out ${
-            visibilityOrganization ? 'duration-300' : 'invisible -translate-y-4 duration-0'
-          }`}
-        >
+        <div className="relative h-[90vh] w-[450px] overflow-auto  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  ease-in-out ">
           <h1 className="py-3 text-center text-3xl font-bold tracking-tight">
             Create new Organization
           </h1>
           <div className="h-[1px] w-full bg-black "></div>
-
-          <div className="px-10 py-5">
+          <div className="align-center mt-[12px] flex  justify-center px-10">
+            {createOrgForm.watch('imageId') ? (
+              <CldImage
+                width="100"
+                height="100"
+                src={createOrgForm.watch('imageId')!}
+                alt="Avatar logo"
+                className="rounded-full"
+              />
+            ) : (
+              <Image
+                width={100}
+                height={100}
+                src="/default_logo.png"
+                alt="Avatar Logo"
+                className="h-[100px] w-[100px] rounded-full"
+              />
+            )}
+          </div>
+          <div className="flex justify-center">
+            <UploadButton
+              className="my-3 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+              folder="org-logos"
+              resourceType={ResourceType.IMAGE}
+              onSuccess={onSuccessUpload}
+            >
+              Upload
+            </UploadButton>
+          </div>
+          <div className="px-10 pb-4">
             <label htmlFor="organization-name" className=" text-xl font-bold ">
               Organization Name
             </label>
@@ -331,138 +367,17 @@ export default function SideBarMenu() {
             <br />
             <select
               id="org-category"
-              className="transparent mt-1 h-9 border-[1px] border-green px-2 py-1  text-lg outline-none"
+              className="transparent mb-2 mt-1 h-9 border-[1px] border-green px-2 py-1  text-lg outline-none"
               {...createOrgForm.register('category')}
             >
-              <option disabled>Select a category</option>
+              <option value="">Select a category</option>
               <option value={UserCategory.STUDENT_GOVERNING_BODY}>Student Governing Body</option>
               <option value={UserCategory.ACADEMIC_ORGANIZATION}>Academic Organization</option>
               <option value={UserCategory.NON_ACADEMIC_ORGANIZATION}>
                 Non Academic Organization
               </option>
             </select>
-          </div>
-          <div className="h-[1px] w-full bg-black "></div>
-          <div className="px-10 pt-5">
-            <div className="mb-6 font-bold">
-              NOTE:{'   '}
-              <span className="font-normal">
-                Please provide the existing CVSU email address that you would like to grant
-                permission to.
-              </span>
-            </div>
-            <label htmlFor="email-address" className=" text-xl font-bold">
-              Email
-            </label>
-            <br />
-            <input
-              type="text"
-              id="email-address"
-              placeholder="e.g music.organization@sample.com"
-              className=" mt-1 h-9 w-3/4 border-[1px] border-green px-2  py-1 text-lg outline-none"
-              {...createOrgForm.register('email')}
-            />
-            <div className="absolute bottom-0 left-7">
-              <button
-                type="button"
-                className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-                onClick={() => setCreateOrganization(!createOrganization)}
-              >
-                Cancel
-              </button>
-            </div>
-            <div className="absolute bottom-0 right-7">
-              <button
-                type="button"
-                onClick={() => {
-                  setVisibilityOrganization(false);
-                  setVisibilityUpload(true);
-                }}
-                className="my-6 rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* UPLOAD ORGANIZATION LOGO */}
-        <div
-          className={`z-2 fixed left-0 top-0 flex  h-full w-full items-center justify-center   ease-in-out ${
-            visibilityUpload ? 'duration-300' : 'invisible -translate-y-4 duration-0'
-          }`}
-        >
-          <div className="relative h-[433px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] ">
-            <h1 className="py-3 text-center text-3xl font-bold tracking-tight">
-              Upload Organization Logo
-            </h1>
-            <div className="h-[1px] w-full bg-black "></div>
-
-            <div className="align-center mt-[30px] flex  justify-center px-10">
-              {createOrgForm.watch('imageId') ? (
-                <CldImage
-                  width="200"
-                  height="200"
-                  src={createOrgForm.watch('imageId')!}
-                  alt="Avatar logo"
-                />
-              ) : (
-                <Image
-                  width={100}
-                  height={100}
-                  src="/default_logo.png"
-                  alt="Avatar Logo"
-                  className="h-[200px] w-[200px]"
-                />
-              )}
-            </div>
-            <div className="flex justify-center">
-              <UploadButton
-                className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-                folder="org-logos"
-                resourceType={ResourceType.IMAGE}
-                onSuccess={onSuccessUpload}
-              >
-                Upload
-              </UploadButton>
-            </div>
-            <div className="absolute bottom-0 left-7">
-              <button
-                type="button"
-                className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-                onClick={() => {
-                  setVisibilityUpload(false);
-                  setVisibilityOrganization(true);
-                }}
-              >
-                Back
-              </button>
-            </div>
-            <div className="absolute bottom-0 right-7">
-              <button
-                type="button"
-                onClick={() => {
-                  setVisibilityUpload(false);
-                  setVisibilityDescription(true);
-                }}
-                className="my-6 rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* LAST STEP */}
-        <div
-          className={`z-2 fixed left-0 top-0 flex  h-full w-full items-center justify-center ease-in-out ${
-            visibilityDescription ? 'duration-300' : 'invisible -translate-y-4 duration-0'
-          }`}
-        >
-          <div className="relative h-[433px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] ">
-            <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Last step</h1>
-            <div className="h-[1px] w-full bg-black "></div>
-            <div className="mt-5 flex flex-col px-10">
+            <div className="flex flex-col">
               <label htmlFor="org-description" className=" mb-2 text-xl font-bold">
                 Description
               </label>
@@ -471,27 +386,88 @@ export default function SideBarMenu() {
                 id="org-description"
                 placeholder="Tell me about this organization"
                 cols={30}
-                rows={7}
+                rows={4}
                 className="border border-green px-2 py-1 text-lg"
               ></textarea>
             </div>
-            <div className="absolute bottom-0 left-7">
+            <div className="pt-3">
+              <div className="mb-3 font-bold">
+                NOTE:{'   '}
+                <span className="font-normal">
+                  Please provide the existing CVSU email address that you would like to grant
+                  permission to.
+                </span>
+              </div>
+              {fields.map((field, index) => (
+                <div key={field.id} className="flex">
+                  <div className="me-1 w-4/6">
+                    <label htmlFor="email-address" className=" text-xl font-bold">
+                      Email
+                    </label>
+                    <br />
+                    <input
+                      type="text"
+                      id="email-address"
+                      placeholder="e.g music.organization@sample.com"
+                      className=" mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none"
+                      {...register(`organization.${index}.email`)}
+                    />
+                  </div>
+                  <div className="w-2/6">
+                    <label htmlFor="position" className=" text-xl font-bold">
+                      Position
+                    </label>
+                    <br />
+                    <select
+                      id="position"
+                      className=" mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none"
+                      {...register(`organization.${index}.position`)}
+                    >
+                      <option value="">Select a position</option>
+                      <option value="">President</option>
+                      <option value="">Vice President</option>
+                      <option value="">Treasurer</option>
+                      <option value="">Others</option>
+                    </select>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!(fields.length === 1)) {
+                        remove(index);
+                      }
+                    }}
+                    className={`ms-1 h-9 self-end px-2 py-1 text-lg ${
+                      fields.length === 1 ? 'cursor-not-allowed bg-red/50 text-black/50' : 'bg-red'
+                    }`}
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+
               <button
                 type="button"
                 onClick={() => {
-                  setVisibilityUpload(true);
-                  setVisibilityDescription(false);
+                  append({ email: '', position: '' });
                 }}
-                className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+                className="my-2 w-full cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
               >
-                Back
+                Add new email
               </button>
             </div>
-            <div className="absolute bottom-0 right-7">
+          </div>
+          <div>
+            <div className="h-[1px] bg-gray"></div>
+            <div className="my-3 flex justify-between px-10">
               <button
                 type="button"
-                className="my-6 rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+                className="cursor-pointer rounded-md bg-gray px-8 py-2 text-lg font-medium"
+                onClick={() => setCreateOrganization(!createOrganization)}
               >
+                Cancel
+              </button>
+              <button type="button" className=" rounded-md bg-yellow px-8 py-2 text-lg font-medium">
                 Create
               </button>
             </div>

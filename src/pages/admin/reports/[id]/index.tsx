@@ -84,7 +84,7 @@ export default function AdminOrgReportPage() {
               PDF
             </div>
             <div>
-              <h2 className="mt-4 text-xl font-medium">Message:</h2>
+              <h2 className="mt-4 text-xl font-medium">Description:</h2>
               Lorem ipsum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem
               ipsum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum
               sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
