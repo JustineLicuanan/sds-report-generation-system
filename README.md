@@ -41,9 +41,15 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.8
+
+- Changed the status indicator to text from icons.
+- Added back the "Subject" in `/admin/logs.tsx`.
+- Added a with report toggle in create announcement modal.
+
 ### Version 0.8.7
 
-- Removed "Date Created" and "Subject" is changed to "Category".
+- Removed "Date Created" and "Subject" is changed to "Category" in `/admin/logs.tsx`.
 - Modified the Create Organization modal.
 
 ### Version 0.8.6

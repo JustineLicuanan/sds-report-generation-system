@@ -26,42 +26,48 @@ export default function AdminLogPage() {
     {
       reportId: 2023001,
       organizationName: 'HGA',
-      category: 'Subject 1',
+      subject: 'Subject 1',
+      category: 'Financial',
       date: '2023-10-20',
       status: 'Pending',
     },
     {
       reportId: 2023002,
       organizationName: 'SDS',
-      category: 'Subject 2',
+      subject: 'Subject 2',
+      category: 'Financial',
       date: '2023-10-11',
       status: 'Rejected',
     },
     {
       reportId: 2023003,
       organizationName: 'BITS',
-      category: 'Subject 3',
+      subject: 'Subject 3',
+      category: 'Accomplishment',
       date: '2023-10-20',
       status: 'Approved',
     },
     {
       reportId: 2023004,
       organizationName: 'ADS',
-      category: 'Subject 1',
+      subject: 'Subject 5',
+      category: 'Accomplishment',
       date: '2023-10-22',
       status: 'Pending',
     },
     {
       reportId: 2023005,
       organizationName: 'TRE',
-      category: 'Subject 2',
+      subject: 'Subject 5',
+      category: 'Accomplishment',
       date: '2023-10-03',
       status: 'Rejected',
     },
     {
       reportId: 2023006,
       organizationName: 'QWE',
-      category: 'Subject 3',
+      subject: 'Subject 6',
+      category: 'Accomplishment',
       date: '2023-10-20',
       status: 'Approved',
     },
@@ -96,7 +102,7 @@ export default function AdminLogPage() {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const tableHeader = ['Organization Name', 'Category', 'Date', 'Status'];
+  const tableHeader = ['Organization Name', 'Subject', 'Category', 'Date', 'Status'];
   return (
     <>
       {/* HEADER */}

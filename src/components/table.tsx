@@ -1,6 +1,7 @@
 type Data = {
   reportId: number;
   organizationName: string;
+  subject: string;
   category: string;
   date: string;
   status: string;
@@ -41,13 +42,16 @@ export default function Table({ data, tableHeader }: YourComponentProps) {
                   {data.organizationName}
                 </td>
                 <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
+                  {data.subject}
+                </td>
+                <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
                   {data.category}
                 </td>
                 <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
                   {data.date}
                 </td>
                 {(data.status === 'Rejected' && (
-                  <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#aa0000]">
+                  <td className="border border-x-0 border-black px-2 py-4 font-semibold text-red">
                     {data.status}
                   </td>
                 )) ||

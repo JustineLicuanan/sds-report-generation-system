@@ -81,8 +81,8 @@ export default function EditInfoPage() {
 
         {/* MAIN CONTENT */}
 
-        <div className="mx-2 mt-4 h-[87vh] w-full ">
-          <div className="relative mx-auto my-0  h-[87vh] max-w-5xl  rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9 ">
+        <div className="mx-2 mt-4 min-h-[87vh] w-full ">
+          <div className="relative mx-auto my-0 max-w-5xl  rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9 ">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
               Organization Profile
             </h1>
@@ -111,7 +111,7 @@ export default function EditInfoPage() {
                 id="name"
                 className={` ${
                   visibility ? 'bg-gray' : ''
-                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1  outline-none md:w-3/4`}
+                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1  outline-none md:w-2/4`}
                 readOnly={visibility}
                 {...editInfoForm.register('name')}
               />
@@ -156,7 +156,7 @@ export default function EditInfoPage() {
                 id="email-address"
                 className={` ${
                   visibility ? 'bg-gray' : ''
-                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1  outline-none md:w-3/4`}
+                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1  outline-none md:w-2/4`}
                 readOnly={visibility}
                 {...editInfoForm.register('email')}
               />
@@ -174,7 +174,7 @@ export default function EditInfoPage() {
                   readOnly={visibility}
                   {...editInfoForm.register('description')}
                 ></textarea>
-                <div className="bottom-2 right-2 my-2 flex justify-between">
+                <div className="my-2 flex justify-between">
                   <button
                     type="button"
                     className={`${
@@ -189,7 +189,6 @@ export default function EditInfoPage() {
                   </button>
 
                   {/* SIGN OUT MODAL */}
-
                   <div
                     className={`${
                       showSignOut ? '' : 'invisible opacity-0'

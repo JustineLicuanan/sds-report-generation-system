@@ -21,7 +21,7 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function ListOfReportPage() {
   const reports = [
-    { id: 1, subject: 'Subject 1', date: '02/03/23', status: 'For approval' },
+    { id: 1, subject: 'Subject 1', date: '02/03/23', status: 'Pending' },
     { id: 2, subject: 'Subject 2', date: '02/04/23', status: 'Approved' },
     { id: 3, subject: 'Subject 3', date: '02/05/23', status: 'Approved' },
     { id: 4, subject: 'Subject 4', date: '02/06/23', status: 'Rejected' },
@@ -59,8 +59,8 @@ export default function ListOfReportPage() {
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
             <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
-            {reports.some((report) => report.status === 'For approval') ? (
-              <ReportList reports={reports.filter((report) => report.status === 'For approval')} />
+            {reports.some((report) => report.status === 'Pending') ? (
+              <ReportList reports={reports.filter((report) => report.status === 'Pending')} />
             ) : (
               <h3 className="flex items-center justify-center text-lg font-semibold text-black/80">
                 There is no pending report.

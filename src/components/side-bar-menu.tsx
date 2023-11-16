@@ -37,6 +37,7 @@ export default function SideBarMenu() {
   const [createAnnouncement, setCreateAnnouncement] = useState(false); // Show Create Announcement Modal
   const [announcementDropdown, setAnnouncementDropdown] = useState(false); // Show options for announcement
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
+  const [showOthers, setShowOthers] = useState(false);
 
   const sideBarButtons = [
     {
@@ -205,12 +206,12 @@ export default function SideBarMenu() {
       {/* MODALS */}
       {/* ANNOUNCEMENT */}
       <div
-        className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
+        className={`fixed left-0 top-0 z-[999] flex h-full w-full items-center justify-center  bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
           createAnnouncement ? '' : 'invisible opacity-0'
         }`}
       >
         <div
-          className={`relative z-[5] h-[450px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
+          className={`relative z-[5] h-fit w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
         >
           <h1 className="py-3 text-center text-3xl font-bold tracking-tight">
             Create new Announcement
@@ -274,7 +275,7 @@ export default function SideBarMenu() {
               placeholder="Subject"
               className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
             />
-            <label htmlFor="announcement-description" className=" mb-2 text-xl font-bold">
+            <label htmlFor="announcement-description" className="mb-2 text-xl font-bold">
               Description
             </label>
             <textarea
@@ -284,32 +285,34 @@ export default function SideBarMenu() {
               className="border border-green px-2 py-1 text-lg"
               {...createOrgForm.register('description')}
             ></textarea>
-          </div>
-          <div className="absolute bottom-0 left-7">
-            <button
-              type="button"
-              onClick={() => {
-                setCreateAnnouncement(false);
-              }}
-              className="my-6 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-            >
-              Cancel
-            </button>
-          </div>
-          <div className="absolute bottom-0 right-7">
-            <button
-              type="button"
-              className="my-6 rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-            >
-              Create
-            </button>
+            <div className="mt-3 w-fit">
+              <label className="relative mb-5 inline-flex cursor-pointer items-center">
+                <input type="checkbox" value="" className="peer sr-only" />
+                <div className="peer h-5 w-9 rounded-full  bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
+                <span className="ms-3 text-sm font-bold text-black/80">With report</span>
+              </label>
+            </div>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  setCreateAnnouncement(false);
+                }}
+                className="rounded-md bg-gray px-8 py-2 text-lg font-medium"
+              >
+                Cancel
+              </button>
+              <button type="button" className="rounded-md bg-yellow px-8 py-2 text-lg font-medium">
+                Create
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* CREATE ORGANIZATION */}
       <form
-        className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out ${
+        className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
           createOrganization ? '' : 'invisible opacity-0'
         }`}
         onSubmit={createOrgForm.handleSubmit(onSubmit)}
@@ -420,14 +423,14 @@ export default function SideBarMenu() {
                     <br />
                     <select
                       id="position"
-                      className=" mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none"
+                      className="mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none"
                       {...register(`organization.${index}.position`)}
                     >
                       <option value="">Select a position</option>
                       <option value="">President</option>
                       <option value="">Vice President</option>
                       <option value="">Treasurer</option>
-                      <option value="">Others</option>
+                      <option value="others">Others</option>
                     </select>
                   </div>
                   <button
@@ -438,7 +441,9 @@ export default function SideBarMenu() {
                       }
                     }}
                     className={`ms-1 h-9 self-end px-2 py-1 text-lg ${
-                      fields.length === 1 ? 'cursor-not-allowed bg-red/50 text-black/50' : 'bg-red'
+                      fields.length === 1
+                        ? 'cursor-not-allowed bg-red/50 text-white/50'
+                        : 'bg-red text-white'
                     }`}
                   >
                     Delete
