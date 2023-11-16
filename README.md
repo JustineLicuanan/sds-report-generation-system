@@ -41,11 +41,16 @@ respective docs.
 
 ## Changelog
 
-### Version 0.8.8
+### Version 0.8.11
 
 - Changed the status indicator to text from icons.
 - Added back the "Subject" in `/admin/logs.tsx`.
 - Added a with report toggle in create announcement modal.
+### Version 0.8.10
+
+- Create an admin report router & its schemas.
+- Add category & 'with schedule' columns to report table.
+- Create a separate organization table.
 
 ### Version 0.8.7
 

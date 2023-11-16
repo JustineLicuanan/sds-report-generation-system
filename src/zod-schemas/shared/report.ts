@@ -1,10 +1,13 @@
+import { ReportCategory } from '@prisma/client';
 import { z } from 'zod';
 
 export const reportSchemas = {
   create: z.object({
     subject: z.string().trim().min(1),
     message: z.string().trim().min(1),
+    category: z.nativeEnum(ReportCategory),
     file: z.string().url().nullable().optional(),
+    withSchedule: z.boolean(),
     announcementId: z.string().cuid().nullable().optional(),
   }),
 
@@ -20,7 +23,9 @@ export const reportSchemas = {
     id: z.string().cuid(),
     subject: z.string().trim().min(1).optional(),
     message: z.string().trim().min(1).optional(),
+    category: z.nativeEnum(ReportCategory).optional(),
     file: z.string().url().nullable().optional(),
+    withSchedule: z.boolean(),
     announcementId: z.string().cuid().nullable().optional(),
   }),
 
