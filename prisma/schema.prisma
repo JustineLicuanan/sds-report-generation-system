@@ -22,6 +22,19 @@ model Example {
     @@index([name])
 }
 
+model Organization {
+    id          String        @id @default(cuid())
+    name        String
+    description String        @default("")
+    category    UserCategory?
+    image       String?
+    imageId     String?
+    status      CommonStatus  @default(ACTIVE)
+    members     User[]
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+}
+
 model Announcement {
     id         String       @id @default(cuid())
     subject    String
@@ -38,16 +51,18 @@ model Announcement {
 }
 
 model Report {
-    id        String       @id @default(cuid())
-    subject   String
-    message   String
-    file      String?
-    schedule  DateTime?
-    status    ReportStatus @default(PENDING)
-    comments  Comment[]
-    logs      Log[]
-    createdAt DateTime     @default(now())
-    updatedAt DateTime     @updatedAt
+    id           String         @id @default(cuid())
+    subject      String
+    message      String
+    category     ReportCategory
+    file         String?
+    withSchedule Boolean
+    schedule     DateTime?
+    status       ReportStatus   @default(PENDING)
+    comments     Comment[]
+    logs         Log[]
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime       @updatedAt
 
     announcement   Announcement? @relation(fields: [announcementId], references: [id])
     announcementId String?
@@ -130,6 +145,9 @@ model User {
     reports       Report[]
     comments      Comment[]
     announcements Announcement[]
+
+    organization   Organization? @relation(fields: [organizationId], references: [id])
+    organizationId String?
 }
 
 model VerificationToken {
@@ -146,15 +164,22 @@ enum CommonStatus {
     DELETED
 }
 
+enum UserRole {
+    ADMIN
+    STUDENT_LEADER
+}
+
 enum UserCategory {
     STUDENT_GOVERNING_BODY
     ACADEMIC_ORGANIZATION
     NON_ACADEMIC_ORGANIZATION
 }
 
-enum UserRole {
-    ADMIN
-    STUDENT_LEADER
+enum ReportCategory {
+    ACCOMPLISHMENT
+    FINANCIAL
+    RESOLUTION
+    OTHER
 }
 
 enum ReportStatus {

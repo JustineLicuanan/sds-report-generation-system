@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.10
+
+- Create an admin report router & its schemas.
+- Add category & 'with schedule' columns to report table.
+- Create a separate organization table.
+
 ### Version 0.8.7
 
 - Removed "Date Created" and "Subject" is changed to "Category".
