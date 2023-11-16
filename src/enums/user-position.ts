@@ -1,0 +1,5 @@
+export enum UserPosition {
+  PRESIDENT = 'PRESIDENT',
+  VICE_PRESIDENT = 'VICE_PRESIDENT',
+  TREASURER = 'TREASURER',
+}
