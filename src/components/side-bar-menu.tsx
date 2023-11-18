@@ -329,7 +329,7 @@ export default function SideBarMenu() {
                 height="100"
                 src={createOrgForm.watch('imageId')!}
                 alt="Avatar logo"
-                className="rounded-full"
+                className="h-[100px] w-[100px] rounded-full"
               />
             ) : (
               <Image

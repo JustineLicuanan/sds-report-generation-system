@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { paths } from '~/meta';
@@ -37,7 +38,7 @@ export default function ReportList({ reports }: { reports: Report[] }) {
           <h1 className="flex justify-between ">
             <div className="text-xl font-semibold">{report.subject}</div>
             <div
-              className={`text-lg font-semibold ${
+              className={`me-4 text-lg font-semibold ${
                 report.status === 'Approved'
                   ? 'text-green'
                   : report.status === 'Rejected'
@@ -48,6 +49,19 @@ export default function ReportList({ reports }: { reports: Report[] }) {
               {report.status}
             </div>
           </h1>
+          {report.status === 'Approved' ? (
+            <div className="absolute -right-2 -top-2 h-6 w-6 rounded-full border-2 border-black bg-[#0CF022] font-bold">
+              <Image src="/approved_icon.svg" alt="Approved Icon" width={100} height={100} />
+            </div>
+          ) : report.status === 'Rejected' ? (
+            <div className="absolute -right-2 -top-2 h-6 w-6 rounded-full border-2 border-black bg-[#FF0000] font-bold">
+              <Image width={100} height={100} src="/rejected_icon.png" alt="Rejected Icon" />
+            </div>
+          ) : (
+            <div className="absolute -right-2 -top-2 h-6 w-6 rounded-full border-2 border-black bg-yellow font-bold">
+              <Image width={100} height={100} src="/pending_icon.png" alt="Pending Icon" />
+            </div>
+          )}
           <div className="mt-1 text-right text-lg text-black">{report.date}</div>
         </button>
       ))}

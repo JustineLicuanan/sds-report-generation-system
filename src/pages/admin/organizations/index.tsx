@@ -6,7 +6,6 @@ import OrganizationAvatar from '~/components/organization-avatar';
 import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
-import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -21,7 +20,14 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AdminPage() {
-  const getOrgQuery = api.admin.org.get.useQuery();
+  // const getOrgQuery = api.admin.org.get.useQuery();
+  const getOrgQuery = [
+    {
+      name: 'BITS',
+      email: 'org@example.com',
+      category: 'ACADEMIC_ORGANIZATION',
+    },
+  ];
 
   return (
     <>
@@ -69,7 +75,10 @@ export default function AdminPage() {
           >
             <OrganizationAvatar
               organization={
-                getOrgQuery.data?.filter(
+                // getOrgQuery.data?.filter(
+                //   (item) => item.category === UserCategory.ACADEMIC_ORGANIZATION
+                // ) ?? []
+                getOrgQuery.filter(
                   (item) => item.category === UserCategory.ACADEMIC_ORGANIZATION
                 ) ?? []
               }
