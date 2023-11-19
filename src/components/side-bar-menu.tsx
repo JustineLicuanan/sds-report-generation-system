@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserCategory } from '@prisma/client';
+import { OrganizationCategory } from '@prisma/client';
 import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -369,9 +369,13 @@ export default function SideBarMenu() {
               {...createOrgForm.register('category')}
             >
               <option value="">Select a category</option>
-              <option value={UserCategory.STUDENT_GOVERNING_BODY}>Student Governing Body</option>
-              <option value={UserCategory.ACADEMIC_ORGANIZATION}>Academic Organization</option>
-              <option value={UserCategory.NON_ACADEMIC_ORGANIZATION}>
+              <option value={OrganizationCategory.STUDENT_GOVERNING_BODY}>
+                Student Governing Body
+              </option>
+              <option value={OrganizationCategory.ACADEMIC_ORGANIZATION}>
+                Academic Organization
+              </option>
+              <option value={OrganizationCategory.NON_ACADEMIC_ORGANIZATION}>
                 Non Academic Organization
               </option>
             </select>

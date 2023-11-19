@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.9.0
+
+- Rename 'UserCategory' enum to 'OrganizationCategory'.
+- Add 'visibility' column to Report table.
+- Remove unnecessary columns from Comment table.
+
 ### Version 0.8.13
 
 - Merged the organization's dashboard and logs and added an action.

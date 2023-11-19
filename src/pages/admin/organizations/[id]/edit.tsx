@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserCategory } from '@prisma/client';
+import { OrganizationCategory } from '@prisma/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '@trpc/react-query';
 import { type GetServerSideProps } from 'next';
@@ -131,7 +131,7 @@ export default function EditInfoPage() {
                 <option value="" disabled>
                   Select a category
                 </option>
-                {Object.values(UserCategory).map((category) => (
+                {Object.values(OrganizationCategory).map((category) => (
                   <option key={category} value={category}>
                     {category}
                   </option>

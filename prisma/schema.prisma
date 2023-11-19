@@ -23,16 +23,16 @@ model Example {
 }
 
 model Organization {
-    id          String        @id @default(cuid())
+    id          String                @id @default(cuid())
     name        String
-    description String        @default("")
-    category    UserCategory?
+    description String                @default("")
+    category    OrganizationCategory?
     image       String?
     imageId     String?
-    status      CommonStatus  @default(ACTIVE)
+    status      CommonStatus          @default(ACTIVE)
     members     User[]
-    createdAt   DateTime      @default(now())
-    updatedAt   DateTime      @updatedAt
+    createdAt   DateTime              @default(now())
+    updatedAt   DateTime              @updatedAt
 }
 
 model Announcement {
@@ -51,18 +51,19 @@ model Announcement {
 }
 
 model Report {
-    id           String         @id @default(cuid())
+    id           String           @id @default(cuid())
     subject      String
     message      String
     category     ReportCategory
+    visibility   ReportVisibility
     file         String?
     withSchedule Boolean
     schedule     DateTime?
-    status       ReportStatus   @default(PENDING)
+    status       ReportStatus     @default(PENDING)
     comments     Comment[]
     logs         Log[]
-    createdAt    DateTime       @default(now())
-    updatedAt    DateTime       @updatedAt
+    createdAt    DateTime         @default(now())
+    updatedAt    DateTime         @updatedAt
 
     announcement   Announcement? @relation(fields: [announcementId], references: [id])
     announcementId String?
@@ -72,12 +73,10 @@ model Report {
 }
 
 model Comment {
-    id        String          @id @default(cuid())
+    id        String   @id @default(cuid())
     content   String
-    location  CommentLocation
-    status    CommonStatus    @default(ACTIVE)
-    createdAt DateTime        @default(now())
-    updatedAt DateTime        @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     announcement   Announcement? @relation(fields: [announcementId], references: [id])
     announcementId String?
@@ -130,16 +129,16 @@ model Session {
 }
 
 model User {
-    id            String         @id @default(cuid())
+    id            String                @id @default(cuid())
     name          String
-    email         String         @unique
+    email         String                @unique
     emailVerified DateTime?
     image         String?
     imageId       String?
-    description   String         @default("")
-    category      UserCategory?
-    role          UserRole       @default(STUDENT_LEADER)
-    status        CommonStatus   @default(ACTIVE)
+    description   String                @default("")
+    category      OrganizationCategory?
+    role          UserRole              @default(STUDENT_LEADER)
+    status        CommonStatus          @default(ACTIVE)
     accounts      Account[]
     sessions      Session[]
     reports       Report[]
@@ -169,7 +168,7 @@ enum UserRole {
     STUDENT_LEADER
 }
 
-enum UserCategory {
+enum OrganizationCategory {
     STUDENT_GOVERNING_BODY
     ACADEMIC_ORGANIZATION
     NON_ACADEMIC_ORGANIZATION
@@ -182,6 +181,11 @@ enum ReportCategory {
     OTHER
 }
 
+enum ReportVisibility {
+    PUBLIC
+    PRIVATE
+}
+
 enum ReportStatus {
     PENDING
     CANCELLED
@@ -189,9 +193,4 @@ enum ReportStatus {
     REJECTED
     ARCHIVED
     DELETED
-}
-
-enum CommentLocation {
-    ANNOUNCEMENT
-    REPORT
 }

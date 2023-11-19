@@ -1,4 +1,4 @@
-import { ReportCategory } from '@prisma/client';
+import { ReportCategory, ReportVisibility } from '@prisma/client';
 import { z } from 'zod';
 
 export const reportSchemas = {
@@ -6,6 +6,7 @@ export const reportSchemas = {
     subject: z.string().trim().min(1),
     message: z.string().trim().min(1),
     category: z.nativeEnum(ReportCategory),
+    visibility: z.nativeEnum(ReportVisibility),
     file: z.string().url().nullable().optional(),
     withSchedule: z.boolean(),
     announcementId: z.string().cuid().nullable().optional(),
@@ -24,6 +25,7 @@ export const reportSchemas = {
     subject: z.string().trim().min(1).optional(),
     message: z.string().trim().min(1).optional(),
     category: z.nativeEnum(ReportCategory).optional(),
+    visibility: z.nativeEnum(ReportVisibility).optional(),
     file: z.string().url().nullable().optional(),
     withSchedule: z.boolean(),
     announcementId: z.string().cuid().nullable().optional(),

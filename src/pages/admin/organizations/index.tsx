@@ -1,4 +1,4 @@
-import { UserCategory } from '@prisma/client';
+import { OrganizationCategory } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
@@ -51,7 +51,7 @@ export default function AdminPage() {
               <OrganizationAvatar
                 organization={
                   getOrgQuery.data?.filter(
-                    (item) => item.category === UserCategory.STUDENT_GOVERNING_BODY
+                    (item) => item.category === OrganizationCategory.STUDENT_GOVERNING_BODY
                   ) ?? []
                 }
               />
@@ -70,7 +70,7 @@ export default function AdminPage() {
             <OrganizationAvatar
               organization={
                 getOrgQuery.data?.filter(
-                  (item) => item.category === UserCategory.ACADEMIC_ORGANIZATION
+                  (item) => item.category === OrganizationCategory.ACADEMIC_ORGANIZATION
                 ) ?? []
               }
             />
@@ -88,7 +88,7 @@ export default function AdminPage() {
             <OrganizationAvatar
               organization={
                 getOrgQuery.data?.filter(
-                  (item) => item.category === UserCategory.NON_ACADEMIC_ORGANIZATION
+                  (item) => item.category === OrganizationCategory.NON_ACADEMIC_ORGANIZATION
                 ) ?? []
               }
             />
