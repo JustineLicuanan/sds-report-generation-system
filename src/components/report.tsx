@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { paths } from '~/meta';
 
 type Report = {
@@ -12,17 +11,17 @@ type Report = {
 };
 
 export default function Report({ reports }: { reports: Report[] }) {
-  const [activeReport, setActiveReport] = useState<number | null>(null);
-  const [reportsState, setReportsState] = useState(reports);
-  const toggleShowOption = (id: number) => {
-    if (activeReport === id) {
-      // Clicking the same button again, hide the div
-      setActiveReport(null);
-    } else {
-      // Clicking a new button, show the div and hide others
-      setActiveReport(id);
-    }
-  };
+  // const [activeReport, setActiveReport] = useState<number | null>(null);
+  // const [reportsState, setReportsState] = useState(reports);
+  // const toggleShowOption = (id: number) => {
+  //   if (activeReport === id) {
+  //     // Clicking the same button again, hide the div
+  //     setActiveReport(null);
+  //   } else {
+  //     // Clicking a new button, show the div and hide others
+  //     setActiveReport(id);
+  //   }
+  // };
 
   const router = useRouter();
   // const toggleHide = (isHidden: boolean, id: number) => {

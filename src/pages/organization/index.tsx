@@ -44,9 +44,9 @@ export default function OrganizationPage() {
     },
   ];
 
-  const [search, setSearch] = useState('');
-  const [status, setStatus] = useState('');
-  const [date, setDate] = useState('');
+  // const [search, setSearch] = useState('');
+  // const [status, setStatus] = useState('');
+  const [date] = useState('');
 
   reports.sort((a, b) => {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -60,12 +60,12 @@ export default function OrganizationPage() {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
   }
-  const filtedData = reports.filter((item) => {
-    return (
-      (status.toLowerCase() === '' || item.status.toLowerCase().includes(status)) &&
-      (search.toLowerCase() === '' || item.subject.toLowerCase().includes(search))
-    );
-  });
+  // const filtedData = reports.filter((item) => {
+  //   return (
+  //     (status.toLowerCase() === '' || item.status.toLowerCase().includes(status)) &&
+  //     (search.toLowerCase() === '' || item.subject.toLowerCase().includes(search))
+  //   );
+  // });
 
   return (
     <>

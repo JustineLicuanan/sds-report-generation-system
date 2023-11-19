@@ -65,7 +65,6 @@ export default function SideBarMenu() {
     name: 'organization',
     control,
   });
-  console.log(fields);
 
   const onSuccessUpload: OnSuccessUpload = (result) => {
     createOrgForm.setValue('image', result.info?.secure_url);
