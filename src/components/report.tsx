@@ -109,8 +109,10 @@ export default function Report({ reports }: { reports: Report[] }) {
                         }
                       }}
                       className={`${
-                        report.status !== 'Pending' ? 'cursor-not-allowed bg-gray/40' : ''
-                      } group/update relative mx-2 flex flex-col items-center justify-center rounded-sm bg-gray p-2`}
+                        report.status !== 'Pending'
+                          ? 'cursor-not-allowed bg-gray/40'
+                          : 'group/update'
+                      } relative mx-2 flex flex-col items-center justify-center rounded-sm bg-gray p-2`}
                     >
                       <Image src="/update_icon.svg" width={20} height={20} alt="Update Icon" />
                       <div className="absolute left-12 z-[4] hidden rounded-md bg-gray px-2 py-1 text-left text-sm font-medium group-hover/update:block lg:left-12   lg:text-base">
@@ -125,8 +127,10 @@ export default function Report({ reports }: { reports: Report[] }) {
                         }
                       }}
                       className={`${
-                        report.status !== 'Pending' ? 'cursor-not-allowed bg-red/20' : ''
-                      } group/update relative mx-2 flex flex-col items-center justify-center rounded-sm bg-red p-2`}
+                        report.status !== 'Pending'
+                          ? 'cursor-not-allowed bg-red/20'
+                          : 'group/delete'
+                      }  relative mx-2 flex flex-col items-center justify-center rounded-sm bg-red p-2`}
                     >
                       <Image src="/delete_icon.svg" width={20} height={20} alt="Delete Icon" />
                       <div className="absolute left-12 z-[4] hidden rounded-md bg-gray px-2 py-1 text-left text-sm font-medium group-hover/delete:block lg:left-12 lg:text-base">

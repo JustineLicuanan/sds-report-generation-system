@@ -1,10 +1,11 @@
 import { signOut } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { meta, paths } from '~/meta';
 
 export default function LogoutPage() {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -27,9 +28,13 @@ export default function LogoutPage() {
             </div>
           </div>
           <div className="absolute bottom-3 left-7">
-            <Link href={paths.ADMIN} className="rounded-md bg-yellow px-8 py-2 text-lg font-medium">
+            <button
+              type="button"
+              onClick={() => router.push(paths.ADMIN)}
+              className="rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+            >
               Back
-            </Link>
+            </button>
           </div>
           <div className="absolute bottom-3 right-7">
             <button
