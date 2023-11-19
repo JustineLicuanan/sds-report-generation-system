@@ -41,9 +41,14 @@ respective docs.
 
 ## Changelog
 
+### Version 0.8.13
+
+- Merged the organization's dashboard and logs and added an action.
+
 ### Version 0.8.12
 
-- Added a notification in an organization if there are pending reports. Moved the organization profile link in bottom right.
+- Added a notification in an organization if there are pending reports. Moved the organization
+  profile link in bottom right.
 - Added back the badge status indicator.
 
 ### Version 0.8.11

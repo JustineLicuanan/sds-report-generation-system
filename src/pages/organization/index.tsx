@@ -1,5 +1,6 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useState } from 'react';
 import NavBar from '~/components/navigation-bar';
 import Report from '~/components/report';
 import SideBarMenu from '~/components/side-bar-menu';
@@ -20,15 +21,50 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function OrganizationPage() {
   const reports = [
-    { id: 1, subject: 'Subject 1', date: '02/03/23', status: 'For approval', isHidden: false },
-    { id: 2, subject: 'Subject 2', date: '02/04/23', status: 'Approved', isHidden: false },
-    { id: 3, subject: 'Subject 3', date: '02/05/23', status: 'Approved', isHidden: false },
-    { id: 4, subject: 'Subject 4', date: '02/06/23', status: 'Rejected', isHidden: false },
-    { id: 5, subject: 'Subject 5', date: '02/07/23', status: 'Rejected', isHidden: false },
+    {
+      subjectId: 2023001,
+      subject: 'Technology',
+      category: 'Financial',
+      date: '09/20/23',
+      status: 'Pending',
+    },
+    {
+      subjectId: 2023002,
+      subject: 'Music',
+      category: 'Financial',
+      date: '09/21/23',
+      status: 'Rejected',
+    },
+    {
+      subjectId: 2023003,
+      subject: 'Games',
+      category: 'Financial',
+      date: '09/22/23',
+      status: 'Approved',
+    },
   ];
+
+  const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('');
+  const [date, setDate] = useState('');
 
   reports.sort((a, b) => {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+  if (date.toLowerCase() === 'oldest') {
+    reports.sort((a, b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
+  } else if (date.toLowerCase() === 'latest') {
+    reports.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  }
+  const filtedData = reports.filter((item) => {
+    return (
+      (status.toLowerCase() === '' || item.status.toLowerCase().includes(status)) &&
+      (search.toLowerCase() === '' || item.subject.toLowerCase().includes(search))
+    );
   });
 
   return (
