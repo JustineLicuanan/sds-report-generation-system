@@ -10,18 +10,18 @@ type Report = {
   status: string;
 };
 export default function ReportList({ reports }: { reports: Report[] }) {
-  const [activeReport, setActiveReport] = useState<number | null>(null);
+  const [activeReport] = useState<number | null>(null);
   const router = useRouter();
 
-  const toggleShowOption = (id: number) => {
-    if (activeReport === id) {
-      // Clicking the same button again, hide the div
-      setActiveReport(null);
-    } else {
-      // Clicking a new button, show the div and hide others
-      setActiveReport(id);
-    }
-  };
+  // const toggleShowOption = (id: number) => {
+  //   if (activeReport === id) {
+  //     // Clicking the same button again, hide the div
+  //     setActiveReport(null);
+  //   } else {
+  //     // Clicking a new button, show the div and hide others
+  //     setActiveReport(id);
+  //   }
+  // };
 
   return (
     <>

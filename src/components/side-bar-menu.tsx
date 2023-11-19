@@ -37,7 +37,7 @@ export default function SideBarMenu() {
   const [createAnnouncement, setCreateAnnouncement] = useState(false); // Show Create Announcement Modal
   const [announcementDropdown, setAnnouncementDropdown] = useState(false); // Show options for announcement
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
-  const [showOthers, setShowOthers] = useState(false);
+  // const [showOthers, setShowOthers] = useState(false);
 
   const sideBarButtons = [
     {
@@ -56,11 +56,7 @@ export default function SideBarMenu() {
 
   const createOrgForm = useForm<Inputs>({ resolver: zodResolver(orgSchemas.create) });
 
-  const {
-    register,
-    formState: { errors },
-    control,
-  } = useForm({
+  const { register, control } = useForm({
     defaultValues: {
       organization: [{ email: '', position: '' }],
     },
