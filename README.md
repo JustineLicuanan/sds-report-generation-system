@@ -1,6 +1,6 @@
-# SD Services MIS
+# SD Services SS
 
-This is an appointment system project.
+This is a scheduling system project.
 
 ## Usage
 
