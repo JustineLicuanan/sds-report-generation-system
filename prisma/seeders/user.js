@@ -2,11 +2,11 @@ const { db } = require('../db');
 
 exports.userSeeder = async () => {
   await db.user.upsert({
-    where: { email: 'admin@example.com' },
+    where: { email: 'stu.dev.services.25@gmail.com' },
     update: {},
     create: {
       name: 'Admin',
-      email: 'admin@example.com',
+      email: 'stu.dev.services.25@gmail.com',
       role: 'ADMIN',
       status: 'ACTIVE',
     },
