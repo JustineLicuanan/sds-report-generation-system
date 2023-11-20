@@ -1,7 +1,7 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import NavBar from '~/components/navigation-bar';
-import SideBarMenu from '~/components/side-bar-menu';
+import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -28,7 +28,7 @@ export default function CreateReportPage() {
       <NavBar showNotificationButton={true} />
       <main className="flex">
         {/* SIDE BAR */}
-        <SideBarMenu />
+        <OrganizationSideBarMenu />
 
         {/* MAIN CONTENT */}
 

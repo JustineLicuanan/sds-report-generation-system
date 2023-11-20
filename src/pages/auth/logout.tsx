@@ -38,7 +38,7 @@ export default function LogoutPage() {
           </div>
           <div className="absolute bottom-3 right-7">
             <button
-              className="rounded-md bg-red px-8 py-2 text-lg font-medium"
+              className="rounded-md bg-red text-white px-8 py-2 text-lg font-medium"
               onClick={() => signOut({ callbackUrl: paths.SIGN_IN })}
             >
               Logout

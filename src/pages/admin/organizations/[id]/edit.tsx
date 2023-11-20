@@ -9,8 +9,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
+import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
-import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -77,7 +77,7 @@ export default function EditInfoPage() {
       <NavBar showNotificationButton={true} />
       <main className="flex">
         {/* SIDE BAR */}
-        <SideBarMenu />
+        <AdminSideBarMenu />
 
         {/* MAIN CONTENT */}
 

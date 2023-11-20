@@ -41,6 +41,13 @@ respective docs.
 
 ## Changelog
 
+### Version 0.9.1
+
+- Changed the 'SideBarMenu' to 'AdminSideBarMenu' for all admin pages.
+- Renamed `side-bar-menu.tsx` to `admin-side-bar-menu.tsx`.
+- Added a side bar for organization.
+- Updated the audience select.
+
 ### Version 0.9.0
 
 - Rename 'UserCategory' enum to 'OrganizationCategory'.

@@ -1,9 +1,9 @@
 import { OrganizationCategory } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
 import OrganizationAvatar from '~/components/organization-avatar';
-import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -35,7 +35,7 @@ export default function AdminPage() {
       <main className="flex">
         {/* SIDE BAR MENU */}
 
-        <SideBarMenu />
+        <AdminSideBarMenu />
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
           <div className="my-4 h-2 rounded-md bg-green"> </div>
 

@@ -10,11 +10,12 @@ import { type z } from 'zod';
 import { paths } from '~/meta';
 import { api } from '~/utils/api';
 import { orgSchemas } from '~/zod-schemas/admin/org';
+import SelectAnnouncement from './select';
 import { ResourceType, UploadButton, type OnSuccessUpload } from './upload-button';
 
 type Inputs = z.infer<typeof orgSchemas.create>;
 
-export default function SideBarMenu() {
+export default function AdminSideBarMenu() {
   const getOrgQuery = api.admin.org.get.useQuery();
   const createOrgMutation = api.admin.org.create.useMutation();
   const organizationList = getOrgQuery.data ?? [];
@@ -28,6 +29,12 @@ export default function SideBarMenu() {
       urlLink: `${paths.ADMIN}${paths.ORGANIZATIONS}`,
     },
     { id: 3, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}${paths.LOGS}` },
+    {
+      id: 3,
+      name: 'Announcement',
+      imageLink: '/announcement_icon.svg',
+      urlLink: `${paths.ADMIN}${paths.ANNOUNCEMENT}`,
+    },
   ];
 
   const { asPath } = useRouter();
@@ -35,22 +42,22 @@ export default function SideBarMenu() {
   const [showSidebar, setShowSidebar] = useState(true); // Toggle Sidebar
 
   const [createAnnouncement, setCreateAnnouncement] = useState(false); // Show Create Announcement Modal
-  const [announcementDropdown, setAnnouncementDropdown] = useState(false); // Show options for announcement
+  const [createDropdown, setCreateDropdown] = useState(false); // Show options for announcement
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
   // const [showOthers, setShowOthers] = useState(false);
 
   const sideBarButtons = [
-    {
-      name: 'Announcement',
-      imageLink: '/announcement_icon.svg',
-      value: announcementDropdown,
-      function: setAnnouncementDropdown,
-    },
+    // {
+    //   name: 'Announcement',
+    //   imageLink: '/announcement_icon.svg',
+    //   value: createDropdown,
+    //   function: setCreateDropdown,
+    // },
     {
       name: 'Create',
       imageLink: '/create_icon.svg',
-      value: createOrganization,
-      function: setCreateOrganization,
+      value: createDropdown,
+      function: setCreateDropdown,
     },
   ];
 
@@ -152,26 +159,31 @@ export default function SideBarMenu() {
                     {item.name}
                   </div>
                 </button>
-                {announcementDropdown && item.name === 'Announcement' && (
-                  <div className="absolute -bottom-[75%] left-12 z-[100] flex flex-col bg-gray  text-left text-lg font-medium">
-                    <Link
-                      href={`${paths.ADMIN}${paths.ANNOUNCEMENT}`}
+                {createDropdown && (
+                  <div className="absolute -bottom-[75%] left-12 z-[100] flex flex-col rounded-sm bg-gray text-left text-lg font-medium shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]">
+                    <button
                       type="button"
                       className="px-2 py-1 text-lg font-medium hover:bg-yellow"
+                      onClick={() => {
+                        return (
+                          setCreateOrganization(!createOrganization),
+                          setCreateDropdown(!createDropdown)
+                        );
+                      }}
                     >
-                      View
-                    </Link>
+                      Organization
+                    </button>
                     <button
                       type="button"
                       className="px-2 py-1 text-lg font-medium hover:bg-yellow"
                       onClick={() => {
                         return (
                           setCreateAnnouncement(!createAnnouncement),
-                          setAnnouncementDropdown(!announcementDropdown)
+                          setCreateDropdown(!createDropdown)
                         );
                       }}
                     >
-                      Create
+                      Announcement
                     </button>
                   </div>
                 )}
@@ -216,7 +228,7 @@ export default function SideBarMenu() {
             <label htmlFor="audience-list" className="text-xl font-bold">
               Audience
             </label>
-            <select
+            {/* <select
               name="audience"
               id="audience-list"
               className="transparent mt-1 h-9 border-[1px] border-green px-2 py-1  text-lg outline-none"
@@ -230,7 +242,8 @@ export default function SideBarMenu() {
                   {org.name}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <SelectAnnouncement />
             <div className="mt-1 flex  justify-between">
               <div>
                 <label htmlFor="date-start" className="text-xl font-bold">

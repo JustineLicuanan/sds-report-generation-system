@@ -52,7 +52,7 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
                 Office of Student Development Services
               </div>
               <div id="sub-title" className="ms-14">
-                Scheduling System
+                Scheduling System For Reporting and File Management
               </div>
             </div>
           </div>

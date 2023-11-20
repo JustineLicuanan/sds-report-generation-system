@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
 import NavBar from '~/components/navigation-bar';
-import SideBarMenu from '~/components/side-bar-menu';
+import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -78,7 +78,7 @@ export default function UserLogPage() {
       <NavBar showNotificationButton={true} />
       <main className="flex">
         {/* SIDE BAR */}
-        <SideBarMenu />
+        <OrganizationSideBarMenu />
 
         {/* MAIN CONTENT */}
 

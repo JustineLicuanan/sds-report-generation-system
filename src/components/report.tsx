@@ -52,7 +52,7 @@ export default function Report({ reports }: { reports: Report[] }) {
                 Subject
               </th>
               <th className=" border-r-0 border-black bg-green px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
-                Created on
+                Category
               </th>
               <th className=" border-r-0 border-black bg-green px-2 py-2 text-base font-bold tracking-tight text-white md:text-lg lg:text-xl">
                 Date

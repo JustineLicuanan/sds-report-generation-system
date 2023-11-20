@@ -2,8 +2,8 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
-import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -68,7 +68,7 @@ export default function AdminOrgReportPage() {
       <NavBar showNotificationButton={true} />
       <main className="flex">
         {/* SIDE BAR */}
-        <SideBarMenu />
+        <AdminSideBarMenu />
 
         {/* MAIN CONTENT */}
         <div className="mx-3 mt-4 flex  w-full flex-col md:flex-row">

@@ -1,8 +1,8 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
+import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
-import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -64,7 +64,7 @@ export default function UserOrgReportPage() {
       <NavBar showNotificationButton={true} />
       <main className="flex">
         {/* SIDE BAR */}
-        <SideBarMenu />
+        <OrganizationSideBarMenu />
 
         {/* MAIN CONTENT */}
         <div className="mx-3 mt-4 flex  w-full flex-col md:flex-row">

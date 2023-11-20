@@ -1,9 +1,9 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
 import ReportList from '~/components/report-list';
-import SideBarMenu from '~/components/side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -43,7 +43,7 @@ export default function ListOfReportPage() {
 
       <main className="flex">
         {/* SIDE BAR*/}
-        <SideBarMenu />
+        <AdminSideBarMenu />
 
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
           <div className="my-2 h-2 rounded-md bg-green"> </div>
