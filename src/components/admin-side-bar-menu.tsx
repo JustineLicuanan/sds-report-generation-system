@@ -218,32 +218,22 @@ export default function AdminSideBarMenu() {
         }`}
       >
         <div
-          className={`relative z-[5] h-fit w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
+          className={`relative z-[5] h-fit w-[450px] rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
         >
-          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">
-            Create new Announcement
-          </h1>
+          <button
+            type="button"
+            onClick={() => setCreateAnnouncement(!createAnnouncement)}
+            className="absolute right-4 top-4 text-xl hover:text-red"
+          >
+            ✖
+          </button>
+          <h1 className="px-10 py-3 text-3xl font-bold tracking-tight">Create new Announcement</h1>
           <div className="h-[1px] w-full bg-black "></div>
           <div className="flex flex-col px-10 py-5 ">
             <label htmlFor="audience-list" className="text-xl font-bold">
               Audience
             </label>
-            {/* <select
-              name="audience"
-              id="audience-list"
-              className="transparent mt-1 h-9 border-[1px] border-green px-2 py-1  text-lg outline-none"
-              defaultValue="sort"
-            >
-              <option value="sort" disabled>
-                Select an audience
-              </option>
-              {organizationList.map((org, idx) => (
-                <option key={idx} value="">
-                  {org.name}
-                </option>
-              ))}
-            </select> */}
-            <SelectAnnouncement />
+            <SelectAnnouncement organization={organizationList} />
             <div className="mt-1 flex  justify-between">
               <div>
                 <label htmlFor="date-start" className="text-xl font-bold">
@@ -326,9 +316,14 @@ export default function AdminSideBarMenu() {
         onSubmit={createOrgForm.handleSubmit(onSubmit)}
       >
         <div className="relative h-[90vh] w-[450px] overflow-auto  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  ease-in-out ">
-          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">
-            Create new Organization
-          </h1>
+          <button
+            type="button"
+            onClick={() => setCreateOrganization(!createOrganization)}
+            className="absolute right-4 top-4 text-xl hover:text-red"
+          >
+            ✖
+          </button>
+          <h1 className="px-10 py-3 text-3xl font-bold tracking-tight">Create new Organization</h1>
           <div className="h-[1px] w-full bg-black "></div>
           <div className="align-center mt-[12px] flex  justify-center px-10">
             {createOrgForm.watch('imageId') ? (

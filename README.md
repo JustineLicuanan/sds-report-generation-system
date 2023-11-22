@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.9.2
+
+- Added a function for audience select in `create announcement`.
+
 ### Version 0.9.1
 
 - Changed the 'SideBarMenu' to 'AdminSideBarMenu' for all admin pages.

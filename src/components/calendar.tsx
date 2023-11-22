@@ -4,6 +4,10 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
 export default function Calendar() {
+  const events = [
+    { title: 'Sample Event 1', date: '2023-11-01' },
+    { title: 'Sample Event 2', date: '2023-11-02' },
+  ];
   return (
     <>
       <FullCalendar
@@ -22,10 +26,7 @@ export default function Calendar() {
           day: 'Day',
           list: 'List',
         }}
-        events={[
-          { title: 'Sample Event 1', date: '2023-11-01' },
-          { title: 'Sample Event 2', date: '2023-11-02' },
-        ]}
+        events={events}
         // dateClick={(arg) => alert(arg.dateStr)}
         headerToolbar={{
           start: 'today prev,next', // will normally be on the left. if RTL, will be on the right
@@ -38,7 +39,6 @@ export default function Calendar() {
           alert('selected ' + info.startStr + ' to ' + info.endStr);
         }}
         droppable={true}
-        editable={true}
       />
     </>
   );
