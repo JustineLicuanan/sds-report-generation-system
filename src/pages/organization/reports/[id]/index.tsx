@@ -1,5 +1,6 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import NavBar from '~/components/navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
@@ -45,6 +46,7 @@ export default function UserOrgReportPage() {
   const [currentComment, setCurrentComment] = useState(myComment); // Comment data
   const [commentButton, setCommentButton] = useState(false);
 
+  const [showRejectModal, setShowRejectModal] = useState(false);
   // Smooth Scrolling when adding a comment.
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -122,7 +124,9 @@ export default function UserOrgReportPage() {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  className="mt-2 rounded-md bg-yellow px-4 py-2 text-lg font-medium"
+                  className={`${
+                    comment ? 'bg-yellow' : 'bg-yellow/50 text-black/50'
+                  } mt-2 rounded-md  px-4 py-2 text-lg font-medium`}
                   onClick={() => {
                     if (!comment) {
                     } else {
@@ -142,7 +146,8 @@ export default function UserOrgReportPage() {
             <div className="absolute bottom-4 right-3">
               <button
                 type="button"
-                className="me-2 rounded-md bg-red px-4 py-2 text-lg font-medium"
+                onClick={() => setShowRejectModal(!showRejectModal)}
+                className="me-2 rounded-md bg-red px-4 py-2 text-lg font-medium text-white"
               >
                 Reject
               </button>
@@ -153,6 +158,36 @@ export default function UserOrgReportPage() {
           </div>
         </div>
       </main>
+
+      {/* REJECTED MODAL */}
+      <div
+        className={`fixed left-0 top-0 z-[999] flex h-full w-full items-center justify-center  bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
+          showRejectModal ? '' : 'invisible opacity-0'
+        }`}
+      >
+        <div
+          className={`relative z-[5] h-fit w-[450px] rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
+        >
+          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Logout</h1>
+          <div className="h-[1px] w-full bg-black "></div>
+          <div className="flex items-center justify-around p-2">
+            <Image src="/danger_icon.png" width={50} height={50} alt="Danger Icon" className="" />
+            <div className="py-3 text-center text-2xl font-medium">
+              Are you sure you want to reject?
+            </div>
+          </div>
+          <div className="">
+            <button type="button" className="rounded-md bg-yellow px-8 py-2 text-lg font-medium">
+              Cancel
+            </button>
+          </div>
+          <div className="">
+            <button className="rounded-md bg-red px-8 py-2 text-lg font-medium text-white">
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

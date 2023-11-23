@@ -114,7 +114,7 @@ export default function AdminSideBarMenu() {
         id="side-bar"
         className={`${
           showSidebar ? 'hidden duration-300 md:flex' : 'flex'
-        } fixed z-[100] my-2 ml-1 h-[90vh] flex-col items-center bg-green px-1 md:sticky md:my-3 md:ml-2  md:h-[87vh] lg:ml-3`}
+        } sticky top-20 z-[100] my-2 ml-1 h-[90vh] flex-col items-center bg-green px-1 md:sticky md:my-3 md:ml-2  md:h-[87vh] lg:ml-3`}
       >
         {/* SIDE BAR LINKS */}
         {sidebarMenu.map((item) => (

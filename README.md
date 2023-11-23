@@ -44,6 +44,11 @@ respective docs.
 ### Version 0.9.3
 
 - Fixed a minor responsiveness error in comments of report page.
+- Fixed the comment button in `reports/[id]/index.tsx` design if there is no text inside the
+  textfield.
+- Made the side-bar sticky.
+- Added a status in report.
+- Added a reject
 
 ### Version 0.9.2
 
