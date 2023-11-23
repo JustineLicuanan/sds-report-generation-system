@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.9.3
+
+- Fixed a minor responsiveness error in comments of report page.
+
 ### Version 0.9.2
 
 - Added a function for audience select in `create announcement`.

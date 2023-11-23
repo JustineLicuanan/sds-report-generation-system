@@ -71,8 +71,8 @@ export default function AdminOrgReportPage() {
         <AdminSideBarMenu />
 
         {/* MAIN CONTENT */}
-        <div className="mx-3 mt-4 flex  w-full flex-col md:flex-row">
-          <div className="ms-1 h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+        <div className="mx-3 my-4 flex  w-full flex-col md:flex-row">
+          <div className="ms-1 min-h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
               {organizationName ?? 'Empty'} - {categoryName ?? 'Empty'}
             </h1>
@@ -92,7 +92,7 @@ export default function AdminOrgReportPage() {
           </div>
 
           {/* COMMENTS */}
-          <div className="relative mb-10 ms-1 h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="relative mb-10 ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
             <div className="h-[55%] overflow-y-auto" ref={containerRef}>
               {orgComment.map((data, index) => (

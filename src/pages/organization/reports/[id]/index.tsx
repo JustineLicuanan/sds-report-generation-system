@@ -1,8 +1,8 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
-import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
+import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -67,8 +67,8 @@ export default function UserOrgReportPage() {
         <OrganizationSideBarMenu />
 
         {/* MAIN CONTENT */}
-        <div className="mx-3 mt-4 flex  w-full flex-col md:flex-row">
-          <div className="ms-1 h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+        <div className="mx-3 my-4 flex  w-full flex-col md:flex-row">
+          <div className="ms-1 min-h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">My Report</h1>
 
             <div className="mt-7 flex justify-between text-xl font-medium">
@@ -86,7 +86,7 @@ export default function UserOrgReportPage() {
           </div>
 
           {/* COMMENTS */}
-          <div className="relative mb-10  ms-1 h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <div className="relative mb-10  ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
             <div className="h-[55%] overflow-y-auto scroll-smooth" ref={containerRef}>
               {adminComment.map((data, index) => (
