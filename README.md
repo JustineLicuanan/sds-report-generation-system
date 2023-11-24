@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.9.4
+
+- Added a function for approve.
+
 ### Version 0.9.3
 
 - Fixed a minor responsiveness error in comments of report page.
@@ -48,7 +52,7 @@ respective docs.
   textfield.
 - Made the side-bar sticky.
 - Added a status in report.
-- Added a reject
+- Added a reject function.
 
 ### Version 0.9.2
 

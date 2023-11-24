@@ -61,7 +61,7 @@ export default function CreateReportPage() {
             >
               Click me to upload your file!
             </label>
-            <input type="file" name="upload-pdf" id="upload-pdf" accept="pdf" className="hidden" />
+            <input type="file" name="upload-pdf" id="upload-pdf" accept=".pdf" className="hidden" />
             <textarea
               name="report-description"
               id="report-description"

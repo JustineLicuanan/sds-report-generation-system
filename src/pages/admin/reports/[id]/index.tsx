@@ -52,6 +52,13 @@ export default function AdminOrgReportPage() {
   const [currentComment, setCurrentComment] = useState(myComment); // Comment data
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectAlert, setRejectAlert] = useState(false);
+
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [approveAlert, setApproveAlert] = useState(false);
+
+  const [scheduleAppointment, setScheduleAppointment] = useState(false);
+  const [appointmentAlert, setAppointmentAlert] = useState(false);
+
   // Smooth Scrolling when adding a comment.
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -83,6 +90,10 @@ export default function AdminOrgReportPage() {
                 <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-red md:text-2xl'>
                   Rejected
                 </h1>
+              ) : approveAlert ? (
+                <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-green md:text-2xl'>
+                  Approved
+                </h1>
               ) : (
                 <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-yellow md:text-2xl'>
                   Pending
@@ -106,7 +117,7 @@ export default function AdminOrgReportPage() {
           {/* COMMENTS */}
           <div className="relative mb-10 ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
-            <div className="h-[55%] overflow-y-auto" ref={containerRef}>
+            <div className="h-[40vh] overflow-y-auto" ref={containerRef}>
               {orgComment.map((data, index) => (
                 <div key={index} className="flex flex-col px-5">
                   <div className="my-1 text-center text-xs font-light">{data.time}</div>
@@ -139,7 +150,6 @@ export default function AdminOrgReportPage() {
                 className="mt-2 w-full border-[1px] border-green px-3 py-1 text-lg outline-none"
                 onChange={(e) => setComment(e.target.value)}
                 value={comment}
-                disabled={rejectAlert}
               ></textarea>
               <div className="flex justify-end">
                 <button
@@ -167,18 +177,23 @@ export default function AdminOrgReportPage() {
                 type="button"
                 onClick={() => setShowRejectModal(!showRejectModal)}
                 className={`${
-                  rejectAlert ? 'cursor-not-allowed bg-red/50 text-white/50' : 'bg-red text-white'
+                  rejectAlert || approveAlert
+                    ? 'cursor-not-allowed bg-red/50 text-white/50'
+                    : 'bg-red text-white'
                 } me-2 rounded-md  px-4 py-2 text-lg font-medium `}
-                disabled={rejectAlert}
+                disabled={rejectAlert || approveAlert}
               >
                 Reject
               </button>
               <button
                 type="button"
+                onClick={() => setShowApproveModal(!showApproveModal)}
                 className={`${
-                  rejectAlert ? 'cursor-not-allowed bg-yellow/50 text-black/50' : 'bg-yellow '
+                  rejectAlert || approveAlert
+                    ? 'cursor-not-allowed bg-yellow/50 text-black/50'
+                    : 'bg-yellow '
                 } rounded-md px-4 py-2 text-lg font-medium`}
-                disabled={rejectAlert}
+                disabled={rejectAlert || approveAlert}
               >
                 Approve
               </button>
@@ -242,13 +257,193 @@ export default function AdminOrgReportPage() {
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
           </svg>
           <span className="sr-only">Info</span>
-          <div className="ml-3 text-sm font-medium">Rejected Successfully.</div>
+          <div className="ml-3 text-sm font-medium">The report has been rejected.</div>
           <button
             type="button"
             className="bg-green-50 text-green-500 hover:bg-green-200 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 -mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg p-1.5 focus:ring-2"
             data-dismiss-target="#alert-3"
             aria-label="Close"
             onClick={() => setRejectAlert(false)}
+          >
+            <span className="sr-only">Close</span>
+            <svg
+              className="h-3 w-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {/* APPROVED MODAL */}
+      <div
+        className={`fixed left-0 top-0 z-[999] flex h-full w-full items-center justify-center  bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
+          showApproveModal ? '' : 'invisible opacity-0'
+        }`}
+      >
+        <div className="relative h-[200px] w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Approve</h1>
+          <div className="h-[1px] w-full bg-black "></div>
+          <div className="flex items-center justify-around p-2">
+            <Image
+              src="/information_icon.svg"
+              width={50}
+              height={50}
+              alt="Information Icon"
+              className=""
+            />
+            <div className="py-3 text-center text-2xl font-medium">
+              Are you sure you want to{' '}
+              <span className="text-2xl font-bold text-green">Approve</span>?
+            </div>
+          </div>
+          <div className="absolute bottom-3 left-7">
+            <button
+              type="button"
+              onClick={() => setShowApproveModal(!showApproveModal)}
+              className="rounded-md bg-gray px-8 py-2 text-lg font-medium"
+            >
+              Cancel
+            </button>
+          </div>
+          <div className="absolute bottom-3 right-7">
+            <button
+              type="button"
+              onClick={() => {
+                setShowApproveModal(!showApproveModal);
+                setApproveAlert(!approveAlert);
+                setScheduleAppointment(!scheduleAppointment);
+              }}
+              className="rounded-md bg-green px-8 py-2 text-lg font-medium text-white"
+            >
+              Approve
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* {approveAlert && (
+        <div
+          id="alert-3"
+          className="absolute bottom-[5%] left-[2%] z-[101] mb-4 flex items-center rounded-lg bg-blue-50 p-4 text-blue-800 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]"
+          role="alert"
+        >
+          <svg
+            className="h-4 w-4 flex-shrink-0"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div className="ml-3 text-sm font-medium">The report has been aprroved.</div>
+          <button
+            type="button"
+            className="bg-green-50 text-green-500 hover:bg-green-200 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 -mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg p-1.5 focus:ring-2"
+            data-dismiss-target="#alert-3"
+            aria-label="Close"
+            onClick={() => setApproveAlert(false)}
+          >
+            <span className="sr-only">Close</span>
+            <svg
+              className="h-3 w-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+          </button>
+        </div>
+      )} */}
+
+      {/* Set Schedule */}
+      <div
+        className={`fixed left-0 top-0 z-[999] flex h-full w-full items-center justify-center  bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
+          scheduleAppointment ? '' : 'invisible opacity-0'
+        }`}
+      >
+        <div className="relative h-[200px] w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Appointment</h1>
+          <div className="h-[1px] w-full bg-black "></div>
+          <div className="flex flex-col items-center justify-around p-2">
+            <label htmlFor="schedule-report" className="py-3 text-xl font-medium">
+              Set the schedule of this report for{' '}
+              <span className="text-xl font-bold text-green">signing.</span>
+            </label>
+            <input
+              type="date"
+              name=""
+              id="schedule-report"
+              className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none"
+            />
+          </div>
+          <div className="absolute bottom-3 left-7">
+            <button
+              type="button"
+              onClick={() => setScheduleAppointment(!scheduleAppointment)}
+              className="rounded-md bg-gray px-8 py-2 text-lg font-medium"
+            >
+              Cancel
+            </button>
+          </div>
+          <div className="absolute bottom-3 right-7">
+            <button
+              type="button"
+              onClick={() => {
+                setScheduleAppointment(!scheduleAppointment);
+                setAppointmentAlert(!appointmentAlert);
+              }}
+              className="rounded-md bg-green px-8 py-2 text-lg font-medium text-white"
+            >
+              Set
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {appointmentAlert && (
+        <div
+          id="alert-3"
+          className="absolute bottom-[5%] left-[2%] z-[101] mb-4 flex items-center rounded-lg bg-blue-50 p-4 text-blue-800 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]"
+          role="alert"
+        >
+          <svg
+            className="h-4 w-4 flex-shrink-0"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div className="ml-3 text-sm font-medium">Set date successfully</div>
+          <button
+            type="button"
+            className="bg-green-50 text-green-500 hover:bg-green-200 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 -mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg p-1.5 focus:ring-2"
+            data-dismiss-target="#alert-3"
+            aria-label="Close"
+            onClick={() => setAppointmentAlert(!appointmentAlert)}
           >
             <span className="sr-only">Close</span>
             <svg
