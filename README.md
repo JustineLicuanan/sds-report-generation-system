@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.9.5
+
+- Added a delete button in announcement.
+- Now the image in navbar will automatically direct to dashboard when clicked but not fully
+  functional.
+
 ### Version 0.9.4
 
 - Added a function for approve.

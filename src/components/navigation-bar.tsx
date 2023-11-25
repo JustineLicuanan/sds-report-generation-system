@@ -1,5 +1,7 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
+import { paths } from '~/meta';
 import TruncateWord from './truncate-word';
 
 export default function NavBar({ showNotificationButton }: { showNotificationButton: boolean }) {
@@ -39,14 +41,16 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
           className="flex w-full items-center justify-between py-1 md:px-7 md:py-2"
         >
           <div id="titles" className="flex px-1">
-            <Image
-              src="/cvsu_logo.png"
-              alt="CVSU Logo"
-              height={100}
-              width={100}
-              id="logo"
-              className="h-10 w-10 rounded-full md:h-12  md:w-12"
-            />
+            <Link href={`${paths.ADMIN}`}>
+              <Image
+                src="/cvsu_logo.png"
+                alt="CVSU Logo"
+                height={100}
+                width={100}
+                id="logo"
+                className="h-10 w-10 rounded-full md:h-12  md:w-12"
+              />
+            </Link>
             <div className="mt-[-5px] leading-3 text-white">
               <div id="title" className="ms-2 text-lg font-bold sm:text-xl md:text-2xl lg:text-3xl">
                 Office of Student Development Services

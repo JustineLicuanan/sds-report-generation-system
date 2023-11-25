@@ -37,8 +37,17 @@ export default function AnnouncementPage() {
     },
   ];
 
+  const [myArray, setMyArray] = useState(listOfAnnouncements);
   const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
+
+  const deleteElementAtIndex = (index: number) => {
+    // Create a copy of the array excluding the element at the specified index
+    const newArray = [...myArray.slice(0, index), ...myArray.slice(index + 1)];
+
+    // Update the state with the new array
+    setMyArray(newArray);
+  };
   return (
     <>
       {/* HEADER */}
@@ -61,7 +70,7 @@ export default function AnnouncementPage() {
             </h1>
             {/* LIST OF ANNOUNCEMENTS */}
             <div className="my-5 w-full">
-              {listOfAnnouncements.map((data, index) => (
+              {myArray.map((data, index) => (
                 <button
                   type="button"
                   onClick={() => {
@@ -109,23 +118,32 @@ export default function AnnouncementPage() {
               <div className="flex py-2 text-xl">
                 <h4 className="font-semibold">Date:</h4>
                 <div className="ms-1 text-xl font-medium">
-                  {listOfAnnouncements[selectedNotification]?.date}
+                  {myArray[selectedNotification]?.date}
                 </div>
               </div>
               <div className="flex py-2 text-xl">
                 <h4 className="font-semibold">Subject:</h4>
                 <div className="ms-1 text-xl font-medium">
-                  {listOfAnnouncements[selectedNotification]?.subject}
+                  {myArray[selectedNotification]?.subject}
                 </div>
               </div>
               <div className="flex py-2 text-xl">
                 <h4 className="font-semibold">Description:</h4>
                 <div className="ms-1 text-xl font-medium">
-                  {listOfAnnouncements[selectedNotification]?.description}
+                  {myArray[selectedNotification]?.description}
                 </div>
               </div>
             </div>
-            <div className="flex justify-end px-4">
+            <div className="flex justify-between px-4">
+              <button
+                type="button"
+                className="my-4 cursor-pointer rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
+                onClick={() => {
+                  deleteElementAtIndex(selectedNotification)
+                  setShowAnnouncement(!showAnnouncement)}}
+              >
+                Delete
+              </button>
               <button
                 type="button"
                 className="my-4 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"

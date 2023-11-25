@@ -84,7 +84,7 @@ export default function AdminOrgReportPage() {
           <div className="ms-1 min-h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <div className="flex justify-between">
               <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
-                {organizationName ?? 'Empty'} - {categoryName ?? 'Empty'}
+                {organizationName ?? 'Org'} - {categoryName ?? 'Report Category'}
               </h1>
               {rejectAlert ? (
                 <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-red md:text-2xl'>
