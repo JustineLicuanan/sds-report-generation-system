@@ -25,7 +25,7 @@ export default function CreateReportPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar showNotificationButton={true} />
+      <NavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <OrganizationSideBarMenu />
@@ -53,15 +53,26 @@ export default function CreateReportPage() {
               type="date"
               name="date"
               id="date"
-              className=" mt-1 h-9 w-1/5 border-[1px] border-green px-2 text-lg outline-none"
+              className=" mt-1 w-1/5 border-[1px] border-green px-2 py-1 text-lg outline-none"
             />
-            <label
-              htmlFor="upload-pdf"
-              className="mt-2  flex h-[50vh] w-full cursor-pointer items-center justify-center border-[5px] border-green py-3 text-4xl font-medium hover:border-green/50"
-            >
-              Click me to upload your file!
-            </label>
-            <input type="file" name="upload-pdf" id="upload-pdf" accept=".pdf" className="hidden" />
+            <div className="mt-2  flex h-[400px] w-full  items-center justify-center border-[5px] border-green py-3 text-4xl font-medium">
+              .PDF
+            </div>
+            <div className="flex justify-end">
+              <label
+                htmlFor="upload-pdf"
+                className="mt-2 cursor-pointer rounded-md bg-yellow px-4 py-1 text-lg font-medium"
+              >
+                Upload
+              </label>
+              <input
+                type="file"
+                name="upload-pdf"
+                id="upload-pdf"
+                accept=".pdf"
+                className="hidden"
+              />
+            </div>
             <textarea
               name="report-description"
               id="report-description"

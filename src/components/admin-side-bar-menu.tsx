@@ -199,11 +199,11 @@ export default function AdminSideBarMenu() {
           <Image
             width={100}
             height={100}
-            src="/logout_icon.svg"
+            src="/signout_icon.svg"
             alt="Sign Out Icon"
             className="h-10 w-fit hover:scale-105 lg:h-12"
           />
-          <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
+          <div className="absolute left-12 hidden whitespace-nowrap rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
             Sign Out
           </div>
         </Link>
@@ -377,15 +377,9 @@ export default function AdminSideBarMenu() {
               {...createOrgForm.register('category')}
             >
               <option value="">Select a category</option>
-              <option value={OrganizationCategory.STUDENT_GOVERNING_BODY}>
-                Student Governing Body
-              </option>
-              <option value={OrganizationCategory.ACADEMIC_ORGANIZATION}>
-                Academic Organization
-              </option>
-              <option value={OrganizationCategory.NON_ACADEMIC_ORGANIZATION}>
-                Non Academic Organization
-              </option>
+              {Object.values(OrganizationCategory).map((category,index) => (
+                <option key={index} value={category}>{category.replace(/_/g, ' ')}</option>
+              ))}
             </select>
             <div className="flex flex-col">
               <label htmlFor="org-description" className=" mb-2 text-xl font-bold">

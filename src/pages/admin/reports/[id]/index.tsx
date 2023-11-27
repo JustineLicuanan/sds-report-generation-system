@@ -74,7 +74,7 @@ export default function AdminOrgReportPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar showNotificationButton={true} />
+      <NavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <AdminSideBarMenu />

@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { OrganizationCategory, type User } from '@prisma/client';
 import { useState } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -10,6 +10,11 @@ export default function SelectAnnouncement({ organization }: { organization: Use
     category: org.category,
   }));
 
+  const orgCategory = [
+    { name: 'StuGovBody', category: OrganizationCategory.STUDENT_GOVERNING_BODY },
+    { name: 'AcadOrg', category: OrganizationCategory.ACADEMIC_ORGANIZATION },
+    { name: 'NonAcadOrg', category: OrganizationCategory.NON_ACADEMIC_ORGANIZATION },
+  ];
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   const handleButtonClick = (category: string) => {
@@ -32,7 +37,7 @@ export default function SelectAnnouncement({ organization }: { organization: Use
         isMulti
         components={makeAnimated()}
         styles={{
-          control: (baseStyles, state) => ({
+          control: (baseStyles) => ({
             ...baseStyles,
             borderColor: 'green',
             outline: 'none',
@@ -41,27 +46,16 @@ export default function SelectAnnouncement({ organization }: { organization: Use
         }}
       />
       <div className="flex gap-2">
-        <button
-          type="button"
-          className="my-2 w-1/3 cursor-pointer rounded-md bg-gray py-2 text-lg font-medium hover:bg-yellow"
-          onClick={() => handleButtonClick('STUDENT_GOVERNING_BODY')}
-        >
-          StuGovBody
-        </button>
-        <button
-          type="button"
-          className="my-2 w-1/3 cursor-pointer rounded-md bg-gray py-2 text-lg font-medium hover:bg-yellow"
-          onClick={() => handleButtonClick('ACADEMIC_ORGANIZATION')}
-        >
-          AcadOrg
-        </button>
-        <button
-          type="button"
-          className="my-2 w-1/3 cursor-pointer rounded-md bg-gray py-2 text-lg font-medium hover:bg-yellow"
-          onClick={() => handleButtonClick('NON_ACADEMIC_ORGANIZATION')}
-        >
-          NonAcadOrg
-        </button>
+        {orgCategory.map((org, index) => (
+          <button
+            key={index}
+            type="button"
+            className="my-2 w-1/3 cursor-pointer rounded-md bg-gray py-2 text-lg font-medium hover:bg-yellow"
+            onClick={() => handleButtonClick(org.category)}
+          >
+            {org.name}
+          </button>
+        ))}
       </div>
     </>
   );

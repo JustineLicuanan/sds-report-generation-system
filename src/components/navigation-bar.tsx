@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { paths } from '~/meta';
 import TruncateWord from './truncate-word';
 
-export default function NavBar({ showNotificationButton }: { showNotificationButton: boolean }) {
+export default function NavBar() {
   const notification = [
     {
       subject: 'File a report today.',
@@ -60,59 +60,56 @@ export default function NavBar({ showNotificationButton }: { showNotificationBut
               </div>
             </div>
           </div>
-          {showNotificationButton && (
-            <div className="relative">
-              <button id="notification" onClick={() => setShowNotification(!showNotification)}>
-                <Image
-                  src="/notification_icon.svg"
-                  className="h-10 text-black md:h-12"
-                  alt="Notification Bell"
-                  height={100}
-                  width={100}
-                />
-              </button>
 
-              <div
-                className={`${
-                  showNotification ? '' : 'hidden'
-                } absolute right-[30px] top-[45px] h-[500px] w-[375px] overflow-auto bg-[#FFFFFF] px-2 pt-2 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]`}
-              >
-                <h1 className="py-2 text-center text-3xl font-bold tracking-tight">
-                  Notifications
-                </h1>
-                {notification.map((notif, index) => (
-                  <button
-                    key={index}
-                    className={`mb-1 h-fit w-full rounded ${
-                      selectedNotification === index ? 'bg-gray/50' : 'bg-gray'
-                    }  text-left hover:bg-yellow`}
-                    onClick={() => {
-                      return setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
-                    }}
+          <div className="relative">
+            <button id="notification" onClick={() => setShowNotification(!showNotification)}>
+              <Image
+                src="/notification_icon.svg"
+                className="h-10 text-black md:h-12"
+                alt="Notification Bell"
+                height={100}
+                width={100}
+              />
+            </button>
+
+            <div
+              className={`${
+                showNotification ? '' : 'hidden'
+              } absolute right-[30px] top-[45px] h-[500px] w-[375px] overflow-auto bg-[#FFFFFF] px-2 pt-2 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]`}
+            >
+              <h1 className="py-2 text-center text-3xl font-bold tracking-tight">Notifications</h1>
+              {notification.map((notif, index) => (
+                <button
+                  key={index}
+                  className={`mb-1 h-fit w-full rounded ${
+                    selectedNotification === index ? 'bg-gray/50' : 'bg-gray'
+                  }  text-left hover:bg-yellow`}
+                  onClick={() => {
+                    return setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
+                  }}
+                >
+                  <div
+                    className={`${
+                      selectedNotification === index
+                        ? 'font-light text-black/60'
+                        : 'font-bold text-black/80 '
+                    } px-2 py-2 text-center text-sm `}
                   >
-                    <div
-                      className={`${
-                        selectedNotification === index
-                          ? 'font-light text-black/60'
-                          : 'font-bold text-black/80 '
-                      } px-2 py-2 text-center text-sm `}
-                    >
-                      {notif.date}
-                    </div>
-                    <div
-                      className={`${
-                        selectedNotification === index
-                          ? 'font-medium text-black/60'
-                          : 'font-bold text-black/80 '
-                      } -mt-4 px-2 py-2 text-center  tracking-tight`}
-                    >
-                      <TruncateWord text={notif.subject} maxLength={33} fontSize="text-lg" />
-                    </div>
-                  </button>
-                ))}
-              </div>
+                    {notif.date}
+                  </div>
+                  <div
+                    className={`${
+                      selectedNotification === index
+                        ? 'font-medium text-black/60'
+                        : 'font-bold text-black/80 '
+                    } -mt-4 px-2 py-2 text-center  tracking-tight`}
+                  >
+                    <TruncateWord text={notif.subject} maxLength={33} fontSize="text-lg" />
+                  </div>
+                </button>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       </nav>
       {showAnnouncement && selectedNotification !== null && (

@@ -74,7 +74,7 @@ export default function EditInfoPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar showNotificationButton={true} />
+      <NavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <AdminSideBarMenu />
@@ -133,7 +133,7 @@ export default function EditInfoPage() {
                 </option>
                 {Object.values(OrganizationCategory).map((category) => (
                   <option key={category} value={category}>
-                    {category}
+                    {category.replace(/_/g, " ")}
                   </option>
                 ))}
               </select>

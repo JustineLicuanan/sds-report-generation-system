@@ -56,7 +56,7 @@ export default function AnnouncementPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar showNotificationButton={true} />
+      <NavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <AdminSideBarMenu />
@@ -139,8 +139,9 @@ export default function AnnouncementPage() {
                 type="button"
                 className="my-4 cursor-pointer rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
                 onClick={() => {
-                  deleteElementAtIndex(selectedNotification)
-                  setShowAnnouncement(!showAnnouncement)}}
+                  deleteElementAtIndex(selectedNotification);
+                  setShowAnnouncement(!showAnnouncement);
+                }}
               >
                 Delete
               </button>

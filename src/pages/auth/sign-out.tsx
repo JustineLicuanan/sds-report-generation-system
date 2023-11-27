@@ -11,38 +11,72 @@ export default function SignOutPage() {
       <Head>
         <title>{`Sign Out ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
-      <main className="flex h-[100vh] items-center justify-center">
-        <div className="relative h-[200px] w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
-          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Sign Out</h1>
-          <div className="h-[1px] w-full bg-black "></div>
-          <div className="flex items-center justify-around p-2">
-            <Image
-              src="/logout_danger_icon.svg"
-              width={50}
-              height={50}
-              alt="Sign Out Danger"
-              className=""
-            />
-            <div className="py-3 text-center text-2xl font-medium">
-              Are you sure you want to sign out?
+
+      <main className="flex flex-col items-center px-10 py-10">
+        <Image
+          src="/cvsu_logo.png"
+          alt="CVSU Logo"
+          height={100}
+          width={100}
+          id="logo"
+          className="h-16 w-16 rounded-full md:h-20  md:w-20"
+        />
+        <div className="leading-3">
+          <div
+            id="title"
+            className="text-center text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl"
+          >
+            Office of Student Development Services
+          </div>
+          <div
+            id="sub-title"
+            className="text-center text-base font-medium sm:text-lg md:text-xl lg:text-2xl"
+          >
+            Scheduling System For Reporting and File Management
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <Image
+            src="/signout_illustration.svg"
+            alt="Sign out"
+            height={100}
+            width={100}
+            id="logo"
+            className="h-16 w-fit rounded-full  md:h-[400px]"
+          />
+          <div className="relative my-10 h-fit w-[350px] rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+            <div className="flex items-center justify-center gap-2">
+              <Image
+                src="/signout_danger_icon.svg"
+                width={50}
+                height={50}
+                alt="Sign Out Danger"
+                className="h-10 w-10"
+              />
+              <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Sign Out</h1>
             </div>
-          </div>
-          <div className="absolute bottom-3 left-7">
-            <button
-              type="button"
-              onClick={() => router.push(paths.ADMIN)}
-              className="rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-            >
-              Back
-            </button>
-          </div>
-          <div className="absolute bottom-3 right-7">
-            <button
-              className="rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
-              onClick={() => signOut({ callbackUrl: paths.SIGN_IN })}
-            >
-              Sign Out
-            </button>
+
+            <div className="h-[1px] w-full bg-black "></div>
+            <div className="px-5 py-3">
+              <div className="text-center text-2xl font-medium">
+                Are you sure you want to sign out?
+              </div>
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  onClick={() => router.push(paths.ADMIN)}
+                  className="rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+                >
+                  Back
+                </button>
+                <button
+                  className="rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
+                  onClick={() => signOut({ callbackUrl: paths.SIGN_IN })}
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </main>

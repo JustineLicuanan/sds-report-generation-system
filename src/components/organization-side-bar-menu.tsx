@@ -2,28 +2,26 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { type z } from 'zod';
 import { paths } from '~/meta';
-import { orgSchemas } from '~/zod-schemas/admin/org';
 
-type Inputs = z.infer<typeof orgSchemas.create>;
+// type Inputs = z.infer<typeof orgSchemas.create>;
 
 export default function OrganizationSideBarMenu() {
   const sidebarMenu = [
     { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ORGANIZATION}` },
-    {
-      id: 2,
-      name: 'Log',
-      imageLink: '/log_icon.svg',
-      urlLink: `${paths.ORGANIZATION}${paths.LOGS}`,
-    },
+    // {
+    //   id: 2,
+    //   name: 'Log',
+    //   imageLink: '/log_icon.svg',
+    //   urlLink: `${paths.ORGANIZATION}${paths.LOGS}`,
+    // },
     {
       id: 3,
       name: 'Create',
       imageLink: '/create_icon.svg',
       urlLink: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ORGANIZATION_CREATE}`,
     },
-    { id: 4, name: 'Sign Out', imageLink: '/logout_icon.svg', urlLink: `${paths.SIGN_OUT}` },
+    { id: 4, name: 'Sign Out', imageLink: '/signout_icon.svg', urlLink: `${paths.SIGN_OUT}` },
   ];
 
   const { asPath } = useRouter();
@@ -82,7 +80,7 @@ export default function OrganizationSideBarMenu() {
                 alt={item.name}
                 className="h-10 w-fit hover:scale-105 lg:h-12"
               />
-              <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
+              <div className="absolute left-12 hidden whitespace-nowrap rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
                 {item.name}
               </div>
             </Link>

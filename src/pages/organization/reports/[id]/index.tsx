@@ -63,7 +63,7 @@ export default function UserOrgReportPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar showNotificationButton={true} />
+      <NavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <OrganizationSideBarMenu />

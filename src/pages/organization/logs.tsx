@@ -75,7 +75,7 @@ export default function UserLogPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar showNotificationButton={true} />
+      <NavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <OrganizationSideBarMenu />

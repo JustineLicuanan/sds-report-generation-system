@@ -43,7 +43,7 @@ export default function AdminDashboardPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar showNotificationButton={true} />
+      <NavBar />
 
       <main className="flex">
         {/* SIDE BAR MENU */}

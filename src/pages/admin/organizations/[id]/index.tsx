@@ -39,7 +39,7 @@ export default function ListOfReportPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar showNotificationButton={true} />
+      <NavBar />
 
       <main className="flex">
         {/* SIDE BAR*/}
@@ -76,7 +76,6 @@ export default function ListOfReportPage() {
           />
         </div>
       </main>
-      
     </>
   );
 }
