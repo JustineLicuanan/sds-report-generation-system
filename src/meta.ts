@@ -5,6 +5,7 @@ export const meta = {
 
 export const paths = {
   SIGN_IN: '/auth/sign-in',
+  SIGN_OUT: '/auth/sign-out',
   ADMIN: '/admin',
   REPORT: '/report',
   ORGANIZATION: '/organization',
@@ -13,6 +14,5 @@ export const paths = {
   ORGANIZATION_EDIT: '/edit',
   LOGS: '/logs',
   ANNOUNCEMENT: '/announcement',
-  LOGOUT: '/auth/logout',
-  ORGANIZATION_CREATE: '/create'
+  ORGANIZATION_CREATE: '/create',
 } as const;

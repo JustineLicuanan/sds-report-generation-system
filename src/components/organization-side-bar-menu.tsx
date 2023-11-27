@@ -23,7 +23,7 @@ export default function OrganizationSideBarMenu() {
       imageLink: '/create_icon.svg',
       urlLink: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ORGANIZATION_CREATE}`,
     },
-    { id: 4, name: 'Logout', imageLink: '/logout_icon.svg', urlLink: `${paths.LOGOUT}` },
+    { id: 4, name: 'Sign Out', imageLink: '/logout_icon.svg', urlLink: `${paths.SIGN_OUT}` },
   ];
 
   const { asPath } = useRouter();
@@ -65,7 +65,7 @@ export default function OrganizationSideBarMenu() {
         {/* SIDE BAR LINKS */}
         {sidebarMenu.map((item) => (
           <>
-            {item.name === 'Logout' && (
+            {item.name === 'Sign Out' && (
               <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
             )}
             <Link

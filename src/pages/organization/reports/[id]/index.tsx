@@ -168,7 +168,7 @@ export default function UserOrgReportPage() {
         <div
           className={`relative z-[5] h-fit w-[450px] rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
         >
-          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Logout</h1>
+          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Sign Out</h1>
           <div className="h-[1px] w-full bg-black "></div>
           <div className="flex items-center justify-around p-2">
             <Image src="/danger_icon.png" width={50} height={50} alt="Danger Icon" className="" />

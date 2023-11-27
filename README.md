@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.9.6
+
+- Rename 'logout.tsx' file to 'sign-out.tsx'.
+
 ### Version 0.9.5
 
 - Added a delete button in announcement.

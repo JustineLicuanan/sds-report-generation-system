@@ -193,18 +193,18 @@ export default function AdminSideBarMenu() {
         })}
         <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
         <Link
-          href={paths.LOGOUT}
+          href={paths.SIGN_OUT}
           className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1  lg:mt-2 lg:h-12 lg:w-12`}
         >
           <Image
             width={100}
             height={100}
             src="/logout_icon.svg"
-            alt="Logout Icon"
+            alt="Sign Out Icon"
             className="h-10 w-fit hover:scale-105 lg:h-12"
           />
           <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
-            Logout
+            Sign Out
           </div>
         </Link>
       </div>
