@@ -13,57 +13,82 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([name])
+model Settings {
+    id             String   @id @default(cuid())
+    ofAdmin        Boolean? @unique
+    appIcon        String?
+    appIconId      String?
+    appName        String?
+    appDescription String?
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
 }
 
 model Organization {
-    id          String                @id @default(cuid())
-    name        String
-    description String                @default("")
-    category    OrganizationCategory?
-    image       String?
-    imageId     String?
-    status      CommonStatus          @default(ACTIVE)
-    members     User[]
-    createdAt   DateTime              @default(now())
-    updatedAt   DateTime              @updatedAt
+    id            String               @id @default(cuid())
+    name          String
+    description   String               @default("")
+    category      OrganizationCategory
+    image         String?
+    imageId       String?
+    members       User[]
+    reports       Report[]
+    announcements Announcement[]
+    notifications Notification[]
+    logs          Log[]
+    createdAt     DateTime             @default(now())
+    updatedAt     DateTime             @updatedAt
+}
+
+model Appointment {
+    id        String          @id @default(cuid())
+    type      AppointmentType
+    start     DateTime?
+    due       DateTime?
+    createdAt DateTime        @default(now())
+    updatedAt DateTime        @updatedAt
+
+    announcement   Announcement? @relation(fields: [announcementId], references: [id])
+    announcementId String?       @unique
+
+    report   Report? @relation(fields: [reportId], references: [id])
+    reportId String? @unique
 }
 
 model Announcement {
-    id         String       @id @default(cuid())
-    subject    String
-    message    String
-    start      DateTime?
-    due        DateTime?
-    withReport Boolean      @default(false)
-    status     CommonStatus @default(ACTIVE)
-    audience   User[]
-    comments   Comment[]
-    reports    Report[]
-    createdAt  DateTime     @default(now())
-    updatedAt  DateTime     @updatedAt
+    id                 String              @id @default(cuid())
+    subject            String
+    description        String
+    withReport         Boolean
+    appointment        Appointment?
+    audience           Organization[]
+    comments           Comment[]
+    reports            Report[]
+    adminNotifications AdminNotification[]
+    notifications      Notification[]
+    createdAt          DateTime            @default(now())
+    updatedAt          DateTime            @updatedAt
 }
 
 model Report {
-    id           String           @id @default(cuid())
-    subject      String
-    message      String
-    category     ReportCategory
-    visibility   ReportVisibility
-    file         String?
-    withSchedule Boolean
-    schedule     DateTime?
-    status       ReportStatus     @default(PENDING)
-    comments     Comment[]
-    logs         Log[]
-    createdAt    DateTime         @default(now())
-    updatedAt    DateTime         @updatedAt
+    id                 String              @id @default(cuid())
+    subject            String
+    description        String
+    category           ReportCategory
+    visibility         ReportVisibility
+    file               String?
+    fileId             String?
+    withAppointment    Boolean
+    appointment        Appointment?
+    status             ReportStatus        @default(PENDING)
+    comments           Comment[]
+    adminNotifications AdminNotification[]
+    notifications      Notification[]
+    createdAt          DateTime            @default(now())
+    updatedAt          DateTime            @updatedAt
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
 
     announcement   Announcement? @relation(fields: [announcementId], references: [id])
     announcementId String?
@@ -73,10 +98,13 @@ model Report {
 }
 
 model Comment {
-    id        String   @id @default(cuid())
-    content   String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id                 String              @id @default(cuid())
+    name               String
+    content            String
+    adminNotifications AdminNotification[]
+    notifications      Notification[]
+    createdAt          DateTime            @default(now())
+    updatedAt          DateTime            @updatedAt
 
     announcement   Announcement? @relation(fields: [announcementId], references: [id])
     announcementId String?
@@ -88,17 +116,65 @@ model Comment {
     createdById String
 }
 
-model Log {
-    id        String   @id @default(cuid())
-    userId    String
-    userName  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+model AdminNotification {
+    id        String           @id @default(cuid())
+    type      NotificationType
+    message   String
+    isRead    Boolean          @default(false)
+    createdAt DateTime         @default(now())
+    updatedAt DateTime         @updatedAt
 
-    report       Report?      @relation(fields: [reportId], references: [id])
-    reportId     String?
-    subject      String
-    reportStatus ReportStatus @default(PENDING)
+    announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+    announcementId String?
+
+    report   Report? @relation(fields: [reportId], references: [id], onDelete: Cascade)
+    reportId String?
+
+    comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+    commentId String?
+}
+
+model Notification {
+    id         String            @id @default(cuid())
+    type       NotificationType
+    message    String
+    isRead     Boolean           @default(false)
+    visibility ReportVisibility?
+    createdAt  DateTime          @default(now())
+    updatedAt  DateTime          @updatedAt
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+    announcementId String?
+
+    report   Report? @relation(fields: [reportId], references: [id], onDelete: Cascade)
+    reportId String?
+
+    comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+    commentId String?
+}
+
+model Log {
+    id        String          @id @default(cuid())
+    type      LogType
+    name      String
+    email     String?
+    subject   String?
+    category  ReportCategory?
+    action    LogAction
+    createdAt DateTime        @default(now())
+    updatedAt DateTime        @updatedAt
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
+
+    organization   Organization? @relation(fields: [organizationId], references: [id])
+    organizationId String?
 }
 
 // Necessary for auth
@@ -129,21 +205,18 @@ model Session {
 }
 
 model User {
-    id            String                @id @default(cuid())
+    id            String         @id @default(cuid())
     name          String
-    email         String                @unique
+    email         String         @unique
     emailVerified DateTime?
     image         String?
-    imageId       String?
-    description   String                @default("")
-    category      OrganizationCategory?
-    role          UserRole              @default(STUDENT_LEADER)
-    status        CommonStatus          @default(ACTIVE)
+    role          UserRole       @default(STUDENT_LEADER)
     accounts      Account[]
     sessions      Session[]
     reports       Report[]
     comments      Comment[]
-    announcements Announcement[]
+    notifications Notification[]
+    logs          Log[]
 
     organization   Organization? @relation(fields: [organizationId], references: [id])
     organizationId String?
@@ -157,12 +230,6 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-enum CommonStatus {
-    ACTIVE
-    ARCHIVED
-    DELETED
-}
-
 enum UserRole {
     ADMIN
     STUDENT_LEADER
@@ -172,6 +239,11 @@ enum OrganizationCategory {
     STUDENT_GOVERNING_BODY
     ACADEMIC_ORGANIZATION
     NON_ACADEMIC_ORGANIZATION
+}
+
+enum AppointmentType {
+    ANNOUNCEMENT
+    REPORT
 }
 
 enum ReportCategory {
@@ -191,6 +263,26 @@ enum ReportStatus {
     CANCELLED
     APPROVED
     REJECTED
-    ARCHIVED
-    DELETED
+}
+
+enum NotificationType {
+    ANNOUNCEMENT
+    ANNOUNCEMENT_COMMENT
+    REPORT
+    REPORT_COMMENT
+}
+
+enum LogType {
+    AUTH
+    REPORT
+}
+
+enum LogAction {
+    SIGN_IN
+    SIGN_OUT
+
+    PENDING
+    CANCELLED
+    APPROVED
+    REJECTED
 }

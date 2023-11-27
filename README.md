@@ -41,6 +41,13 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.0
+
+- Alter db tables.
+- Create settings seeder.
+- Update UserPosition enum.
+- Create auth audit logger.
+
 ### Version 0.9.6
 
 - Rename 'logout.tsx' file to 'sign-out.tsx'.

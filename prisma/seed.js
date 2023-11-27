@@ -1,9 +1,11 @@
 const { db } = require('./db');
+const { settingsSeeder } = require('./seeders/settings');
 const { userSeeder } = require('./seeders/user');
 
 (async () => {
   try {
     // Seeders
+    await settingsSeeder();
     await userSeeder();
 
     // Disconnect after seeding

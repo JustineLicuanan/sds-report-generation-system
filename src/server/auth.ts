@@ -1,10 +1,11 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import type { CommonStatus, OrganizationCategory, UserRole } from '@prisma/client';
+import { LogAction, LogType, type UserRole } from '@prisma/client';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 
 import { env } from '~/env.mjs';
+import { paths } from '~/meta';
 import { db } from '~/server/db';
 
 /**
@@ -16,21 +17,15 @@ declare module 'next-auth' {
     user: DefaultSession['user'] & {
       id: string;
       // ...other properties
-      imageId?: string;
-      description?: string;
-      category?: OrganizationCategory;
       role: UserRole;
-      status: CommonStatus;
+      organizationId?: string;
     };
   }
 
   interface User {
     // ...other properties
-    imageId?: string;
-    description?: string;
-    category?: OrganizationCategory;
     role: UserRole;
-    status: CommonStatus;
+    organizationId?: string;
   }
 }
 
@@ -44,18 +39,12 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
-        imageId: user.imageId,
-        description: user.description,
-        category: user.category,
         role: user.role,
-        status: user.status,
+        organizationId: user.organizationId,
       },
     }),
     async signIn({ user }) {
-      const userExists = !!(await db.user.count({
-        where: { email: user.email ?? '', status: 'ACTIVE' },
-      }));
-
+      const userExists = !!(await db.user.count({ where: { email: user.email ?? '' } }));
       return userExists;
     },
   },
@@ -80,6 +69,31 @@ export const authOptions: NextAuthOptions = {
      * model.
      */
   ],
+  pages: { signIn: paths.SIGN_IN, signOut: paths.SIGN_OUT },
+  events: {
+    async signIn({ user }) {
+      await db.log.create({
+        data: {
+          type: LogType.AUTH,
+          name: user.name!,
+          email: user.email,
+          action: LogAction.SIGN_IN,
+          createdBy: { connect: { id: user.id } },
+        },
+      });
+    },
+    async signOut({ session }) {
+      await db.log.create({
+        data: {
+          type: LogType.AUTH,
+          name: session.user.name!,
+          email: session.user.email,
+          action: LogAction.SIGN_OUT,
+          createdBy: { connect: { id: session.user.id } },
+        },
+      });
+    },
+  },
 };
 
 /**
