@@ -33,7 +33,7 @@ export default function Table({ data, tableHeader }: YourComponentProps) {
         <tbody>
           {data.length === 0 ? ( // Check if data is empty
             <tr>
-              <td colSpan={6}>No result found</td>
+              <td colSpan={tableHeader.length}>No result found</td>
             </tr>
           ) : (
             data.map((data) => (

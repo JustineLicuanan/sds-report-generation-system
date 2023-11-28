@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.2
+
+- Fixed the mobile responsiveness for `signout.tsx`.
+- Added an authentication logs.
+
 ### Version 0.10.1
 
 - Fix the whitespace wrap error on sign out tooltip in side bar menu.

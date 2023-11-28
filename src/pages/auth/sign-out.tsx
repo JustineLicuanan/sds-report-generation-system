@@ -12,7 +12,7 @@ export default function SignOutPage() {
         <title>{`Sign Out ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
-      <main className="flex flex-col items-center px-10 py-10">
+      <main className="flex flex-col items-center px-4 py-4 md:px-10 md:py-10">
         <Image
           src="/cvsu_logo.png"
           alt="CVSU Logo"
@@ -35,14 +35,14 @@ export default function SignOutPage() {
             Scheduling System For Reporting and File Management
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col items-center justify-between md:flex-row">
           <Image
             src="/signout_illustration.svg"
             alt="Sign out"
             height={100}
             width={100}
             id="logo"
-            className="h-16 w-fit rounded-full  md:h-[400px]"
+            className="mb-4 mt-3 h-[150px] w-fit md:mb-0 md:h-[350px]"
           />
           <div className="relative my-10 h-fit w-[350px] rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <div className="flex items-center justify-center gap-2">

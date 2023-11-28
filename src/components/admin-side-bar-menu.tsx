@@ -28,7 +28,6 @@ export default function AdminSideBarMenu() {
       imageLink: '/organizations_icon.svg',
       urlLink: `${paths.ADMIN}${paths.ORGANIZATIONS}`,
     },
-    { id: 3, name: 'Log', imageLink: '/log_icon.svg', urlLink: `${paths.ADMIN}${paths.LOGS}` },
     {
       id: 3,
       name: 'Announcement',
@@ -38,21 +37,25 @@ export default function AdminSideBarMenu() {
   ];
 
   const { asPath } = useRouter();
+  const router = useRouter();
 
   const [showSidebar, setShowSidebar] = useState(true); // Toggle Sidebar
 
   const [createAnnouncement, setCreateAnnouncement] = useState(false); // Show Create Announcement Modal
-  const [createDropdown, setCreateDropdown] = useState(false); // Show options for announcement
+  const [createDropdown, setCreateDropdown] = useState(false);
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
+
+  const [logDropdown, setLogDropdown] = useState(false);
+
   // const [showOthers, setShowOthers] = useState(false);
 
   const sideBarButtons = [
-    // {
-    //   name: 'Announcement',
-    //   imageLink: '/announcement_icon.svg',
-    //   value: createDropdown,
-    //   function: setCreateDropdown,
-    // },
+    {
+      name: 'Log',
+      imageLink: '/log_icon.svg',
+      value: logDropdown,
+      function: setLogDropdown,
+    },
     {
       name: 'Create',
       imageLink: '/create_icon.svg',
@@ -68,6 +71,7 @@ export default function AdminSideBarMenu() {
       organization: [{ email: '', position: '' }],
     },
   });
+
   const { fields, append, remove } = useFieldArray({
     name: 'organization',
     control,
@@ -139,58 +143,100 @@ export default function AdminSideBarMenu() {
         ))}
 
         {/* SIDE BAR BUTTONS */}
-        {sideBarButtons.map((item) => {
-          return (
-            <>
-              <div className="relative">
+        <div>
+          <div className="relative">
+            <button
+              type="button"
+              className="group  mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
+              onClick={() => {
+                if (createDropdown) {
+                  setCreateDropdown(!createDropdown);
+                }
+                setLogDropdown(!logDropdown);
+              }}
+            >
+              <Image
+                width={100}
+                height={100}
+                src="/log_icon.svg"
+                alt="Logs"
+                className="h-12 w-fit hover:scale-105"
+              />
+              <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
+                Logs
+              </div>
+            </button>
+            {logDropdown && (
+              <div className="absolute -bottom-[75%] left-12 z-[100] flex flex-col rounded-sm bg-gray text-left text-lg font-medium shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]">
                 <button
                   type="button"
-                  className="group  mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
-                  onClick={() => item.function(!item.value)}
+                  className="px-2 py-1 text-lg font-medium hover:bg-yellow"
+                  onClick={() =>
+                    router.push(`${paths.ADMIN}${paths.ORGANIZATION_REPORTS}${paths.LOGS}`)
+                  }
                 >
-                  <Image
-                    width={100}
-                    height={100}
-                    src={item.imageLink}
-                    alt={item.name}
-                    className="h-12 w-fit hover:scale-105"
-                  />
-                  <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
-                    {item.name}
-                  </div>
+                  Reports
                 </button>
-                {createDropdown && (
-                  <div className="absolute -bottom-[75%] left-12 z-[100] flex flex-col rounded-sm bg-gray text-left text-lg font-medium shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]">
-                    <button
-                      type="button"
-                      className="px-2 py-1 text-lg font-medium hover:bg-yellow"
-                      onClick={() => {
-                        return (
-                          setCreateOrganization(!createOrganization),
-                          setCreateDropdown(!createDropdown)
-                        );
-                      }}
-                    >
-                      Organization
-                    </button>
-                    <button
-                      type="button"
-                      className="px-2 py-1 text-lg font-medium hover:bg-yellow"
-                      onClick={() => {
-                        return (
-                          setCreateAnnouncement(!createAnnouncement),
-                          setCreateDropdown(!createDropdown)
-                        );
-                      }}
-                    >
-                      Announcement
-                    </button>
-                  </div>
-                )}
+                <button
+                  type="button"
+                  className="px-2 py-1 text-lg font-medium hover:bg-yellow"
+                  onClick={() => router.push(`${paths.ADMIN}${paths.AUTH_LOGS}`)}
+                >
+                  Auth
+                </button>
               </div>
-            </>
-          );
-        })}
+            )}
+          </div>
+          <div className="relative">
+            <button
+              type="button"
+              className="group  mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
+              onClick={() => {
+                if (logDropdown) {
+                  setLogDropdown(!logDropdown);
+                }
+                setCreateDropdown(!createDropdown);
+              }}
+            >
+              <Image
+                width={100}
+                height={100}
+                src="/create_icon.svg"
+                alt="Create Icon"
+                className="h-12 w-fit hover:scale-105"
+              />
+              <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
+                Create
+              </div>
+            </button>
+            {createDropdown && (
+              <div className="absolute -bottom-[75%] left-12 z-[100] flex flex-col rounded-sm bg-gray text-left text-lg font-medium shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]">
+                <button
+                  type="button"
+                  className="px-2 py-1 text-lg font-medium hover:bg-yellow"
+                  onClick={() => {
+                    return (
+                      setCreateOrganization(!createOrganization), setCreateDropdown(!createDropdown)
+                    );
+                  }}
+                >
+                  Organization
+                </button>
+                <button
+                  type="button"
+                  className="px-2 py-1 text-lg font-medium hover:bg-yellow"
+                  onClick={() => {
+                    return (
+                      setCreateAnnouncement(!createAnnouncement), setCreateDropdown(!createDropdown)
+                    );
+                  }}
+                >
+                  Announcement
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
         <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
         <Link
           href={paths.SIGN_OUT}
@@ -377,8 +423,10 @@ export default function AdminSideBarMenu() {
               {...createOrgForm.register('category')}
             >
               <option value="">Select a category</option>
-              {Object.values(OrganizationCategory).map((category,index) => (
-                <option key={index} value={category}>{category.replace(/_/g, ' ')}</option>
+              {Object.values(OrganizationCategory).map((category, index) => (
+                <option key={index} value={category}>
+                  {category.replace(/_/g, ' ')}
+                </option>
               ))}
             </select>
             <div className="flex flex-col">

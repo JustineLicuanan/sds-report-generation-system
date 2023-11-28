@@ -107,7 +107,7 @@ export default function AdminLogPage() {
     <>
       {/* HEADER */}
       <Head>
-        <title>{`Logs ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Report Logs ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
