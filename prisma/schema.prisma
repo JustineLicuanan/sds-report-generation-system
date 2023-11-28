@@ -34,11 +34,15 @@ model Organization {
     isArchived    Boolean              @default(false)
     members       User[]
     reports       Report[]
+    comments      Comment[]
     announcements Announcement[]
     notifications Notification[]
     logs          Log[]
     createdAt     DateTime             @default(now())
     updatedAt     DateTime             @updatedAt
+
+    @@unique([id, name])
+    @@unique([id, name, isArchived])
 }
 
 model Announcement {
@@ -47,7 +51,7 @@ model Announcement {
     description        String
     start              DateTime?
     due                DateTime?
-    withReport         Boolean
+    hasReport          Boolean
     isArchived         Boolean             @default(false)
     audience           Organization[]
     comments           Comment[]
@@ -66,13 +70,14 @@ model Report {
     visibility         ReportVisibility
     file               String?
     fileId             String?
-    withSchedule       Boolean
+    hasSchedule        Boolean
     due                DateTime?
     status             ReportStatus        @default(PENDING)
     isArchived         Boolean             @default(false)
     comments           Comment[]
     adminNotifications AdminNotification[]
     notifications      Notification[]
+    logs               Log[]
     createdAt          DateTime            @default(now())
     updatedAt          DateTime            @updatedAt
 
@@ -84,11 +89,12 @@ model Report {
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
+
+    @@unique([id, visibility])
 }
 
 model Comment {
     id                 String              @id @default(cuid())
-    name               String
     content            String
     isArchived         Boolean             @default(false)
     adminNotifications AdminNotification[]
@@ -102,8 +108,13 @@ model Comment {
     report   Report? @relation(fields: [reportId], references: [id])
     reportId String?
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
+    createdBy     User   @relation(fields: [createdById, createdByName], references: [id, name])
+    createdById   String
+    createdByName String
+
+    organization     Organization? @relation(fields: [organizationId, organizationName], references: [id, name])
+    organizationId   String?
+    organizationName String?
 }
 
 model AdminNotification {
@@ -125,13 +136,12 @@ model AdminNotification {
 }
 
 model Notification {
-    id         String            @id @default(cuid())
-    type       NotificationType
-    message    String
-    isRead     Boolean           @default(false)
-    visibility ReportVisibility?
-    createdAt  DateTime          @default(now())
-    updatedAt  DateTime          @updatedAt
+    id        String           @id @default(cuid())
+    type      NotificationType
+    message   String
+    isRead    Boolean          @default(false)
+    createdAt DateTime         @default(now())
+    updatedAt DateTime         @updatedAt
 
     organization   Organization @relation(fields: [organizationId], references: [id])
     organizationId String
@@ -142,8 +152,9 @@ model Notification {
     announcement   Announcement? @relation(fields: [announcementId], references: [id])
     announcementId String?
 
-    report   Report? @relation(fields: [reportId], references: [id])
-    reportId String?
+    report           Report?           @relation(fields: [reportId, reportVisibility], references: [id, visibility])
+    reportId         String?
+    reportVisibility ReportVisibility?
 
     comment   Comment? @relation(fields: [commentId], references: [id])
     commentId String?
@@ -162,6 +173,9 @@ model Log {
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
+
+    report   Report? @relation(fields: [reportId], references: [id])
+    reportId String?
 
     organization   Organization? @relation(fields: [organizationId], references: [id])
     organizationId String?
@@ -201,7 +215,6 @@ model User {
     emailVerified DateTime?
     image         String?
     role          UserRole       @default(STUDENT_LEADER)
-    isArchived    Boolean        @default(false)
     accounts      Account[]
     sessions      Session[]
     reports       Report[]
@@ -209,8 +222,12 @@ model User {
     notifications Notification[]
     logs          Log[]
 
-    organization   Organization? @relation(fields: [organizationId], references: [id])
-    organizationId String?
+    organization           Organization? @relation(fields: [organizationId, organizationName, organizationIsArchived], references: [id, name, isArchived])
+    organizationId         String?
+    organizationName       String?
+    organizationIsArchived Boolean?
+
+    @@unique([id, name])
 }
 
 model VerificationToken {
@@ -271,4 +288,6 @@ enum LogAction {
     CANCELLED
     APPROVED
     REJECTED
+    ARCHIVED
+    UNARCHIVED
 }

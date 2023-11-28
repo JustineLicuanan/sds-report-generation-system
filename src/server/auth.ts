@@ -1,5 +1,5 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { LogAction, LogType, type UserRole } from '@prisma/client';
+import { LogAction, LogType, UserRole } from '@prisma/client';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
@@ -19,6 +19,8 @@ declare module 'next-auth' {
       // ...other properties
       role: UserRole;
       organizationId?: string;
+      organizationName?: string;
+      organizationIsArchived?: boolean;
     };
   }
 
@@ -26,6 +28,8 @@ declare module 'next-auth' {
     // ...other properties
     role: UserRole;
     organizationId?: string;
+    organizationName?: string;
+    organizationIsArchived?: boolean;
   }
 }
 
@@ -41,10 +45,21 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
         role: user.role,
         organizationId: user.organizationId,
+        organizationName: user.organizationName,
+        organizationIsArchived: user.organizationIsArchived,
       },
     }),
     async signIn({ user }) {
-      const userExists = !!(await db.user.count({ where: { email: user.email ?? '' } }));
+      const userExists = !!(await db.user.count({
+        where: {
+          AND: { email: user.email ?? '' },
+          OR: [
+            { role: UserRole.ADMIN },
+            { role: UserRole.STUDENT_LEADER, organizationIsArchived: false },
+          ],
+        },
+      }));
+
       return userExists;
     },
   },
