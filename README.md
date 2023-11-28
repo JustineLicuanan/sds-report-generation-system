@@ -41,6 +41,21 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.2
+
+- Fixed the mobile responsiveness for `signout.tsx`.
+- Added an authentication logs.
+
+### Version 0.10.1
+
+- Fix the whitespace wrap error on sign out tooltip in side bar menu.
+- Looped the enums for select.
+- Added a upload button for create report of organization.
+- Fixed lint errors
+- Changed the UI of sign in and sign out.
+- Removed logs in organization.
+- Removed the parameters of navigation bar.
+
 ### Version 0.10.0
 
 - Alter db tables.
