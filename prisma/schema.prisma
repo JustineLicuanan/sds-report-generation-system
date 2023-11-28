@@ -31,6 +31,7 @@ model Organization {
     category      OrganizationCategory
     image         String?
     imageId       String?
+    isArchived    Boolean              @default(false)
     members       User[]
     reports       Report[]
     announcements Announcement[]
@@ -40,27 +41,14 @@ model Organization {
     updatedAt     DateTime             @updatedAt
 }
 
-model Appointment {
-    id        String          @id @default(cuid())
-    type      AppointmentType
-    start     DateTime?
-    due       DateTime?
-    createdAt DateTime        @default(now())
-    updatedAt DateTime        @updatedAt
-
-    announcement   Announcement? @relation(fields: [announcementId], references: [id])
-    announcementId String?       @unique
-
-    report   Report? @relation(fields: [reportId], references: [id])
-    reportId String? @unique
-}
-
 model Announcement {
     id                 String              @id @default(cuid())
     subject            String
     description        String
+    start              DateTime?
+    due                DateTime?
     withReport         Boolean
-    appointment        Appointment?
+    isArchived         Boolean             @default(false)
     audience           Organization[]
     comments           Comment[]
     reports            Report[]
@@ -78,9 +66,10 @@ model Report {
     visibility         ReportVisibility
     file               String?
     fileId             String?
-    withAppointment    Boolean
-    appointment        Appointment?
+    withSchedule       Boolean
+    due                DateTime?
     status             ReportStatus        @default(PENDING)
+    isArchived         Boolean             @default(false)
     comments           Comment[]
     adminNotifications AdminNotification[]
     notifications      Notification[]
@@ -101,6 +90,7 @@ model Comment {
     id                 String              @id @default(cuid())
     name               String
     content            String
+    isArchived         Boolean             @default(false)
     adminNotifications AdminNotification[]
     notifications      Notification[]
     createdAt          DateTime            @default(now())
@@ -124,13 +114,13 @@ model AdminNotification {
     createdAt DateTime         @default(now())
     updatedAt DateTime         @updatedAt
 
-    announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+    announcement   Announcement? @relation(fields: [announcementId], references: [id])
     announcementId String?
 
-    report   Report? @relation(fields: [reportId], references: [id], onDelete: Cascade)
+    report   Report? @relation(fields: [reportId], references: [id])
     reportId String?
 
-    comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+    comment   Comment? @relation(fields: [commentId], references: [id])
     commentId String?
 }
 
@@ -149,13 +139,13 @@ model Notification {
     user   User   @relation(fields: [userId], references: [id])
     userId String
 
-    announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+    announcement   Announcement? @relation(fields: [announcementId], references: [id])
     announcementId String?
 
-    report   Report? @relation(fields: [reportId], references: [id], onDelete: Cascade)
+    report   Report? @relation(fields: [reportId], references: [id])
     reportId String?
 
-    comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+    comment   Comment? @relation(fields: [commentId], references: [id])
     commentId String?
 }
 
@@ -211,6 +201,7 @@ model User {
     emailVerified DateTime?
     image         String?
     role          UserRole       @default(STUDENT_LEADER)
+    isArchived    Boolean        @default(false)
     accounts      Account[]
     sessions      Session[]
     reports       Report[]
@@ -239,11 +230,6 @@ enum OrganizationCategory {
     STUDENT_GOVERNING_BODY
     ACADEMIC_ORGANIZATION
     NON_ACADEMIC_ORGANIZATION
-}
-
-enum AppointmentType {
-    ANNOUNCEMENT
-    REPORT
 }
 
 enum ReportCategory {

@@ -1,33 +1,59 @@
-import { CommonStatus, UserRole } from '@prisma/client';
+import { TRPCError } from '@trpc/server';
+
 import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
 import { orgSchemas } from '~/zod-schemas/admin/org';
 
 export const orgRouter = createTRPCRouter({
   create: adminProcedure.input(orgSchemas.create).mutation(({ ctx, input }) => {
-    return ctx.db.user.create({ data: input });
+    const { members, ...data } = input;
+
+    try {
+      return ctx.db.organization.create({
+        data: { ...data, members: { createMany: { data: members } } },
+      });
+    } catch (err) {
+      throw new TRPCError({ code: 'CONFLICT' });
+    }
   }),
 
   get: adminProcedure.input(orgSchemas.get).query(async ({ ctx, input }) => {
-    return ctx.db.user.findMany({
-      where: { id: input?.id, role: UserRole.STUDENT_LEADER },
-      include: { reports: input?.withReports },
-    });
+    try {
+      return ctx.db.organization.findMany({
+        where: { id: input?.id, category: input?.category, isArchived: input?.isArchived ?? false },
+        include: {
+          members: input?.withMembers,
+          reports: input?.withReports,
+          announcements: input?.withAnnouncements,
+          notifications: input?.withNotifications,
+          logs: input?.withLogs,
+        },
+      });
+    } catch (err) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+    }
   }),
 
-  update: adminProcedure.input(orgSchemas.update).mutation(({ ctx, input }) => {
-    const { id, ...data } = input;
-    return ctx.db.user.update({ where: { id }, data });
-  }),
+  // FIXME:
+  // update: adminProcedure.input(orgSchemas.update).mutation(async ({ ctx, input }) => {
+  //   const { id, members, ...data } = input;
 
-  countSessions: adminProcedure.input(orgSchemas.countSessions).query(({ ctx, input }) => {
-    return ctx.db.session.count({ where: { user: { id: input.id } } });
-  }),
+  //   try {
+  //     await ctx.db.user.upsert(members!);
 
-  clearAllSessions: adminProcedure.input(orgSchemas.clearAllSessions).mutation(({ ctx, input }) => {
-    return ctx.db.session.deleteMany({ where: { user: { id: input.id } } });
-  }),
+  //     return ctx.db.organization.update({
+  //       where: { id },
+  //       data: { ...data, members: {  } },
+  //     });
+  //   } catch (err) {
+  //     throw new TRPCError({ code: 'CONFLICT' });
+  //   }
+  // }),
 
   archive: adminProcedure.input(orgSchemas.archive).mutation(({ ctx, input }) => {
-    return ctx.db.user.update({ where: { id: input.id }, data: { status: CommonStatus.ARCHIVED } });
+    try {
+      return ctx.db.organization.update({ where: { id: input.id }, data: { isArchived: true } });
+    } catch (err) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+    }
   }),
 });

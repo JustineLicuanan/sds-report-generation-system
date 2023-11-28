@@ -4,30 +4,51 @@ import { z } from 'zod';
 export const orgSchemas = {
   create: z.object({
     name: z.string().trim().min(1),
-    email: z.string().trim().toLowerCase().email(),
-    image: z.string().url().nullable().optional(),
-    imageId: z.string().nullable().optional(),
     description: z.string().trim().optional(),
     category: z.nativeEnum(OrganizationCategory),
+    image: z.string().url().nullable().optional(),
+    imageId: z.string().nullable().optional(),
+    members: z
+      .object({ name: z.string().trim().min(1), email: z.string().trim().toLowerCase().email() })
+      .array(),
   }),
 
   get: z
-    .object({ id: z.string().cuid().optional(), withReports: z.literal(true).optional() })
+    .object({
+      id: z.string().cuid().optional(),
+      category: z.nativeEnum(OrganizationCategory).optional(),
+      isArchived: z.literal(true).optional(),
+      withMembers: z.literal(true).optional(),
+      withReports: z.literal(true).optional(),
+      withAnnouncements: z.literal(true).optional(),
+      withNotifications: z.literal(true).optional(),
+      withLogs: z.literal(true).optional(),
+    })
     .optional(),
 
+  // FIXME:
   update: z.object({
     id: z.string().cuid(),
     name: z.string().trim().min(1).optional(),
-    email: z.string().trim().toLowerCase().email().optional(),
-    image: z.string().url().nullable().optional(),
-    imageId: z.string().nullable().optional(),
     description: z.string().trim().optional(),
     category: z.nativeEnum(OrganizationCategory).optional(),
+    image: z.string().url().nullable().optional(),
+    imageId: z.string().nullable().optional(),
+    members: z
+      .object({
+        where: z.object({ id: z.string().cuid().default('undefined') }),
+        update: z.object({
+          name: z.string().trim().min(1),
+          email: z.string().trim().toLowerCase().email(),
+        }),
+        create: z.object({
+          name: z.string().trim().min(1),
+          email: z.string().trim().toLowerCase().email(),
+        }),
+      })
+      .array()
+      .optional(),
   }),
-
-  countSessions: z.object({ id: z.string().cuid() }),
-
-  clearAllSessions: z.object({ id: z.string().cuid() }),
 
   archive: z.object({ id: z.string().cuid() }),
 };
