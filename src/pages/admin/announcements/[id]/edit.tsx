@@ -110,7 +110,6 @@ export default function EditAnnouncement() {
           </div>
         </div>
       </main>
-      {/* MAIN CONTENT */}
     </>
   );
 }

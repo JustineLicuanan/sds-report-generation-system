@@ -9,12 +9,12 @@ import { paths } from '~/meta';
 export default function OrganizationSideBarMenu() {
   const sidebarMenu = [
     { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ORGANIZATION}` },
-    // {
-    //   id: 2,
-    //   name: 'Log',
-    //   imageLink: '/log_icon.svg',
-    //   urlLink: `${paths.ORGANIZATION}${paths.LOGS}`,
-    // },
+    {
+      id: 2,
+      name: 'Announcement',
+      imageLink: '/announcement_icon.svg',
+      urlLink: `${paths.ORGANIZATION}${paths.ANNOUNCEMENTS}`,
+    },
     {
       id: 3,
       name: 'Create',
@@ -58,7 +58,7 @@ export default function OrganizationSideBarMenu() {
         id="side-bar"
         className={`${
           showSidebar ? 'hidden duration-300 md:flex' : 'flex'
-        } fixed z-[100] my-2 ml-1 h-[90vh] flex-col items-center bg-green px-1 md:sticky md:my-3 md:ml-2  md:h-[87vh] lg:ml-3`}
+        } sticky top-20 z-[100] my-2 ml-1 h-[90vh] flex-col items-center bg-green px-1 md:sticky md:my-3 md:ml-2  md:h-[87vh] lg:ml-3`}
       >
         {/* SIDE BAR LINKS */}
         {sidebarMenu.map((item) => (

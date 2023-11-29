@@ -16,5 +16,6 @@ export const paths = {
   ANNOUNCEMENTS: '/announcements/',
   EDIT_ANNOUNCEMENTS: '/edit',
   ORGANIZATION_CREATE: '/create',
+  REPORT_CREATE: '/create',
   AUTH_LOGS: '/auth/logs',
 } as const;

@@ -32,8 +32,8 @@ export default function CreateReportPage() {
 
         {/* MAIN CONTENT */}
 
-        <div className="mx-3 mt-4 h-[87vh] w-full ">
-          <div className="mx-auto my-0 flex h-[87vh] max-w-5xl flex-col rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
+        <div className="mx-3 mt-4  w-full ">
+          <div className="mx-auto my-0 flex min-h-[87vh] max-w-5xl flex-col rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
               Create New Report
             </h1>
@@ -53,7 +53,7 @@ export default function CreateReportPage() {
               type="date"
               name="date"
               id="date"
-              className=" mt-1 w-1/5 border-[1px] border-green px-2 py-1 text-lg outline-none"
+              className=" mt-1 h-8 w-1/5 border-[1px] border-green px-2 text-lg outline-none"
             />
             <div className="mt-2  flex h-[400px] w-full  items-center justify-center border-[5px] border-green py-3 text-4xl font-medium">
               .PDF
