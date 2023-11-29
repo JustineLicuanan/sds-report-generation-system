@@ -1,10 +1,11 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import type { CommonStatus, OrganizationCategory, UserRole } from '@prisma/client';
+import { LogAction, LogType, UserRole } from '@prisma/client';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 
 import { env } from '~/env.mjs';
+import { paths } from '~/meta';
 import { db } from '~/server/db';
 
 /**
@@ -16,21 +17,19 @@ declare module 'next-auth' {
     user: DefaultSession['user'] & {
       id: string;
       // ...other properties
-      imageId?: string;
-      description?: string;
-      category?: OrganizationCategory;
       role: UserRole;
-      status: CommonStatus;
+      organizationId?: string;
+      organizationName?: string;
+      organizationIsArchived?: boolean;
     };
   }
 
   interface User {
     // ...other properties
-    imageId?: string;
-    description?: string;
-    category?: OrganizationCategory;
     role: UserRole;
-    status: CommonStatus;
+    organizationId?: string;
+    organizationName?: string;
+    organizationIsArchived?: boolean;
   }
 }
 
@@ -44,16 +43,18 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
-        imageId: user.imageId,
-        description: user.description,
-        category: user.category,
         role: user.role,
-        status: user.status,
+        organizationId: user.organizationId,
+        organizationName: user.organizationName,
+        organizationIsArchived: user.organizationIsArchived,
       },
     }),
     async signIn({ user }) {
       const userExists = !!(await db.user.count({
-        where: { email: user.email ?? '', status: 'ACTIVE' },
+        where: {
+          AND: { email: user.email ?? '' },
+          OR: [{ role: UserRole.ADMIN }, { organizationIsArchived: false }],
+        },
       }));
 
       return userExists;
@@ -80,6 +81,31 @@ export const authOptions: NextAuthOptions = {
      * model.
      */
   ],
+  pages: { signIn: paths.SIGN_IN, signOut: paths.SIGN_OUT },
+  events: {
+    async signIn({ user }) {
+      await db.log.create({
+        data: {
+          type: LogType.AUTH,
+          name: user.name!,
+          email: user.email,
+          action: LogAction.SIGN_IN,
+          createdById: user.id,
+        },
+      });
+    },
+    async signOut({ session }) {
+      await db.log.create({
+        data: {
+          type: LogType.AUTH,
+          name: session.user.name!,
+          email: session.user.email,
+          action: LogAction.SIGN_OUT,
+          createdById: session.user.id,
+        },
+      });
+    },
+  },
 };
 
 /**

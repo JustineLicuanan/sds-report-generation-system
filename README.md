@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.9
+
+- Alter most, if not all, schemas.
+
 ### Version 0.10.6
 
 - Changed the notification to redirect instead of modal.
