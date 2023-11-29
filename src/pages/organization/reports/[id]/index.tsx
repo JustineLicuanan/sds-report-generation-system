@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import NavBar from '~/components/navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
+import PdfViewer from '~/components/pdf-viewer';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -77,7 +78,7 @@ export default function UserOrgReportPage() {
               <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
             </div>
             <div className="mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] border-green text-4xl">
-              PDF
+              <PdfViewer />
             </div>
             <div>
               <h2 className="mt-4 text-xl font-medium">Message:</h2>

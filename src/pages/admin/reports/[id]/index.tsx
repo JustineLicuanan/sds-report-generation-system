@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
+import PdfViewer from '~/components/pdf-viewer';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -104,7 +105,7 @@ export default function AdminOrgReportPage() {
               <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
             </div>
             <div className="mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] border-green text-4xl">
-              PDF
+              <PdfViewer />
             </div>
             <div>
               <h2 className="mt-4 text-xl font-medium">Description:</h2>

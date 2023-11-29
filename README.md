@@ -45,7 +45,8 @@ respective docs.
 
 - Added a member list in organization profile.
 - Added a page for editing an announcement.
-- Added a announcement page for organization.
+- Added an announcement page for organization.
+- Added a pdf viewer.
 
 ### Version 0.10.2
 
