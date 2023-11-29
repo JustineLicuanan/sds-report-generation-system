@@ -174,9 +174,9 @@ model Log {
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
 
-    report   Report? @relation(fields: [reportId], references: [id])
-    reportId String?
-    // TODO: reportVisibility Boolean?
+    report           Report?           @relation(fields: [reportId, reportVisibility], references: [id, visibility])
+    reportId         String?
+    reportVisibility ReportVisibility?
 
     organization   Organization? @relation(fields: [organizationId], references: [id])
     organizationId String?

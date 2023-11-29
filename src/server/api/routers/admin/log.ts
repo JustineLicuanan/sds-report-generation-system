@@ -12,6 +12,7 @@ export const logRouter = createTRPCRouter({
           email: input.email,
           category: input.category,
           action: input.action,
+          reportVisibility: input.reportVisibility,
         },
         include: {
           createdBy: input.includeCreatedBy,

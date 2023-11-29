@@ -1,4 +1,4 @@
-import { LogType } from '@prisma/client';
+import { LogType, ReportVisibility } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
@@ -22,6 +22,10 @@ export const logRouter = createTRPCRouter({
                 category: input.category,
                 action: input.action,
                 organizationId: ctx.session.user.organizationId,
+                OR: [
+                  { createdById: ctx.session.user.id },
+                  { reportVisibility: ReportVisibility.PUBLIC },
+                ],
               }
             : undefined,
         include: {
