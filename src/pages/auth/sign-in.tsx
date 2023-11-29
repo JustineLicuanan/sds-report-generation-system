@@ -98,7 +98,7 @@ export default function SignInPage() {
           >
             {alertMessage === 'invalid' && (
               <div
-                className="dark:bg-gray-800 bg-red-50 text-red-800 dark:text-red-400 mb-4 flex w-full items-center rounded-lg p-4 text-base"
+                className=" mb-4 flex w-full items-center rounded-lg bg-red/5 p-4 text-base text-red/80"
                 role="alert"
               >
                 <svg
@@ -118,7 +118,7 @@ export default function SignInPage() {
             )}
             {alertMessage === 'error' && (
               <div
-                className="dark:bg-gray-800 bg-red-50 text-red-800 dark:text-red-400 mb-4 flex w-full items-center rounded-lg p-4 text-base"
+                className=" mb-4 flex w-full items-center rounded-lg bg-red/5 p-4 text-base text-red/80"
                 role="alert"
               >
                 <svg
@@ -138,7 +138,7 @@ export default function SignInPage() {
             )}
             {alertMessage === 'success' && (
               <div
-                className="border-green-300 bg-green-50 text-green-800 dark:border-green-800 dark:bg-gray-800 dark:text-green-400 mb-4 flex items-center rounded-lg border p-4 text-sm"
+                className="mb-4 flex items-center rounded-lg border border-green/30 bg-green/5 p-4 text-sm text-green/80"
                 role="alert"
               >
                 <svg

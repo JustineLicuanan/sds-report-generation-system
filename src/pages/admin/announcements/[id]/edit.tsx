@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import NavBar from '~/components/navigation-bar';
 import SelectAnnouncement from '~/components/select';
 import { meta, paths } from '~/meta';
 import { api } from '~/utils/api';
@@ -19,7 +19,7 @@ export default function EditAnnouncement() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <AdminNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <AdminSideBarMenu />

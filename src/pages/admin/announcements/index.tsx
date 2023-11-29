@@ -2,8 +2,8 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import NavBar from '~/components/navigation-bar';
 import TruncateWord from '~/components/truncate-word';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -59,7 +59,7 @@ export default function AnnouncementPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <AdminNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <AdminSideBarMenu />

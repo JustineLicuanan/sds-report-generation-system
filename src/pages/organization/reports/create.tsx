@@ -1,7 +1,7 @@
 import { ReportCategory, ReportVisibility } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
-import NavBar from '~/components/navigation-bar';
+import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -26,7 +26,7 @@ export default function CreateReportPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <OrgNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <OrganizationSideBarMenu />
@@ -95,7 +95,7 @@ export default function CreateReportPage() {
             <div className="mt-3 flex w-fit gap-2">
               <label className="relative mb-5 inline-flex cursor-pointer items-center">
                 <input type="checkbox" value="" className="peer sr-only" />
-                <div className="peer h-6 w-11 rounded-full  bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
+                <div className="peer h-6 w-11 rounded-full border border-yellow  bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-black after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
                 <span className="ms-3 text-lg font-bold text-black/80">Has schedule </span>
               </label>
               <div className="group relative">

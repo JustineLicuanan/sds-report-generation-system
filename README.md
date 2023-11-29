@@ -41,6 +41,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.6
+
+- Changed the notification to redirect instead of modal.
+- Added a remove session per member.
+- Seperated the nav bar for admin and org.
+
 ### Version 0.10.5
 
 - Added a help info in has announcement and has report.

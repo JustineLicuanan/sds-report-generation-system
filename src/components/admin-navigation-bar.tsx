@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { paths } from '~/meta';
 import TruncateWord from './truncate-word';
 
-export default function NavBar() {
+export default function AdminNavBar() {
   const notification = [
     {
       subject: 'File a report today.',
@@ -29,6 +30,8 @@ export default function NavBar() {
   const [showNotification, setShowNotification] = useState(false);
   const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
+
+  const router = useRouter();
 
   notification.sort((a, b) => {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -85,7 +88,8 @@ export default function NavBar() {
                     selectedNotification === index ? 'bg-gray/50' : 'bg-gray'
                   }  text-left hover:bg-yellow`}
                   onClick={() => {
-                    return setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
+                    // setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
+                    router.push(`${paths.ADMIN}${paths.ORGANIZATION_REPORTS}/${index}`);
                   }}
                 >
                   <div
@@ -112,7 +116,8 @@ export default function NavBar() {
           </div>
         </div>
       </nav>
-      {showAnnouncement && selectedNotification !== null && (
+
+      {/* {showAnnouncement && selectedNotification !== null && (
         <div
           className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out
          ${showAnnouncement ? '' : 'invisible opacity-0'}`}
@@ -154,7 +159,7 @@ export default function NavBar() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

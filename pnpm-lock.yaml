@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@fullcalendar/core':
     specifier: ^6.1.9
@@ -77,6 +73,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  react-export-table-to-excel:
+    specifier: ^1.0.6
+    version: 1.0.6
   react-hook-form:
     specifier: ^7.47.0
     version: 7.47.0(react@18.2.0)
@@ -3211,6 +3210,10 @@ packages:
       scheduler: 0.23.0
     dev: false
 
+  /react-export-table-to-excel@1.0.6:
+    resolution: {integrity: sha512-2NKyor1rFFEqYDXQq5tPoVNwwdv5kT8DWc65wAmDa9Hi0441qHj0tOxegWhpW0vlCM2TypIsw+ghzIr900U4RA==}
+    dev: false
+
   /react-hook-form@7.47.0(react@18.2.0):
     resolution: {integrity: sha512-F/TroLjTICipmHeFlMrLtNLceO2xr1jU3CyiNla5zdwsGUGu2UOxxR4UyJgLlhMwLW/Wzp4cpJ7CPfgJIeKdSg==}
     engines: {node: '>=12.22.0'}
@@ -3952,3 +3955,7 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

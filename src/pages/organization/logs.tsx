@@ -2,7 +2,7 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
-import NavBar from '~/components/navigation-bar';
+import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -75,7 +75,7 @@ export default function UserLogPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <OrgNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <OrganizationSideBarMenu />

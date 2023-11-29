@@ -3,6 +3,7 @@ import { OrganizationCategory } from '@prisma/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '@trpc/react-query';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -10,12 +11,13 @@ import { useState } from 'react';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import NavBar from '~/components/navigation-bar';
+import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { orgSchemas } from '~/zod-schemas/admin/org';
+import AdminNavBar from '~/components/admin-navigation-bar';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -73,6 +75,11 @@ export default function EditInfoPage() {
     control,
   });
 
+  const onSuccessUpload: OnSuccessUpload = (result) => {
+    editInfoForm.setValue('image', result.info?.secure_url);
+    editInfoForm.setValue('imageId', result.info?.public_id);
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (values) => {
     await updateOrgMutation.mutateAsync(values);
   };
@@ -85,7 +92,7 @@ export default function EditInfoPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <AdminNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <AdminSideBarMenu />
@@ -103,14 +110,35 @@ export default function EditInfoPage() {
             >
               {/* ORGANIZATION'S LOGO */}
               <div className="mb-2 mt-2 flex flex-col items-center">
-                <Image
-                  src={editInfoForm.watch('image') ?? '/default_logo.png'}
-                  alt="Organization's Logo"
-                  width={112}
-                  height={112}
-                  className="mb-3 me-1 flex  h-28 w-28 rounded-full bg-green"
-                />
-                <h2 className="mb-2 text-xl font-bold">Logo</h2>
+                <div className="align-center mt-[12px] flex  justify-center px-10">
+                  {editInfoForm.watch('imageId') ? (
+                    <CldImage
+                      width="100"
+                      height="100"
+                      src={editInfoForm.watch('imageId')!}
+                      alt="Avatar logo"
+                      className="h-[100px] w-[100px] rounded-full"
+                    />
+                  ) : (
+                    <Image
+                      width={100}
+                      height={100}
+                      src="/default_logo.png"
+                      alt="Avatar Logo"
+                      className="h-[100px] w-[100px] rounded-full"
+                    />
+                  )}
+                </div>
+                <div className="flex justify-center">
+                  <UploadButton
+                    className="my-3 cursor-pointer rounded-md  bg-yellow px-8 py-2 text-lg font-medium"
+                    folder="org-logos"
+                    resourceType={ResourceType.IMAGE}
+                    onSuccess={onSuccessUpload}
+                  >
+                    Upload
+                  </UploadButton>
+                </div>
               </div>
 
               {/* ORGANIZATION NAME */}
@@ -189,6 +217,15 @@ export default function EditInfoPage() {
                 <div className="mb-1 mt-6 text-xl font-bold">Members</div>
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex">
+                    <button
+                      type="button"
+                      className={`me-1 ms-1 flex h-9 items-center self-end px-2 ${
+                        visibility ? 'cursor-not-allowed bg-red opacity-50' : 'bg-red '
+                      }`}
+                      disabled={visibility}
+                    >
+                      <Image src="/session_icon.png" alt="Session Icon" width={40} height={40} />
+                    </button>
                     <div className="me-1 w-4/6">
                       <label htmlFor="email-address" className=" text-lg font-bold">
                         Email
@@ -227,15 +264,8 @@ export default function EditInfoPage() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (!(fields.length === 1)) {
-                          remove(index);
-                        }
-                      }}
                       className={`ms-1 flex h-9 items-center self-end px-2 ${
-                        fields.length === 1
-                          ? 'cursor-not-allowed bg-gray opacity-50'
-                          : 'bg-gray text-white'
+                        visibility ? 'cursor-not-allowed bg-gray opacity-50' : 'bg-gray text-white'
                       }`}
                       disabled={visibility}
                     >
@@ -266,8 +296,8 @@ export default function EditInfoPage() {
                     append({ email: '', position: '' });
                   }}
                   className={`${
-                    visibility ? 'opacity-50' : ''
-                  } my-2 w-full cursor-pointer rounded-md bg-yellow  px-8 py-2 text-lg font-medium`}
+                    visibility ? 'cursor-not-allowed opacity-50' : ''
+                  } my-2 w-full  rounded-md bg-yellow  px-8 py-2 text-lg font-medium`}
                   disabled={visibility}
                 >
                   Add new email
@@ -291,7 +321,7 @@ export default function EditInfoPage() {
                   <div
                     className={`${
                       showSignOut ? '' : 'invisible opacity-0'
-                    } fixed left-0 top-0 z-[3]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out `}
+                    } fixed left-0 top-0 z-[100]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out `}
                   >
                     <div className="relative h-[433px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
                       <h1 className="py-3 text-center text-3xl font-bold tracking-tight text-[#bb2124]">
@@ -340,7 +370,7 @@ export default function EditInfoPage() {
                             setShowSignOut(false);
                           }}
                         >
-                          Cancel
+                          No, Cancel
                         </button>
                       </div>
                       <div className="absolute bottom-0 right-7">
@@ -353,7 +383,7 @@ export default function EditInfoPage() {
                           } my-6 rounded-md px-8 py-2 text-lg font-medium `}
                           disabled={!(confirmSignout === getOrgQuery.data?.[0]?.name)}
                         >
-                          Sign out
+                          Yes, Sign out
                         </button>
                       </div>
                     </div>
@@ -382,10 +412,10 @@ export default function EditInfoPage() {
             </form>
           </div>
         </div>
-        {/* {successAlert && (
+        {successAlert && (
           <div
             id="alert-3"
-            className="bg-green-50 text-green-800 dark:bg-gray-800 dark:text-green-400 absolute bottom-[5%] left-[2%] z-[2] mb-4 flex items-center rounded-lg p-4"
+            className="fixed bottom-[5%] left-[2%] z-[101] mb-4 flex items-center rounded-lg bg-blue-50 p-4 text-blue-800 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]"
             role="alert"
           >
             <svg
@@ -424,7 +454,7 @@ export default function EditInfoPage() {
               </svg>
             </button>
           </div>
-        )} */}
+        )}
       </main>
     </>
   );

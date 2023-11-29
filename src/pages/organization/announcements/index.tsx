@@ -2,7 +2,7 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import NavBar from '~/components/navigation-bar';
+import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import TruncateWord from '~/components/truncate-word';
 import { meta, paths } from '~/meta';
@@ -59,7 +59,7 @@ export default function AnnouncementPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <OrgNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <OrganizationSideBarMenu />

@@ -1,3 +1,5 @@
+import { MutableRefObject } from 'react';
+
 type Data = {
   reportId: number;
   organizationName: string;
@@ -9,13 +11,15 @@ type Data = {
 type YourComponentProps = {
   data: Data[];
   tableHeader: string[];
+  tableRef: MutableRefObject<null>;
 };
 
-export default function Table({ data, tableHeader }: YourComponentProps) {
+export default function Table({ data, tableHeader, tableRef }: YourComponentProps) {
   return (
     <>
       <table
         id="myTable"
+        ref={tableRef}
         className="w-full min-w-max border-collapse  border border-black text-center "
       >
         <thead>

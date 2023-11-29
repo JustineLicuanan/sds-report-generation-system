@@ -1,7 +1,7 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
-import NavBar from '~/components/navigation-bar';
+import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import Report from '~/components/report';
 import { meta } from '~/meta';
@@ -74,7 +74,7 @@ export default function OrganizationPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <OrgNavBar />
 
       <main className="flex">
         {/* SIDE BAR*/}

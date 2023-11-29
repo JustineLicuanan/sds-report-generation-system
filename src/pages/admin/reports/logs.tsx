@@ -1,9 +1,10 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { useDownloadExcel } from 'react-export-table-to-excel';
+import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import NavBar from '~/components/navigation-bar';
 import Pagination from '~/components/pagination';
 import Table from '~/components/table';
 import { meta } from '~/meta';
@@ -76,6 +77,14 @@ export default function AdminLogPage() {
   const [status, setStatus] = useState('');
   const [date, setDate] = useState('');
 
+  const tableRef = useRef(null);
+
+  const { onDownload } = useDownloadExcel({
+    currentTableRef: tableRef.current,
+    filename: 'report-logs',
+    sheet: 'report',
+  });
+
   if (date.toLowerCase() === 'oldest') {
     logData.sort((a, b) => {
       return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -111,7 +120,7 @@ export default function AdminLogPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <AdminNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <AdminSideBarMenu />
@@ -164,7 +173,7 @@ export default function AdminLogPage() {
                 <select
                   name="sort-status"
                   id="sort-status"
-                  className="h-7 border-[1px] border-green bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+                  className="me-2 h-7 border-[1px] border-green bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
                   onChange={(e) => setStatus(e.target.value)}
                 >
                   <option value="" className="text-sm md:text-base">
@@ -181,10 +190,17 @@ export default function AdminLogPage() {
                   </option>
                 </select>
               </div>
+              <button
+                onClick={onDownload}
+                className="mt-2 flex h-7 w-fit items-center gap-2 border-[1px] border-green bg-white px-2 py-1 text-sm hover:bg-yellow md:mt-0 md:h-9 md:text-base lg:h-11"
+              >
+                <div>Export</div>
+                <Image src="/excel_icon.svg" alt="Excel Icon" width={20} height={20} />
+              </button>
             </div>
 
             <div className="overflow-x-scroll sm:overflow-hidden">
-              <Table data={currentData} tableHeader={tableHeader} />
+              <Table data={currentData} tableHeader={tableHeader} tableRef={tableRef} />
               <Pagination
                 itemsPerPage={itemsPerPage}
                 totalItems={filteredData.length}

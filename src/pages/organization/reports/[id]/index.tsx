@@ -1,8 +1,7 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import NavBar from '~/components/navigation-bar';
+import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
 import { meta } from '~/meta';
@@ -57,6 +56,10 @@ export default function UserOrgReportPage() {
     }
   }, [currentComment]);
 
+  const goBack = () => {
+    window.history.back();
+  };
+
   return (
     <>
       <Head>
@@ -64,7 +67,7 @@ export default function UserOrgReportPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <OrgNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <OrganizationSideBarMenu />
@@ -72,8 +75,24 @@ export default function UserOrgReportPage() {
         {/* MAIN CONTENT */}
         <div className="mx-3 my-4 flex  w-full flex-col md:flex-row">
           <div className="ms-1 min-h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
-            <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">My Report</h1>
-
+            <div className="flex justify-between">
+              <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
+                My report - {'Report Category'}
+              </h1>
+              {/* {rejected ? (
+                <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-red md:text-2xl'>
+                  Rejected
+                </h1>
+              ) : approveAlert ? (
+                <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-green md:text-2xl'>
+                  Approved
+                </h1>
+              ) : (
+                <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-yellow md:text-2xl'>
+                  Pending
+                </h1>
+              )} */}
+            </div>
             <div className="mt-7 flex justify-between text-xl font-medium">
               <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
             </div>
@@ -144,51 +163,9 @@ export default function UserOrgReportPage() {
               </div>
               <div className="mt-2 h-[1px] bg-gray"></div>
             </div>
-            <div className="absolute bottom-4 right-3">
-              <button
-                type="button"
-                onClick={() => setShowRejectModal(!showRejectModal)}
-                className="me-2 rounded-md bg-red px-4 py-2 text-lg font-medium text-white"
-              >
-                Reject
-              </button>
-              <button type="button" className="rounded-md bg-yellow px-4 py-2 text-lg font-medium">
-                Approve
-              </button>
-            </div>
           </div>
         </div>
       </main>
-
-      {/* REJECTED MODAL */}
-      <div
-        className={`fixed left-0 top-0 z-[999] flex h-full w-full items-center justify-center  bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
-          showRejectModal ? '' : 'invisible opacity-0'
-        }`}
-      >
-        <div
-          className={`relative z-[5] h-fit w-[450px] rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
-        >
-          <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Sign Out</h1>
-          <div className="h-[1px] w-full bg-black "></div>
-          <div className="flex items-center justify-around p-2">
-            <Image src="/danger_icon.png" width={50} height={50} alt="Danger Icon" className="" />
-            <div className="py-3 text-center text-2xl font-medium">
-              Are you sure you want to reject?
-            </div>
-          </div>
-          <div className="">
-            <button type="button" className="rounded-md bg-yellow px-8 py-2 text-lg font-medium">
-              Cancel
-            </button>
-          </div>
-          <div className="">
-            <button className="rounded-md bg-red px-8 py-2 text-lg font-medium text-white">
-              Reject
-            </button>
-          </div>
-        </div>
-      </div>
     </>
   );
 }

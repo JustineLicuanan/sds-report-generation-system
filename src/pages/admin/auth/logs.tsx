@@ -1,9 +1,10 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useState } from 'react';
-import NavBar from '~/components/navigation-bar';
-import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
+import { useRef, useState } from 'react';
+import { useDownloadExcel } from 'react-export-table-to-excel';
+import AdminNavBar from '~/components/admin-navigation-bar';
+import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import Pagination from '~/components/pagination';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -37,6 +38,14 @@ export default function AdminLogPage() {
   ];
   const [search, setSearch] = useState('');
 
+  const tableRef = useRef(null);
+
+  const { onDownload } = useDownloadExcel({
+    currentTableRef: tableRef.current,
+    filename: 'auth-logs',
+    sheet: 'auth',
+  });
+
   logData.sort((a, b) => {
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
@@ -63,17 +72,17 @@ export default function AdminLogPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <AdminNavBar />
       <main className="flex">
         {/* SIDE BAR */}
-        <OrganizationSideBarMenu />
+        <AdminSideBarMenu />
 
         {/* MAIN CONTENT */}
 
         <div className="mx-3 my-4 w-full">
           <div className="mx-auto my-0 min-h-[87vh] max-w-5xl rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Log</h1>
-            <div className="my-4 flex flex-col md:my-6 md:flex-row">
+            <div className="my-4 flex flex-col justify-between md:my-6 md:flex-row">
               {/* SEARCH */}
               <div className="flex">
                 <label
@@ -96,10 +105,18 @@ export default function AdminLogPage() {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
+              <button
+                onClick={onDownload}
+                className="mt-2 flex h-7 w-fit items-center gap-2 border-[1px] border-green bg-white px-2 py-1 text-sm hover:bg-yellow md:mt-0 md:h-9 md:text-base lg:h-11"
+              >
+                <div>Export</div>
+                <Image src="/excel_icon.svg" alt="Excel Icon" width={20} height={20} />
+              </button>
             </div>
 
             <div className="overflow-x-scroll sm:overflow-hidden">
               <table
+                ref={tableRef}
                 id="myTable"
                 className="w-full min-w-max border-collapse  border border-black text-center "
               >

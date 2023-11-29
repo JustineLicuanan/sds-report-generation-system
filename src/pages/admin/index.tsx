@@ -3,9 +3,9 @@ import '@splidejs/react-splide/css';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import Calendar from '~/components/calendar';
-import NavBar from '~/components/navigation-bar';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -43,7 +43,7 @@ export default function AdminDashboardPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <AdminNavBar />
 
       <main className="flex">
         {/* SIDE BAR MENU */}

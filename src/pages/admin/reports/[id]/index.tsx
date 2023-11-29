@@ -3,8 +3,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import NavBar from '~/components/navigation-bar';
 import PdfViewer from '~/components/pdf-viewer';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -52,6 +52,7 @@ export default function AdminOrgReportPage() {
   const [comment, setComment] = useState(''); // Comment box
   const [currentComment, setCurrentComment] = useState(myComment); // Comment data
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejected, setRejected] = useState(false);
   const [rejectAlert, setRejectAlert] = useState(false);
 
   const [showApproveModal, setShowApproveModal] = useState(false);
@@ -75,7 +76,7 @@ export default function AdminOrgReportPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <NavBar />
+      <AdminNavBar />
       <main className="flex">
         {/* SIDE BAR */}
         <AdminSideBarMenu />
@@ -87,7 +88,7 @@ export default function AdminOrgReportPage() {
               <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
                 {organizationName ?? 'Org'} - {categoryName ?? 'Report Category'}
               </h1>
-              {rejectAlert ? (
+              {rejected ? (
                 <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-red md:text-2xl'>
                   Rejected
                 </h1>
@@ -178,11 +179,11 @@ export default function AdminOrgReportPage() {
                 type="button"
                 onClick={() => setShowRejectModal(!showRejectModal)}
                 className={`${
-                  rejectAlert || approveAlert
+                  rejected || approveAlert
                     ? 'cursor-not-allowed bg-red/50 text-white/50'
                     : 'bg-red text-white'
                 } me-2 rounded-md  px-4 py-2 text-lg font-medium `}
-                disabled={rejectAlert || approveAlert}
+                disabled={rejected || approveAlert}
               >
                 Reject
               </button>
@@ -190,11 +191,11 @@ export default function AdminOrgReportPage() {
                 type="button"
                 onClick={() => setShowApproveModal(!showApproveModal)}
                 className={`${
-                  rejectAlert || approveAlert
+                  rejected || approveAlert
                     ? 'cursor-not-allowed bg-yellow/50 text-black/50'
                     : 'bg-yellow '
                 } rounded-md px-4 py-2 text-lg font-medium`}
-                disabled={rejectAlert || approveAlert}
+                disabled={rejected || approveAlert}
               >
                 Approve
               </button>
@@ -232,6 +233,7 @@ export default function AdminOrgReportPage() {
               type="button"
               onClick={() => {
                 setShowRejectModal(!showRejectModal);
+                setRejected(!rejected);
                 setRejectAlert(!rejectAlert);
               }}
               className="rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
@@ -245,7 +247,7 @@ export default function AdminOrgReportPage() {
       {rejectAlert && (
         <div
           id="alert-3"
-          className="absolute bottom-[5%] left-[2%] z-[101] mb-4 flex items-center rounded-lg bg-blue-50 p-4 text-blue-800 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]"
+          className="fixed bottom-[5%] left-[2%] z-[101] mb-4 flex items-center rounded-lg bg-blue-50 p-4 text-blue-800 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]"
           role="alert"
         >
           <svg
@@ -264,7 +266,7 @@ export default function AdminOrgReportPage() {
             className="bg-green-50 text-green-500 hover:bg-green-200 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 -mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg p-1.5 focus:ring-2"
             data-dismiss-target="#alert-3"
             aria-label="Close"
-            onClick={() => setRejectAlert(false)}
+            onClick={() => setRejectAlert(!rejectAlert)}
           >
             <span className="sr-only">Close</span>
             <svg
