@@ -1,7 +1,6 @@
 import { OrganizationCategory, type User } from '@prisma/client';
 import { useState } from 'react';
 import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
 
 export default function SelectAnnouncement({ organization }: { organization: User[] }) {
   const options = organization.map((org) => ({
@@ -35,7 +34,6 @@ export default function SelectAnnouncement({ organization }: { organization: Use
         isSearchable={true}
         isClearable={true}
         isMulti
-        components={makeAnimated()}
         styles={{
           control: (baseStyles) => ({
             ...baseStyles,

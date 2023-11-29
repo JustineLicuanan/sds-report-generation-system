@@ -2,8 +2,8 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
-import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
+import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import Pagination from '~/components/pagination';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -66,7 +66,7 @@ export default function AdminLogPage() {
       <NavBar />
       <main className="flex">
         {/* SIDE BAR */}
-        <AdminSideBarMenu />
+        <OrganizationSideBarMenu />
 
         {/* MAIN CONTENT */}
 

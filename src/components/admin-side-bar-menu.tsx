@@ -32,7 +32,7 @@ export default function AdminSideBarMenu() {
       id: 3,
       name: 'Announcement',
       imageLink: '/announcement_icon.svg',
-      urlLink: `${paths.ADMIN}${paths.ANNOUNCEMENT}`,
+      urlLink: `${paths.ADMIN}${paths.ANNOUNCEMENTS}`,
     },
   ];
 
@@ -46,7 +46,7 @@ export default function AdminSideBarMenu() {
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
 
   const [logDropdown, setLogDropdown] = useState(false);
-
+  const [othersField, setOthersField] = useState('');
   // const [showOthers, setShowOthers] = useState(false);
 
   const sideBarButtons = [
@@ -66,7 +66,7 @@ export default function AdminSideBarMenu() {
 
   const createOrgForm = useForm<Inputs>({ resolver: zodResolver(orgSchemas.create) });
 
-  const { register, control } = useForm({
+  const { register, control, watch } = useForm({
     defaultValues: {
       organization: [{ email: '', position: '' }],
     },
@@ -484,9 +484,9 @@ export default function AdminSideBarMenu() {
                       {...register(`organization.${index}.position`)}
                     >
                       <option value="">Select a position</option>
-                      <option value="">President</option>
-                      <option value="">Vice President</option>
-                      <option value="">Treasurer</option>
+                      <option value="President">President</option>
+                      <option value="Vice President">Vice President</option>
+                      <option value="Treasurer">Treasurer</option>
                       <option value="others">Others</option>
                     </select>
                   </div>

@@ -9,12 +9,12 @@ import { paths } from '~/meta';
 export default function OrganizationSideBarMenu() {
   const sidebarMenu = [
     { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ORGANIZATION}` },
-    // {
-    //   id: 2,
-    //   name: 'Log',
-    //   imageLink: '/log_icon.svg',
-    //   urlLink: `${paths.ORGANIZATION}${paths.LOGS}`,
-    // },
+    {
+      id: 2,
+      name: 'Announcement',
+      imageLink: '/announcement_icon.svg',
+      urlLink: `${paths.ORGANIZATION}${paths.ANNOUNCEMENTS}`,
+    },
     {
       id: 3,
       name: 'Create',

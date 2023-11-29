@@ -41,11 +41,23 @@ respective docs.
 
 ## Changelog
 
-### Version 0.10.3
+### Version 0.10.5
 
 - Added a help info in has announcement and has report.
 - Removed date, and added category, report visibility and has schedule.
-- 
+
+### Version 0.10.4
+
+- Update Prisma schema.
+- Refactor most if not all admin procedures except update org.
+
+### Version 0.10.3
+
+- Added a member list in organization profile.
+- Added a page for editing an announcement.
+- Added an announcement page for organization.
+- Added a pdf viewer.
+
 ### Version 0.10.2
 
 - Fixed the mobile responsiveness for `signout.tsx`.
