@@ -9,16 +9,20 @@ import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import { paths } from '~/meta';
 import { api } from '~/utils/api';
+import { announcementSchemas } from '~/zod-schemas/admin/announcement';
 import { orgSchemas } from '~/zod-schemas/admin/org';
 import SelectAnnouncement from './select';
 import { ResourceType, UploadButton, type OnSuccessUpload } from './upload-button';
 
-type Inputs = z.infer<typeof orgSchemas.create>;
+type InputsAnnouncement = z.infer<typeof announcementSchemas.create>;
+type InputsOrg = z.infer<typeof orgSchemas.create>;
 
 export default function AdminSideBarMenu() {
   const getOrgQuery = api.admin.org.get.useQuery();
   const createOrgMutation = api.admin.org.create.useMutation();
   const organizationList = getOrgQuery.data ?? [];
+
+  const createAnnouncementMutation = api.admin.announcement.create.useMutation();
 
   const sidebarMenu = [
     { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ADMIN}` },
@@ -64,7 +68,10 @@ export default function AdminSideBarMenu() {
     },
   ];
 
-  const createOrgForm = useForm<Inputs>({ resolver: zodResolver(orgSchemas.create) });
+  const createOrgForm = useForm<InputsOrg>({ resolver: zodResolver(orgSchemas.create) });
+  const createAnnouncementForm = useForm<InputsAnnouncement>({
+    resolver: zodResolver(announcementSchemas.create),
+  });
 
   const { register, control, watch } = useForm({
     defaultValues: {
@@ -82,7 +89,11 @@ export default function AdminSideBarMenu() {
     createOrgForm.setValue('imageId', result.info?.public_id);
   };
 
-  const onSubmit: SubmitHandler<Inputs> = async (values) => {
+  const onSubmitAnnouncement: SubmitHandler<InputsAnnouncement> = async (values) => {
+    await createAnnouncementMutation.mutateAsync(values);
+  };
+
+  const onSubmitOrg: SubmitHandler<InputsOrg> = async (values) => {
     await createOrgMutation.mutateAsync(values);
   };
 
@@ -263,8 +274,9 @@ export default function AdminSideBarMenu() {
           createAnnouncement ? '' : 'invisible opacity-0'
         }`}
       >
-        <div
+        <form
           className={`relative z-[5] h-fit w-[450px] rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out`}
+          onSubmit={createAnnouncementForm.handleSubmit(onSubmitAnnouncement)}
         >
           <button
             type="button"
@@ -288,9 +300,9 @@ export default function AdminSideBarMenu() {
                 <br />
                 <input
                   type="date"
-                  name="date-start"
                   id="date-start"
-                  className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
+                  className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none"
+                  {...createAnnouncementForm.register('start')}
                 />
               </div>
               <div className="text-xl font-bold">
@@ -303,9 +315,9 @@ export default function AdminSideBarMenu() {
                 <br />
                 <input
                   type="date"
-                  name="date-end"
                   id="date-end"
                   className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
+                  {...createAnnouncementForm.register('due')}
                 />
               </div>
             </div>
@@ -314,10 +326,10 @@ export default function AdminSideBarMenu() {
             </label>
             <input
               type="text"
-              name="announcement-subject"
               id="announcement-subject"
               placeholder="Subject"
               className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
+              {...createAnnouncementForm.register('subject')}
             />
             <label htmlFor="announcement-description" className="mb-2 text-xl font-bold">
               Description
@@ -327,11 +339,16 @@ export default function AdminSideBarMenu() {
               placeholder="Announcement description"
               rows={3}
               className="border border-green px-2 py-1 text-lg"
-              {...createOrgForm.register('description')}
+              {...createAnnouncementForm.register('description')}
             ></textarea>
             <div className="mt-3 flex w-fit gap-2">
               <label className="relative mb-5 inline-flex cursor-pointer items-center">
-                <input type="checkbox" value="" className="peer sr-only" />
+                <input
+                  type="checkbox"
+                  value=""
+                  className="peer sr-only"
+                  {...createAnnouncementForm.register('hasReport')}
+                />
                 <div className="peer h-5 w-9 rounded-full  bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
                 <span className="ms-3 text-sm font-bold text-black/80">With report </span>
               </label>
@@ -354,12 +371,12 @@ export default function AdminSideBarMenu() {
               >
                 Cancel
               </button>
-              <button type="button" className="rounded-md bg-yellow px-8 py-2 text-lg font-medium">
+              <button type="submit" className="rounded-md bg-yellow px-8 py-2 text-lg font-medium">
                 Create
               </button>
             </div>
           </div>
-        </div>
+        </form>
       </div>
 
       {/* CREATE ORGANIZATION */}
@@ -367,7 +384,7 @@ export default function AdminSideBarMenu() {
         className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
           createOrganization ? '' : 'invisible opacity-0'
         }`}
-        onSubmit={createOrgForm.handleSubmit(onSubmit)}
+        onSubmit={createOrgForm.handleSubmit(onSubmitOrg)}
       >
         <div className="relative h-[90vh] w-[450px] overflow-auto  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  ease-in-out ">
           <button

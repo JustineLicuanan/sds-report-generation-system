@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.10
+
+- Added a form in admin side bar, but not complete yet.
+
 ### Version 0.10.9
 
 - Alter most, if not all, schemas.
