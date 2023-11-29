@@ -7,7 +7,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
@@ -60,6 +60,17 @@ export default function EditInfoPage() {
       description: getOrgQuery.data?.[0]?.description,
       category: getOrgQuery.data?.[0]?.category as Inputs['category'],
     },
+  });
+
+  const { register, control } = useForm({
+    defaultValues: {
+      organization: [{ email: '', position: '' }],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    name: 'organization',
+    control,
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (values) => {
@@ -133,7 +144,7 @@ export default function EditInfoPage() {
                 </option>
                 {Object.values(OrganizationCategory).map((category) => (
                   <option key={category} value={category}>
-                    {category.replace(/_/g, " ")}
+                    {category.replace(/_/g, ' ')}
                   </option>
                 ))}
               </select>
@@ -174,6 +185,94 @@ export default function EditInfoPage() {
                   readOnly={visibility}
                   {...editInfoForm.register('description')}
                 ></textarea>
+
+                <div className="mb-1 mt-6 text-xl font-bold">Members</div>
+                {fields.map((field, index) => (
+                  <div key={field.id} className="flex">
+                    <div className="me-1 w-4/6">
+                      <label htmlFor="email-address" className=" text-lg font-bold">
+                        Email
+                      </label>
+                      <br />
+                      <input
+                        type="text"
+                        id="email-address"
+                        placeholder="e.g music.organization@sample.com"
+                        className={`${
+                          visibility ? 'bg-gray' : ''
+                        } mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none`}
+                        {...register(`organization.${index}.email`)}
+                        disabled={visibility}
+                      />
+                    </div>
+                    <div className="w-2/6">
+                      <label htmlFor="position" className=" text-lg font-bold">
+                        Position
+                      </label>
+                      <br />
+                      <select
+                        id="position"
+                        className={`${
+                          visibility ? 'bg-gray text-black/50' : ''
+                        } mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none`}
+                        {...register(`organization.${index}.position`)}
+                        disabled={visibility}
+                      >
+                        <option value="">Select a position</option>
+                        <option value="">President</option>
+                        <option value="">Vice President</option>
+                        <option value="">Treasurer</option>
+                        <option value="others">Others</option>
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!(fields.length === 1)) {
+                          remove(index);
+                        }
+                      }}
+                      className={`ms-1 flex h-9 items-center self-end px-2 ${
+                        fields.length === 1
+                          ? 'cursor-not-allowed bg-gray opacity-50'
+                          : 'bg-gray text-white'
+                      }`}
+                      disabled={visibility}
+                    >
+                      <Image src="/save_icon.png" alt="Save Icon" width={40} height={40} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!(fields.length === 1)) {
+                          remove(index);
+                        }
+                      }}
+                      className={`ms-1 flex h-9 items-center self-end px-2 ${
+                        fields.length === 1
+                          ? 'cursor-not-allowed bg-red opacity-50'
+                          : 'bg-red text-white'
+                      }`}
+                      disabled={visibility}
+                    >
+                      <Image src="/delete_icon.svg" alt="Delete" width={40} height={40} />
+                    </button>
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    append({ email: '', position: '' });
+                  }}
+                  className={`${
+                    visibility ? 'opacity-50' : ''
+                  } my-2 w-full cursor-pointer rounded-md bg-yellow  px-8 py-2 text-lg font-medium`}
+                  disabled={visibility}
+                >
+                  Add new email
+                </button>
+
                 <div className="my-2 flex justify-between">
                   <button
                     type="button"
@@ -283,7 +382,7 @@ export default function EditInfoPage() {
             </form>
           </div>
         </div>
-        {successAlert && (
+        {/* {successAlert && (
           <div
             id="alert-3"
             className="bg-green-50 text-green-800 dark:bg-gray-800 dark:text-green-400 absolute bottom-[5%] left-[2%] z-[2] mb-4 flex items-center rounded-lg p-4"
@@ -325,7 +424,7 @@ export default function EditInfoPage() {
               </svg>
             </button>
           </div>
-        )}
+        )} */}
       </main>
     </>
   );

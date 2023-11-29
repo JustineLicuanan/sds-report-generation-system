@@ -41,6 +41,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.3
+
+- Added a member list in organization profile.
+
 ### Version 0.10.2
 
 - Fixed the mobile responsiveness for `signout.tsx`.
