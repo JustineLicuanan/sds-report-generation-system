@@ -1,3 +1,4 @@
+import { UserRole } from '@prisma/client';
 import { signOut } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -64,7 +65,11 @@ export default function SignOutPage() {
               <div className="flex justify-between">
                 <button
                   type="button"
-                  onClick={() => router.push(paths.ADMIN)}
+                  onClick={() => {
+                    if (UserRole.ADMIN === 'ADMIN') {
+                      router.push(paths.ADMIN);
+                    }
+                  }}
                   className="rounded-md bg-yellow px-8 py-2 text-lg font-medium"
                 >
                   Back

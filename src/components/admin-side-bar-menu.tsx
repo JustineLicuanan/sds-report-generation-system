@@ -329,12 +329,20 @@ export default function AdminSideBarMenu() {
               className="border border-green px-2 py-1 text-lg"
               {...createOrgForm.register('description')}
             ></textarea>
-            <div className="mt-3 w-fit">
+            <div className="mt-3 flex w-fit gap-2">
               <label className="relative mb-5 inline-flex cursor-pointer items-center">
                 <input type="checkbox" value="" className="peer sr-only" />
                 <div className="peer h-5 w-9 rounded-full  bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
-                <span className="ms-3 text-sm font-bold text-black/80">With report</span>
+                <span className="ms-3 text-sm font-bold text-black/80">With report </span>
               </label>
+              <div className="group relative">
+                <div className="h-5 w-5 rounded-full border bg-gray text-center text-sm font-bold">
+                  ?
+                </div>
+                <div className="absolute left-0 hidden whitespace-nowrap rounded-md bg-gray px-2 py-1 text-sm font-medium group-hover:block">
+                  Some description
+                </div>
+              </div>
             </div>
             <div className="flex justify-between">
               <button

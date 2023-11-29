@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.3
+
+- Added a help info in has announcement and has report.
+- Removed date, and added category, report visibility and has schedule.
+- 
 ### Version 0.10.2
 
 - Fixed the mobile responsiveness for `signout.tsx`.
