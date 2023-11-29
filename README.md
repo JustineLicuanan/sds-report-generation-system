@@ -41,6 +41,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.4
+
+- Update Prisma schema.
+- Refactor most if not all admin procedures except update org.
+
 ### Version 0.10.3
 
 - Added a member list in organization profile.
