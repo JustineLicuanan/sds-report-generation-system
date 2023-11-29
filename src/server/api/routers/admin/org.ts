@@ -4,15 +4,30 @@ import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
 import { orgSchemas } from '~/zod-schemas/admin/org';
 
 export const orgRouter = createTRPCRouter({
-  create: adminProcedure.input(orgSchemas.create).mutation(({ ctx, input }) => {
+  create: adminProcedure.input(orgSchemas.create).mutation(async ({ ctx, input }) => {
     const { members, ...data } = input;
 
     try {
+      const userExists = !!(await ctx.db.user.count({
+        where: {
+          email: { in: members.map(({ where }) => where.email) },
+          organizationIsArchived: false,
+        },
+      }));
+
+      if (userExists) {
+        throw new TRPCError({ code: 'CONFLICT' });
+      }
+
       return ctx.db.organization.create({
-        data: { ...data, members: { createMany: { data: members } } },
+        data: { ...data, members: { connectOrCreate: members } },
       });
     } catch (err) {
-      throw new TRPCError({ code: 'CONFLICT' });
+      if (err instanceof TRPCError && err.code === 'CONFLICT') {
+        throw err;
+      }
+
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
     }
   }),
 
@@ -21,11 +36,12 @@ export const orgRouter = createTRPCRouter({
       return ctx.db.organization.findMany({
         where: { id: input?.id, category: input?.category, isArchived: input?.isArchived ?? false },
         include: {
-          members: input?.withMembers,
-          reports: input?.withReports,
-          announcements: input?.withAnnouncements,
-          notifications: input?.withNotifications,
-          logs: input?.withLogs,
+          members: input?.includeMembers,
+          reports: input?.includeReports,
+          comments: input?.includeComments,
+          notifications: input?.includeNotifications,
+          logs: input?.includeLogs,
+          announcements: input?.includeAnnouncements,
         },
       });
     } catch (err) {
@@ -38,6 +54,7 @@ export const orgRouter = createTRPCRouter({
   //   const { id, members, ...data } = input;
 
   //   try {
+  //     // FIXME: count w/ filter available, upsert, set (use $transaction(?) to exec all or nothing)
   //     await ctx.db.user.upsert(members!);
 
   //     return ctx.db.organization.update({

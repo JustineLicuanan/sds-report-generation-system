@@ -16,13 +16,17 @@ export const announcementRouter = createTRPCRouter({
   get: adminProcedure.input(announcementSchemas.get).query(({ ctx, input }) => {
     try {
       return ctx.db.announcement.findMany({
-        where: { id: input?.id, isArchived: input?.isArchived ?? false },
+        where: {
+          id: input?.id,
+          hasReport: input?.hasReport,
+          isArchived: input?.isArchived ?? false,
+        },
         include: {
-          audience: input?.withAudience,
-          comments: input?.withComments,
-          reports: input?.withReports,
-          adminNotifications: input?.withAdminNotifications,
-          notifications: input?.withNotifications,
+          audience: input?.includeAudience,
+          comments: input?.includeComments,
+          reports: input?.includeReports,
+          adminNotifications: input?.includeAdminNotifications,
+          notifications: input?.includeNotifications,
         },
       });
     } catch (err) {

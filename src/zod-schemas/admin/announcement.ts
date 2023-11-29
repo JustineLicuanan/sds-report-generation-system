@@ -6,19 +6,20 @@ export const announcementSchemas = {
     description: z.string().trim().min(1),
     start: z.string().datetime({ offset: true }).nullable().optional(),
     due: z.string().datetime({ offset: true }).nullable().optional(),
-    withReport: z.boolean(),
+    hasReport: z.boolean(),
     audience: z.object({ id: z.string().cuid() }).array(),
   }),
 
   get: z
     .object({
       id: z.string().cuid().optional(),
+      hasReport: z.boolean().optional(),
       isArchived: z.literal(true).optional(),
-      withAudience: z.literal(true).optional(),
-      withComments: z.literal(true).optional(),
-      withReports: z.literal(true).optional(),
-      withAdminNotifications: z.literal(true).optional(),
-      withNotifications: z.literal(true).optional(),
+      includeAudience: z.literal(true).optional(),
+      includeComments: z.literal(true).optional(),
+      includeReports: z.literal(true).optional(),
+      includeAdminNotifications: z.literal(true).optional(),
+      includeNotifications: z.literal(true).optional(),
     })
     .optional(),
 
@@ -28,7 +29,7 @@ export const announcementSchemas = {
     description: z.string().trim().min(1).optional(),
     start: z.string().datetime({ offset: true }).nullable().optional(),
     due: z.string().datetime({ offset: true }).nullable().optional(),
-    withReport: z.boolean().optional(),
+    hasReport: z.boolean().optional(),
     audience: z.object({ id: z.string().cuid() }).array().optional(),
   }),
 
