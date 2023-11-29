@@ -32,7 +32,7 @@ export default function AdminSideBarMenu() {
       id: 3,
       name: 'Announcement',
       imageLink: '/announcement_icon.svg',
-      urlLink: `${paths.ADMIN}${paths.ANNOUNCEMENT}`,
+      urlLink: `${paths.ADMIN}${paths.ANNOUNCEMENTS}`,
     },
   ];
 

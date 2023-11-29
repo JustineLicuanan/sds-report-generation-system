@@ -1,10 +1,11 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import NavBar from '~/components/navigation-bar';
 import TruncateWord from '~/components/truncate-word';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
 
@@ -36,6 +37,8 @@ export default function AnnouncementPage() {
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit perspiciatis molestias odit, dolorum ipsam asperiores laborum accusamus.',
     },
   ];
+
+  const router = useRouter();
 
   const [myArray, setMyArray] = useState(listOfAnnouncements);
   const [showAnnouncement, setShowAnnouncement] = useState(false);
@@ -94,7 +97,7 @@ export default function AnnouncementPage() {
                   </div>
                   <div className="flex py-2 text-xl">
                     <h4 className="font-semibold">Description:</h4>
-                    <div className="ms-1  font-medium">
+                    <div className="ms-1  text-justify font-medium">
                       <TruncateWord text={data.description} maxLength={70} fontSize="text-xl" />
                     </div>
                   </div>
@@ -112,6 +115,13 @@ export default function AnnouncementPage() {
           <div
             className={`relative z-[5] h-fit w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out `}
           >
+            <button
+              type="button"
+              onClick={() => setShowAnnouncement(!showAnnouncement)}
+              className="absolute right-4 top-4 text-xl hover:text-red"
+            >
+              ✖
+            </button>
             <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Announcement</h1>
             <div className="h-[1px] w-full bg-black "></div>
             <div className="px-3 py-2">
@@ -147,10 +157,14 @@ export default function AnnouncementPage() {
               </button>
               <button
                 type="button"
-                className="my-4 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-                onClick={() => setShowAnnouncement(!showAnnouncement)}
+                className="my-4 cursor-pointer rounded-md bg-gray px-8 py-2 text-lg font-medium"
+                onClick={() =>
+                  router.push(
+                    `${paths.ADMIN}${paths.ANNOUNCEMENTS}/${selectedNotification}${paths.EDIT_ANNOUNCEMENTS}`
+                  )
+                }
               >
-                Close
+                Update
               </button>
             </div>
           </div>

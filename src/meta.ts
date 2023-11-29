@@ -13,7 +13,8 @@ export const paths = {
   ORGANIZATION_REPORTS: '/reports',
   ORGANIZATION_EDIT: '/edit',
   LOGS: '/logs',
-  ANNOUNCEMENT: '/announcement',
+  ANNOUNCEMENTS: '/announcements/',
+  EDIT_ANNOUNCEMENTS: '/edit',
   ORGANIZATION_CREATE: '/create',
   AUTH_LOGS: '/auth/logs',
 } as const;
