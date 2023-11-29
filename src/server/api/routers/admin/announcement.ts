@@ -1,4 +1,6 @@
+import { NotificationType } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
+
 import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
 import { announcementSchemas } from '~/zod-schemas/admin/announcement';
 
@@ -7,7 +9,21 @@ export const announcementRouter = createTRPCRouter({
     const { audience, ...data } = input;
 
     try {
-      return ctx.db.announcement.create({ data: { ...data, audience: { connect: audience } } });
+      return ctx.db.announcement.create({
+        data: {
+          ...data,
+          audience: { connect: audience },
+          notifications: {
+            createMany: {
+              data: audience.map(({ id }) => ({
+                type: NotificationType.ANNOUNCEMENT,
+                message: `Announcement: ${data.subject}`,
+                organizationId: id,
+              })),
+            },
+          },
+        },
+      });
     } catch (err) {
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
     }
@@ -49,7 +65,10 @@ export const announcementRouter = createTRPCRouter({
 
   archive: adminProcedure.input(announcementSchemas.archive).mutation(({ ctx, input }) => {
     try {
-      return ctx.db.announcement.update({ where: { id: input.id }, data: { isArchived: true } });
+      return ctx.db.announcement.update({
+        where: { id: input.id },
+        data: { isArchived: true, notifications: { deleteMany: {} } },
+      });
     } catch (err) {
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
     }

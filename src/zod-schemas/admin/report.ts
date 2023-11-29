@@ -33,5 +33,11 @@ export const reportSchemas = {
     id: z.string().cuid(),
     due: z.string().datetime({ offset: true }).nullable().optional(),
     status: z.nativeEnum(ReportStatus),
+    notificationData: z.object({ organizationId: z.string().cuid(), userId: z.string().cuid() }),
+    logData: z.object({
+      name: z.string().trim().min(1),
+      subject: z.string().trim().min(1),
+      category: z.nativeEnum(ReportCategory),
+    }),
   }),
 };

@@ -31,7 +31,7 @@ export const orgRouter = createTRPCRouter({
     }
   }),
 
-  get: adminProcedure.input(orgSchemas.get).query(async ({ ctx, input }) => {
+  get: adminProcedure.input(orgSchemas.get).query(({ ctx, input }) => {
     try {
       return ctx.db.organization.findMany({
         where: { id: input?.id, category: input?.category, isArchived: input?.isArchived ?? false },
@@ -68,7 +68,10 @@ export const orgRouter = createTRPCRouter({
 
   archive: adminProcedure.input(orgSchemas.archive).mutation(({ ctx, input }) => {
     try {
-      return ctx.db.organization.update({ where: { id: input.id }, data: { isArchived: true } });
+      return ctx.db.organization.update({
+        where: { id: input.id },
+        data: { isArchived: true, notifications: { deleteMany: {} } },
+      });
     } catch (err) {
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
     }
