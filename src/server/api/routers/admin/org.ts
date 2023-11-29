@@ -10,7 +10,7 @@ export const orgRouter = createTRPCRouter({
     try {
       const userExists = !!(await ctx.db.user.count({
         where: {
-          email: { in: members.map(({ where }) => where.email) },
+          email: { in: members.map(({ email }) => email) },
           organizationIsArchived: false,
         },
       }));
@@ -20,7 +20,15 @@ export const orgRouter = createTRPCRouter({
       }
 
       return ctx.db.organization.create({
-        data: { ...data, members: { connectOrCreate: members } },
+        data: {
+          ...data,
+          members: {
+            connectOrCreate: members.map((member) => ({
+              where: { email: member.email },
+              create: member,
+            })),
+          },
+        },
       });
     } catch (err) {
       if (err instanceof TRPCError && err.code === 'CONFLICT') {

@@ -9,13 +9,7 @@ export const orgSchemas = {
     image: z.string().url().nullable().optional(),
     imageId: z.string().nullable().optional(),
     members: z
-      .object({
-        where: z.object({ email: z.string().trim().toLowerCase().email() }),
-        create: z.object({
-          name: z.string().trim().min(1),
-          email: z.string().trim().toLowerCase().email(),
-        }),
-      })
+      .object({ name: z.string().trim().min(1), email: z.string().trim().toLowerCase().email() })
       .array(),
   }),
 

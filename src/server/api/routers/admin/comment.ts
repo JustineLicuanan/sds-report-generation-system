@@ -71,7 +71,11 @@ export const commentRouter = createTRPCRouter({
     try {
       return ctx.db.comment.update({
         where: { id: input.id },
-        data: { isArchived: true, notifications: { deleteMany: {} } },
+        data: {
+          isArchived: true,
+          adminNotifications: { deleteMany: {} },
+          notifications: { deleteMany: {} },
+        },
       });
     } catch (err) {
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });

@@ -53,10 +53,7 @@ export const authOptions: NextAuthOptions = {
       const userExists = !!(await db.user.count({
         where: {
           AND: { email: user.email ?? '' },
-          OR: [
-            { role: UserRole.ADMIN },
-            { role: UserRole.STUDENT_LEADER, organizationIsArchived: false },
-          ],
+          OR: [{ role: UserRole.ADMIN }, { organizationIsArchived: false }],
         },
       }));
 
@@ -93,7 +90,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name!,
           email: user.email,
           action: LogAction.SIGN_IN,
-          createdBy: { connect: { id: user.id } },
+          createdById: user.id,
         },
       });
     },
@@ -104,7 +101,7 @@ export const authOptions: NextAuthOptions = {
           name: session.user.name!,
           email: session.user.email,
           action: LogAction.SIGN_OUT,
-          createdBy: { connect: { id: session.user.id } },
+          createdById: session.user.id,
         },
       });
     },

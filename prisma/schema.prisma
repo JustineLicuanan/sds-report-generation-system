@@ -176,6 +176,7 @@ model Log {
 
     report   Report? @relation(fields: [reportId], references: [id])
     reportId String?
+    // TODO: reportVisibility Boolean?
 
     organization   Organization? @relation(fields: [organizationId], references: [id])
     organizationId String?
