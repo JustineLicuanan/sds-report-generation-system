@@ -1,11 +1,14 @@
 import { type GetServerSideProps } from 'next';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -41,6 +44,14 @@ export default function UserOrgReportPage() {
       comment: 'Lorem ipsum dolor sit amet.',
     },
   ];
+  const { data: session } = useSession();
+
+  const router = useRouter();
+  const getReportQuery = api.shared.report.get.useQuery({
+    id: router.query.id as string,
+    includeComments: true,
+  });
+  const reportData = getReportQuery.data?.[0];
 
   const [comment, setComment] = useState(''); // Comment box
   const [currentComment, setCurrentComment] = useState(myComment); // Comment data
@@ -55,10 +66,6 @@ export default function UserOrgReportPage() {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [currentComment]);
-
-  const goBack = () => {
-    window.history.back();
-  };
 
   return (
     <>
@@ -77,7 +84,7 @@ export default function UserOrgReportPage() {
           <div className="ms-1 min-h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <div className="flex justify-between">
               <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
-                My report - {'Report Category'}
+                My report - {reportData?.category}
               </h1>
               {/* {rejected ? (
                 <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-red md:text-2xl'>
@@ -94,16 +101,15 @@ export default function UserOrgReportPage() {
               )} */}
             </div>
             <div className="mt-7 flex justify-between text-xl font-medium">
-              <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
+              <h2>{reportData?.subject}</h2>{' '}
+              <h2 className="text-right">{reportData?.createdAt.toString()}</h2>
             </div>
             <div className="mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] border-green text-4xl">
-              <PdfViewer />
+              <PdfViewer pdf={reportData?.file!} />
             </div>
             <div>
-              <h2 className="mt-4 text-xl font-medium">Message:</h2>
-              Lorem ipsum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem
-              ipsum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              <h2 className="mt-4 text-xl font-medium">Description:</h2>
+              {reportData?.description}
             </div>
           </div>
 
@@ -111,18 +117,24 @@ export default function UserOrgReportPage() {
           <div className="relative mb-10  ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
             <div className="h-[55%] overflow-y-auto scroll-smooth" ref={containerRef}>
-              {adminComment.map((data, index) => (
-                <div key={index} className="flex flex-col px-5">
-                  <div className="my-1 text-center text-xs font-light">{data.time}</div>
-                  <div className="font-bold">Admin</div>
-                  <div className="w-3/4">{data.comment}</div>
-                </div>
-              ))}
-              {currentComment.map((data, index) => (
-                <div key={index} className="flex flex-col px-5 text-right">
-                  <div className="my-1 text-center text-xs font-light">{data.time}</div>
-                  <div className="font-bold">You</div>
-                  <div className="w-3/4 self-end ">{data.comment}</div>
+              {reportData?.comments.map((data, index) => (
+                <div
+                  key={index}
+                  className={`${
+                    session?.user.id === data.createdById ? 'text-right' : ''
+                  } flex flex-col px-5`}
+                >
+                  <div className="my-1 text-center text-xs font-light">
+                    {data.createdAt.toString()}
+                  </div>
+                  <div className="font-bold">
+                    {data.createdByName} {}
+                  </div>
+                  <div
+                    className={`${session?.user.id === data.createdById ? 'self-end' : ''} w-3/4`}
+                  >
+                    {data.content}
+                  </div>
                 </div>
               ))}
             </div>

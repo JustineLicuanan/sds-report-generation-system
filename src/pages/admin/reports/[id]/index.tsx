@@ -46,6 +46,15 @@ export default function AdminOrgReportPage() {
     },
   ];
 
+  const { data: session } = useSession();
+
+  const router = useRouter();
+  const getReportQuery = api.shared.report.get.useQuery({
+    id: router.query.id as string,
+    includeComments: true,
+  });
+  const reportData = getReportQuery.data?.[0];
+
   const router = useRouter();
   const { organizationName, categoryName } = router.query;
 
@@ -120,18 +129,24 @@ export default function AdminOrgReportPage() {
           <div className="relative mb-10 ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
             <div className="h-[40vh] overflow-y-auto" ref={containerRef}>
-              {orgComment.map((data, index) => (
-                <div key={index} className="flex flex-col px-5">
-                  <div className="my-1 text-center text-xs font-light">{data.time}</div>
-                  <div className="font-bold">Organization Name</div>
-                  <div className="w-3/4">{data.comment}</div>
-                </div>
-              ))}
-              {currentComment.map((data, index) => (
-                <div key={index} className="flex flex-col px-5 text-right">
-                  <div className="my-1 text-center text-xs font-light">{data.time}</div>
-                  <div className="font-bold">You</div>
-                  <div className="w-3/4 self-end ">{data.comment}</div>
+              {reportData?.comments.map((data, index) => (
+                <div
+                  key={index}
+                  className={`${
+                    session?.user.id === data.createdById ? 'text-right' : ''
+                  } flex flex-col px-5`}
+                >
+                  <div className="my-1 text-center text-xs font-light">
+                    {data.createdAt.toString()}
+                  </div>
+                  <div className="font-bold">
+                    {data.createdByName} {}
+                  </div>
+                  <div
+                    className={`${session?.user.id === data.createdById ? 'self-end' : ''} w-3/4`}
+                  >
+                    {data.content}
+                  </div>
                 </div>
               ))}
             </div>
