@@ -1,12 +1,22 @@
 import { UserRole } from '@prisma/client';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { signOut } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { meta, paths } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
 
-export default function SignOutPage() {
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  return { props: { role: authSession?.user?.role } };
+}) satisfies GetServerSideProps;
+
+export default function SignOutPage({
+  role,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+
   return (
     <>
       <Head>

@@ -1,4 +1,5 @@
 import { type GetServerSideProps } from 'next';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -8,6 +9,7 @@ import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -55,7 +57,6 @@ export default function AdminOrgReportPage() {
   });
   const reportData = getReportQuery.data?.[0];
 
-  const router = useRouter();
   const { organizationName, categoryName } = router.query;
 
   const [comment, setComment] = useState(''); // Comment box
@@ -115,8 +116,8 @@ export default function AdminOrgReportPage() {
               <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
             </div>
             <div className="mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] border-green text-4xl">
-              <PdfViewer />
-            </div>
+              {reportData?.file ? <PdfViewer pdf={reportData?.file} /> : '.PDF'}
+            </div>``
             <div>
               <h2 className="mt-4 text-xl font-medium">Description:</h2>
               Lorem ipsum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem
