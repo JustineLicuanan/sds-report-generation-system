@@ -1,16 +1,11 @@
+import { Report, ReportStatus } from '@prisma/client';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { paths } from '~/meta';
 
-type Report = {
-  id: number;
-  subject: string;
-  date: string;
-  status: string;
-};
 export default function ReportList({ reports }: { reports: Report[] }) {
-  const [activeReport] = useState<number | null>(null);
+  const [activeReport] = useState<string | null>(null);
   const router = useRouter();
 
   // const toggleShowOption = (id: number) => {
@@ -37,9 +32,9 @@ export default function ReportList({ reports }: { reports: Report[] }) {
             <div className="text-xl font-semibold">{report.subject}</div>
             <div
               className={`me-4 text-lg font-semibold ${
-                report.status === 'Approved'
+                report.status === ReportStatus.APPROVED
                   ? 'text-green'
-                  : report.status === 'Rejected'
+                  : report.status === ReportStatus.REJECTED
                   ? 'text-red'
                   : 'text-yellow group-hover:text-black'
               } `}
@@ -47,11 +42,11 @@ export default function ReportList({ reports }: { reports: Report[] }) {
               {report.status}
             </div>
           </h1>
-          {report.status === 'Approved' ? (
+          {report.status === ReportStatus.APPROVED ? (
             <div className="absolute -right-2 -top-2 h-6 w-6 rounded-full border-2 border-black bg-[#0CF022] font-bold">
               <Image src="/approved_icon.svg" alt="Approved Icon" width={100} height={100} />
             </div>
-          ) : report.status === 'Rejected' ? (
+          ) : report.status === ReportStatus.REJECTED ? (
             <div className="absolute -right-2 -top-2 h-6 w-6 rounded-full border-2 border-black bg-[#FF0000] font-bold">
               <Image width={100} height={100} src="/rejected_icon.png" alt="Rejected Icon" />
             </div>
@@ -60,7 +55,9 @@ export default function ReportList({ reports }: { reports: Report[] }) {
               <Image width={100} height={100} src="/pending_icon.png" alt="Pending Icon" />
             </div>
           )}
-          <div className="mt-1 text-right text-lg text-black">{report.date}</div>
+          <div className="mt-1 text-right text-lg text-black">
+            {report.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
+          </div>
         </button>
       ))}
     </>

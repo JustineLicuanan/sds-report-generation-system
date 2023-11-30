@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '@trpc/react-query';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -7,6 +9,7 @@ import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import TruncateWord from '~/components/truncate-word';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -21,35 +24,23 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AnnouncementPage() {
-  const listOfAnnouncements = [
-    {
-      organization: 'Music Organization',
-      subject: 'Event Report',
-      date: '11/05/23',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, deleniti!',
-    },
-    {
-      organization: 'Science Organization',
-      subject: 'Financial Report',
-      date: '11/07/23',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit perspiciatis molestias odit, dolorum ipsam asperiores laborum accusamus.',
-    },
-  ];
-
+  const queryClient = useQueryClient();
   const router = useRouter();
 
-  const [myArray, setMyArray] = useState(listOfAnnouncements);
   const [showAnnouncement, setShowAnnouncement] = useState(false);
-  const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
+  const [selectedNotification, setSelectedNotification] = useState<string | null>(null);
 
-  const deleteElementAtIndex = (index: number) => {
-    // Create a copy of the array excluding the element at the specified index
-    const newArray = [...myArray.slice(0, index), ...myArray.slice(index + 1)];
+  const getAnnouncementQuery = api.admin.announcement.get.useQuery({ includeAudience: true });
+  const archiveAnnouncementMutation = api.admin.announcement.archive.useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [getQueryKey(api.admin.announcement.get, undefined, 'query')],
+      });
+    },
+  });
 
-    // Update the state with the new array
-    setMyArray(newArray);
+  const archiveAnnouncementById = (id: string) => {
+    archiveAnnouncementMutation.mutateAsync({ id });
   };
   return (
     <>
@@ -73,32 +64,38 @@ export default function AnnouncementPage() {
             </h1>
             {/* LIST OF ANNOUNCEMENTS */}
             <div className="my-5 w-full">
-              {myArray.map((data, index) => (
+              {getAnnouncementQuery?.data?.map((data, index) => (
                 <button
                   type="button"
                   onClick={() => {
-                    return setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
+                    return setShowAnnouncement(!showAnnouncement), setSelectedNotification(data.id);
                   }}
                   className="mb-4 w-full bg-gray px-3 py-2 hover:bg-yellow"
                   key={index}
                 >
                   <div className="flex justify-between py-2">
                     <div>
-                      <h4 className="text-2xl font-semibold">{data.organization}</h4>
+                      <h4 className="text-2xl font-semibold">{data.subject}</h4>
                     </div>
                     <div className="flex  text-xl">
                       <h4 className="font-semibold">Date started:</h4>
-                      <div className="ms-1 text-xl font-medium">{data.date}</div>
+                      <div className="ms-1 text-xl font-medium">
+                        {data.due?.toLocaleString('en-US', { timeZone: 'Asia/Manila' }) ?? 'N/A'}
+                      </div>
                     </div>
                   </div>
                   <div className="flex py-2 text-xl">
-                    <h4 className="font-semibold">Subject:</h4>
-                    <div className="ms-1 text-xl font-medium">{data.subject}</div>
+                    <h4 className="font-semibold">Description:</h4>
+                    <div className="ms-1 text-xl font-medium">{data.description}</div>
                   </div>
                   <div className="flex py-2 text-xl">
-                    <h4 className="font-semibold">Description:</h4>
+                    <h4 className="font-semibold">Audience:</h4>
                     <div className="ms-1  text-justify font-medium">
-                      <TruncateWord text={data.description} maxLength={70} fontSize="text-xl" />
+                      <TruncateWord
+                        text={data.audience.map(({ name }) => name).join(', ') ?? ''}
+                        maxLength={70}
+                        fontSize="text-xl"
+                      />
                     </div>
                   </div>
                 </button>
@@ -128,19 +125,24 @@ export default function AnnouncementPage() {
               <div className="flex py-2 text-xl">
                 <h4 className="font-semibold">Date:</h4>
                 <div className="ms-1 text-xl font-medium">
-                  {myArray[selectedNotification]?.date}
-                </div>
-              </div>
-              <div className="flex py-2 text-xl">
-                <h4 className="font-semibold">Subject:</h4>
-                <div className="ms-1 text-xl font-medium">
-                  {myArray[selectedNotification]?.subject}
+                  {getAnnouncementQuery?.data
+                    ?.find(({ id }) => selectedNotification)
+                    ?.due?.toLocaleString('en-US', { timeZone: 'Asia/Manila' }) ?? 'N/A'}
                 </div>
               </div>
               <div className="flex py-2 text-xl">
                 <h4 className="font-semibold">Description:</h4>
                 <div className="ms-1 text-xl font-medium">
-                  {myArray[selectedNotification]?.description}
+                  {getAnnouncementQuery?.data?.find(({ id }) => selectedNotification)?.description}
+                </div>
+              </div>
+              <div className="flex py-2 text-xl">
+                <h4 className="font-semibold">Audience:</h4>
+                <div className="ms-1 text-xl font-medium">
+                  {getAnnouncementQuery?.data
+                    ?.find(({ id }) => selectedNotification)
+                    ?.audience.map(({ name }) => name)
+                    .join(', ')}
                 </div>
               </div>
             </div>
@@ -149,14 +151,14 @@ export default function AnnouncementPage() {
                 type="button"
                 className="my-4 cursor-pointer rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
                 onClick={() => {
-                  deleteElementAtIndex(selectedNotification);
+                  archiveAnnouncementById(selectedNotification);
                   setShowAnnouncement(!showAnnouncement);
                 }}
               >
                 Delete
               </button>
               <button
-                type="button"
+                type="submit"
                 className="my-4 cursor-pointer rounded-md bg-gray px-8 py-2 text-lg font-medium"
                 onClick={() =>
                   router.push(

@@ -1,11 +1,14 @@
+import { ReportStatus } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import ReportList from '~/components/report-list';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -20,16 +23,14 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function ListOfReportPage() {
-  const reports = [
-    { id: 1, subject: 'Subject 1', date: '02/03/23', status: 'Pending' },
-    { id: 2, subject: 'Subject 2', date: '02/04/23', status: 'Approved' },
-    { id: 3, subject: 'Subject 3', date: '02/05/23', status: 'Approved' },
-    { id: 4, subject: 'Subject 4', date: '02/06/23', status: 'Rejected' },
-    { id: 5, subject: 'Subject 5', date: '02/07/23', status: 'Rejected' },
-  ];
+  const router = useRouter();
+  const getOrgWithReportsQuery = api.admin.org.get.useQuery({
+    id: router.query.id as string,
+    includeReports: true,
+  });
 
-  reports.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  getOrgWithReportsQuery?.data?.[0]?.reports.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
   return (
@@ -59,8 +60,14 @@ export default function ListOfReportPage() {
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
             <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
-            {reports.some((report) => report.status === 'Pending') ? (
-              <ReportList reports={reports.filter((report) => report.status === 'Pending')} />
+            {getOrgWithReportsQuery?.data?.[0]?.reports.some(
+              (report) => report.status === ReportStatus.PENDING
+            ) ? (
+              <ReportList
+                reports={getOrgWithReportsQuery?.data?.[0]?.reports.filter(
+                  (report) => report.status === ReportStatus.PENDING
+                )}
+              />
             ) : (
               <h3 className="flex items-center justify-center text-lg font-semibold text-black/80">
                 There is no pending report.
@@ -70,9 +77,10 @@ export default function ListOfReportPage() {
           </div>
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <ReportList
-            reports={reports.filter(
-              (report) => report.status === 'Approved' || report.status === 'Rejected'
-            )}
+            reports={getOrgWithReportsQuery?.data?.[0]?.reports.filter(
+              (report) =>
+                report.status === ReportStatus.APPROVED || report.status === ReportStatus.REJECTED
+            ) ?? []}
           />
         </div>
       </main>

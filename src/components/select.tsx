@@ -1,10 +1,19 @@
-import { OrganizationCategory, type User } from '@prisma/client';
-import { useState } from 'react';
+import { OrganizationCategory, type Organization } from '@prisma/client';
 import Select from 'react-select';
 
-export default function SelectAnnouncement({ organization }: { organization: User[] }) {
+type Props = {
+  organization: Organization[];
+  selectedValues: { id: string }[];
+  setSelectedValues(newSelectedValues: { id: string }[]): void;
+};
+
+export default function SelectAnnouncement({
+  organization,
+  selectedValues,
+  setSelectedValues,
+}: Props) {
   const options = organization.map((org) => ({
-    value: org.name,
+    value: org.id,
     label: org.name,
     category: org.category,
   }));
@@ -14,11 +23,10 @@ export default function SelectAnnouncement({ organization }: { organization: Use
     { name: 'AcadOrg', category: OrganizationCategory.ACADEMIC_ORGANIZATION },
     { name: 'NonAcadOrg', category: OrganizationCategory.NON_ACADEMIC_ORGANIZATION },
   ];
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   const handleButtonClick = (category: string) => {
     const filteredOptions = options.filter((option) => option.category === category);
-    const newSelectedValues = filteredOptions.map((option) => option.value);
+    const newSelectedValues = filteredOptions.map((option) => ({ id: option.value }));
     setSelectedValues(newSelectedValues);
   };
 
@@ -26,9 +34,9 @@ export default function SelectAnnouncement({ organization }: { organization: Use
     <>
       <Select
         options={options}
-        value={options.filter((option) => selectedValues.includes(option.value))}
+        value={options.filter((option) => selectedValues.some(({ id }) => id === option.value))}
         onChange={(selectedOptions) =>
-          setSelectedValues(selectedOptions.map((option) => option.value))
+          setSelectedValues(selectedOptions.map((option) => ({ id: option.value })))
         }
         closeMenuOnSelect={false}
         isSearchable={true}
@@ -43,6 +51,7 @@ export default function SelectAnnouncement({ organization }: { organization: Use
           }),
         }}
       />
+
       <div className="flex gap-2">
         {orgCategory.map((org, index) => (
           <button

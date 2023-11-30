@@ -1,3 +1,4 @@
+import { LogType } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -9,6 +10,7 @@ import Pagination from '~/components/pagination';
 import Table from '~/components/table';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -23,59 +25,10 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AdminLogPage() {
-  const logData = [
-    {
-      reportId: 2023001,
-      organizationName: 'HGA',
-      subject: 'Subject 1',
-      category: 'Financial',
-      date: '2023-10-20',
-      status: 'Pending',
-    },
-    {
-      reportId: 2023002,
-      organizationName: 'SDS',
-      subject: 'Subject 2',
-      category: 'Financial',
-      date: '2023-10-11',
-      status: 'Rejected',
-    },
-    {
-      reportId: 2023003,
-      organizationName: 'BITS',
-      subject: 'Subject 3',
-      category: 'Accomplishment',
-      date: '2023-10-20',
-      status: 'Approved',
-    },
-    {
-      reportId: 2023004,
-      organizationName: 'ADS',
-      subject: 'Subject 5',
-      category: 'Accomplishment',
-      date: '2023-10-22',
-      status: 'Pending',
-    },
-    {
-      reportId: 2023005,
-      organizationName: 'TRE',
-      subject: 'Subject 5',
-      category: 'Accomplishment',
-      date: '2023-10-03',
-      status: 'Rejected',
-    },
-    {
-      reportId: 2023006,
-      organizationName: 'QWE',
-      subject: 'Subject 6',
-      category: 'Accomplishment',
-      date: '2023-10-20',
-      status: 'Approved',
-    },
-  ];
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [date, setDate] = useState('');
+  const getReportLogsQuery = api.admin.log.get.useQuery({ type: LogType.REPORT });
 
   const tableRef = useRef(null);
 
@@ -86,19 +39,19 @@ export default function AdminLogPage() {
   });
 
   if (date.toLowerCase() === 'oldest') {
-    logData.sort((a, b) => {
-      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    getReportLogsQuery?.data?.sort((a, b) => {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
     });
   } else if (date.toLowerCase() === 'latest') {
-    logData.sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    getReportLogsQuery?.data?.sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
   }
 
-  const filteredData = logData.filter((item) => {
+  const filteredData = getReportLogsQuery?.data?.filter((item) => {
     return (
-      (status.toLowerCase() === '' || item.status.toLowerCase().includes(status)) &&
-      (search.toLowerCase() === '' || item.organizationName.toLowerCase().includes(search))
+      (status.toLowerCase() === '' || item.action.toLowerCase().includes(status)) &&
+      (search.toLowerCase() === '' || item.name.toLowerCase().includes(search))
     );
   });
 
@@ -107,7 +60,7 @@ export default function AdminLogPage() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentData = filteredData?.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -200,10 +153,10 @@ export default function AdminLogPage() {
             </div>
 
             <div className="overflow-x-scroll sm:overflow-hidden">
-              <Table data={currentData} tableHeader={tableHeader} tableRef={tableRef} />
+              <Table data={currentData ?? []} tableHeader={tableHeader} tableRef={tableRef} />
               <Pagination
                 itemsPerPage={itemsPerPage}
-                totalItems={filteredData.length}
+                totalItems={filteredData?.length ?? 0}
                 currentPage={currentPage}
                 paginate={paginate}
               />

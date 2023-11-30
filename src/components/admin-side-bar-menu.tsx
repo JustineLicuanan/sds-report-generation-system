@@ -1,5 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { OrganizationCategory } from '@prisma/client';
+import { useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '@trpc/react-query';
 import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,11 +20,18 @@ type InputsAnnouncement = z.infer<typeof announcementSchemas.create>;
 type InputsOrg = z.infer<typeof orgSchemas.create>;
 
 export default function AdminSideBarMenu() {
+  const queryClient = useQueryClient();
   const getOrgQuery = api.admin.org.get.useQuery();
   const createOrgMutation = api.admin.org.create.useMutation();
   const organizationList = getOrgQuery.data ?? [];
 
-  const createAnnouncementMutation = api.admin.announcement.create.useMutation();
+  const createAnnouncementMutation = api.admin.announcement.create.useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [getQueryKey(api.admin.announcement.get, undefined, 'query')],
+      });
+    },
+  });
 
   const sidebarMenu = [
     { id: 1, name: 'Home', imageLink: '/home_icon.svg', urlLink: `${paths.ADMIN}` },
@@ -68,20 +77,18 @@ export default function AdminSideBarMenu() {
     },
   ];
 
-  const createOrgForm = useForm<InputsOrg>({ resolver: zodResolver(orgSchemas.create) });
+  const createOrgForm = useForm<InputsOrg>({
+    resolver: zodResolver(orgSchemas.create),
+    defaultValues: { members: [{ email: '', name: '' }] },
+  });
   const createAnnouncementForm = useForm<InputsAnnouncement>({
     resolver: zodResolver(announcementSchemas.create),
+    defaultValues: { audience: [] },
   });
 
-  const { register, control, watch } = useForm({
-    defaultValues: {
-      organization: [{ email: '', position: '' }],
-    },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    name: 'organization',
-    control,
+  const membersFieldArray = useFieldArray({
+    name: 'members',
+    control: createOrgForm.control,
   });
 
   const onSuccessUpload: OnSuccessUpload = (result) => {
@@ -291,7 +298,13 @@ export default function AdminSideBarMenu() {
             <label htmlFor="audience-list" className="text-xl font-bold">
               Audience
             </label>
-            <SelectAnnouncement organization={organizationList} />
+            <SelectAnnouncement
+              organization={organizationList}
+              selectedValues={createAnnouncementForm.watch('audience')}
+              setSelectedValues={(newSelectedValues) =>
+                createAnnouncementForm.setValue('audience', newSelectedValues)
+              }
+            />
             <div className="mt-1 flex  justify-between">
               <div>
                 <label htmlFor="date-start" className="text-xl font-bold">
@@ -302,7 +315,7 @@ export default function AdminSideBarMenu() {
                   type="date"
                   id="date-start"
                   className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none"
-                  {...createAnnouncementForm.register('start')}
+                  // {...createAnnouncementForm.register('start')}
                 />
               </div>
               <div className="text-xl font-bold">
@@ -317,7 +330,7 @@ export default function AdminSideBarMenu() {
                   type="date"
                   id="date-end"
                   className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
-                  {...createAnnouncementForm.register('due')}
+                  // {...createAnnouncementForm.register('due')}
                 />
               </div>
             </div>
@@ -350,7 +363,7 @@ export default function AdminSideBarMenu() {
                   {...createAnnouncementForm.register('hasReport')}
                 />
                 <div className="peer h-5 w-9 rounded-full  bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
-                <span className="ms-3 text-sm font-bold text-black/80">With report </span>
+                <span className="ms-3 text-sm font-bold text-black/80">Has report </span>
               </label>
               <div className="group relative">
                 <div className="h-5 w-5 rounded-full border bg-gray text-center text-sm font-bold">
@@ -384,7 +397,7 @@ export default function AdminSideBarMenu() {
         className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
           createOrganization ? '' : 'invisible opacity-0'
         }`}
-        onSubmit={createOrgForm.handleSubmit(onSubmitOrg)}
+        onSubmit={createOrgForm.handleSubmit(onSubmitOrg, (err) => console.log(err))}
       >
         <div className="relative h-[90vh] w-[450px] overflow-auto  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  ease-in-out ">
           <button
@@ -459,12 +472,12 @@ export default function AdminSideBarMenu() {
                 Description
               </label>
               <textarea
-                name="organization-description"
                 id="org-description"
                 placeholder="Tell me about this organization"
                 cols={30}
                 rows={4}
                 className="border border-green px-2 py-1 text-lg"
+                {...createOrgForm.register('description')}
               ></textarea>
             </div>
             <div className="pt-3">
@@ -475,7 +488,7 @@ export default function AdminSideBarMenu() {
                   permission to.
                 </span>
               </div>
-              {fields.map((field, index) => (
+              {membersFieldArray.fields.map((field, index) => (
                 <div key={field.id} className="flex">
                   <div className="me-1 w-4/6">
                     <label htmlFor="email-address" className=" text-xl font-bold">
@@ -487,7 +500,7 @@ export default function AdminSideBarMenu() {
                       id="email-address"
                       placeholder="e.g music.organization@sample.com"
                       className=" mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none"
-                      {...register(`organization.${index}.email`)}
+                      {...createOrgForm.register(`members.${index}.email`)}
                     />
                   </div>
                   <div className="w-2/6">
@@ -498,7 +511,7 @@ export default function AdminSideBarMenu() {
                     <select
                       id="position"
                       className="mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none"
-                      {...register(`organization.${index}.position`)}
+                      {...createOrgForm.register(`members.${index}.name`)}
                     >
                       <option value="">Select a position</option>
                       <option value="President">President</option>
@@ -510,12 +523,12 @@ export default function AdminSideBarMenu() {
                   <button
                     type="button"
                     onClick={() => {
-                      if (!(fields.length === 1)) {
-                        remove(index);
+                      if (!(membersFieldArray.fields.length === 1)) {
+                        membersFieldArray.remove(index);
                       }
                     }}
                     className={`ms-1 h-9 self-end px-2 py-1 text-lg ${
-                      fields.length === 1
+                      membersFieldArray.fields.length === 1
                         ? 'cursor-not-allowed bg-red/50 text-white/50'
                         : 'bg-red text-white'
                     }`}
@@ -528,7 +541,7 @@ export default function AdminSideBarMenu() {
               <button
                 type="button"
                 onClick={() => {
-                  append({ email: '', position: '' });
+                  membersFieldArray.append({ email: '', name: '' });
                 }}
                 className="my-2 w-full cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
               >
@@ -546,7 +559,7 @@ export default function AdminSideBarMenu() {
               >
                 Cancel
               </button>
-              <button type="button" className=" rounded-md bg-yellow px-8 py-2 text-lg font-medium">
+              <button type="submit" className=" rounded-md bg-yellow px-8 py-2 text-lg font-medium">
                 Create
               </button>
             </div>

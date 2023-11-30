@@ -1,10 +1,10 @@
-import { type User } from '@prisma/client';
+import { type Organization } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { paths } from '~/meta';
 
-export default function OrganizationAvatar({ organization }: { organization: User[] }) {
+export default function OrganizationAvatar({ organization }: { organization: Organization[] }) {
   const router = useRouter();
   return (
     <>

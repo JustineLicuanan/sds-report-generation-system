@@ -25,7 +25,6 @@ export const getServerSideProps = (async (ctx) => {
 export default function AdminDashboardPage() {
   const getOrgQuery = api.admin.org.get.useQuery();
   const data = getOrgQuery.data ?? []; // Assuming getOrgQuery.data is an array of your data
-  console.log(data);
   // Calculate the number of items per group
   const itemsPerGroup = 2;
 

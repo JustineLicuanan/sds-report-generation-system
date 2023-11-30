@@ -1,3 +1,4 @@
+import { LogType } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -8,6 +9,7 @@ import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import Pagination from '~/components/pagination';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -22,21 +24,8 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AdminLogPage() {
-  const logData = [
-    {
-      name: 'Admin',
-      email: 'admin@example.com',
-      action: 'Sigin in',
-      date: '2023-11-27',
-    },
-    {
-      name: 'Admin',
-      email: 'admin@example.com',
-      action: 'Sigin in',
-      date: '2023-11-27',
-    },
-  ];
   const [search, setSearch] = useState('');
+  const getAuthLogsQuery = api.admin.log.get.useQuery({ type: LogType.AUTH });
 
   const tableRef = useRef(null);
 
@@ -46,11 +35,11 @@ export default function AdminLogPage() {
     sheet: 'auth',
   });
 
-  logData.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  getAuthLogsQuery?.data?.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  const filteredData = logData.filter((item) => {
+  const filteredData = getAuthLogsQuery?.data?.filter((item) => {
     return search.toLowerCase() === '' || item.name.toLowerCase().includes(search);
   });
 
@@ -59,7 +48,7 @@ export default function AdminLogPage() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentData = filteredData?.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -133,12 +122,12 @@ export default function AdminLogPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentData.length === 0 ? ( // Check if data is empty
+                  {currentData?.length === 0 ? ( // Check if data is empty
                     <tr>
                       <td colSpan={tableHeader.length}>No result found</td>
                     </tr>
                   ) : (
-                    currentData.map((data, index) => (
+                    currentData?.map((data, index) => (
                       <tr key={index} className=" even:bg-[#808080]/20">
                         <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
                           {data.name}
@@ -150,7 +139,7 @@ export default function AdminLogPage() {
                           {data.action}
                         </td>
                         <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                          {data.date}
+                          {data.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
                         </td>
                       </tr>
                     ))
@@ -159,7 +148,7 @@ export default function AdminLogPage() {
               </table>
               <Pagination
                 itemsPerPage={itemsPerPage}
-                totalItems={logData.length}
+                totalItems={getAuthLogsQuery?.data?.length ?? 0}
                 currentPage={currentPage}
                 paginate={paginate}
               />

@@ -4,8 +4,8 @@ export const announcementSchemas = {
   create: z.object({
     subject: z.string().trim().min(1),
     description: z.string().trim().min(1),
-    start: z.string().datetime({ offset: true }).nullable().optional(),
-    due: z.string().datetime({ offset: true }).nullable().optional(),
+    // start: z.string().datetime({ offset: true }).nullable().optional(),
+    // due: z.string().datetime({ offset: true }).nullable().optional(),
     hasReport: z.boolean(),
     audience: z.object({ id: z.string().cuid() }).array(),
   }),
