@@ -129,7 +129,7 @@ export default function AdminOrgReportPage() {
           {/* COMMENTS */}
           <div className="relative mb-10 ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
-            <div className="h-[40vh] overflow-y-auto" ref={containerRef}>
+            <div className="h-[40vh] overflow-y-auto scroll-smooth" ref={containerRef}>
               {reportData?.comments.map((data, index) => (
                 <div
                   key={index}

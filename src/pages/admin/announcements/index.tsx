@@ -126,21 +126,24 @@ export default function AnnouncementPage() {
                 <h4 className="font-semibold">Date:</h4>
                 <div className="ms-1 text-xl font-medium">
                   {getAnnouncementQuery?.data
-                    ?.find(({ id }) => selectedNotification)
+                    ?.find(({ id }) => id === selectedNotification)
                     ?.due?.toLocaleString('en-US', { timeZone: 'Asia/Manila' }) ?? 'N/A'}
                 </div>
               </div>
               <div className="flex py-2 text-xl">
                 <h4 className="font-semibold">Description:</h4>
                 <div className="ms-1 text-xl font-medium">
-                  {getAnnouncementQuery?.data?.find(({ id }) => selectedNotification)?.description}
+                  {
+                    getAnnouncementQuery?.data?.find(({ id }) => id === selectedNotification)
+                      ?.description
+                  }
                 </div>
               </div>
               <div className="flex py-2 text-xl">
                 <h4 className="font-semibold">Audience:</h4>
                 <div className="ms-1 text-xl font-medium">
                   {getAnnouncementQuery?.data
-                    ?.find(({ id }) => selectedNotification)
+                    ?.find(({ id }) => id === selectedNotification)
                     ?.audience.map(({ name }) => name)
                     .join(', ')}
                 </div>
