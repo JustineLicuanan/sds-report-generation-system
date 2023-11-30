@@ -76,8 +76,10 @@ export default function SignOutPage({
                 <button
                   type="button"
                   onClick={() => {
-                    if (UserRole.ADMIN === 'ADMIN') {
+                    if (role === UserRole.ADMIN) {
                       router.push(paths.ADMIN);
+                    } else {
+                      router.push(paths.ORGANIZATION);
                     }
                   }}
                   className="rounded-md bg-yellow px-8 py-2 text-lg font-medium"

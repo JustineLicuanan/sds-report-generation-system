@@ -37,9 +37,16 @@ respective docs.
 - Make sort functional for other web pages
 - Make it more mobile responsive
 - Change the web page link for user and admin in some pages e.g logs.
-- Add a pdf viewer with features (Full screen, download)
 
 ## Changelog
+
+### Version 0.10.11
+
+- The data now in `Organization Dashboard` is connected to database.
+- Create report in `Organization` is now working.
+- `Organization's Report` is now real data including .
+- `Announcement` page of organization is now displaying the announcements from admin.
+- `sign out's` back button is now working.
 
 ### Version 0.10.10
 
