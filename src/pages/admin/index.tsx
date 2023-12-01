@@ -10,6 +10,7 @@ import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { getOrganizationsCounts } from '~/utils/getOrganizationsCounts';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -23,7 +24,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AdminDashboardPage() {
-  const getOrgQuery = api.admin.org.get.useQuery();
+  const getOrgQuery = api.admin.org.get.useQuery({ includeReports: true });
   const data = getOrgQuery.data ?? []; // Assuming getOrgQuery.data is an array of your data
   // Calculate the number of items per group
   const itemsPerGroup = 2;
@@ -68,8 +69,8 @@ export default function AdminDashboardPage() {
               }}
               data-splide='{"type":"loop"}'
             >
-              {data.map((item, itemIndex) => (
-                <SplideSlide key={itemIndex}>
+              {getOrganizationsCounts(data).map((item) => (
+                <SplideSlide key={item.id}>
                   <div className="mx-2 rounded-md bg-white py-2">
                     <div className="my-1 text-center text-lg font-bold">{item.name}</div>
                     <div className="flex  items-center justify-center">
@@ -77,16 +78,22 @@ export default function AdminDashboardPage() {
                       <div className="mx-5">
                         <div className="border-b-2 border-b-black px-1 text-center text-lg font-medium">
                           Pending Appointment <br />
-                          <span className="text-2xl font-semibold text-yellow">0</span>
+                          <span className="text-2xl font-semibold text-yellow">
+                            {item._count.reports.hasSchedule}
+                          </span>
                         </div>
                         <div className="flex  text-center ">
                           <div className="border-r-2 border-r-black  px-1 text-lg font-medium">
                             Approved <br />
-                            <span className="text-2xl font-semibold text-yellow">5</span>
+                            <span className="text-2xl font-semibold text-yellow">
+                              {item._count.reports.status.APPROVED}
+                            </span>
                           </div>
                           <div className="px-1 text-center text-lg font-medium">
                             Total Reports <br />
-                            <span className="text-2xl font-semibold text-yellow">6</span>
+                            <span className="text-2xl font-semibold text-yellow">
+                              {item._count.reports._all}
+                            </span>
                           </div>
                         </div>
                       </div>
