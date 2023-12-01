@@ -2,6 +2,8 @@ import { NotificationType, Notification as TNotification } from '@prisma/client'
 
 export function generateNotificationLink(notification: TNotification) {
   switch (notification.type) {
+    case NotificationType.ANNOUNCEMENT:
+      return `/announcements#${notification.announcementId}`;
     case NotificationType.REPORT:
       return `/reports/${notification.reportId}`;
     case NotificationType.REPORT_COMMENT:
