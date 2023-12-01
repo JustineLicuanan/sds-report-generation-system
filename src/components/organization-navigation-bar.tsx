@@ -3,39 +3,23 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { paths } from '~/meta';
+import { api } from '~/utils/api';
+import { generateNotificationLink } from '~/utils/generateNotificationLink';
 import TruncateWord from './truncate-word';
 
 export default function OrgNavBar() {
-  const notification = [
-    {
-      subject: 'File a report today.',
-      date: '10/05/23',
-      isRead: false,
-      description: 'File a report today for your organization.',
-    },
-    {
-      subject: 'File a report tomorrow.',
-      date: '10/04/23',
-      isRead: false,
-      description: 'File a report tomorrow for your organization.',
-    },
-    {
-      subject: 'File a report from yesterday.',
-      date: '10/06/23',
-      isRead: false,
-      description: 'File a report from yesterday for your organization.',
-    },
-  ];
+  const router = useRouter();
 
   const [showNotification, setShowNotification] = useState(false);
   const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
 
-  const router = useRouter();
+  const getNotificationsQuery = api.shared.notification.get.useQuery();
 
-  notification.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  // getNotificationsQuery?.data?.sort((a, b) => {
+  //   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  // });
+
   return (
     <>
       <nav className="sticky top-0 z-[999] flex max-h-[12vh] min-h-[4vh] items-center">
@@ -81,7 +65,7 @@ export default function OrgNavBar() {
               } absolute right-[30px] top-[45px] h-[500px] w-[375px] overflow-auto bg-[#FFFFFF] px-2 pt-2 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]`}
             >
               <h1 className="py-2 text-center text-3xl font-bold tracking-tight">Notifications</h1>
-              {notification.map((notif, index) => (
+              {getNotificationsQuery?.data?.map((notif, index) => (
                 <button
                   key={index}
                   className={`mb-1 h-fit w-full rounded ${
@@ -89,7 +73,8 @@ export default function OrgNavBar() {
                   }  text-left hover:bg-yellow`}
                   onClick={() => {
                     // setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
-                    router.push(`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${paths.REPORT_CREATE}`);
+                    router.push(`/organization${generateNotificationLink(notif)}`);
+                    setShowNotification(false);
                   }}
                 >
                   <div
@@ -99,7 +84,7 @@ export default function OrgNavBar() {
                         : 'font-bold text-black/80 '
                     } px-2 py-2 text-center text-sm `}
                   >
-                    {notif.date}
+                    {notif.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
                   </div>
                   <div
                     className={`${
@@ -108,7 +93,7 @@ export default function OrgNavBar() {
                         : 'font-bold text-black/80 '
                     } -mt-4 px-2 py-2 text-center  tracking-tight`}
                   >
-                    <TruncateWord text={notif.subject} maxLength={33} fontSize="text-lg" />
+                    <TruncateWord text={notif.message} maxLength={33} fontSize="text-lg" />
                   </div>
                 </button>
               ))}

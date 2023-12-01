@@ -78,13 +78,14 @@ export default function AnnouncementPage() {
                 getAnnouncementQuery?.data?.map((data) => (
                   <button
                     type="button"
+                    id={data.id}
+                    key={data.id}
+                    className="mb-4 w-full bg-gray px-3 py-2 hover:bg-yellow"
                     onClick={() => {
                       return (
                         setShowAnnouncement(!showAnnouncement), setSelectedNotification(data.id)
                       );
                     }}
-                    className="mb-4 w-full bg-gray px-3 py-2 hover:bg-yellow"
-                    key={data.id}
                   >
                     <div className="flex justify-between py-2">
                       <div>

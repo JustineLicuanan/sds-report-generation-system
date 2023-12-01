@@ -11,6 +11,7 @@ export const notificationSchemas = {
       includeAnnouncement: z.literal(true).optional(),
       includeReport: z.literal(true).optional(),
       includeComment: z.literal(true).optional(),
+      isAsc: z.literal(true).optional(),
     })
     .optional(),
 

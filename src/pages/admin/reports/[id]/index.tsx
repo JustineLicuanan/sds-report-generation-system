@@ -17,8 +17,10 @@ import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { commentSchemas } from '~/zod-schemas/admin/comment';
+import { reportSchemas } from '~/zod-schemas/admin/report';
 
-type InputsComment = z.infer<typeof commentSchemas.createInReport>;
+type CommentInputs = z.infer<typeof commentSchemas.createInReport>;
+type DueInputs = z.infer<typeof reportSchemas.due>;
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -42,7 +44,7 @@ export default function AdminOrgReportPage() {
   const reportData = getReportQuery.data?.[0];
 
   const createCommentMutation = api.admin.comment.createInReport.useMutation();
-  const createCommentForm = useForm<InputsComment>({
+  const createCommentForm = useForm<CommentInputs>({
     resolver: zodResolver(commentSchemas.createInReport),
     values: {
       reportId: reportData?.id!,
@@ -56,15 +58,15 @@ export default function AdminOrgReportPage() {
   });
 
   const updateReportStatusMutation = api.admin.report.updateStatus.useMutation();
+  const approveReportForm = useForm<DueInputs>({ resolver: zodResolver(reportSchemas.due) });
 
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejected, setRejected] = useState(false);
 
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [scheduleAppointment, setScheduleAppointment] = useState(false);
-  const [due, setDue] = useState<string | undefined>(undefined);
 
-  const onSubmitComment: SubmitHandler<InputsComment> = async (values) => {
+  const onSubmitComment: SubmitHandler<CommentInputs> = async (values) => {
     await createCommentMutation.mutateAsync(values);
     toast.success('Commented Successfully, refresh the page!', {
       position: 'bottom-right',
@@ -86,7 +88,7 @@ export default function AdminOrgReportPage() {
     }
   };
 
-  const updateStatus = async (status: ReportStatus) => {
+  const updateReportStatus = async (status: ReportStatus, due?: string) => {
     await updateReportStatusMutation.mutateAsync({
       id: reportData?.id!,
       logData: {
@@ -99,8 +101,13 @@ export default function AdminOrgReportPage() {
         userId: reportData?.createdById!,
       },
       status,
-      due: due && undefined,
+      due,
     });
+  };
+
+  const onSubmitApproveReport: SubmitHandler<DueInputs> = async ({ due }) => {
+    await updateReportStatus(ReportStatus.APPROVED, due);
+    setScheduleAppointment(!scheduleAppointment);
   };
 
   const statusIsNotPending =
@@ -271,7 +278,7 @@ export default function AdminOrgReportPage() {
             <button
               type="button"
               onClick={async () => {
-                await updateStatus(ReportStatus.REJECTED);
+                await updateReportStatus(ReportStatus.REJECTED);
                 setShowRejectModal(!showRejectModal);
                 setRejected(!rejected);
               }}
@@ -333,7 +340,12 @@ export default function AdminOrgReportPage() {
           scheduleAppointment ? '' : 'invisible opacity-0'
         }`}
       >
-        <div className="relative h-[200px] w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+        <form
+          className="relative h-[200px] w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]"
+          onSubmit={approveReportForm.handleSubmit(onSubmitApproveReport, (err) => {
+            console.log(err);
+          })}
+        >
           <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Appointment</h1>
           <div className="h-[1px] w-full bg-black "></div>
           <div className="flex flex-col items-center justify-around p-2">
@@ -345,8 +357,7 @@ export default function AdminOrgReportPage() {
               type="date"
               id="schedule-report"
               className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none"
-              onChange={(e) => setDue(e.target.value.toString())}
-              value={due}
+              {...approveReportForm.register('due')}
             />
           </div>
           <div className="absolute bottom-3 left-7">
@@ -360,17 +371,13 @@ export default function AdminOrgReportPage() {
           </div>
           <div className="absolute bottom-3 right-7">
             <button
-              type="button"
-              onClick={async () => {
-                await updateStatus(ReportStatus.APPROVED);
-                setScheduleAppointment(!scheduleAppointment);
-              }}
+              type="submit"
               className="rounded-md bg-green px-8 py-2 text-lg font-medium text-white"
             >
               Set
             </button>
           </div>
-        </div>
+        </form>
       </div>
 
       <ToastContainer />
