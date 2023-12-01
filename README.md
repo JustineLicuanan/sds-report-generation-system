@@ -40,6 +40,13 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.12
+
+- Added a select all option in Create Announcement.
+- Added a notification alert when creating a report.
+- Fixed the datas in admin's view org's report. 
+- Admin can now reject a report.
+
 ### Version 0.10.11
 
 - The data now in `Organization Dashboard` is connected to database.

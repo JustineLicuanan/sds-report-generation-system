@@ -1,9 +1,14 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ReportStatus } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
+import { z } from 'zod';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
@@ -11,6 +16,9 @@ import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { commentSchemas } from '~/zod-schemas/admin/comment';
+
+type InputsComment = z.infer<typeof commentSchemas.createInReport>;
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -24,61 +32,79 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AdminOrgReportPage() {
-  const orgComment = [
-    {
-      id: 1,
-      time: '10:50 pm',
-      comment: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis enim vitae sed!',
-    },
-    {
-      id: 2,
-      time: '10:52 pm',
-      comment: 'Lorem ipsum dolor sit amet consectetur Corporis enim vitae sed!',
-    },
-  ];
-
-  const myComment = [
-    {
-      time: '10:55 pm',
-      comment: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis enim vitae sed!',
-    },
-    {
-      time: '10:58 pm',
-      comment: 'Lorem ipsum dolor sit amet.',
-    },
-  ];
-
   const { data: session } = useSession();
-
   const router = useRouter();
-  const getReportQuery = api.shared.report.get.useQuery({
+  const getReportQuery = api.admin.report.get.useQuery({
     id: router.query.id as string,
     includeComments: true,
+    includeOrganization: true,
   });
   const reportData = getReportQuery.data?.[0];
 
-  const { organizationName, categoryName } = router.query;
+  const createCommentMutation = api.admin.comment.createInReport.useMutation();
+  const createCommentForm = useForm<InputsComment>({
+    resolver: zodResolver(commentSchemas.createInReport),
+    values: {
+      reportId: reportData?.id!,
+      content: '',
+      notificationData: {
+        organizationId: reportData?.organizationId!,
+        reportVisibility: reportData?.visibility!,
+        userId: reportData?.createdById!,
+      },
+    },
+  });
 
-  const [comment, setComment] = useState(''); // Comment box
-  const [currentComment, setCurrentComment] = useState(myComment); // Comment data
+  const updateReportStatusMutation = api.admin.report.updateStatus.useMutation();
+
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejected, setRejected] = useState(false);
-  const [rejectAlert, setRejectAlert] = useState(false);
 
   const [showApproveModal, setShowApproveModal] = useState(false);
-  const [approveAlert, setApproveAlert] = useState(false);
-
   const [scheduleAppointment, setScheduleAppointment] = useState(false);
-  const [appointmentAlert, setAppointmentAlert] = useState(false);
+  const [due, setDue] = useState<string | undefined>(undefined);
 
-  // Smooth Scrolling when adding a comment.
-  const containerRef = useRef<HTMLDivElement>(null);
+  const onSubmitComment: SubmitHandler<InputsComment> = async (values) => {
+    await createCommentMutation.mutateAsync(values);
+    toast.success('Commented Successfully, refresh the page!', {
+      position: 'bottom-right',
+    });
+    createCommentForm.reset(undefined, { keepDefaultValues: true });
+  };
 
+  const scrollableContainerRef = useRef(null);
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    // Scroll to the bottom when the component mounts
+    scrollToBottom();
+  }, [reportData]); // You might want to include any other dependencies that affect the scrolling behavior
+
+  const scrollToBottom = () => {
+    if (scrollableContainerRef.current) {
+      (scrollableContainerRef.current as HTMLDivElement).scrollTop = (
+        scrollableContainerRef.current as HTMLDivElement
+      ).scrollHeight;
     }
-  }, [currentComment]);
+  };
+
+  const updateStatus = async (status: ReportStatus) => {
+    await updateReportStatusMutation.mutateAsync({
+      id: reportData?.id!,
+      logData: {
+        category: reportData?.category!,
+        name: reportData?.organization.name!,
+        subject: reportData?.subject!,
+      },
+      notificationData: {
+        organizationId: reportData?.organizationId!,
+        userId: reportData?.createdById!,
+      },
+      status,
+      due: due && undefined,
+    });
+  };
+
+  const statusIsNotPending =
+    reportData?.status === ReportStatus.REJECTED || reportData?.status === ReportStatus.APPROVED;
   return (
     <>
       <Head>
@@ -95,14 +121,14 @@ export default function AdminOrgReportPage() {
         <div className="mx-3 my-4 flex  w-full flex-col md:flex-row">
           <div className="ms-1 min-h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <div className="flex justify-between">
-              <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
-                {organizationName ?? 'Org'} - {categoryName ?? 'Report Category'}
+              <h1 className="text-xl font-bold uppercase tracking-tight md:text-2xl lg:text-3xl">
+                {reportData?.subject}
               </h1>
-              {rejected ? (
+              {reportData?.status === ReportStatus.REJECTED ? (
                 <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-red md:text-2xl'>
                   Rejected
                 </h1>
-              ) : approveAlert ? (
+              ) : reportData?.status === ReportStatus.APPROVED ? (
                 <h1 className='className="text-xl lg:text-3xl" font-bold tracking-tight text-green md:text-2xl'>
                   Approved
                 </h1>
@@ -113,110 +139,107 @@ export default function AdminOrgReportPage() {
               )}
             </div>
             <div className="mt-7 flex justify-between text-xl font-medium">
-              <h2>[Subject]</h2> <h2 className="text-right">[Date]</h2>
+              <h2>
+                {reportData?.category.charAt(0).toUpperCase()! +
+                  reportData?.category.slice(1).toLowerCase()!}
+              </h2>{' '}
+              <h2 className="text-right">
+                {reportData?.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
+              </h2>
             </div>
             <div className="mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] border-green text-4xl">
-              {reportData?.file ? <PdfViewer pdf={reportData?.file} /> : '.PDF'}
-            </div>``
+              {reportData?.file ? <PdfViewer pdf={reportData?.file} /> : 'PDF'}
+            </div>
             <div>
               <h2 className="mt-4 text-xl font-medium">Description:</h2>
-              Lorem ipsum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem
-              ipsum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              {reportData?.description}
             </div>
           </div>
 
           {/* COMMENTS */}
-          <div className="relative mb-10 ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+          <form
+            className="relative mb-10  ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]"
+            onSubmit={createCommentForm.handleSubmit(onSubmitComment, (error) =>
+              console.log(error)
+            )}
+          >
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
-            <div className="h-[40vh] overflow-y-auto scroll-smooth" ref={containerRef}>
-              {reportData?.comments.map((data, index) => (
-                <div
-                  key={index}
-                  className={`${
-                    session?.user.id === data.createdById ? 'text-right' : ''
-                  } flex flex-col px-5`}
-                >
-                  <div className="my-1 text-center text-xs font-light">
-                    {data.createdAt.toString()}
-                  </div>
-                  <div className="font-bold">
-                    {data.createdByName} {}
-                  </div>
+            <div className="h-[40vh] overflow-y-auto scroll-smooth" ref={scrollableContainerRef}>
+              {reportData?.comments.length ? (
+                reportData?.comments.map((data) => (
                   <div
-                    className={`${session?.user.id === data.createdById ? 'self-end' : ''} w-3/4`}
+                    key={data.id}
+                    id={data.id}
+                    className={`${
+                      session?.user.id === data.createdById ? 'text-right' : ''
+                    } flex flex-col px-5`}
                   >
-                    {data.content}
+                    <div className="my-1 text-center text-xs font-light">
+                      {data.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
+                    </div>
+                    <div className="font-bold">
+                      {data.organizationName} {data.createdByName}
+                    </div>
+                    <div
+                      className={`${session?.user.id === data.createdById ? 'self-end' : ''} w-3/4`}
+                    >
+                      {data.content}
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="flex flex-col items-center px-5">
+                  <div className="font-bold">There is no current comment.</div>
                 </div>
-              ))}
+              )}
             </div>
             {/* ADD A COMMENT */}
             <div className="mx-3 mt-6">
-              <div className="h-[1px] bg-[#9b8888]"></div>
-              {/* <input
-                type="text"
-                placeholder="Add a comment"
-                className="mt-2 h-14 w-3/4 border-[1px] border-green px-3 py-1 text-lg outline-none"
-              /> */}
-
+              <div className="h-[1px] bg-gray"></div>
               <textarea
-                name="comment"
                 id="comment"
                 rows={2}
                 placeholder="Add a comment"
                 className="mt-2 w-full border-[1px] border-green px-3 py-1 text-lg outline-none"
-                onChange={(e) => setComment(e.target.value)}
-                value={comment}
+                {...createCommentForm.register('content')}
               ></textarea>
               <div className="flex justify-end">
                 <button
-                  type="button"
+                  type="submit"
                   className={`${
-                    comment ? 'bg-yellow' : 'cursor-not-allowed bg-yellow/50 text-black/50'
+                    createCommentForm.watch('content') ? 'bg-yellow' : 'bg-yellow/50 text-black/50'
                   } mt-2 rounded-md  px-4 py-2 text-lg font-medium`}
-                  onClick={() => {
-                    if (!comment) {
-                    } else {
-                      setCurrentComment((currentComment) => {
-                        return [...currentComment, { time: '11:00 pm', comment: comment }];
-                      });
-                      setComment('');
-                    }
-                  }}
+                  disabled={!createCommentForm.watch('content')}
                 >
                   Comment
                 </button>
               </div>
               <div className="mt-2 h-[1px] bg-gray"></div>
             </div>
+
             <div className="absolute bottom-4 right-3">
               <button
                 type="button"
                 onClick={() => setShowRejectModal(!showRejectModal)}
                 className={`${
-                  rejected || approveAlert
-                    ? 'cursor-not-allowed bg-red/50 text-white/50'
-                    : 'bg-red text-white'
-                } me-2 rounded-md  px-4 py-2 text-lg font-medium `}
-                disabled={rejected || approveAlert}
+                  statusIsNotPending ? 'opacity-50' : ''
+                } me-2 rounded-md bg-red px-4  py-2 text-lg font-medium text-white`}
+                disabled={statusIsNotPending}
               >
                 Reject
               </button>
               <button
                 type="button"
-                onClick={() => setShowApproveModal(!showApproveModal)}
                 className={`${
-                  rejected || approveAlert
-                    ? 'cursor-not-allowed bg-yellow/50 text-black/50'
-                    : 'bg-yellow '
-                } rounded-md px-4 py-2 text-lg font-medium`}
-                disabled={rejected || approveAlert}
+                  statusIsNotPending ? 'opacity-50' : ''
+                } rounded-md bg-yellow px-4 py-2 text-lg font-medium`}
+                disabled={statusIsNotPending}
+                onClick={() => setShowApproveModal(!showApproveModal)}
               >
                 Approve
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </main>
 
@@ -247,10 +270,10 @@ export default function AdminOrgReportPage() {
           <div className="absolute bottom-3 right-7">
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
+                await updateStatus(ReportStatus.REJECTED);
                 setShowRejectModal(!showRejectModal);
                 setRejected(!rejected);
-                setRejectAlert(!rejectAlert);
               }}
               className="rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
             >
@@ -260,51 +283,6 @@ export default function AdminOrgReportPage() {
         </div>
       </div>
 
-      {rejectAlert && (
-        <div
-          id="alert-3"
-          className="fixed bottom-[5%] left-[2%] z-[101] mb-4 flex items-center rounded-lg bg-blue-50 p-4 text-blue-800 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]"
-          role="alert"
-        >
-          <svg
-            className="h-4 w-4 flex-shrink-0"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div className="ml-3 text-sm font-medium">The report has been rejected.</div>
-          <button
-            type="button"
-            className="bg-green-50 text-green-500 hover:bg-green-200 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 -mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg p-1.5 focus:ring-2"
-            data-dismiss-target="#alert-3"
-            aria-label="Close"
-            onClick={() => setRejectAlert(!rejectAlert)}
-          >
-            <span className="sr-only">Close</span>
-            <svg
-              className="h-3 w-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-          </button>
-        </div>
-      )}
-
-      {/* APPROVED MODAL */}
       <div
         className={`fixed left-0 top-0 z-[999] flex h-full w-full items-center justify-center  bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
           showApproveModal ? '' : 'invisible opacity-0'
@@ -340,7 +318,6 @@ export default function AdminOrgReportPage() {
               type="button"
               onClick={() => {
                 setShowApproveModal(!showApproveModal);
-                setApproveAlert(!approveAlert);
                 setScheduleAppointment(!scheduleAppointment);
               }}
               className="rounded-md bg-green px-8 py-2 text-lg font-medium text-white"
@@ -351,51 +328,6 @@ export default function AdminOrgReportPage() {
         </div>
       </div>
 
-      {/* {approveAlert && (
-        <div
-          id="alert-3"
-          className="absolute bottom-[5%] left-[2%] z-[101] mb-4 flex items-center rounded-lg bg-blue-50 p-4 text-blue-800 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]"
-          role="alert"
-        >
-          <svg
-            className="h-4 w-4 flex-shrink-0"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div className="ml-3 text-sm font-medium">The report has been aprroved.</div>
-          <button
-            type="button"
-            className="bg-green-50 text-green-500 hover:bg-green-200 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 -mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg p-1.5 focus:ring-2"
-            data-dismiss-target="#alert-3"
-            aria-label="Close"
-            onClick={() => setApproveAlert(false)}
-          >
-            <span className="sr-only">Close</span>
-            <svg
-              className="h-3 w-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-          </button>
-        </div>
-      )} */}
-
-      {/* Set Schedule */}
       <div
         className={`fixed left-0 top-0 z-[999] flex h-full w-full items-center justify-center  bg-black/[.50] px-4 transition-opacity duration-300 ease-in-out ${
           scheduleAppointment ? '' : 'invisible opacity-0'
@@ -411,9 +343,10 @@ export default function AdminOrgReportPage() {
             </label>
             <input
               type="date"
-              name=""
               id="schedule-report"
               className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none"
+              onChange={(e) => setDue(e.target.value.toString())}
+              value={due}
             />
           </div>
           <div className="absolute bottom-3 left-7">
@@ -428,9 +361,9 @@ export default function AdminOrgReportPage() {
           <div className="absolute bottom-3 right-7">
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
+                await updateStatus(ReportStatus.APPROVED);
                 setScheduleAppointment(!scheduleAppointment);
-                setAppointmentAlert(!appointmentAlert);
               }}
               className="rounded-md bg-green px-8 py-2 text-lg font-medium text-white"
             >
@@ -440,49 +373,7 @@ export default function AdminOrgReportPage() {
         </div>
       </div>
 
-      {appointmentAlert && (
-        <div
-          id="alert-3"
-          className="absolute bottom-[5%] left-[2%] z-[101] mb-4 flex items-center rounded-lg bg-blue-50 p-4 text-blue-800 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]"
-          role="alert"
-        >
-          <svg
-            className="h-4 w-4 flex-shrink-0"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div className="ml-3 text-sm font-medium">Set date successfully</div>
-          <button
-            type="button"
-            className="bg-green-50 text-green-500 hover:bg-green-200 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 -mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg p-1.5 focus:ring-2"
-            data-dismiss-target="#alert-3"
-            aria-label="Close"
-            onClick={() => setAppointmentAlert(!appointmentAlert)}
-          >
-            <span className="sr-only">Close</span>
-            <svg
-              className="h-3 w-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-          </button>
-        </div>
-      )}
+      <ToastContainer />
     </>
   );
 }

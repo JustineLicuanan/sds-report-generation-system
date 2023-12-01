@@ -103,7 +103,7 @@ export default function Report({ logs }: { logs: Log[] }) {
                       }}
                       className={`${
                         log.action !== LogAction.PENDING
-                          ? 'cursor-not-allowed bg-gray/40'
+                          ? 'cursor-not-allowed opacity-50'
                           : 'group/update'
                       } relative mx-2 flex flex-col items-center justify-center rounded-sm bg-gray p-2`}
                     >
@@ -121,7 +121,7 @@ export default function Report({ logs }: { logs: Log[] }) {
                       }}
                       className={`${
                         log.action !== LogAction.PENDING
-                          ? 'cursor-not-allowed bg-red/20'
+                          ? 'cursor-not-allowed opacity-50'
                           : 'group/delete'
                       }  relative mx-2 flex flex-col items-center justify-center rounded-sm bg-red p-2`}
                     >

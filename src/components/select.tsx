@@ -25,9 +25,16 @@ export default function SelectAnnouncement({
   ];
 
   const handleButtonClick = (category: string) => {
-    const filteredOptions = options.filter((option) => option.category === category);
-    const newSelectedValues = filteredOptions.map((option) => ({ id: option.value }));
-    setSelectedValues(newSelectedValues);
+    if (category === 'All') {
+      // If the button is "All", select all options
+      const newSelectedValues = options.map((option) => ({ id: option.value }));
+      setSelectedValues(newSelectedValues);
+    } else {
+      // If it's a specific category button, filter options based on the category
+      const filteredOptions = options.filter((option) => option.category === category);
+      const newSelectedValues = filteredOptions.map((option) => ({ id: option.value }));
+      setSelectedValues(newSelectedValues);
+    }
   };
 
   return (
@@ -53,6 +60,13 @@ export default function SelectAnnouncement({
       />
 
       <div className="flex gap-2">
+      <button
+            type="button"
+            className="my-2 w-1/3 cursor-pointer rounded-md bg-gray py-2 text-lg font-medium hover:bg-yellow"
+            onClick={() => handleButtonClick("All")}
+          >
+            All
+          </button>
         {orgCategory.map((org, index) => (
           <button
             key={index}

@@ -4,7 +4,9 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
+import NotificationAlert from '~/components/notification-alert';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
@@ -37,7 +39,10 @@ export default function CreateReportPage() {
   const router = useRouter();
   const onSubmitReport: SubmitHandler<InputsReport> = async (values) => {
     await createReportMutation.mutateAsync(values);
-    router.push(`${paths.ORGANIZATION}`);
+    toast.success('Created Report Successfully!', {
+      position: 'bottom-right',
+    });
+    setTimeout(() => router.push(`${paths.ORGANIZATION}`), 1500);
   };
 
   const onSuccessUpload: OnSuccessUpload = (result) => {
@@ -99,7 +104,7 @@ export default function CreateReportPage() {
               className="mt-1 h-9 w-2/5 border-[1px] border-green px-2  py-1 text-lg outline-none"
               {...createReportForm.register('announcementId')}
             >
-              <option value="">N/A</option>
+              <option value="n/a">N/A</option>
               {getAnnouncementQuery.data?.map((announcement) => (
                 <option key={announcement.id} value={announcement.id}>
                   {announcement.subject}
@@ -128,19 +133,6 @@ export default function CreateReportPage() {
                 'PDF'
               )}
             </div>
-            {/* <label
-              htmlFor="upload-pdf"
-              className="mt-2 cursor-pointer rounded-md bg-yellow px-4 py-2 text-center text-lg font-bold"
-            >
-              Upload
-            </label> */}
-            {/* <input
-              type="file"
-              id="upload-pdf"
-              accept=".pdf"
-              className="hidden"
-              {...createReportForm.register('file')}
-            /> */}
             <UploadButton
               className="my-3 cursor-pointer rounded-md  bg-yellow px-8 py-2 text-lg font-medium"
               folder="report-files"
@@ -187,6 +179,7 @@ export default function CreateReportPage() {
           </form>
         </div>
       </main>
+      <NotificationAlert />
     </>
   );
 }

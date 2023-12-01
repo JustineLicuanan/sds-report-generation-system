@@ -6,7 +6,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
+import NotificationAlert from '~/components/notification-alert';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
@@ -30,27 +32,6 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function UserOrgReportPage() {
-  const adminComment = [
-    {
-      time: '10:50 pm',
-      comment: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis enim vitae sed!',
-    },
-    {
-      time: '10:52 pm',
-      comment: 'Lorem ipsum dolor sit amet consectetur Corporis enim vitae sed!',
-    },
-  ];
-  const myComment = [
-    {
-      time: '10:55 pm',
-      comment: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis enim vitae sed!',
-    },
-    {
-      time: '10:58 pm',
-      comment: 'Lorem ipsum dolor sit amet.',
-    },
-  ];
-
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -68,23 +49,26 @@ export default function UserOrgReportPage() {
 
   const onSubmitComment: SubmitHandler<InputsComment> = async (values) => {
     await createCommentMutation.mutateAsync(values);
+    toast.success('Commented Successfully, refresh the page!', {
+      position: 'bottom-right',
+    });
     createCommentForm.reset(undefined, { keepDefaultValues: true });
   };
 
-  // const [comment, setComment] = useState(''); // Comment box
-  const [currentComment, setCurrentComment] = useState(myComment); // Comment data
-  const [commentButton, setCommentButton] = useState(false);
-
-  const [showRejectModal, setShowRejectModal] = useState(false);
-  // Smooth Scrolling when adding a comment.
-  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollableContainerRef = useRef(null);
 
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-  }, [currentComment]);
+    // Scroll to the bottom when the component mounts
+    scrollToBottom();
+  }, [reportData]); // You might want to include any other dependencies that affect the scrolling behavior
 
+  const scrollToBottom = () => {
+    if (scrollableContainerRef.current) {
+      (scrollableContainerRef.current as HTMLDivElement).scrollTop = (
+        scrollableContainerRef.current as HTMLDivElement
+      ).scrollHeight;
+    }
+  };
   return (
     <>
       <Head>
@@ -144,7 +128,7 @@ export default function UserOrgReportPage() {
             )}
           >
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
-            <div className="h-[40vh] overflow-y-auto scroll-smooth" ref={containerRef}>
+            <div className="h-[40vh] overflow-y-auto scroll-smooth" ref={scrollableContainerRef}>
               {reportData?.comments.length ? (
                 reportData?.comments.map((data) => (
                   <div
@@ -199,6 +183,7 @@ export default function UserOrgReportPage() {
           </form>
         </div>
       </main>
+      <NotificationAlert />
     </>
   );
 }

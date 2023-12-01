@@ -1,4 +1,4 @@
-import { LogType } from '@prisma/client';
+import { LogAction, LogType } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -107,9 +107,14 @@ export default function OrganizationPage() {
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
             <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
-            <Report logs={logList} />
+            <Report logs={logList.filter((log) => log.action === LogAction.PENDING)} />
           </div>
           <div className="my-2 h-2 rounded-md bg-green"> </div>
+          <Report
+            logs={logList.filter(
+              (log) => log.action === LogAction.APPROVED || log.action === LogAction.REJECTED
+            )}
+          />
         </div>
       </main>
     </>

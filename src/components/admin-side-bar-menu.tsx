@@ -8,11 +8,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { type z } from 'zod';
 import { paths } from '~/meta';
 import { api } from '~/utils/api';
 import { announcementSchemas } from '~/zod-schemas/admin/announcement';
 import { orgSchemas } from '~/zod-schemas/admin/org';
+import NotificationAlert from './notification-alert';
 import SelectAnnouncement from './select';
 import { ResourceType, UploadButton, type OnSuccessUpload } from './upload-button';
 
@@ -59,7 +61,7 @@ export default function AdminSideBarMenu() {
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
 
   const [logDropdown, setLogDropdown] = useState(false);
-  const [othersField, setOthersField] = useState('');
+  // const [othersField, setOthersField] = useState('');
   // const [showOthers, setShowOthers] = useState(false);
 
   const sideBarButtons = [
@@ -98,10 +100,28 @@ export default function AdminSideBarMenu() {
 
   const onSubmitAnnouncement: SubmitHandler<InputsAnnouncement> = async (values) => {
     await createAnnouncementMutation.mutateAsync(values);
+    toast.success('Created Announcement Successfully!', {
+      position: 'bottom-right',
+    });
+    createAnnouncementForm.reset(undefined, { keepDefaultValues: true });
+    setCreateAnnouncement(!createAnnouncement);
   };
 
   const onSubmitOrg: SubmitHandler<InputsOrg> = async (values) => {
-    await createOrgMutation.mutateAsync(values);
+    try {
+      await createOrgMutation.mutateAsync(values);
+      toast.success('Created Organization Successfully!', {
+        position: 'bottom-right',
+      });
+      createOrgForm.reset(undefined, { keepDefaultValues: true });
+      setCreateOrganization(!createOrganization);
+    } catch (error) {
+      toast.error('Creating Organization Failed!', {
+        position: 'bottom-right',
+      });
+      createOrgForm.reset(undefined, { keepDefaultValues: true });
+      setCreateOrganization(!createOrganization);
+    }
   };
 
   return (
@@ -314,7 +334,7 @@ export default function AdminSideBarMenu() {
                 <input
                   type="date"
                   id="date-start"
-                  className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none"
+                  className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg "
                   // {...createAnnouncementForm.register('start')}
                 />
               </div>
@@ -329,7 +349,7 @@ export default function AdminSideBarMenu() {
                 <input
                   type="date"
                   id="date-end"
-                  className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
+                  className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg  "
                   // {...createAnnouncementForm.register('due')}
                 />
               </div>
@@ -341,7 +361,7 @@ export default function AdminSideBarMenu() {
               type="text"
               id="announcement-subject"
               placeholder="Subject"
-              className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
+              className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg  "
               {...createAnnouncementForm.register('subject')}
             />
             <label htmlFor="announcement-description" className="mb-2 text-xl font-bold">
@@ -362,7 +382,7 @@ export default function AdminSideBarMenu() {
                   className="peer sr-only"
                   {...createAnnouncementForm.register('hasReport')}
                 />
-                <div className="peer h-5 w-9 rounded-full  bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
+                <div className="peer-focus: peer h-5 w-9  rounded-full bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
                 <span className="ms-3 text-sm font-bold text-black/80">Has report </span>
               </label>
               <div className="group relative">
@@ -447,7 +467,7 @@ export default function AdminSideBarMenu() {
               type="text"
               id="organization-name"
               placeholder="e.g Music Organization"
-              className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none "
+              className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg "
               {...createOrgForm.register('name')}
             />
             <br />
@@ -457,7 +477,7 @@ export default function AdminSideBarMenu() {
             <br />
             <select
               id="org-category"
-              className="transparent mb-2 mt-1 h-9 border-[1px] border-green px-2 py-1  text-lg outline-none"
+              className="transparent mb-2 mt-1 h-9 border-[1px] border-green px-2 py-1  text-lg "
               {...createOrgForm.register('category')}
             >
               <option value="">Select a category</option>
@@ -499,7 +519,7 @@ export default function AdminSideBarMenu() {
                       type="text"
                       id="email-address"
                       placeholder="e.g music.organization@sample.com"
-                      className=" mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none"
+                      className=" mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg "
                       {...createOrgForm.register(`members.${index}.email`)}
                     />
                   </div>
@@ -510,7 +530,7 @@ export default function AdminSideBarMenu() {
                     <br />
                     <select
                       id="position"
-                      className="mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none"
+                      className="mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg "
                       {...createOrgForm.register(`members.${index}.name`)}
                     >
                       <option value="">Select a position</option>
@@ -566,6 +586,7 @@ export default function AdminSideBarMenu() {
           </div>
         </div>
       </form>
+      <NotificationAlert />
     </>
   );
 }

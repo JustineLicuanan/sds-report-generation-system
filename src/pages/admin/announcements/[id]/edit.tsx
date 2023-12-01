@@ -1,10 +1,24 @@
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import SelectAnnouncement from '~/components/select';
 import { meta, paths } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
+import { authRedirects } from '~/utils/auth-redirects';
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  const authRedirect = authRedirects.admin(authSession);
+
+  // if(!authRedirect.props) {
+  //   return authRedirect;
+  // }
+
+  return authRedirect;
+}) satisfies GetServerSideProps;
 
 export default function EditAnnouncement() {
   const getOrgQuery = api.admin.org.get.useQuery();
