@@ -5,15 +5,26 @@ import { useState } from 'react';
 import { paths } from '~/meta';
 import { api } from '~/utils/api';
 import { generateNotificationLink } from '~/utils/generateNotificationLink';
+import { OrderBy } from '~/zod-schemas/shared/notification';
 import TruncateWord from './truncate-word';
 
 export default function AdminNavBar() {
+  const utils = api.useContext();
+
   const [showNotification, setShowNotification] = useState(false);
   const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
 
   const router = useRouter();
-  const getNotificationsQuery = api.admin.notification.get.useQuery();
+  const getNotificationsQuery = api.admin.notification.get.useQuery({
+    orderByCreatedAt: OrderBy.DESC,
+  });
+
+  const readNotificationMutation = api.admin.notification.read.useMutation({
+    onSuccess: async () => {
+      await utils.admin.notification.get.invalidate({ orderByCreatedAt: OrderBy.DESC });
+    },
+  });
 
   // getNotificationsQuery?.data?.sort((a, b) => {
   //   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -68,28 +79,25 @@ export default function AdminNavBar() {
                 <button
                   key={index}
                   className={`mb-1 h-fit w-full rounded ${
-                    selectedNotification === index ? 'bg-gray/50' : 'bg-gray'
+                    notif.isRead ? 'bg-gray/50' : 'bg-gray'
                   }  text-left hover:bg-yellow`}
-                  onClick={() => {
+                  onClick={async () => {
                     // setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
+                    await readNotificationMutation.mutateAsync({ id: notif.id });
                     router.push(`/admin${generateNotificationLink(notif)}`);
                     setShowNotification(false);
                   }}
                 >
                   <div
                     className={`${
-                      selectedNotification === index
-                        ? 'font-light text-black/60'
-                        : 'font-bold text-black/80 '
+                      notif.isRead ? 'font-light text-black/60' : 'font-bold text-black/80 '
                     } px-2 py-2 text-center text-sm `}
                   >
                     {notif.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
                   </div>
                   <div
                     className={`${
-                      selectedNotification === index
-                        ? 'font-medium text-black/60'
-                        : 'font-bold text-black/80 '
+                      notif.isRead ? 'font-medium text-black/60' : 'font-bold text-black/80 '
                     } -mt-4 px-2 py-2 text-center  tracking-tight`}
                   >
                     <TruncateWord text={notif.message} maxLength={33} fontSize="text-lg" />

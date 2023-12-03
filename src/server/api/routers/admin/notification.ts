@@ -13,7 +13,7 @@ export const notificationRouter = createTRPCRouter({
           report: input?.includeReport,
           comment: input?.includeComment,
         },
-        orderBy: { createdAt: input?.isAsc ? 'asc' : 'desc' },
+        orderBy: { createdAt: input?.orderByCreatedAt },
       });
     } catch (err) {
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });

@@ -34,8 +34,10 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AdminOrgReportPage() {
-  const { data: session } = useSession();
   const router = useRouter();
+  const utils = api.useContext();
+  const { data: session } = useSession();
+
   const getReportQuery = api.admin.report.get.useQuery({
     id: router.query.id as string,
     includeComments: true,
@@ -43,7 +45,16 @@ export default function AdminOrgReportPage() {
   });
   const reportData = getReportQuery.data?.[0];
 
-  const createCommentMutation = api.admin.comment.createInReport.useMutation();
+  const createCommentMutation = api.admin.comment.createInReport.useMutation({
+    onSuccess: async () => {
+      await utils.admin.report.get.invalidate({
+        id: router.query.id as string,
+        includeComments: true,
+        includeOrganization: true,
+      });
+    },
+  });
+
   const createCommentForm = useForm<CommentInputs>({
     resolver: zodResolver(commentSchemas.createInReport),
     values: {
@@ -68,7 +79,7 @@ export default function AdminOrgReportPage() {
 
   const onSubmitComment: SubmitHandler<CommentInputs> = async (values) => {
     await createCommentMutation.mutateAsync(values);
-    toast.success('Commented Successfully, refresh the page!', {
+    toast.success('Commented Successfully!', {
       position: 'bottom-right',
     });
     createCommentForm.reset(undefined, { keepDefaultValues: true });
@@ -166,9 +177,9 @@ export default function AdminOrgReportPage() {
           {/* COMMENTS */}
           <form
             className="relative mb-10  ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]"
-            onSubmit={createCommentForm.handleSubmit(onSubmitComment, (error) =>
-              console.log(error)
-            )}
+            onSubmit={createCommentForm.handleSubmit(onSubmitComment, (error) => {
+              console.log(error);
+            })}
           >
             <h2 className=" mb-2 text-center text-2xl font-medium">Comments</h2>
             <div className="h-[40vh] overflow-y-auto scroll-smooth" ref={scrollableContainerRef}>
@@ -354,7 +365,7 @@ export default function AdminOrgReportPage() {
               <span className="text-xl font-bold text-green">signing.</span>
             </label>
             <input
-              type="date"
+              type="datetime-local"
               id="schedule-report"
               className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg outline-none"
               {...approveReportForm.register('due')}

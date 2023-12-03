@@ -4,7 +4,7 @@ import { type GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
@@ -32,16 +32,24 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function UserOrgReportPage() {
+  const router = useRouter();
+  const utils = api.useContext();
   const { data: session } = useSession();
 
-  const router = useRouter();
   const getReportQuery = api.shared.report.get.useQuery({
     id: router.query.id as string,
     includeComments: true,
   });
   const reportData = getReportQuery.data?.[0];
 
-  const createCommentMutation = api.shared.comment.createInReport.useMutation();
+  const createCommentMutation = api.shared.comment.createInReport.useMutation({
+    onSuccess: async () => {
+      await utils.shared.report.get.invalidate({
+        id: router.query.id as string,
+        includeComments: true,
+      });
+    },
+  });
   const createCommentForm = useForm<InputsComment>({
     resolver: zodResolver(commentSchemas.createInReport),
     values: { reportId: reportData?.id!, content: '' },
@@ -49,7 +57,7 @@ export default function UserOrgReportPage() {
 
   const onSubmitComment: SubmitHandler<InputsComment> = async (values) => {
     await createCommentMutation.mutateAsync(values);
-    toast.success('Commented Successfully, refresh the page!', {
+    toast.success('Commented Successfully!', {
       position: 'bottom-right',
     });
     createCommentForm.reset(undefined, { keepDefaultValues: true });

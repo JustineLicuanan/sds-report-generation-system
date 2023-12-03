@@ -1,6 +1,11 @@
 import { NotificationType } from '@prisma/client';
 import { z } from 'zod';
 
+export enum OrderBy {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
 export const notificationSchemas = {
   get: z
     .object({
@@ -11,7 +16,7 @@ export const notificationSchemas = {
       includeAnnouncement: z.literal(true).optional(),
       includeReport: z.literal(true).optional(),
       includeComment: z.literal(true).optional(),
-      isAsc: z.literal(true).optional(),
+      orderByCreatedAt: z.nativeEnum(OrderBy).optional(),
     })
     .optional(),
 

@@ -1,20 +1,15 @@
-import { UserRole } from '@prisma/client';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { signOut } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { meta, paths } from '~/meta';
-import { getServerAuthSession } from '~/server/auth';
 
-export const getServerSideProps = (async (ctx) => {
-  const authSession = await getServerAuthSession(ctx);
-  return { props: { role: authSession?.user?.role } };
-}) satisfies GetServerSideProps;
+// export const getServerSideProps = (async (ctx) => {
+//   const authSession = await getServerAuthSession(ctx);
+//   return { props: { role: authSession?.user?.role } };
+// }) satisfies GetServerSideProps;
 
-export default function SignOutPage({
-  role,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function SignOutPage() {
   const router = useRouter();
 
   return (
@@ -75,13 +70,7 @@ export default function SignOutPage({
               <div className="flex justify-between">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (role === UserRole.ADMIN) {
-                      router.push(paths.ADMIN);
-                    } else {
-                      router.push(paths.ORGANIZATION);
-                    }
-                  }}
+                  onClick={() => router.back()}
                   className="rounded-md bg-yellow px-8 py-2 text-lg font-medium"
                 >
                   Back
