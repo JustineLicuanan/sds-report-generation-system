@@ -40,7 +40,7 @@ respective docs.
 
 ## Changelog
 
-### Version 0.10.18
+### Version 0.10.23
 
 - Org's images are now appearing in carousel of admin dashboard.
 - Announcements are now working in the dashboard.
@@ -48,6 +48,14 @@ respective docs.
   `/organization/index.tsx`.
 - Logo is now showing both in `/admin/organizations/[id]/index.tsx` and `/organization/index.tsx`.
 - Logo of an organization is now showing on Organization's List.
+
+### Version 0.10.22
+
+- fix: announcement query invalidation after mutation
+- fix: datetime validation error
+- feat: add 'orderByDue' & 'orderByCreatedAt' filters to announcement queries
+- feat: create 'getNotificationsCount' utility function
+- refactor: optimize 'getOrganizationsCounts' utility function
 
 ### Version 0.10.17
 

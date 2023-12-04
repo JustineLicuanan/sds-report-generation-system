@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client';
+import { NotificationType, Notification as TNotification } from '@prisma/client';
 import { inferRouterOutputs } from '@trpc/server';
 
 import { AppRouter } from '~/server/api/root';
@@ -18,4 +18,23 @@ export function generateNotificationLink(
     default:
       return `/announcements`;
   }
+}
+
+export function getNotificationsCount(notifications: TNotification[]) {
+  return {
+    _count: notifications.reduce(
+      (acc, { isRead }) => {
+        if (!isRead) {
+          acc.isUnread++;
+        }
+
+        if (isRead) {
+          acc.isRead++;
+        }
+
+        return acc;
+      },
+      { isRead: 0, isUnread: 0 }
+    ),
+  };
 }

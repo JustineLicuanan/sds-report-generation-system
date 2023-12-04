@@ -9,6 +9,7 @@ import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { OrderBy } from '~/zod-schemas/shared/notification';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -38,7 +39,10 @@ export default function AnnouncementPage() {
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit perspiciatis molestias odit, dolorum ipsam asperiores laborum accusamus.',
     },
   ];
-  const getAnnouncementQuery = api.shared.announcement.get.useQuery({ includeAudience: true });
+  const getAnnouncementQuery = api.shared.announcement.get.useQuery({
+    includeAudience: true,
+    orderByDue: OrderBy.ASC,
+  });
   const router = useRouter();
 
   // const [myArray, setMyArray] = useState(announcement);

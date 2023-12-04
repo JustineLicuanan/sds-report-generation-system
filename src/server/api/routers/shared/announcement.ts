@@ -20,6 +20,7 @@ export const announcementRouter = createTRPCRouter({
           adminNotifications: input?.includeAdminNotifications,
           notifications: input?.includeNotifications,
         },
+        orderBy: { due: input?.orderByDue, createdAt: input?.orderByCreatedAt },
       });
     } catch (err) {
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });

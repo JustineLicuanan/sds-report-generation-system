@@ -40,6 +40,4 @@ export const reportSchemas = {
       category: z.nativeEnum(ReportCategory),
     }),
   }),
-
-  due: z.object({ due: z.string().datetime({ offset: true }) }),
 };
