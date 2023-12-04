@@ -1,7 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { OrganizationCategory } from '@prisma/client';
-import { useQueryClient } from '@tanstack/react-query';
-import { getQueryKey } from '@trpc/react-query';
 import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,21 +15,20 @@ import { orgSchemas } from '~/zod-schemas/admin/org';
 import NotificationAlert from './notification-alert';
 import SelectAnnouncement from './select';
 import { ResourceType, UploadButton, type OnSuccessUpload } from './upload-button';
+import { OrderBy } from '~/zod-schemas/shared/notification';
 
 type InputsAnnouncement = z.infer<typeof announcementSchemas.create>;
 type InputsOrg = z.infer<typeof orgSchemas.create>;
 
 export default function AdminSideBarMenu() {
-  const queryClient = useQueryClient();
+  const utils = api.useContext();
   const getOrgQuery = api.admin.org.get.useQuery();
   const createOrgMutation = api.admin.org.create.useMutation();
   const organizationList = getOrgQuery.data ?? [];
 
   const createAnnouncementMutation = api.admin.announcement.create.useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [getQueryKey(api.admin.announcement.get, undefined, 'query')],
-      });
+      utils.admin.announcement.get.invalidate({ includeAudience: true, orderByDue: OrderBy.ASC });
     },
   });
 
@@ -331,8 +328,13 @@ export default function AdminSideBarMenu() {
                 <input
                   type="date"
                   id="date-start"
-                  className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg "
-                  // {...createAnnouncementForm.register('start')}
+                  className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg"
+                  onChange={(e) => {
+                    createAnnouncementForm.setValue(
+                      'start',
+                      e.target.value ? new Date(e.target.value).toISOString() : undefined
+                    );
+                  }}
                 />
               </div>
               <div className="text-xl font-bold">
@@ -347,7 +349,12 @@ export default function AdminSideBarMenu() {
                   type="date"
                   id="date-end"
                   className="mb-2 mt-1 h-9 border-[1px] border-green px-2  py-1 text-lg  "
-                  // {...createAnnouncementForm.register('due')}
+                  onChange={(e) => {
+                    createAnnouncementForm.setValue(
+                      'due',
+                      e.target.value ? new Date(e.target.value).toISOString() : undefined
+                    );
+                  }}
                 />
               </div>
             </div>

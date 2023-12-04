@@ -11,6 +11,7 @@ import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { OrderBy } from '~/zod-schemas/shared/notification';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -30,7 +31,10 @@ export default function AnnouncementPage() {
   const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<string | null>(null);
 
-  const getAnnouncementQuery = api.admin.announcement.get.useQuery({ includeAudience: true });
+  const getAnnouncementQuery = api.admin.announcement.get.useQuery({
+    includeAudience: true,
+    orderByDue: OrderBy.ASC,
+  });
   const archiveAnnouncementMutation = api.admin.announcement.archive.useMutation({
     onSuccess: () => {
       queryClient.invalidateQueries({

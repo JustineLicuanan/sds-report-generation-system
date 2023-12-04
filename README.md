@@ -40,6 +40,14 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.22
+
+- fix: announcement query invalidation after mutation
+- fix: datetime validation error
+- feat: add 'orderByDue' & 'orderByCreatedAt' filters to announcement queries
+- feat: create 'getNotificationsCount' utility function
+- refactor: optimize 'getOrganizationsCounts' utility function
+
 ### Version 0.10.17
 
 - Implement 'read notification' function.

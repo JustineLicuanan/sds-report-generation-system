@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { OrderBy } from '~/zod-schemas/shared/notification';
 
 export const announcementSchemas = {
   get: z
@@ -10,6 +11,8 @@ export const announcementSchemas = {
       includeReports: z.literal(true).optional(),
       includeAdminNotifications: z.literal(true).optional(),
       includeNotifications: z.literal(true).optional(),
+      orderByDue: z.nativeEnum(OrderBy).optional(),
+      orderByCreatedAt: z.nativeEnum(OrderBy).optional(),
     })
     .optional(),
 };
