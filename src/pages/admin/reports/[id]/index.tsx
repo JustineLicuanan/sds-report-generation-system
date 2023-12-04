@@ -281,6 +281,7 @@ export default function AdminOrgReportPage() {
                 await updateReportStatus(ReportStatus.REJECTED);
                 setShowRejectModal(!showRejectModal);
                 setRejected(!rejected);
+                toast.success('Report rejected successfully!');
               }}
               className="rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
             >

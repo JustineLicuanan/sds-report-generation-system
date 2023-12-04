@@ -9,7 +9,6 @@ import TruncateWord from './truncate-word';
 
 export default function AdminNavBar() {
   const [showNotification, setShowNotification] = useState(false);
-  const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
 
   const router = useRouter();

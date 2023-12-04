@@ -61,9 +61,6 @@ export default function AdminSideBarMenu() {
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
 
   const [logDropdown, setLogDropdown] = useState(false);
-  // const [othersField, setOthersField] = useState('');
-  // const [showOthers, setShowOthers] = useState(false);
-
   const sideBarButtons = [
     {
       name: 'Log',
@@ -103,8 +100,8 @@ export default function AdminSideBarMenu() {
     toast.success('Created Announcement Successfully!', {
       position: 'bottom-right',
     });
-    createAnnouncementForm.reset(undefined, { keepDefaultValues: true });
     setCreateAnnouncement(!createAnnouncement);
+    createAnnouncementForm.reset(undefined, { keepDefaultValues: true });
   };
 
   const onSubmitOrg: SubmitHandler<InputsOrg> = async (values) => {
