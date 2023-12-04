@@ -1,5 +1,5 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { LogAction, LogType, UserRole } from '@prisma/client';
+import { LogAction, LogType, Session, UserRole } from '@prisma/client';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
@@ -95,13 +95,17 @@ export const authOptions: NextAuthOptions = {
       });
     },
     async signOut({ session }) {
+      const user = await db.user.findUnique({
+        where: { id: (session as unknown as Session).userId },
+      });
+
       await db.log.create({
         data: {
           type: LogType.AUTH,
-          name: session.user.name!,
-          email: session.user.email,
+          name: user?.name!,
+          email: user?.email,
           action: LogAction.SIGN_OUT,
-          createdById: session.user.id,
+          createdById: user?.id!,
         },
       });
     },

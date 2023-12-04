@@ -7,7 +7,7 @@ import { useState } from 'react';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import TruncateWord from '~/components/truncate-word';
-import { meta, paths } from '~/meta';
+import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -160,7 +160,7 @@ export default function AnnouncementPage() {
               >
                 Delete
               </button>
-              <button
+              {/* <button
                 type="submit"
                 className="my-4 cursor-pointer rounded-md bg-gray px-8 py-2 text-lg font-medium"
                 onClick={() =>
@@ -170,7 +170,7 @@ export default function AnnouncementPage() {
                 }
               >
                 Update
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

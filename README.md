@@ -40,6 +40,14 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.17
+
+- Implement 'read notification' function.
+- Move unfinished `/admin/announcements/[id]/edit.tsx` to `/under-construction/edit.txt` folder.
+- Fix comment not appearing issue.
+- Optimize sign out page.
+- Fix `SIGN_OUT` not logging issue.
+
 ### Version 0.10.12
 
 - Added a select all option in Create Announcement.
