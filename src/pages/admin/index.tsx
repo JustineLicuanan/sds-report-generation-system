@@ -70,13 +70,14 @@ export default function AdminDashboardPage() {
                   <div className="mx-2 rounded-md bg-white py-2">
                     <div className="my-1 text-center text-lg font-bold">{item.name}</div>
                     <div className="flex  items-center justify-center">
-                      <CldImage
+                      {item.imageId ? <CldImage
                         width="100"
                         height="100"
                         src={`/${item.imageId}`}
                         alt="Organization logo"
                         className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"
-                      />
+                      /> : <div className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"></div>}
+                     
                       <div className="mx-5">
                         <div className="border-b-2 border-b-black px-1 text-center text-lg font-medium">
                           Pending Appointment <br />
