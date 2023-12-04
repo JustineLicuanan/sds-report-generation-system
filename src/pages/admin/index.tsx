@@ -1,12 +1,14 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import Calendar from '~/components/calendar';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -26,15 +28,9 @@ export const getServerSideProps = (async (ctx) => {
 export default function AdminDashboardPage() {
   const getOrgQuery = api.admin.org.get.useQuery({ includeReports: true });
   const data = getOrgQuery.data ?? []; // Assuming getOrgQuery.data is an array of your data
-  // Calculate the number of items per group
-  const itemsPerGroup = 2;
 
-  const groupedData = [];
-  for (let i = 0; i < data.length; i += itemsPerGroup) {
-    const group = data.slice(i, i + itemsPerGroup);
-    groupedData.push(group);
-  }
-
+  const getAnnouncementQuery = api.admin.announcement.get.useQuery();
+  const announcement = getAnnouncementQuery.data ?? [];
   return (
     <>
       <Head>
@@ -74,7 +70,13 @@ export default function AdminDashboardPage() {
                   <div className="mx-2 rounded-md bg-white py-2">
                     <div className="my-1 text-center text-lg font-bold">{item.name}</div>
                     <div className="flex  items-center justify-center">
-                      <div className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"></div>
+                      <CldImage
+                        width="100"
+                        height="100"
+                        src={`/${item.imageId}`}
+                        alt="Organization logo"
+                        className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"
+                      />
                       <div className="mx-5">
                         <div className="border-b-2 border-b-black px-1 text-center text-lg font-medium">
                           Pending Appointment <br />
@@ -118,7 +120,27 @@ export default function AdminDashboardPage() {
               <h1 className=" py-2 text-2xl font-bold">Announcements</h1>
               <Image width={30} height={30} src="/announcement_icon.svg" alt="Announcement Icon" />
             </div>
-            <div className="text-lg font-medium ">No new announcement(s) today.</div>
+            {announcement?.length! > 2 ? (
+              <div className="text-lg font-medium ">
+                {announcement[0]?.subject!},{announcement[1]?.subject!} and{' '}
+                {announcement?.length! - 2}{' '}
+                <Link
+                  href={`${paths.ADMIN}${paths.ANNOUNCEMENTS}`}
+                  className="text-blue-500 hover:underline"
+                >
+                  {' '}
+                  more
+                </Link>{' '}
+                announcement(s).
+              </div>
+            ) : announcement?.length! > 0 ? (
+              <div className="w-full py-2 text-lg">
+                {announcement[0]?.subject} and {announcement[1]?.subject}
+              </div>
+            ) : (
+              <div className="text-lg font-medium ">There are no announcement.</div>
+            )}
+            {/* <div className="text-lg font-medium ">No new announcement today.</div> */}
           </div>
         </div>
       </main>

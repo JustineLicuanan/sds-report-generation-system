@@ -40,6 +40,15 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.18
+
+- Org's images are now appearing in carousel of admin dashboard.
+- Announcements are now working in the dashboard.
+- Add a description if there are empty reports both in `/admin/organizations/[id]/index.tsx` and
+  `/organization/index.tsx`.
+- Logo is now showing both in `/admin/organizations/[id]/index.tsx` and `/organization/index.tsx`.
+- Logo of an organization is now showing on Organization's List.
+
 ### Version 0.10.17
 
 - Implement 'read notification' function.

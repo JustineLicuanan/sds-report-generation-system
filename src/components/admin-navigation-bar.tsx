@@ -25,6 +25,12 @@ export default function AdminNavBar() {
     },
   });
 
+  const markAllAsReadMutation = api.admin.notification.read.useMutation({
+    onSuccess: async () => {
+      await utils.admin.notification.get.invalidate();
+    },
+  });
+
   // getNotificationsQuery?.data?.sort((a, b) => {
   //   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   // });
@@ -74,6 +80,17 @@ export default function AdminNavBar() {
               } absolute right-[30px] top-[45px] h-[500px] w-[375px] overflow-auto bg-[#FFFFFF] px-2 pt-2 shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]`}
             >
               <h1 className="py-2 text-center text-3xl font-bold tracking-tight">Notifications</h1>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await markAllAsReadMutation.mutateAsync();
+                  }}
+                  className=""
+                >
+                  Mark all as read
+                </button>
+              </div>
               {getNotificationsQuery?.data?.map((notif, index) => (
                 <button
                   key={index}

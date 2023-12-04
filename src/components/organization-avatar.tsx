@@ -1,4 +1,5 @@
 import { type Organization } from '@prisma/client';
+import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -6,6 +7,7 @@ import { paths } from '~/meta';
 
 export default function OrganizationAvatar({ organization }: { organization: Organization[] }) {
   const router = useRouter();
+
   return (
     <>
       {organization.map((item) => (
@@ -13,12 +15,27 @@ export default function OrganizationAvatar({ organization }: { organization: Org
           key={item.id}
           className="group/avatar relative mb-2 me-1 flex h-20 w-20 rounded-full  md:mb-3 md:h-24 md:w-24 lg:h-28 lg:w-28"
         >
-          <button
-            onClick={() => router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}`)}
-            className="mb-2 me-1 flex h-20 w-20 rounded-full bg-green  md:mb-3 md:h-24 md:w-24 lg:h-28 lg:w-28"
-          >
-            {/* Your button content */}
-          </button>
+          {item?.imageId ? (
+            <button
+              onClick={() => router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}`)}
+              className="mb-2 me-1 flex h-20 w-20 rounded-full bg-green  md:mb-3 md:h-24 md:w-24 lg:h-28 lg:w-28"
+            >
+              <CldImage
+                width="100"
+                height="100"
+                src={`/${item.imageId}`}
+                alt="Organization Logo"
+                className="h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"
+              />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}`)}
+              className="mb-2 me-1 flex h-20 w-20 rounded-full bg-green  md:mb-3 md:h-24 md:w-24 lg:h-28 lg:w-28"
+            ></button>
+          )}
+
           <div className="absolute right-0 top-0 z-[4] h-7 w-7 rounded-full bg-yellow text-center ">
             <Image src="/exclamation_icon.svg" alt="Notification Alert" height={100} width={100} />
           </div>
