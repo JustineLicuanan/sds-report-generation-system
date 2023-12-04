@@ -4,12 +4,11 @@ import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import ReportList from '~/components/report-list';
-import { meta, paths } from '~/meta';
+import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -84,15 +83,7 @@ export default function ListOfReportPage() {
             ) : (
               <div className="flex items-center justify-center text-xl font-semibold">
                 There are no pending report
-                <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />, Create
-                a&nbsp;
-                <Link
-                  href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`}
-                  className="text-xl text-blue-500 hover:underline"
-                >
-                  new
-                </Link>
-                &nbsp;one.
+                <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />
               </div>
             )}
             <div className="my-2 h-2 rounded-md bg-green"> </div>
