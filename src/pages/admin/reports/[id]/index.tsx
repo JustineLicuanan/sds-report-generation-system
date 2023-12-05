@@ -163,8 +163,9 @@ export default function AdminOrgReportPage() {
             </div>
             <div className="mt-7 flex justify-between text-xl font-medium">
               <h2>
-                {reportData?.category?.charAt(0).toUpperCase() +
-                  reportData?.category?.slice(1).toLowerCase()}
+                {reportData?.category.charAt(0).toUpperCase() ??
+                  '' + reportData?.category.slice(1).toLowerCase() ??
+                  ''}
               </h2>{' '}
               <h2 className="text-right">
                 {reportData?.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
