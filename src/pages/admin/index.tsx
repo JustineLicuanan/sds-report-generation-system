@@ -70,14 +70,18 @@ export default function AdminDashboardPage() {
                   <div className="mx-2 rounded-md bg-white py-2">
                     <div className="my-1 text-center text-lg font-bold">{item.name}</div>
                     <div className="flex  items-center justify-center">
-                      {item.imageId ? <CldImage
-                        width="100"
-                        height="100"
-                        src={`/${item.imageId}`}
-                        alt="Organization logo"
-                        className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"
-                      /> : <div className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"></div>}
-                     
+                      {item.imageId ? (
+                        <CldImage
+                          width="100"
+                          height="100"
+                          src={`/${item.imageId}`}
+                          alt="Organization logo"
+                          className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"
+                        />
+                      ) : (
+                        <div className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"></div>
+                      )}
+
                       <div className="mx-5">
                         <div className="border-b-2 border-b-black px-1 text-center text-lg font-medium">
                           Pending Appointment <br />
@@ -121,10 +125,9 @@ export default function AdminDashboardPage() {
               <h1 className=" py-2 text-2xl font-bold">Announcements</h1>
               <Image width={30} height={30} src="/announcement_icon.svg" alt="Announcement Icon" />
             </div>
-            {announcement?.length! > 2 ? (
+            {announcement.length > 2 ? (
               <div className="text-lg font-medium ">
-                {announcement[0]?.subject!},{announcement[1]?.subject!} and{' '}
-                {announcement?.length! - 2}{' '}
+                {announcement[0]?.subject},{announcement[1]?.subject} and {announcement?.length - 2}{' '}
                 <Link
                   href={`${paths.ADMIN}${paths.ANNOUNCEMENTS}`}
                   className="text-blue-500 hover:underline"
@@ -134,7 +137,7 @@ export default function AdminDashboardPage() {
                 </Link>{' '}
                 announcement(s).
               </div>
-            ) : announcement?.length! > 0 ? (
+            ) : announcement?.length > 0 ? (
               <div className="w-full py-2 text-lg">
                 {announcement[0]?.subject} and {announcement[1]?.subject}
               </div>

@@ -2,7 +2,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '@trpc/react-query';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
@@ -26,7 +25,6 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function AnnouncementPage() {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<string | null>(null);

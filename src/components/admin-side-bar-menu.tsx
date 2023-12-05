@@ -12,10 +12,10 @@ import { paths } from '~/meta';
 import { api } from '~/utils/api';
 import { announcementSchemas } from '~/zod-schemas/admin/announcement';
 import { orgSchemas } from '~/zod-schemas/admin/org';
+import { OrderBy } from '~/zod-schemas/shared/notification';
 import NotificationAlert from './notification-alert';
 import SelectAnnouncement from './select';
 import { ResourceType, UploadButton, type OnSuccessUpload } from './upload-button';
-import { OrderBy } from '~/zod-schemas/shared/notification';
 
 type InputsAnnouncement = z.infer<typeof announcementSchemas.create>;
 type InputsOrg = z.infer<typeof orgSchemas.create>;
@@ -58,20 +58,6 @@ export default function AdminSideBarMenu() {
   const [createOrganization, setCreateOrganization] = useState(false); // Show Create Organization Modal
 
   const [logDropdown, setLogDropdown] = useState(false);
-  const sideBarButtons = [
-    {
-      name: 'Log',
-      imageLink: '/log_icon.svg',
-      value: logDropdown,
-      function: setLogDropdown,
-    },
-    {
-      name: 'Create',
-      imageLink: '/create_icon.svg',
-      value: createDropdown,
-      function: setCreateDropdown,
-    },
-  ];
 
   const createOrgForm = useForm<InputsOrg>({
     resolver: zodResolver(orgSchemas.create),

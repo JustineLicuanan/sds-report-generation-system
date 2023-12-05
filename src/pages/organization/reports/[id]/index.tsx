@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
+import { type z } from 'zod';
 import NotificationAlert from '~/components/notification-alert';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
@@ -112,8 +112,10 @@ export default function UserOrgReportPage() {
             </div>
             <div className="mt-7 flex justify-between text-xl font-medium">
               <h2>
-                {reportData?.category.charAt(0).toUpperCase()! +
-                  reportData?.category.slice(1).toLowerCase()!}
+                {reportData?.category
+                  ? reportData?.category.charAt(0).toUpperCase() +
+                    reportData?.category.slice(1).toLowerCase()
+                  : ''}
               </h2>{' '}
               <h2 className="text-right">
                 {reportData?.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}

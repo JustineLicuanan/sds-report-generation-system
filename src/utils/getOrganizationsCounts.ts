@@ -1,7 +1,7 @@
 import { ReportStatus } from '@prisma/client';
-import { inferRouterOutputs } from '@trpc/server';
+import { type inferRouterOutputs } from '@trpc/server';
 
-import { AppRouter } from '~/server/api/root';
+import { type AppRouter } from '~/server/api/root';
 
 export function getOrganizationsCounts(
   organizations: inferRouterOutputs<AppRouter>['admin']['org']['get']

@@ -1,5 +1,5 @@
-import { Log, LogAction } from '@prisma/client';
-import { MutableRefObject } from 'react';
+import {type Log, LogAction } from '@prisma/client';
+import {type MutableRefObject } from 'react';
 
 type YourComponentProps = {
   data: Log[];

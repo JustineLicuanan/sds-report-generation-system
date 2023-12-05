@@ -1,7 +1,7 @@
-import { NotificationType, Notification as TNotification } from '@prisma/client';
-import { inferRouterOutputs } from '@trpc/server';
+import { NotificationType, type Notification as TNotification } from '@prisma/client';
+import { type inferRouterOutputs } from '@trpc/server';
 
-import { AppRouter } from '~/server/api/root';
+import { type AppRouter } from '~/server/api/root';
 
 export function generateNotificationLink(
   notification:

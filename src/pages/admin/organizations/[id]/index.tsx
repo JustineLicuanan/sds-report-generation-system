@@ -1,6 +1,5 @@
 import { LogAction, ReportStatus } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
-import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -31,8 +30,6 @@ export default function ListOfReportPage() {
     includeReports: true,
   });
   const org = getOrgWithReportsQuery?.data?.[0];
-
-  const { data: session } = useSession();
 
   org?.reports.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -76,20 +73,20 @@ export default function ListOfReportPage() {
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
             <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
-            {org?.reports.filter((log) => log.status === LogAction.PENDING).length! > 0 ? (
+            {org?.reports?.filter((log) => log.status === LogAction.PENDING)?.length ? (
               <ReportList
-                reports={org?.reports.filter((log) => log.status === LogAction.PENDING)!}
+                reports={org?.reports?.filter((log) => log.status === LogAction.PENDING) ?? []}
               />
             ) : (
               <div className="flex items-center justify-center text-xl font-semibold">
-                There are no pending report
+                There are no pending reports
                 <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />
               </div>
             )}
             <div className="my-2 h-2 rounded-md bg-green"> </div>
             <ReportList
               reports={
-                org?.reports.filter(
+                org?.reports?.filter(
                   (report) =>
                     report.status === ReportStatus.APPROVED ||
                     report.status === ReportStatus.REJECTED

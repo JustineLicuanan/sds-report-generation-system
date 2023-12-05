@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import {type OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';

@@ -12,7 +12,7 @@ export default function AdminNavBar() {
   const utils = api.useContext();
 
   const [showNotification, setShowNotification] = useState(false);
-  const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
+  // const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
 
   const router = useRouter();
   const getNotificationsQuery = api.admin.notification.get.useQuery({
@@ -99,8 +99,9 @@ export default function AdminNavBar() {
                   }  text-left hover:bg-yellow`}
                   onClick={async () => {
                     // setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
-                    await readNotificationMutation.mutateAsync({ id: notif.id });
-                    router.push(`/admin${generateNotificationLink(notif)}`);
+                    await readNotificationMutation
+                      .mutateAsync({ id: notif.id })
+                      .then(() => router.push(`/admin${generateNotificationLink(notif)}`));
                     setShowNotification(false);
                   }}
                 >

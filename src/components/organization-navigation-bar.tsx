@@ -13,8 +13,8 @@ export default function OrgNavBar() {
   const utils = api.useContext();
 
   const [showNotification, setShowNotification] = useState(false);
-  const [showAnnouncement, setShowAnnouncement] = useState(false);
-  const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
+  // const [showAnnouncement, setShowAnnouncement] = useState(false);
+  // const [selectedNotification, setSelectedNotification] = useState<number | null>(null);
 
   const getNotificationsQuery = api.shared.notification.get.useQuery({
     orderByCreatedAt: OrderBy.DESC,
@@ -83,8 +83,9 @@ export default function OrgNavBar() {
                   }  text-left hover:bg-yellow`}
                   onClick={async () => {
                     // setShowAnnouncement(!showAnnouncement), setSelectedNotification(index);
-                    await readNotificationMutation.mutateAsync({ id: notif.id });
-                    router.push(`/organization${generateNotificationLink(notif)}`);
+                    await readNotificationMutation
+                      .mutateAsync({ id: notif.id })
+                      .then(() => router.push(`/organization${generateNotificationLink(notif)}`));
                     setShowNotification(false);
                   }}
                 >

@@ -23,22 +23,6 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AnnouncementPage() {
-  const listOfAnnouncements = [
-    {
-      organization: 'Music Organization',
-      subject: 'Event Report',
-      date: '11/05/23',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, deleniti!',
-    },
-    {
-      organization: 'Science Organization',
-      subject: 'Financial Report',
-      date: '11/07/23',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit perspiciatis molestias odit, dolorum ipsam asperiores laborum accusamus.',
-    },
-  ];
   const getAnnouncementQuery = api.shared.announcement.get.useQuery({
     includeAudience: true,
     orderByDue: OrderBy.ASC,
@@ -167,8 +151,8 @@ export default function AnnouncementPage() {
               <button
                 type="button"
                 className="my-4 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium "
-                onClick={() => {
-                  router.push(
+                onClick={async () => {
+                  await router.push(
                     `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`
                   );
                 }}

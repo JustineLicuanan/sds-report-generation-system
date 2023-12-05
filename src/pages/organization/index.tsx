@@ -5,7 +5,6 @@ import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import Report from '~/components/report';
@@ -34,7 +33,7 @@ export default function OrganizationPage() {
 
   // const [search, setSearch] = useState('');
   // const [status, setStatus] = useState('');
-  const [date] = useState('');
+  // const [date] = useState('');
 
   logList.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -75,7 +74,7 @@ export default function OrganizationPage() {
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div className="flex">
             <div className=""></div>
-            {org?.imageId  ? (
+            {org?.imageId ? (
               <CldImage
                 width="100"
                 height="100"

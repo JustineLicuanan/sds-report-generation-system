@@ -40,6 +40,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.24
+
+- Fixed half of lint errors.
+
 ### Version 0.10.23
 
 - Org's images are now appearing in carousel of admin dashboard.

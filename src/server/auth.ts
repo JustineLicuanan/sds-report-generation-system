@@ -1,5 +1,5 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { LogAction, LogType, Session, UserRole } from '@prisma/client';
+import { LogAction, LogType, UserRole, type Session } from '@prisma/client';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
