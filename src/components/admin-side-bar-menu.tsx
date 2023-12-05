@@ -23,7 +23,11 @@ type InputsOrg = z.infer<typeof orgSchemas.create>;
 export default function AdminSideBarMenu() {
   const utils = api.useContext();
   const getOrgQuery = api.admin.org.get.useQuery();
-  const createOrgMutation = api.admin.org.create.useMutation();
+  const createOrgMutation = api.admin.org.create.useMutation({
+    onSuccess: async () => {
+      await utils.admin.org.get.invalidate({ includeReports: true });
+    },
+  });
   const organizationList = getOrgQuery.data ?? [];
 
   const createAnnouncementMutation = api.admin.announcement.create.useMutation({
