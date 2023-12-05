@@ -76,10 +76,10 @@ export default function AdminDashboardPage() {
                           height="100"
                           src={`/${item.imageId}`}
                           alt="Organization logo"
-                          className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"
+                          className="mx-2 h-24 w-24 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"
                         />
                       ) : (
-                        <div className="mx-5 h-28 w-28 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"></div>
+                        <div className="mx-2 h-24 w-24 rounded-full bg-green lg:h-20  lg:w-20 xl:h-28 xl:w-28"></div>
                       )}
 
                       <div className="mx-5">

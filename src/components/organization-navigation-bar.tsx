@@ -52,8 +52,8 @@ export default function OrgNavBar() {
               <div id="title" className="ms-2 text-lg font-bold sm:text-xl md:text-2xl lg:text-3xl">
                 Office of Student Development Services
               </div>
-              <div id="sub-title" className="ms-14">
-                Scheduling System For Reporting and File Management
+              <div id="sub-title" className="ms-2 lg:ms-14 ">
+                Scheduling System For Report-File Management
               </div>
             </div>
           </div>

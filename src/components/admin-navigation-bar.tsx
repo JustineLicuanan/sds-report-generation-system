@@ -42,7 +42,7 @@ export default function AdminNavBar() {
           id="nav-container"
           className="flex w-full items-center justify-between py-1 md:px-7 md:py-2"
         >
-          <div id="titles" className="flex px-1">
+          <div id="titles" className="flex items-center px-1">
             <Link href={`${paths.ADMIN}`}>
               <Image
                 src="/cvsu_logo.png"
@@ -57,8 +57,8 @@ export default function AdminNavBar() {
               <div id="title" className="ms-2 text-lg font-bold sm:text-xl md:text-2xl lg:text-3xl">
                 Office of Student Development Services
               </div>
-              <div id="sub-title" className="ms-14">
-                Scheduling System For Reporting and File Management
+              <div id="sub-title" className="ms-2 md:ms-14">
+                Report-File Scheduling and Management System
               </div>
             </div>
           </div>
