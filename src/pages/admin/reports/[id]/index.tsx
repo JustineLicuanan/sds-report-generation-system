@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ReportStatus } from '@prisma/client';
+import { ReportCategory, ReportStatus, ReportVisibility } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import {type SubmitHandler, useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
-import {type z } from 'zod';
+import { type z } from 'zod';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
@@ -56,12 +56,12 @@ export default function AdminOrgReportPage() {
   const createCommentForm = useForm<CommentInputs>({
     resolver: zodResolver(commentSchemas.createInReport),
     values: {
-      reportId: reportData?.id!,
+      reportId: reportData?.id ?? '',
       content: '',
       notificationData: {
-        organizationId: reportData?.organizationId!,
-        reportVisibility: reportData?.visibility!,
-        userId: reportData?.createdById!,
+        organizationId: reportData?.organizationId ?? '',
+        reportVisibility: reportData?.visibility ?? ReportVisibility.PRIVATE,
+        userId: reportData?.createdById ?? '',
       },
     },
   });
@@ -107,15 +107,15 @@ export default function AdminOrgReportPage() {
   const [due, setDue] = useState<string | undefined>('');
   const updateReportStatus = async (status: ReportStatus) => {
     await updateReportStatusMutation.mutateAsync({
-      id: reportData?.id!,
+      id: reportData?.id ?? '',
       logData: {
-        category: reportData?.category!,
-        name: reportData?.organization.name!,
-        subject: reportData?.subject!,
+        category: reportData?.category ?? ReportCategory.OTHER,
+        name: reportData?.organization.name ?? '',
+        subject: reportData?.subject ?? '',
       },
       notificationData: {
-        organizationId: reportData?.organizationId!,
-        userId: reportData?.createdById!,
+        organizationId: reportData?.organizationId ?? '',
+        userId: reportData?.createdById ?? '',
       },
       status,
       due: due ? new Date(due).toISOString() : undefined,
@@ -163,8 +163,8 @@ export default function AdminOrgReportPage() {
             </div>
             <div className="mt-7 flex justify-between text-xl font-medium">
               <h2>
-                {reportData?.category.charAt(0).toUpperCase()! +
-                  reportData?.category.slice(1).toLowerCase()!}
+                {reportData?.category?.charAt(0).toUpperCase() +
+                  reportData?.category?.slice(1).toLowerCase()}
               </h2>{' '}
               <h2 className="text-right">
                 {reportData?.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}

@@ -3,14 +3,14 @@ import { ReportCategory, ReportVisibility } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import {type SubmitHandler, useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import {type z } from 'zod';
+import { type z } from 'zod';
 import NotificationAlert from '~/components/notification-alert';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
-import {type OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -31,18 +31,22 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function CreateReportPage() {
-  const createReportMutation = api.shared.report.create.useMutation();
+  const router = useRouter();
+
+  const createReportMutation = api.shared.report.create.useMutation({
+    onSuccess: async ({ id }) => {
+      toast.success('Created Report Successfully!', {
+        position: 'bottom-right',
+      });
+      await router.push(`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${id}`);
+    },
+  });
   const createReportForm = useForm<InputsReport>({ resolver: zodResolver(reportSchemas.create) });
 
   const getAnnouncementQuery = api.shared.announcement.get.useQuery();
 
-  const router = useRouter();
   const onSubmitReport: SubmitHandler<InputsReport> = async (values) => {
     await createReportMutation.mutateAsync(values);
-    toast.success('Created Report Successfully!', {
-      position: 'bottom-right',
-    });
-    setTimeout(() => router.push(`${paths.ORGANIZATION}`), 1500);
   };
 
   const onSuccessUpload: OnSuccessUpload = (result) => {

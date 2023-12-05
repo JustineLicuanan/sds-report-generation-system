@@ -1,5 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { getQueryKey } from '@trpc/react-query';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
@@ -24,7 +22,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AnnouncementPage() {
-  const queryClient = useQueryClient();
+  const utils = api.useContext();
 
   const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<string | null>(null);
@@ -34,16 +32,18 @@ export default function AnnouncementPage() {
     orderByDue: OrderBy.ASC,
   });
   const archiveAnnouncementMutation = api.admin.announcement.archive.useMutation({
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [getQueryKey(api.admin.announcement.get, undefined, 'query')],
+    onSuccess: async () => {
+      await utils.admin.announcement.get.invalidate({
+        includeAudience: true,
+        orderByDue: OrderBy.ASC,
       });
     },
   });
 
-  const archiveAnnouncementById = (id: string) => {
-    archiveAnnouncementMutation.mutateAsync({ id });
-  };
+  async function archiveAnnouncementById(id: string) {
+    await archiveAnnouncementMutation.mutateAsync({ id });
+  }
+
   return (
     <>
       {/* HEADER */}
@@ -155,8 +155,8 @@ export default function AnnouncementPage() {
               <button
                 type="button"
                 className="my-4 cursor-pointer rounded-md bg-red px-8 py-2 text-lg font-medium text-white"
-                onClick={() => {
-                  archiveAnnouncementById(selectedNotification);
+                onClick={async () => {
+                  await archiveAnnouncementById(selectedNotification);
                   setShowAnnouncement(!showAnnouncement);
                 }}
               >

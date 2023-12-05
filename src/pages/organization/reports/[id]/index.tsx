@@ -52,7 +52,7 @@ export default function UserOrgReportPage() {
   });
   const createCommentForm = useForm<InputsComment>({
     resolver: zodResolver(commentSchemas.createInReport),
-    values: { reportId: reportData?.id!, content: '' },
+    values: { reportId: reportData?.id ?? '', content: '' },
   });
 
   const onSubmitComment: SubmitHandler<InputsComment> = async (values) => {

@@ -27,8 +27,11 @@ export default function AdminSideBarMenu() {
   const organizationList = getOrgQuery.data ?? [];
 
   const createAnnouncementMutation = api.admin.announcement.create.useMutation({
-    onSuccess: () => {
-      utils.admin.announcement.get.invalidate({ includeAudience: true, orderByDue: OrderBy.ASC });
+    onSuccess: async () => {
+      await utils.admin.announcement.get.invalidate({
+        includeAudience: true,
+        orderByDue: OrderBy.ASC,
+      });
     },
   });
 

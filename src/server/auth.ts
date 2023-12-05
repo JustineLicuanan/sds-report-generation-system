@@ -99,13 +99,15 @@ export const authOptions: NextAuthOptions = {
         where: { id: (session as unknown as Session).userId },
       });
 
+      if (!user) return;
+
       await db.log.create({
         data: {
           type: LogType.AUTH,
-          name: user?.name!,
-          email: user?.email,
+          name: user.name,
+          email: user.email,
           action: LogAction.SIGN_OUT,
-          createdById: user?.id!,
+          createdById: user.id,
         },
       });
     },
