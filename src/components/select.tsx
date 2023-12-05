@@ -60,13 +60,13 @@ export default function SelectAnnouncement({
       />
 
       <div className="flex gap-2">
-      <button
-            type="button"
-            className="my-2 w-1/3 cursor-pointer rounded-md bg-gray py-2 text-lg font-medium hover:bg-yellow"
-            onClick={() => handleButtonClick("All")}
-          >
-            All
-          </button>
+        <button
+          type="button"
+          className="my-2 w-1/3 cursor-pointer rounded-md bg-gray py-2 text-lg font-medium hover:bg-yellow"
+          onClick={() => handleButtonClick('All')}
+        >
+          All
+        </button>
         {orgCategory.map((org, index) => (
           <button
             key={index}
