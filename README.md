@@ -40,6 +40,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.25
+
+- The announcement section in admin dashboard is now a link. It also displays all the current
+  announcement.
+- New UI for side bar.
+
 ### Version 0.10.24
 
 - Fixed half of lint errors.

@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { OrganizationCategory } from '@prisma/client';
 import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
@@ -44,14 +43,26 @@ export default function AdminSideBarMenu() {
     {
       id: 2,
       name: 'Organizations',
-      imageLink: '/organizations_icon.svg',
+      imageLink: '/organization_icon.png',
       urlLink: `${paths.ADMIN}${paths.ORGANIZATIONS}`,
     },
     {
       id: 3,
-      name: 'Announcement',
-      imageLink: '/announcement_icon.svg',
+      name: 'Announcements',
+      imageLink: '/announcement_white_icon.png',
       urlLink: `${paths.ADMIN}${paths.ANNOUNCEMENTS}`,
+    },
+    {
+      id: 4,
+      name: 'Logs',
+      imageLink: '/log_icon.png',
+      urlLink: `${paths.ADMIN}${paths.ORGANIZATION_REPORTS}${paths.LOGS}`,
+    },
+    {
+      id: 5,
+      name: 'Appointments',
+      imageLink: '/Appointment_icon.svg',
+      urlLink: `${paths.ADMIN}${paths.APPOINTMENTS}`,
     },
   ];
 
@@ -110,7 +121,7 @@ export default function AdminSideBarMenu() {
       setCreateOrganization(!createOrganization);
     }
   };
-
+  console.log(logDropdown);
   return (
     <>
       {/* HAMBURGER MENU */}
@@ -143,28 +154,33 @@ export default function AdminSideBarMenu() {
         id="side-bar"
         className={`${
           showSidebar ? 'hidden duration-300 md:flex' : 'flex'
-        } sticky top-20 z-[100] my-2 ml-1 h-[90vh] flex-col items-center bg-green px-1 md:sticky md:my-3 md:ml-2  md:h-[87vh] lg:ml-3`}
+        } sticky top-[10vh] z-[100] h-full flex-col bg-green px-1 py-3 md:h-[90vh]`}
       >
         {/* SIDE BAR LINKS */}
         {sidebarMenu.map((item) => (
-          <Link
-            href={item.urlLink}
-            key={item.id}
-            className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md p-1 hover:bg-yellow md:mx-1 lg:mt-2  lg:h-12 lg:w-12 ${
-              asPath === item.urlLink ? 'bg-yellow' : 'bg-gray' // Check if the current route matches the item's urlLink
-            }`}
-          >
-            <Image
-              width={100}
-              height={100}
-              src={item.imageLink}
-              alt={item.name}
-              className="h-10 w-fit hover:scale-105 lg:h-12"
-            />
-            <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
-              {item.name}
-            </div>
-          </Link>
+          <div key={item.id} className="">
+            <button
+              onClick={() => router.push(item.urlLink)}
+              className={`flex w-full items-center gap-1 rounded-lg px-1 py-2 hover:bg-yellow ${
+                asPath === item.urlLink ? 'bg-yellow' : ''
+              }`}
+            >
+              <Image
+                width={100}
+                height={100}
+                src={item.imageLink}
+                alt={item.name}
+                className="max-w-[20px]"
+              />
+              <div
+                className={`rounded-md px-2 py-1 text-left text-lg  text-white ${
+                  asPath === item.urlLink ? 'font-bold' : 'font-medium'
+                }`}
+              >
+                {item.name}
+              </div>
+            </button>
+          </div>
         ))}
 
         {/* SIDE BAR BUTTONS */}
@@ -172,54 +188,10 @@ export default function AdminSideBarMenu() {
           <div className="relative">
             <button
               type="button"
-              className="group  mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
+              className={`${
+                createDropdown ? 'bg-yellow' : 'rounded-lg'
+              } flex w-full items-center gap-1  px-1 py-2 hover:bg-yellow`}
               onClick={() => {
-                if (createDropdown) {
-                  setCreateDropdown(!createDropdown);
-                }
-                setLogDropdown(!logDropdown);
-              }}
-            >
-              <Image
-                width={100}
-                height={100}
-                src="/log_icon.svg"
-                alt="Logs"
-                className="h-12 w-fit hover:scale-105"
-              />
-              <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
-                Logs
-              </div>
-            </button>
-            {logDropdown && (
-              <div className="absolute -bottom-[75%] left-12 z-[100] flex flex-col rounded-sm bg-gray text-left text-lg font-medium shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]">
-                <button
-                  type="button"
-                  className="px-2 py-1 text-lg font-medium hover:bg-yellow"
-                  onClick={() =>
-                    router.push(`${paths.ADMIN}${paths.ORGANIZATION_REPORTS}${paths.LOGS}`)
-                  }
-                >
-                  Reports
-                </button>
-                <button
-                  type="button"
-                  className="px-2 py-1 text-lg font-medium hover:bg-yellow"
-                  onClick={() => router.push(`${paths.ADMIN}${paths.AUTH_LOGS}`)}
-                >
-                  Auth
-                </button>
-              </div>
-            )}
-          </div>
-          <div className="relative">
-            <button
-              type="button"
-              className="group  mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1 lg:mt-2 lg:h-12 lg:w-12"
-              onClick={() => {
-                if (logDropdown) {
-                  setLogDropdown(!logDropdown);
-                }
                 setCreateDropdown(!createDropdown);
               }}
             >
@@ -228,56 +200,102 @@ export default function AdminSideBarMenu() {
                 height={100}
                 src="/create_icon.svg"
                 alt="Create Icon"
-                className="h-12 w-fit hover:scale-105"
+                className="max-w-[20px]"
               />
-              <div className="absolute left-12 hidden rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
+              <div
+                className={`rounded-md px-2 py-1 text-left text-lg text-white ${
+                  createDropdown ? 'font-bold' : ''
+                }`}
+              >
                 Create
+              </div>
+              <div className="flex w-full justify-end">
+                <Image
+                  width={100}
+                  height={100}
+                  src="/dropdown_icon.png"
+                  alt="Dropdown Icon"
+                  className={`${
+                    createDropdown ? 'rotate-180 duration-300' : 'duration-300'
+                  } max-w-[20px]`}
+                />
               </div>
             </button>
             {createDropdown && (
-              <div className="absolute -bottom-[75%] left-12 z-[100] flex flex-col rounded-sm bg-gray text-left text-lg font-medium shadow-[5px_5px_10px_0px_rgba(94,94,94,1)]">
-                <button
-                  type="button"
-                  className="px-2 py-1 text-lg font-medium hover:bg-yellow"
-                  onClick={() => {
-                    return (
-                      setCreateOrganization(!createOrganization), setCreateDropdown(!createDropdown)
-                    );
-                  }}
-                >
-                  Organization
-                </button>
-                <button
-                  type="button"
-                  className="px-2 py-1 text-lg font-medium hover:bg-yellow"
-                  onClick={() => {
-                    return (
-                      setCreateAnnouncement(!createAnnouncement), setCreateDropdown(!createDropdown)
-                    );
-                  }}
-                >
-                  Announcement
-                </button>
+              <div className="z-[100] flex flex-col  bg-gray/20 text-left text-lg font-medium">
+                <div>
+                  <button
+                    type="button"
+                    className={`flex w-full items-center gap-1 px-1 py-2 hover:bg-yellow/90 ${
+                      createOrganization ? 'bg-yellow/90' : ''
+                    }`}
+                    onClick={() => {
+                      return setCreateOrganization(!createOrganization);
+                    }}
+                  >
+                    <Image
+                      width={100}
+                      height={100}
+                      src="/organization_icon.png"
+                      alt="Organization Icon"
+                      className="max-w-[20px]"
+                    />
+                    <div
+                      className={`rounded-md px-2 py-1 text-left text-lg text-white ${
+                        createOrganization ? 'font-bold' : ''
+                      }`}
+                    >
+                      Organization
+                    </div>
+                  </button>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    className={`flex w-full items-center gap-1 px-1 py-2 hover:bg-yellow/90 ${
+                      createAnnouncement ? 'bg-yellow/90' : ''
+                    }`}
+                    onClick={() => {
+                      return setCreateAnnouncement(!createAnnouncement);
+                    }}
+                  >
+                    <Image
+                      width={100}
+                      height={100}
+                      src="/announcement_white_icon.png"
+                      alt="Announcement Icon"
+                      className="max-w-[20px]"
+                    />
+                    <div
+                      className={`rounded-md px-2 py-1 text-left text-lg text-white ${
+                        createAnnouncement ? 'font-bold' : ''
+                      }`}
+                    >
+                      Announcement
+                    </div>
+                  </button>
+                </div>
               </div>
             )}
           </div>
         </div>
-        <div className="mt-1 h-[4px] w-full rounded bg-gray lg:mt-2"></div>
-        <Link
-          href={paths.SIGN_OUT}
-          className={`group relative mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-gray p-1 hover:bg-yellow md:mx-1  lg:mt-2 lg:h-12 lg:w-12`}
-        >
-          <Image
-            width={100}
-            height={100}
-            src="/signout_icon.svg"
-            alt="Sign Out Icon"
-            className="h-10 w-fit hover:scale-105 lg:h-12"
-          />
-          <div className="absolute left-12 hidden whitespace-nowrap rounded-md bg-gray px-2 py-1 text-left text-lg font-medium group-hover:block lg:left-16 lg:text-xl">
-            Sign Out
-          </div>
-        </Link>
+        <div className="mt-1 h-[1px] w-full rounded bg-gray lg:my-2"></div>
+        <div>
+          <button
+            type="button"
+            onClick={() => router.push(paths.SIGN_OUT)}
+            className={`flex w-full items-center gap-1 rounded-lg px-1 py-2 hover:bg-yellow`}
+          >
+            <Image
+              width={100}
+              height={100}
+              src="/signout_icon.png"
+              alt="Sign Out Icon"
+              className="max-w-[20px]"
+            />
+            <div className="rounded-md px-2 py-1 text-left text-lg  text-white">Sign Out</div>
+          </button>
+        </div>
       </div>
 
       {/* ANNOUNCEMENT DROP DOWN */}

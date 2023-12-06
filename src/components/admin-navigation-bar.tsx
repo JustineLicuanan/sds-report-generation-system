@@ -37,7 +37,7 @@ export default function AdminNavBar() {
 
   return (
     <>
-      <nav className="sticky top-0 z-[999] flex max-h-[12vh] min-h-[4vh] items-center">
+      <nav className="sticky top-0 z-[999] flex min-h-[10vh] items-center shadow-lg">
         <div
           id="nav-container"
           className="flex w-full items-center justify-between py-1 md:px-7 md:py-2"

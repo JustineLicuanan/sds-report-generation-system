@@ -12,7 +12,7 @@ export default function OrganizationSideBarMenu() {
     {
       id: 2,
       name: 'Announcement',
-      imageLink: '/announcement_icon.svg',
+      imageLink: '/announcement_white_icon.png',
       urlLink: `${paths.ORGANIZATION}${paths.ANNOUNCEMENTS}`,
     },
     {

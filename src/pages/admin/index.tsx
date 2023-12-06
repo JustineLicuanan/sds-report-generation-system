@@ -116,36 +116,38 @@ export default function AdminDashboardPage() {
           <div className="col-span-3 row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2">
             <div className="flex items-center ">
               <h1 className=" py-2 text-2xl font-bold">Appointments</h1>
-              <Image width={30} height={30} src="/appointment_icon.svg" alt="Appointment Icon" />
+              <Image
+                width={30}
+                height={30}
+                src="/appointment_black_icon.svg"
+                alt="Appointment Icon"
+              />
             </div>
             <div className="text-lg font-medium ">No pending appointment(s) today.</div>
           </div>
-          <div className="col-span-3 row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2">
+          <Link
+            href={`${paths.ADMIN}${paths.ANNOUNCEMENTS}`}
+            className="group col-span-3  row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2"
+          >
             <div className="flex items-center">
-              <h1 className=" py-2 text-2xl font-bold">Announcements</h1>
+              <h1 className=" py-2 text-2xl font-bold group-hover:text-blue-500 group-hover:underline ">
+                Announcements
+              </h1>
               <Image width={30} height={30} src="/announcement_icon.svg" alt="Announcement Icon" />
             </div>
-            {announcement.length > 2 ? (
-              <div className="text-lg font-medium ">
-                {announcement[0]?.subject},{announcement[1]?.subject} and {announcement?.length - 2}{' '}
-                <Link
-                  href={`${paths.ADMIN}${paths.ANNOUNCEMENTS}`}
-                  className="text-blue-500 hover:underline"
-                >
-                  {' '}
-                  more
-                </Link>{' '}
-                announcement(s).
-              </div>
-            ) : announcement?.length > 0 ? (
-              <div className="w-full py-2 text-lg">
-                {announcement[0]?.subject} and {announcement[1]?.subject}
-              </div>
-            ) : (
-              <div className="text-lg font-medium ">There are no announcement.</div>
-            )}
+            <div className="h-[100px] overflow-auto">
+              {announcement.length ? (
+                announcement.map((announcement, index) => (
+                  <div key={index} className="text-lg font-medium ">
+                    {announcement.subject}
+                  </div>
+                ))
+              ) : (
+                <div className="text-lg font-medium ">There are no announcement.</div>
+              )}
+            </div>
             {/* <div className="text-lg font-medium ">No new announcement today.</div> */}
-          </div>
+          </Link>
         </div>
       </main>
     </>
