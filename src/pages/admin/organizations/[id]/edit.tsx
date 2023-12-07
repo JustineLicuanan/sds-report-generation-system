@@ -13,6 +13,7 @@ import { type z } from 'zod';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
+import { UserPosition } from '~/enums/user-position';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -39,6 +40,7 @@ export default function EditInfoPage() {
   const [showSignOut, setShowSignOut] = useState(false); // ENABLE OR DISABLED SIGNOUT BUTTON
   const [confirmSignout, setConfirmSignOut] = useState(''); // CHECK IF THE INPUT BOX IS CORRECT
   const [successAlert, setSuccessAlert] = useState(false); // SHOW SUCCESS ALERT
+  const [other, setOther] = useState(false);
 
   const queryClient = useQueryClient();
   const getOrgQuery = api.admin.org.get.useQuery({ id: router.query.id as Inputs['id'] });
@@ -105,7 +107,7 @@ export default function EditInfoPage() {
               Organization Profile
             </h1>
             <form
-              className="mx-auto my-0 flex max-w-2xl flex-col"
+              className="mx-auto my-0 flex max-w-3xl flex-col"
               onSubmit={editInfoForm.handleSubmit(onSubmit)}
             >
               {/* ORGANIZATION'S LOGO */}
@@ -150,11 +152,11 @@ export default function EditInfoPage() {
                 id="name"
                 className={` ${
                   visibility ? 'bg-gray' : ''
-                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1  outline-none md:w-2/4`}
+                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1   md:w-2/4`}
                 readOnly={visibility}
                 {...editInfoForm.register('name')}
               />
-              {editInfoForm.formState.isDirty}
+              {/* {editInfoForm.formState.isDirty} */}
               {/* CATEGORY */}
               <label htmlFor="category" className="mt-1 text-lg font-bold">
                 Category
@@ -184,18 +186,69 @@ export default function EditInfoPage() {
                   id="text-description"
                   className={` ${
                     visibility ? 'bg-gray' : ''
-                  } mt-1   border-[1px] border-green px-2  py-1 outline-none`}
+                  } mt-1   border-[1px] border-green px-2  py-1 `}
                   rows={2}
                   readOnly={visibility}
                   {...editInfoForm.register('description')}
                 ></textarea>
+                <div>
+                  <div className="mb-1 mt-6 text-xl font-bold">Add a member:</div>
+                  <div className="flex gap-1">
+                    <input
+                      type="email"
+                      id="email-address"
+                      placeholder="Email"
+                      className={`h-9 w-2/4 border-[1px] border-green px-2  py-1 text-lg `}
+                    />
 
-                <div className="mb-1 mt-6 text-xl font-bold">Members</div>
+                    <select
+                      id="position"
+                      className={`h-9 w-1/4 border-[1px] border-green bg-white px-2 py-1 text-lg`}
+                      onChange={(e) => {
+                        if (e.target.value === 'other') {
+                          setOther(!other);
+                        } else {
+                          setOther(false);
+                        }
+                      }}
+                    >
+                      <option value="">Select a position</option>
+                      {Object.values(UserPosition).map((position, index) => (
+                        <option key={index} value={position.toLowerCase()}>
+                          {position}
+                        </option>
+                      ))}
+                      <option value="other">Other</option>
+                    </select>
+
+                    <input
+                      type="text"
+                      id="other"
+                      className={`${
+                        other ? '' : 'bg-gray'
+                      } h-9 w-1/4 border-[1px] border-green  px-2  py-1 text-lg `}
+                      disabled={!other}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      append({ email: '', position: '' });
+                    }}
+                    className={` my-2 w-full  rounded-md bg-yellow  px-8 py-2 text-lg font-medium`}
+                  >
+                    Add new email
+                  </button>
+                </div>
+
+                <div className="mb-1 mt-6 text-xl font-bold">
+                  {getOrgQuery.data?.[0]?.name} Members
+                </div>
                 {fields.map((field, index) => (
-                  <div key={field.id} className="flex">
+                  <div key={field.id} className="my-1 flex items-center">
                     <button
                       type="button"
-                      className={`me-1 ms-1 flex h-9 items-center self-end px-2 ${
+                      className={`me-1 ms-1 flex h-9 items-center px-2 ${
                         visibility ? 'cursor-not-allowed bg-red opacity-50' : 'bg-red '
                       }`}
                       disabled={visibility}
@@ -203,45 +256,39 @@ export default function EditInfoPage() {
                       <Image src="/session_icon.png" alt="Session Icon" width={40} height={40} />
                     </button>
                     <div className="me-1 w-4/6">
-                      <label htmlFor="email-address" className=" text-lg font-bold">
-                        Email
-                      </label>
-                      <br />
                       <input
-                        type="text"
+                        type="email"
                         id="email-address"
-                        placeholder="e.g music.organization@sample.com"
+                        placeholder="Email"
                         className={`${
                           visibility ? 'bg-gray' : ''
-                        } mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none`}
+                        }  h-9 w-full border-[1px] border-green px-2  py-1 text-lg `}
                         {...register(`organization.${index}.email`)}
                         disabled={visibility}
                       />
                     </div>
                     <div className="w-2/6">
-                      <label htmlFor="position" className=" text-lg font-bold">
-                        Position
-                      </label>
-                      <br />
                       <select
                         id="position"
                         className={`${
                           visibility ? 'bg-gray text-black/50' : ''
-                        } mt-1 h-9 w-full border-[1px] border-green px-2  py-1 text-lg outline-none`}
+                        } h-9 w-full border-[1px] border-green px-2  py-1 text-lg `}
                         {...register(`organization.${index}.position`)}
                         disabled={visibility}
                       >
                         <option value="">Select a position</option>
-                        <option value="">President</option>
-                        <option value="">Vice President</option>
-                        <option value="">Treasurer</option>
-                        <option value="others">Others</option>
+                        {Object.values(UserPosition).map((position, index) => (
+                          <option key={index} value={position.toLowerCase()}>
+                            {position}
+                          </option>
+                        ))}
+                        <option value="other">Other</option>
                       </select>
                     </div>
                     <button
                       type="button"
-                      className={`ms-1 flex h-9 items-center self-end px-2 ${
-                        visibility ? 'cursor-not-allowed bg-gray opacity-50' : 'bg-gray text-white'
+                      className={`ms-1 flex h-9 items-center bg-green px-2 ${
+                        visibility ? 'cursor-not-allowed  opacity-50' : ' text-white'
                       }`}
                       disabled={visibility}
                     >
@@ -254,7 +301,7 @@ export default function EditInfoPage() {
                           remove(index);
                         }
                       }}
-                      className={`ms-1 flex h-9 items-center self-end px-2 ${
+                      className={`ms-1 flex h-9 items-center px-2 ${
                         fields.length === 1
                           ? 'cursor-not-allowed bg-red opacity-50'
                           : 'bg-red text-white'
@@ -265,19 +312,6 @@ export default function EditInfoPage() {
                     </button>
                   </div>
                 ))}
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    append({ email: '', position: '' });
-                  }}
-                  className={`${
-                    visibility ? 'cursor-not-allowed opacity-50' : ''
-                  } my-2 w-full  rounded-md bg-yellow  px-8 py-2 text-lg font-medium`}
-                  disabled={visibility}
-                >
-                  Add new email
-                </button>
 
                 <div className="my-2 flex justify-between">
                   <button
@@ -332,7 +366,7 @@ export default function EditInfoPage() {
                           type="text"
                           name="signout-confirmation"
                           id="signout-confirmation"
-                          className="mt-2 w-3/4 border border-green px-2 py-1 text-xl outline-none"
+                          className="mt-2 w-3/4 border border-green px-2 py-1 text-xl "
                           onChange={(e) => setConfirmSignOut(e.target.value)}
                           value={confirmSignout}
                         />

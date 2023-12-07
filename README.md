@@ -34,7 +34,6 @@ respective docs.
 
 ## Upcoming Changes
 
-- Make sort functional for other web pages
 - Make it more mobile responsive
 - Change the web page link for user and admin in some pages e.g logs.
 
@@ -44,7 +43,7 @@ respective docs.
 
 - Fixed the UI of create announcement.
 - Added a org position in logs.
-- Edit info unfinished.
+- Edit info unfinished(70% done).
 
 ### Version 0.10.25
 
