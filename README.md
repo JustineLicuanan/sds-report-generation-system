@@ -40,6 +40,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.26
+
+- Fixed the UI of create announcement.
+- Added a org position in logs.
+- Edit info unfinished.
+
 ### Version 0.10.25
 
 - The announcement section in admin dashboard is now a link. It also displays all the current

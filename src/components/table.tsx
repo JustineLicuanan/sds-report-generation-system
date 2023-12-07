@@ -1,8 +1,10 @@
-import { LogAction, type Log } from '@prisma/client';
+import { LogAction } from '@prisma/client';
+import { inferRouterOutputs } from '@trpc/server';
 import { type MutableRefObject } from 'react';
+import { AppRouter } from '~/server/api/root';
 
 type YourComponentProps = {
-  data: Log[];
+  data: inferRouterOutputs<AppRouter>['admin']['log']['get'];
   tableHeader: string[];
   tableRef: MutableRefObject<null>;
 };
@@ -36,7 +38,7 @@ export default function Table({ data, tableHeader, tableRef }: YourComponentProp
             data.map((data) => (
               <tr key={data.reportId} className=" even:bg-[#808080]/20">
                 <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                  {data.name}
+                  {data.name} - {data.createdBy.name}
                 </td>
                 <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
                   {data.subject}

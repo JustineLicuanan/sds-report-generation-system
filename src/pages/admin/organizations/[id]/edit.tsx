@@ -10,14 +10,14 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
+import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import {type OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { orgSchemas } from '~/zod-schemas/admin/org';
-import AdminNavBar from '~/components/admin-navigation-bar';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -154,7 +154,7 @@ export default function EditInfoPage() {
                 readOnly={visibility}
                 {...editInfoForm.register('name')}
               />
-
+              {editInfoForm.formState.isDirty}
               {/* CATEGORY */}
               <label htmlFor="category" className="mt-1 text-lg font-bold">
                 Category
@@ -176,30 +176,6 @@ export default function EditInfoPage() {
                   </option>
                 ))}
               </select>
-
-              {/* NOTE */}
-              <div className="text-sn mb-1 mt-2 w-full font-bold md:w-2/4">
-                NOTE:{'   '}
-                <span className="text-sm font-normal">
-                  Please provide the existing CVSU email address that you would like to grant
-                  permission to.
-                </span>
-              </div>
-
-              {/* EMAIL */}
-              <label htmlFor="email-address" className=" text-lg font-bold">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email-address"
-                className={` ${
-                  visibility ? 'bg-gray' : ''
-                } mt-1 h-8 w-full border-[1px] border-green px-2 py-1  outline-none md:w-2/4`}
-                readOnly={visibility}
-                {...editInfoForm.register('email')}
-              />
-
               <label htmlFor="text-description" className="mt-1 text-lg font-bold">
                 Description
               </label>

@@ -71,7 +71,7 @@ export default function SelectAnnouncement({
           <button
             key={index}
             type="button"
-            className="my-2 w-1/3 cursor-pointer rounded-md bg-gray py-2 text-lg font-medium hover:bg-yellow"
+            className="my-2 w-1/3 cursor-pointer rounded-md bg-gray px-2 py-2 text-lg font-medium hover:bg-yellow"
             onClick={() => handleButtonClick(org.category)}
           >
             {org.name}

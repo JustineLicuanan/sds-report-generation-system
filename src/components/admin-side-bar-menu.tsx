@@ -121,7 +121,6 @@ export default function AdminSideBarMenu() {
       setCreateOrganization(!createOrganization);
     }
   };
-  console.log(logDropdown);
   return (
     <>
       {/* HAMBURGER MENU */}
@@ -154,7 +153,7 @@ export default function AdminSideBarMenu() {
         id="side-bar"
         className={`${
           showSidebar ? 'hidden duration-300 md:flex' : 'flex'
-        } sticky top-[10vh] z-[100] h-full flex-col bg-green px-1 py-3 md:h-[90vh]`}
+        } fixed top-[10vh] z-[100] h-[90vh] flex-col bg-green px-1 py-3 md:sticky`}
       >
         {/* SIDE BAR LINKS */}
         {sidebarMenu.map((item) => (
@@ -389,23 +388,22 @@ export default function AdminSideBarMenu() {
               className="border border-green px-2 py-1 text-lg"
               {...createAnnouncementForm.register('description')}
             ></textarea>
-            <div className="mt-3 flex w-fit gap-2">
-              <label className="relative mb-5 inline-flex cursor-pointer items-center">
+            <div className="my-3 flex w-fit items-center gap-2">
+              <label className="hover:cursor-pointer">
                 <input
+                  className="mr-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-neutral-300 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-neutral-100 after:shadow-[0_0px_3px_0_rgb(0_0_0_/_7%),_0_2px_2px_0_rgb(0_0_0_/_4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-yellow checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-yellow checked:after:shadow-[0_3px_1px_-2px_rgba(0,0,0,0.2),_0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px_-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-yellow checked:focus:bg-yellow checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-yellow dark:checked:after:bg-yellow dark:focus:before:shadow-[3px_-1px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]"
                   type="checkbox"
-                  value=""
-                  className="peer sr-only"
+                  role="switch"
                   {...createAnnouncementForm.register('hasReport')}
                 />
-                <div className="peer-focus: peer h-5 w-9  rounded-full bg-gray after:absolute after:start-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray after:bg-white after:transition-all after:content-[''] peer-checked:bg-yellow peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-1 peer-focus:ring-yellow rtl:peer-checked:after:-translate-x-full dark:border-gray dark:bg-gray dark:peer-focus:ring-blue-800"></div>
-                <span className="ms-3 text-sm font-bold text-black/80">Has report </span>
+                Report
               </label>
               <div className="group relative">
                 <div className="h-5 w-5 rounded-full border bg-gray text-center text-sm font-bold">
                   ?
                 </div>
                 <div className="absolute left-0 hidden whitespace-nowrap rounded-md bg-gray px-2 py-1 text-sm font-medium group-hover:block">
-                  Some description
+                  If organization(s) are need to report linked to this announcement, enable this.
                 </div>
               </div>
             </div>

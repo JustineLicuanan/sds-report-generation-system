@@ -28,7 +28,11 @@ export default function AdminLogPage() {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [date, setDate] = useState('');
-  const getReportLogsQuery = api.admin.log.get.useQuery({ type: LogType.REPORT });
+
+  const getReportLogsQuery = api.admin.log.get.useQuery({
+    type: LogType.REPORT,
+    includeCreatedBy: true,
+  });
 
   const tableRef = useRef(null);
 
@@ -38,13 +42,26 @@ export default function AdminLogPage() {
     sheet: 'report',
   });
 
+  getReportLogsQuery?.data?.sort((a, b) => {
+    const dateTimeA = a.createdAt.toISOString().slice(0, 19);
+    const dateTimeB = b.createdAt.toISOString().slice(0, 19);
+
+    return dateTimeB.localeCompare(dateTimeA);
+  });
+
   if (date.toLowerCase() === 'oldest') {
     getReportLogsQuery?.data?.sort((a, b) => {
-      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      return a.createdAt
+        .toISOString()
+        .slice(0, 19)
+        .localeCompare(b.createdAt.toISOString().slice(0, 19));
     });
   } else if (date.toLowerCase() === 'latest') {
     getReportLogsQuery?.data?.sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      return b.createdAt
+        .toISOString()
+        .slice(0, 19)
+        .localeCompare(a.createdAt.toISOString().slice(0, 19));
     });
   }
 
@@ -79,10 +96,23 @@ export default function AdminLogPage() {
         <AdminSideBarMenu />
 
         {/* MAIN CONTENT */}
-
         <div className="mx-3 my-4 w-full">
           <div className="mx-auto my-0 min-h-[87vh] max-w-5xl rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
+            {/* <div className="flex justify-between"> */}
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Log</h1>
+            {/* <select
+                name="logs-dropdown"
+                id="logs-dropdown"
+                className="me-2 h-7 border-[1px] border-green bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
+              >
+                <option value="report" className="text-sm md:text-base">
+                  Report
+                </option>
+                <option value="authentication" className="text-sm md:text-base">
+                  Authentication
+                </option>
+              </select> */}
+            {/* </div> */}
             <div className="my-4 flex flex-col md:my-6 md:flex-row">
               {/* SEARCH */}
               <div className="flex">
