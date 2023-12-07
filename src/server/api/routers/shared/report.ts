@@ -8,6 +8,7 @@ import {
 import { TRPCError } from '@trpc/server';
 
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
+import { isVowel } from '~/utils';
 import { reportSchemas } from '~/zod-schemas/shared/report';
 
 export const reportRouter = createTRPCRouter({
@@ -21,9 +22,9 @@ export const reportRouter = createTRPCRouter({
           adminNotifications: {
             create: {
               type: NotificationType.REPORT,
-              message: `${ctx.session.user.organizationName} ${
-                ctx.session.user.name
-              } submitted a ${input.category.toLowerCase()} report: ${input.subject}`,
+              message: `${ctx.session.user.organizationName} ${ctx.session.user.name} submitted ${
+                isVowel(input.category.charAt(0)) ? 'an' : 'a'
+              } ${input.category.toLowerCase()} report: ${input.subject}`,
             },
           },
           logs: {

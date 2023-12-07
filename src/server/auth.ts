@@ -87,7 +87,7 @@ export const authOptions: NextAuthOptions = {
       await db.log.create({
         data: {
           type: LogType.AUTH,
-          name: user.name!,
+          name: !user.organizationIsArchived ? `${user.organizationName} ${user.name}` : user.name!,
           email: user.email,
           action: LogAction.SIGN_IN,
           createdById: user.id,
@@ -104,7 +104,7 @@ export const authOptions: NextAuthOptions = {
       await db.log.create({
         data: {
           type: LogType.AUTH,
-          name: user.name,
+          name: !user.organizationIsArchived ? `${user.organizationName} ${user.name}` : user.name,
           email: user.email,
           action: LogAction.SIGN_OUT,
           createdById: user.id,
