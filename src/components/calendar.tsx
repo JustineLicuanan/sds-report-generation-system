@@ -19,8 +19,8 @@ export default function Calendar({
 
   const restricted = [
     {
-      start: startDate.toISOString().split('T')[0],
-      end: endDate.toISOString().split('T')[0],
+      start: startDate.toISOString().split('T')[0]!,
+      end: endDate.toISOString().split('T')[0]!,
       overlap: false,
       display: 'background',
       color: '#ff9f89',
@@ -31,9 +31,11 @@ export default function Calendar({
     id: item.id,
     title: item.createdBy.organizationName,
     start: item.due?.toISOString() ?? '',
+    end: item.due?.toISOString() ?? '',
+    color: '',
   }));
 
-  const events: Array = [...restricted, ...data];
+  const events: any[] = [...restricted, ...data];
 
   const updateReportMutation = api.admin.report.update.useMutation({
     onSuccess: async () => {
@@ -43,7 +45,7 @@ export default function Calendar({
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<number | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState();
 
   return (
     <>
@@ -72,10 +74,6 @@ export default function Calendar({
           end: 'dayGridMonth,dayGridWeek', // will normally be on the right. if RTL, will be on the left
         }}
         height={'70vh'}
-        selectable={true}
-        select={(info) => {
-          alert('selected ' + info.startStr + ' to ' + info.endStr);
-        }}
         droppable={true}
         editable={true}
         eventDrop={async (props) =>
@@ -84,14 +82,12 @@ export default function Calendar({
             due: props.event.start?.toISOString(),
           })
         }
-        eventClick={(info) => {
-          const selected = events.find((event: string) => event.id === info.event.id);
-          setSelectedEvent(selected);
+        eventClick={() => {
           setShowModal(!showModal);
         }}
         eventBackgroundColor="green"
       />
-      {showModal && (
+      {showModal && selectedEvent !== null && (
         <div
           className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out
       `}

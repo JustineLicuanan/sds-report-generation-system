@@ -42,7 +42,8 @@ respective docs.
 ### Version 0.10.28
 
 - The appointments is now working.
-- The calendar is now working.
+- The dates in calendar is now showing.
+- calendar modal is not working.
 
 ### Version 0.10.26
 
