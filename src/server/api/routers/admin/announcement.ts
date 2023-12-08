@@ -64,6 +64,19 @@ export const announcementRouter = createTRPCRouter({
     }
   }),
 
+  markAsCompleted: adminProcedure
+    .input(announcementSchemas.markAsCompleted)
+    .mutation(({ ctx, input }) => {
+      try {
+        return ctx.db.announcement.updateMany({
+          where: { id: input?.id },
+          data: { isCompleted: input?.isCompleted === false ? input?.isCompleted : true },
+        });
+      } catch (err) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+      }
+    }),
+
   archive: adminProcedure.input(announcementSchemas.archive).mutation(({ ctx, input }) => {
     try {
       return ctx.db.announcement.update({
