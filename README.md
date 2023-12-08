@@ -43,7 +43,7 @@ respective docs.
 
 - Fixed the UI of create announcement.
 - Added a org position in logs.
-- Edit info unfinished(70% done).
+- Edit info unfinished(90% done).
 
 ### Version 0.10.25
 

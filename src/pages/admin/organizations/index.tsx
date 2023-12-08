@@ -22,7 +22,7 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function AdminPage() {
   const getOrgQuery = api.admin.org.get.useQuery();
-
+  
   return (
     <>
       <Head>

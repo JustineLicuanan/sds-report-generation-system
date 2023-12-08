@@ -396,6 +396,7 @@ export default function AdminOrgReportPage() {
               onClick={async () => {
                 await updateReportStatus(ReportStatus.APPROVED);
                 setScheduleAppointment(!scheduleAppointment);
+                console.log(due)
               }}
             >
               Set

@@ -31,6 +31,9 @@ export default function AdminDashboardPage() {
 
   const getAnnouncementQuery = api.admin.announcement.get.useQuery();
   const announcement = getAnnouncementQuery.data ?? [];
+
+  const getReportQuery = api.admin.report.get.useQuery();
+  const getDue = getReportQuery?.data;
   return (
     <>
       <Head>
@@ -111,7 +114,7 @@ export default function AdminDashboardPage() {
             </Splide>
           </div>
           <div className="col-span-3 row-span-2 bg-gray/30 p-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-2 md:row-span-4">
-            <Calendar />
+            <Calendar date={getDue} title={data}/>
           </div>
           <div className="col-span-3 row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2">
             <div className="flex items-center ">

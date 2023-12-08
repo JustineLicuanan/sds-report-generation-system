@@ -2,12 +2,11 @@ import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { Organization, Report } from '@prisma/client';
 
-export default function Calendar() {
-  const events = [
-    { title: 'Sample Event 1', date: '2023-11-01' },
-    { title: 'Sample Event 2', date: '2023-11-02' },
-  ];
+export default function Calendar({ date, title }: { date: []; title: Organization[] }) {
+  const events = [title, date];
+
   return (
     <>
       <FullCalendar
