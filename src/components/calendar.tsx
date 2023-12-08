@@ -33,7 +33,7 @@ export default function Calendar({
     start: item.due?.toISOString() ?? '',
   }));
 
-  const events: object = [...restricted, ...data];
+  const events: Array = [...restricted, ...data];
 
   const updateReportMutation = api.admin.report.update.useMutation({
     onSuccess: async () => {
@@ -43,6 +43,8 @@ export default function Calendar({
   });
 
   const [showModal, setShowModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<number | null>(null);
+
   return (
     <>
       <FullCalendar
@@ -82,9 +84,45 @@ export default function Calendar({
             due: props.event.start?.toISOString(),
           })
         }
-        eventClick={() => setShowModal(!showModal)}
+        eventClick={(info) => {
+          const selected = events.find((event: string) => event.id === info.event.id);
+          setSelectedEvent(selected);
+          setShowModal(!showModal);
+        }}
         eventBackgroundColor="green"
       />
+      {showModal && (
+        <div
+          className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out
+      `}
+        >
+          <div
+            className={`relative z-[5] h-fit w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out `}
+          >
+            <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Announcement</h1>
+            <div className="h-[1px] w-full bg-black "></div>
+            <div className="px-3 py-2">
+              <div className="flex  text-xl">
+                <h4 className="font-semibold">Date:</h4>
+                <div className="ms-1 text-xl font-medium"></div>
+              </div>
+              <div className="flex py-2 text-xl">
+                <h4 className="font-semibold">Organization:</h4>
+                <div className="ms-1 text-xl font-medium"></div>
+              </div>
+            </div>
+            <div className="flex justify-end px-4">
+              <button
+                type="button"
+                className="my-4 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+                onClick={() => setShowModal(!showModal)}
+              >
+                Mark as complete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
