@@ -71,4 +71,17 @@ export const reportRouter = createTRPCRouter({
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
     }
   }),
+
+  markAsCompleted: adminProcedure
+    .input(reportSchemas.markAsCompleted)
+    .mutation(({ ctx, input }) => {
+      try {
+        return ctx.db.report.updateMany({
+          where: { id: input?.id },
+          data: { isCompleted: input?.isCompleted === false ? input?.isCompleted : true },
+        });
+      } catch (err) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+      }
+    }),
 });

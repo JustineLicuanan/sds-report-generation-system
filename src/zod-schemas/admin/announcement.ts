@@ -36,5 +36,9 @@ export const announcementSchemas = {
     audience: z.object({ id: z.string().cuid() }).array().optional(),
   }),
 
+  markAsCompleted: z
+    .object({ id: z.string().cuid().optional(), isCompleted: z.literal(false).optional() })
+    .optional(),
+
   archive: z.object({ id: z.string().cuid() }),
 };

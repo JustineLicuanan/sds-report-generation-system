@@ -40,4 +40,8 @@ export const reportSchemas = {
       category: z.nativeEnum(ReportCategory),
     }),
   }),
+
+  markAsCompleted: z
+    .object({ id: z.string().cuid().optional(), isCompleted: z.literal(false).optional() })
+    .optional(),
 };

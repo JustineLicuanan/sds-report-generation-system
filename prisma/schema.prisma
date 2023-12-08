@@ -52,6 +52,7 @@ model Announcement {
     start              DateTime?
     due                DateTime?
     hasReport          Boolean
+    isCompleted        Boolean             @default(false)
     isArchived         Boolean             @default(false)
     audience           Organization[]
     comments           Comment[]
@@ -73,6 +74,7 @@ model Report {
     hasSchedule        Boolean
     due                DateTime?
     status             ReportStatus        @default(PENDING)
+    isCompleted        Boolean             @default(false)
     isArchived         Boolean             @default(false)
     comments           Comment[]
     adminNotifications AdminNotification[]
