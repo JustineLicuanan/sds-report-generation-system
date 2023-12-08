@@ -57,22 +57,15 @@ export const orgRouter = createTRPCRouter({
     }
   }),
 
-  // FIXME:
-  // update: adminProcedure.input(orgSchemas.update).mutation(async ({ ctx, input }) => {
-  //   const { id, members, ...data } = input;
+  update: adminProcedure.input(orgSchemas.update).mutation(async ({ ctx, input }) => {
+    const { id, ...data } = input;
 
-  //   try {
-  //     // FIXME: count w/ filter available, upsert, set (use $transaction(?) to exec all or nothing)
-  //     await ctx.db.user.upsert(members!);
-
-  //     return ctx.db.organization.update({
-  //       where: { id },
-  //       data: { ...data, members: {  } },
-  //     });
-  //   } catch (err) {
-  //     throw new TRPCError({ code: 'CONFLICT' });
-  //   }
-  // }),
+    try {
+      return ctx.db.organization.update({ where: { id }, data });
+    } catch (err) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+    }
+  }),
 
   archive: adminProcedure.input(orgSchemas.archive).mutation(({ ctx, input }) => {
     try {

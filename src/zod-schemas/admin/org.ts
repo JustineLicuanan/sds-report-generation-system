@@ -27,7 +27,6 @@ export const orgSchemas = {
     })
     .optional(),
 
-  // FIXME:
   update: z.object({
     id: z.string().cuid(),
     name: z.string().trim().min(1).optional(),
@@ -35,20 +34,6 @@ export const orgSchemas = {
     category: z.nativeEnum(OrganizationCategory).optional(),
     image: z.string().url().nullable().optional(),
     imageId: z.string().nullable().optional(),
-    members: z
-      .object({
-        where: z.object({ id: z.string().cuid().default('undefined') }),
-        update: z.object({
-          name: z.string().trim().min(1),
-          email: z.string().trim().toLowerCase().email(),
-        }),
-        create: z.object({
-          name: z.string().trim().min(1),
-          email: z.string().trim().toLowerCase().email(),
-        }),
-      })
-      .array()
-      .optional(),
   }),
 
   archive: z.object({ id: z.string().cuid() }),

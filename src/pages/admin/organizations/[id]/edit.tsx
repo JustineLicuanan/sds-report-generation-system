@@ -1,17 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { OrganizationCategory } from '@prisma/client';
-import { useQueryClient } from '@tanstack/react-query';
-import { getQueryKey } from '@trpc/react-query';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
+import { OrgMemberItem } from '~/components/org-member-item';
 import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { UserPosition } from '~/enums/user-position';
 import { meta } from '~/meta';
@@ -19,6 +18,7 @@ import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { orgSchemas } from '~/zod-schemas/admin/org';
+import { userSchemas } from '~/zod-schemas/admin/user';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -31,11 +31,12 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-type InputsInfo = z.infer<typeof orgSchemas.update>;
-type InputsMember = z.infer<typeof orgSchemas.update>;
+type UpdateOrgInputs = z.infer<typeof orgSchemas.update>;
+type AddMemberInputs = z.infer<typeof userSchemas.create>;
 
 export default function EditInfoPage() {
   const router = useRouter();
+  const utils = api.useContext();
 
   const [visibility, setVisibility] = useState(true); // VISIBILITY OF BUTTON
   const [showSignOut, setShowSignOut] = useState(false); // ENABLE OR DISABLED SIGNOUT BUTTON
@@ -44,50 +45,66 @@ export default function EditInfoPage() {
   const [addOther, setAddOther] = useState(false);
   const [updateOther, setuUpdateOther] = useState(false);
 
-  const queryClient = useQueryClient();
-  const getOrgQuery = api.admin.org.get.useQuery({ id: router.query.id as InputsInfo['id'] });
+  const getOrgQuery = api.admin.org.get.useQuery({
+    id: router.query.id as UpdateOrgInputs['id'],
+    includeMembers: true,
+  });
+
   const updateOrgMutation = api.admin.org.update.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData(getQueryKey(api.admin.org.get, { id: data.id }, 'query'), data);
+      utils.admin.org.get.invalidate({ id: getOrgQuery.data?.[0]?.id, includeMembers: true });
       setSuccessAlert(true);
     },
   });
-  const hasSessionsOrgQuery = api.admin.org.countSessions.useQuery({
-    id: router.query.id as InputsInfo['id'],
+
+  const addMemberMutation = api.admin.user.create.useMutation({
+    onSuccess: (data) => {
+      utils.admin.org.get.invalidate({ id: getOrgQuery.data?.[0]?.id, includeMembers: true });
+      setSuccessAlert(true);
+    },
   });
-  const editInfoForm = useForm<InputsInfo>({
+
+  const updateOrgForm = useForm<UpdateOrgInputs>({
     resolver: zodResolver(orgSchemas.update),
     values: {
-      id: router.query.id as InputsInfo['id'],
+      id: router.query.id as UpdateOrgInputs['id'],
       name: getOrgQuery.data?.[0]?.name,
-      email: getOrgQuery.data?.[0]?.email,
+      category: getOrgQuery.data?.[0]?.category as UpdateOrgInputs['category'],
+      description: getOrgQuery.data?.[0]?.description,
       image: getOrgQuery.data?.[0]?.image,
       imageId: getOrgQuery.data?.[0]?.imageId,
-      description: getOrgQuery.data?.[0]?.description,
-      category: getOrgQuery.data?.[0]?.category as InputsInfo['category'],
     },
   });
 
-  const editMemberForm = useForm<InputsMember>({ resolver: zodResolver(orgSchemas.update) });
-
-  const { register, control } = useForm({
-    defaultValues: {
-      organization: [{ email: '', position: '' }],
+  const addMemberForm = useForm<AddMemberInputs>({
+    resolver: zodResolver(userSchemas.create),
+    values: {
+      name: '',
+      email: '',
+      organization: {
+        id: getOrgQuery.data?.[0]?.id ?? '',
+        name: getOrgQuery.data?.[0]?.name ?? '',
+      },
     },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    name: 'organization',
-    control,
   });
 
   const onSuccessUpload: OnSuccessUpload = (result) => {
-    editInfoForm.setValue('image', result.info?.secure_url);
-    editInfoForm.setValue('imageId', result.info?.public_id);
+    updateOrgForm.setValue('image', result.info?.secure_url);
+    updateOrgForm.setValue('imageId', result.info?.public_id);
   };
 
-  const onSubmit: SubmitHandler<InputsInfo> = async (values) => {
-    await updateOrgMutation.mutateAsync(values);
+  const onSubmit: SubmitHandler<UpdateOrgInputs> = async (values) => {
+    if (!updateOrgForm.formState.isDirty) {
+      setSuccessAlert(true);
+      setVisibility(!visibility);
+    } else {
+      await updateOrgMutation.mutateAsync(values);
+      setVisibility(!visibility);
+    }
+  };
+
+  const onSubmitAddMember: SubmitHandler<AddMemberInputs> = async (values) => {
+    await addMemberMutation.mutateAsync(values);
   };
 
   return (
@@ -111,15 +128,15 @@ export default function EditInfoPage() {
               Organization Profile
             </h1>
             <div className="mx-auto my-0 max-w-3xl">
-              <form className="flex flex-col" onSubmit={editInfoForm.handleSubmit(onSubmit)}>
+              <form className="flex flex-col" onSubmit={updateOrgForm.handleSubmit(onSubmit)}>
                 {/* ORGANIZATION'S LOGO */}
                 <div className="mb-2 mt-2 flex flex-col items-center">
                   <div className="align-center mt-[12px] flex  justify-center px-10">
-                    {editInfoForm.watch('imageId') ? (
+                    {updateOrgForm.watch('imageId') ? (
                       <CldImage
                         width="100"
                         height="100"
-                        src={editInfoForm.watch('imageId')!}
+                        src={updateOrgForm.watch('imageId')!}
                         alt="Avatar logo"
                         className="h-[100px] w-[100px] rounded-full"
                       />
@@ -156,7 +173,7 @@ export default function EditInfoPage() {
                     visibility ? 'bg-gray' : ''
                   } mt-1 h-8 w-full border-[1px] border-green px-2 py-1   md:w-2/4`}
                   readOnly={visibility}
-                  {...editInfoForm.register('name')}
+                  {...updateOrgForm.register('name')}
                 />
                 {/* {editInfoForm.formState.isDirty} */}
                 {/* CATEGORY */}
@@ -169,7 +186,7 @@ export default function EditInfoPage() {
                     visibility ? 'bg-gray' : 'bg-[#ffffff]'
                   } me-2 h-8 w-full border-[1px] border-green  px-2 py-1 md:w-2/4`}
                   disabled={visibility}
-                  {...editInfoForm.register('category')}
+                  {...updateOrgForm.register('category')}
                 >
                   <option value="" disabled>
                     Select a category
@@ -191,11 +208,37 @@ export default function EditInfoPage() {
                     } mt-1   border-[1px] border-green px-2  py-1 `}
                     rows={2}
                     readOnly={visibility}
-                    {...editInfoForm.register('description')}
-                  ></textarea>
+                    {...updateOrgForm.register('description')}
+                  />
+                </div>
+
+                <div className="my-2 flex justify-between">
+                  <button
+                    type="button"
+                    className={`${
+                      visibility ? '' : 'hidden'
+                    } w-fit  rounded-md bg-yellow px-4 py-2 text-lg font-medium`}
+                    onClick={() => setVisibility(!visibility)}
+                  >
+                    Edit Info
+                  </button>
+
+                  <button
+                    type="submit"
+                    className={`${
+                      visibility ? 'hidden' : ''
+                    } w-fit  rounded-md bg-green px-4 py-2 text-lg font-medium text-white`}
+                  >
+                    Save Changes
+                  </button>
                 </div>
               </form>
-              <form onSubmit={editInfoForm.handleSubmit(onSubmit)}>
+
+              <form
+                onSubmit={addMemberForm.handleSubmit(onSubmitAddMember, (err) => {
+                  console.log(err);
+                })}
+              >
                 <div className="mb-1 mt-6 text-xl font-bold">Add a member:</div>
                 <div className="flex gap-1">
                   <input
@@ -203,6 +246,7 @@ export default function EditInfoPage() {
                     id="email-address"
                     placeholder="Email"
                     className={`h-9 w-2/4 border-[1px] border-green px-2  py-1 text-lg `}
+                    {...addMemberForm.register('email')}
                   />
 
                   <select
@@ -210,15 +254,17 @@ export default function EditInfoPage() {
                     className={`h-9 w-1/4 border-[1px] border-green bg-white px-2 py-1 text-lg`}
                     onChange={(e) => {
                       if (e.target.value === 'other') {
+                        addMemberForm.setValue('name', '');
                         setAddOther(!addOther);
                       } else {
+                        addMemberForm.setValue('name', e.target.value);
                         setAddOther(false);
                       }
                     }}
                   >
                     <option value="">Select a position</option>
                     {Object.values(UserPosition).map((position, index) => (
-                      <option key={index} value={position.toLowerCase()}>
+                      <option key={position} value={position}>
                         {position}
                       </option>
                     ))}
@@ -232,14 +278,13 @@ export default function EditInfoPage() {
                       addOther ? '' : 'bg-gray'
                     } h-9 w-1/4 border-[1px] border-green  px-2  py-1 text-lg `}
                     disabled={!addOther}
+                    {...addMemberForm.register('name')}
                   />
                 </div>
+
                 <button
-                  type="button"
-                  onClick={() => {
-                    append({ email: '', position: '' });
-                  }}
-                  className={` my-2 w-full  rounded-md bg-yellow  px-8 py-2 text-lg font-medium`}
+                  type="submit"
+                  className="my-2 w-full rounded-md bg-yellow  px-8 py-2 text-lg font-medium"
                 >
                   Add new email
                 </button>
@@ -248,185 +293,15 @@ export default function EditInfoPage() {
               <div className="mb-1 mt-6 text-xl font-bold">
                 {getOrgQuery.data?.[0]?.name} Members
               </div>
-              {fields.map((field, index) => (
-                <div key={field.id} className="my-1 flex items-center">
-                  <button
-                    type="button"
-                    className={`me-1 ms-1 flex h-9 items-center bg-red px-2
-                      `}
-                  >
-                    <Image src="/session_icon.png" alt="Session Icon" width={40} height={40} />
-                  </button>
-                  <div className="me-1 w-2/4">
-                    <input
-                      type="email"
-                      id="email-address"
-                      placeholder="Email"
-                      className={`h-9 w-full border-[1px] border-green px-2  py-1 text-lg `}
-                      {...register(`organization.${index}.email`)}
-                    />
-                  </div>
-                  <div className="w-1/4">
-                    <select
-                      id="position"
-                      className={`h-9 w-full border-[1px] border-green px-2  py-1 text-lg `}
-                      onChange={(e) => {
-                        if (e.target.value === 'other') {
-                          setuUpdateOther(!updateOther);
-                        } else {
-                          setuUpdateOther(false);
-                        }
-                      }}
-                      // {...editInfoForm.register(`organization.${index}.position`)}
-                    >
-                      <option value="">Select a position</option>
-                      {Object.values(UserPosition).map((position, index) => (
-                        <option key={index} value={position.toLowerCase()}>
-                          {position}
-                        </option>
-                      ))}
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  <div className="ms-1 w-1/4">
-                    <input
-                      type="text"
-                      id="other"
-                      className={`${
-                        updateOther ? '' : 'bg-gray'
-                      } h-9 w-full border-[1px] border-green px-2  py-1 text-lg `}
-                      disabled={!updateOther}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    className={`ms-1 flex h-9 items-center bg-green px-2 text-white`}
-                  >
-                    <Image src="/save_icon.png" alt="Save Icon" width={40} height={40} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!(fields.length === 1)) {
-                        remove(index);
-                      }
-                    }}
-                    className={`ms-1 flex h-9 items-center px-2 ${
-                      fields.length === 1
-                        ? 'cursor-not-allowed bg-red opacity-50'
-                        : 'bg-red text-white'
-                    }`}
-                  >
-                    <Image src="/delete_icon.svg" alt="Delete" width={40} height={40} />
-                  </button>
-                </div>
+
+              {getOrgQuery.data?.[0]?.members.map((member) => (
+                <OrgMemberItem
+                  key={member.id}
+                  member={member}
+                  orgId={getOrgQuery.data?.[0]?.id ?? ''}
+                  setSuccessAlert={setSuccessAlert}
+                />
               ))}
-
-              <div className="my-2 flex justify-between">
-                <button
-                  type="button"
-                  className={`${
-                    hasSessionsOrgQuery.data === 0
-                      ? 'bg-[#bb2124]/40 text-white/50'
-                      : 'bg-[#bb2124] text-white'
-                  } w-fit rounded-md bg-[#bb2124] px-4 py-2 text-lg font-medium text-white`}
-                  onClick={() => setShowSignOut(true)}
-                  disabled={!hasSessionsOrgQuery.data}
-                >
-                  Sign-out all devices
-                </button>
-
-                {/* SIGN OUT MODAL */}
-                <div
-                  className={`${
-                    showSignOut ? '' : 'invisible opacity-0'
-                  } fixed left-0 top-0 z-[100]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out `}
-                >
-                  <div className="relative h-[433px] w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
-                    <h1 className="py-3 text-center text-3xl font-bold tracking-tight text-[#bb2124]">
-                      {/*  */}
-                      Sign-out all devices
-                    </h1>
-                    <div className="h-[1px] w-full bg-black "></div>
-                    <div className="mt-5 flex flex-col items-center px-2">
-                      <div className="rounded-full bg-[#bb2124]/20 p-3 ">
-                        <Image
-                          src="/danger_icon.png"
-                          alt="Danger Icon"
-                          width={50}
-                          height={50}
-                          className="-mt-2"
-                        />
-                      </div>
-                      <div className="mt-2 px-5 text-2xl font-bold">Are you sure?</div>
-                      <div className="text-center text-xl font-medium text-black/70">
-                        If you select yes, all the devices will be sign-out.
-                      </div>
-                      <label
-                        htmlFor="signout-confirmation"
-                        className="mt-10 text-center text-xl font-medium"
-                      >
-                        To continue, please type{' '}
-                        <span className="text-xl font-bold text-[#bb2124]">
-                          &quot;{getOrgQuery.data?.[0]?.name}&quot;
-                        </span>
-                      </label>
-                      <input
-                        type="text"
-                        name="signout-confirmation"
-                        id="signout-confirmation"
-                        className="mt-2 w-3/4 border border-green px-2 py-1 text-xl "
-                        onChange={(e) => setConfirmSignOut(e.target.value)}
-                        value={confirmSignout}
-                      />
-                    </div>
-                    <div className="absolute bottom-0 left-7">
-                      <button
-                        type="button"
-                        className="my-6 rounded-md bg-yellow px-8 py-2 text-lg font-medium"
-                        onClick={() => {
-                          setConfirmSignOut('');
-                          setShowSignOut(false);
-                        }}
-                      >
-                        No, Cancel
-                      </button>
-                    </div>
-                    <div className="absolute bottom-0 right-7">
-                      <button
-                        type="button"
-                        className={`${
-                          confirmSignout === getOrgQuery.data?.[0]?.name
-                            ? 'bg-[#bb2124] text-white'
-                            : 'bg-[#bb2124]/40 text-white/50'
-                        } my-6 rounded-md px-8 py-2 text-lg font-medium `}
-                        disabled={!(confirmSignout === getOrgQuery.data?.[0]?.name)}
-                      >
-                        Yes, Sign out
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className={`${
-                    visibility ? '' : 'hidden'
-                  } w-fit  rounded-md bg-yellow px-4 py-2 text-lg font-medium`}
-                  onClick={() => setVisibility(!visibility)}
-                >
-                  Edit Info
-                </button>
-                <button
-                  type="submit"
-                  className={`${
-                    visibility ? 'hidden' : ''
-                  } w-fit  rounded-md bg-yellow px-4 py-2 text-lg font-medium`}
-                  onClick={() => setVisibility(!visibility)}
-                >
-                  Save Changes
-                </button>
-              </div>
             </div>
           </div>
         </div>
