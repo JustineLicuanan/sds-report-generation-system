@@ -39,6 +39,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.28
+
+- The appointments is now working.
+- The calendar is now working.
+
 ### Version 0.10.26
 
 - Fixed the UI of create announcement.

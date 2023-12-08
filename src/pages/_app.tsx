@@ -5,6 +5,7 @@ import Head from 'next/head';
 
 import { api } from '~/utils/api';
 
+import { ToastContainer } from 'react-toastify';
 import '~/styles/globals.css';
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -18,6 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       </Head>
 
       <Component {...pageProps} />
+      <ToastContainer />
     </SessionProvider>
   );
 };

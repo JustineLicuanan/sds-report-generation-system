@@ -32,8 +32,12 @@ export default function AdminDashboardPage() {
   const getAnnouncementQuery = api.admin.announcement.get.useQuery();
   const announcement = getAnnouncementQuery.data ?? [];
 
-  const getReportQuery = api.admin.report.get.useQuery();
-  const getDue = getReportQuery?.data;
+  const getReportQuery = api.admin.report.get.useQuery({ includeCreatedBy: true });
+  const report = getReportQuery.data ?? [];
+
+  const today = new Date();
+  // const weekAgo = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+
   return (
     <>
       <Head>
@@ -114,11 +118,16 @@ export default function AdminDashboardPage() {
             </Splide>
           </div>
           <div className="col-span-3 row-span-2 bg-gray/30 p-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-2 md:row-span-4">
-            <Calendar date={getDue} title={data}/>
+            <Calendar date={report} />
           </div>
-          <div className="col-span-3 row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2">
+          <Link
+            href={`${paths.ADMIN}${paths.APPOINTMENTS}`}
+            className="group col-span-3 row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2"
+          >
             <div className="flex items-center ">
-              <h1 className=" py-2 text-2xl font-bold">Appointments</h1>
+              <h1 className=" py-2 text-2xl font-bold group-hover:text-blue-500 group-hover:underline">
+                Appointments
+              </h1>
               <Image
                 width={30}
                 height={30}
@@ -126,11 +135,33 @@ export default function AdminDashboardPage() {
                 alt="Appointment Icon"
               />
             </div>
-            <div className="text-lg font-medium ">No pending appointment(s) today.</div>
-          </div>
+            <div className="h-[100px] overflow-auto">
+              {report.filter((report) => report.due !== null).length ? (
+                report
+                  .filter((report) => report.due !== null)
+                  .sort((a, b) => (a.due as Date).getTime() - (b.due as Date).getTime())
+                  .map((report, index) => (
+                    <div key={index} className="flex items-center gap-2 text-lg font-medium">
+                      {report.due?.getFullYear() === today.getFullYear() &&
+                      report.due?.getMonth() === today.getMonth() &&
+                      report.due?.getDate() === today.getDate() ? (
+                        <div className="h-2 w-2 rounded-full bg-green"></div>
+                      ) : report.due && report.due > today ? (
+                        <div className="h-2 w-2 rounded-full bg-yellow"></div>
+                      ) : (
+                        <div className="h-2 w-2 rounded-full bg-red"> </div>
+                      )}
+                      <div>{report.createdBy.organizationName}</div>
+                    </div>
+                  ))
+              ) : (
+                <div className="text-lg font-medium ">There are no pending appointments.</div>
+              )}
+            </div>
+          </Link>
           <Link
             href={`${paths.ADMIN}${paths.ANNOUNCEMENTS}`}
-            className="group col-span-3  row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2"
+            className="group col-span-3  row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2 "
           >
             <div className="flex items-center">
               <h1 className=" py-2 text-2xl font-bold group-hover:text-blue-500 group-hover:underline ">

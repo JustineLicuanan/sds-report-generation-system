@@ -1,28 +1,24 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@fullcalendar/core':
-    specifier: ^6.1.9
-    version: 6.1.9
+    specifier: ^6.1.10
+    version: 6.1.10
   '@fullcalendar/daygrid':
     specifier: ^6.1.9
-    version: 6.1.9(@fullcalendar/core@6.1.9)
+    version: 6.1.9(@fullcalendar/core@6.1.10)
   '@fullcalendar/interaction':
     specifier: ^6.1.9
-    version: 6.1.9(@fullcalendar/core@6.1.9)
+    version: 6.1.9(@fullcalendar/core@6.1.10)
   '@fullcalendar/list':
     specifier: ^6.1.9
-    version: 6.1.9(@fullcalendar/core@6.1.9)
+    version: 6.1.9(@fullcalendar/core@6.1.10)
   '@fullcalendar/react':
     specifier: ^6.1.9
-    version: 6.1.9(@fullcalendar/core@6.1.9)(react-dom@18.2.0)(react@18.2.0)
+    version: 6.1.9(@fullcalendar/core@6.1.10)(react-dom@18.2.0)(react@18.2.0)
   '@fullcalendar/timegrid':
     specifier: ^6.1.9
-    version: 6.1.9(@fullcalendar/core@6.1.9)
+    version: 6.1.9(@fullcalendar/core@6.1.10)
   '@hookform/resolvers':
     specifier: ^3.3.2
     version: 3.3.2(react-hook-form@7.47.0)
@@ -373,55 +369,55 @@ packages:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
     dev: false
 
-  /@fullcalendar/core@6.1.9:
-    resolution: {integrity: sha512-eeG+z9BWerdsU9Ac6j16rpYpPnE0wxtnEHiHrh/u/ADbGTR3hCOjCD9PxQOfhOTHbWOVs7JQunGcksSPu5WZBQ==}
+  /@fullcalendar/core@6.1.10:
+    resolution: {integrity: sha512-oTXGJSAGpCf1oY+CKp5qYjMHkJCPBkJ3SHitl63n8Q6xKeiwQ4EF6Au451euUovREwJpLmD1AyZrCnWmtB9AVg==}
     dependencies:
       preact: 10.12.1
     dev: false
 
-  /@fullcalendar/daygrid@6.1.9(@fullcalendar/core@6.1.9):
+  /@fullcalendar/daygrid@6.1.9(@fullcalendar/core@6.1.10):
     resolution: {integrity: sha512-o/6joH/7lmVHXAkbaa/tUbzWYnGp/LgfdiFyYPkqQbjKEeivNZWF1WhHqFbhx0zbFONSHtrvkjY2bjr+Ef2quQ==}
     peerDependencies:
       '@fullcalendar/core': ~6.1.9
     dependencies:
-      '@fullcalendar/core': 6.1.9
+      '@fullcalendar/core': 6.1.10
     dev: false
 
-  /@fullcalendar/interaction@6.1.9(@fullcalendar/core@6.1.9):
+  /@fullcalendar/interaction@6.1.9(@fullcalendar/core@6.1.10):
     resolution: {integrity: sha512-I3FGnv0kKZpIwujg3HllbKrciNjTqeTYy3oJG226oAn7lV6wnrrDYMmuGmA0jPJAGN46HKrQqKN7ItxQRDec4Q==}
     peerDependencies:
       '@fullcalendar/core': ~6.1.9
     dependencies:
-      '@fullcalendar/core': 6.1.9
+      '@fullcalendar/core': 6.1.10
     dev: false
 
-  /@fullcalendar/list@6.1.9(@fullcalendar/core@6.1.9):
+  /@fullcalendar/list@6.1.9(@fullcalendar/core@6.1.10):
     resolution: {integrity: sha512-OCKdC1Gz26cJ5QsXdQyXVyzVu23ypT2xzyAR+Wc8jEytcJLWXw2a914m/MVax8n8EHuaIYY2exhsy/eaSU0XNA==}
     peerDependencies:
       '@fullcalendar/core': ~6.1.9
     dependencies:
-      '@fullcalendar/core': 6.1.9
+      '@fullcalendar/core': 6.1.10
     dev: false
 
-  /@fullcalendar/react@6.1.9(@fullcalendar/core@6.1.9)(react-dom@18.2.0)(react@18.2.0):
+  /@fullcalendar/react@6.1.9(@fullcalendar/core@6.1.10)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-ioxu0V++pYz2u/N1LL1V8DkMyiKGRun0gMAll2tQz3Kzi3r9pTwncGKRb1zO8h0e+TrInU08ywk/l5lBwp7eog==}
     peerDependencies:
       '@fullcalendar/core': ~6.1.9
       react: ^16.7.0 || ^17 || ^18
       react-dom: ^16.7.0 || ^17 || ^18
     dependencies:
-      '@fullcalendar/core': 6.1.9
+      '@fullcalendar/core': 6.1.10
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@fullcalendar/timegrid@6.1.9(@fullcalendar/core@6.1.9):
+  /@fullcalendar/timegrid@6.1.9(@fullcalendar/core@6.1.10):
     resolution: {integrity: sha512-le7UV05wVE1Trdr054kgJXTwa+A1pEI8nlCBnPWdcyrL+dTLoPvQ4AWEVCnV7So+4zRYaCqnqGXfCJsj0RQa0g==}
     peerDependencies:
       '@fullcalendar/core': ~6.1.9
     dependencies:
-      '@fullcalendar/core': 6.1.9
-      '@fullcalendar/daygrid': 6.1.9(@fullcalendar/core@6.1.9)
+      '@fullcalendar/core': 6.1.10
+      '@fullcalendar/daygrid': 6.1.9(@fullcalendar/core@6.1.10)
     dev: false
 
   /@hookform/resolvers@3.3.2(react-hook-form@7.47.0):
@@ -3978,3 +3974,7 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

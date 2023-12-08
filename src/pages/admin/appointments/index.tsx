@@ -2,8 +2,10 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
+import Calendar from '~/components/calendar';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -17,12 +19,15 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-export default function AnnouncementPage() {
+export default function AppointmentPage() {
+  const getReportQuery = api.admin.report.get.useQuery({ includeCreatedBy: true });
+  const report = getReportQuery.data ?? [];
+
   return (
     <>
       {/* HEADER */}
       <Head>
-        <title>{`Announcements ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Appointments ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -38,6 +43,9 @@ export default function AnnouncementPage() {
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
               Appointments
             </h1>
+            <div className="my-5 p-1 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+              <Calendar date={report} />
+            </div>
           </div>
         </div>
       </main>

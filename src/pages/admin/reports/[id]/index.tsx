@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { type z } from 'zod';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
@@ -396,7 +396,7 @@ export default function AdminOrgReportPage() {
               onClick={async () => {
                 await updateReportStatus(ReportStatus.APPROVED);
                 setScheduleAppointment(!scheduleAppointment);
-                console.log(due)
+                console.log(due);
               }}
             >
               Set
@@ -404,8 +404,6 @@ export default function AdminOrgReportPage() {
           </div>
         </div>
       </div>
-
-      <ToastContainer />
     </>
   );
 }
