@@ -39,6 +39,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.29
+
+- Functions of save as PDF is now working but not implemented to real pages.
+
 ### Version 0.10.28
 
 - The appointments is now working.

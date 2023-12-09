@@ -18,3 +18,28 @@ nav {
   background: #2a9134;
   background: -moz-linear-gradient(left, #2a9134 1%, #3fa34d 53%, #2a9134 100%);
 }
+
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  #download-button {
+    display: none;
+    visibility: none;
+  }
+
+  .print-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    margin: 20px;
+    background-color: #fff;
+    text-align: center;
+    border-bottom: 1px solid #000;
+  }
+}
