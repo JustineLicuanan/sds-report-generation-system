@@ -16,6 +16,8 @@ export const paths = {
   ANNOUNCEMENTS: '/announcements',
   EDIT_ANNOUNCEMENTS: '/edit',
   APPOINTMENTS: '/appointments',
+  MEMBERS: '/members',
+  CBL: '/cbl',
   ORGANIZATION_CREATE: '/create',
   REPORT_CREATE: '/create',
   AUTH_LOGS: '/auth/logs',

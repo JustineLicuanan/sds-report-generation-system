@@ -135,10 +135,11 @@ export default function AdminDashboardPage() {
                 alt="Appointment Icon"
               />
             </div>
-            <div className="h-[100px] overflow-auto">
+            <div className="h-[80%] overflow-auto">
               {report.filter((report) => report.due !== null).length ? (
                 report
                   .filter((report) => report.due !== null)
+                  .filter((report) => report.isCompleted === false)
                   .sort((a, b) => (a.due as Date).getTime() - (b.due as Date).getTime())
                   .map((report, index) => (
                     <div key={index} className="flex items-center gap-2 text-lg font-medium">
@@ -151,11 +152,13 @@ export default function AdminDashboardPage() {
                       ) : (
                         <div className="h-2 w-2 rounded-full bg-red"> </div>
                       )}
-                      <div>{report.createdBy.organizationName}</div>
+                      <div className="text-xl font-medium ">
+                        {report.createdBy.organizationName}
+                      </div>
                     </div>
                   ))
               ) : (
-                <div className="text-lg font-medium ">There are no pending appointments.</div>
+                <div className="text-xl font-medium ">There are no pending appointments.</div>
               )}
             </div>
           </Link>
@@ -169,15 +172,15 @@ export default function AdminDashboardPage() {
               </h1>
               <Image width={30} height={30} src="/announcement_icon.svg" alt="Announcement Icon" />
             </div>
-            <div className="h-[100px] overflow-auto">
+            <div className="h-[80%] overflow-auto">
               {announcement.length ? (
                 announcement.map((announcement, index) => (
-                  <div key={index} className="text-lg font-medium ">
+                  <div key={index} className="text-xl font-medium ">
                     {announcement.subject}
                   </div>
                 ))
               ) : (
-                <div className="text-lg font-medium ">There are no announcement.</div>
+                <div className="text-xl font-medium ">There are no announcement.</div>
               )}
             </div>
             {/* <div className="text-lg font-medium ">No new announcement today.</div> */}

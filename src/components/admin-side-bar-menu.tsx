@@ -61,7 +61,7 @@ export default function AdminSideBarMenu() {
     {
       id: 5,
       name: 'Appointments',
-      imageLink: '/Appointment_icon.svg',
+      imageLink: '/appointment_icon.svg',
       urlLink: `${paths.ADMIN}${paths.APPOINTMENTS}`,
     },
   ];

@@ -5,6 +5,7 @@ import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import Report from '~/components/report';
@@ -56,7 +57,7 @@ export default function OrganizationPage() {
   //     (search.toLowerCase() === '' || item.subject.toLowerCase().includes(search))
   //   );
   // });
-
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -72,27 +73,43 @@ export default function OrganizationPage() {
 
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
           <div className="my-2 h-2 rounded-md bg-green"> </div>
-          <div className="flex">
-            <div className=""></div>
-            {org?.imageId ? (
-              <CldImage
-                width="100"
-                height="100"
-                src={`/${org?.imageId}`}
-                alt="Organization Logo"
-                className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"
-              />
-            ) : (
-              <div className='className="my-4 lg:w-28" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28'></div>
-            )}
-
-            <div className="self-center">
-              <div className="ms-4 text-2xl font-bold lg:text-3xl">
-                {org?.name} - {session?.user.name}
+          <div className="mx-4 flex justify-between ">
+            <div className="flex items-center gap-4">
+              {org?.imageId ? (
+                <CldImage
+                  width="100"
+                  height="100"
+                  src={`/${org?.imageId}`}
+                  alt="Organization Logo"
+                  className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"
+                />
+              ) : (
+                <div className='className="my-4 lg:w-28" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28'></div>
+              )}
+              <div className="">
+                <div className="ms-4 text-2xl font-bold lg:text-3xl">
+                  {org?.name} - {session?.user.name}
+                </div>
+                <div className="ms-12 text-lg font-semibold text-black/80 lg:text-xl">
+                  {org?.category.replace(/_/g, ' ')}
+                </div>
               </div>
-              <div className="ms-12 text-lg font-semibold text-black/80 lg:text-xl">
-                {org?.category.replace(/_/g, ' ')}
-              </div>
+            </div>
+            <div className="flex items-end gap-2">
+              <button
+                onClick={() => router.push(`${paths.ORGANIZATION}${paths.CBL}`)}
+                type="button"
+                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
+              >
+                View CBL
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push(`${paths.ORGANIZATION}${paths.MEMBERS}`)}
+                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
+              >
+                View Members
+              </button>
             </div>
           </div>
           <div className="my-2 h-2 rounded-md bg-green"> </div>

@@ -63,7 +63,7 @@ export default function AdminNavBar() {
             </div>
           </div>
 
-          <div className="relative">
+          <div id="hide-element" className="relative">
             <button id="notification" onClick={() => setShowNotification(!showNotification)}>
               <Image
                 src="/notification_icon.svg"

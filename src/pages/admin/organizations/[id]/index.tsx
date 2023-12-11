@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import ReportList from '~/components/report-list';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -50,24 +50,45 @@ export default function ListOfReportPage() {
 
         <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
           <div className="my-2 h-2 rounded-md bg-green"> </div>
-          <div className="flex">
-            <div className=""></div>
-            {org?.imageId ? (
-              <CldImage
-                width="100"
-                height="100"
-                src={`/${org?.imageId}`}
-                alt="Organization Logo"
-                className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"
-              />
-            ) : (
-              <div className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"></div>
-            )}
-            <div className="ms-4 self-center">
-              <div className="text-2xl font-bold lg:text-3xl">{org?.name}</div>
-              <div className="text-lg font-semibold text-black/80 lg:text-xl">
-                {org?.category.replace(/_/g, ' ')}
+          <div className="mx-4 flex justify-between ">
+            <div className="flex items-center gap-4">
+              {org?.imageId ? (
+                <CldImage
+                  width="100"
+                  height="100"
+                  src={`/${org?.imageId}`}
+                  alt="Organization Logo"
+                  className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"
+                />
+              ) : (
+                <div className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"></div>
+              )}
+              <div className="">
+                <div className="text-2xl font-bold lg:text-3xl">{org?.name}</div>
+                <div className="text-lg font-semibold text-black/80 lg:text-xl">
+                  {org?.category.replace(/_/g, ' ')}
+                </div>
               </div>
+            </div>
+            <div className="flex items-end gap-2 ">
+              <button
+                onClick={() =>
+                  router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.CBL}`)
+                }
+                type="button"
+                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
+              >
+                View CBL
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.MEMBERS}`)
+                }
+                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
+              >
+                View Members
+              </button>
             </div>
           </div>
           <div className="my-2 h-2 rounded-md bg-green"> </div>

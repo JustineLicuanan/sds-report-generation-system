@@ -93,8 +93,9 @@ export default function AdminLogPage() {
       <AdminNavBar />
       <main className="flex">
         {/* SIDE BAR */}
-        <AdminSideBarMenu />
-
+        <div id="hide-element">
+          <AdminSideBarMenu />
+        </div>
         {/* MAIN CONTENT */}
         <div className="mx-3 my-4 w-full">
           <div className="mx-auto my-0 min-h-[87vh] max-w-5xl rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
@@ -113,7 +114,7 @@ export default function AdminLogPage() {
                 </option>
               </select> */}
             {/* </div> */}
-            <div className="my-4 flex flex-col md:my-6 md:flex-row">
+            <div id="hide-element" className="my-4 flex flex-col md:my-6 md:flex-row">
               {/* SEARCH */}
               <div className="flex">
                 <label
@@ -173,13 +174,18 @@ export default function AdminLogPage() {
                   </option>
                 </select>
               </div>
-              <button
-                onClick={onDownload}
-                className="mt-2 flex h-7 w-fit items-center gap-2 border-[1px] border-green bg-white px-2 py-1 text-sm hover:bg-yellow md:mt-0 md:h-9 md:text-base lg:h-11"
+              <select
+                id=""
+                className="me-2 h-7 border-[1px] border-green bg-white px-2 py-1 text-sm md:h-9 md:text-base lg:h-11"
               >
-                <div>Export</div>
-                <Image src="/excel_icon.svg" alt="Excel Icon" width={20} height={20} />
-              </button>
+                <option value="">Export</option>
+                <option value="pdf" onClick={() => print()}>
+                  PDF
+                </option>
+                <option value="excel" onClick={() => onDownload()}>
+                  Excel
+                </option>
+              </select>
             </div>
 
             <div className="overflow-x-scroll sm:overflow-hidden">

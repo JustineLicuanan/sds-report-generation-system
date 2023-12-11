@@ -39,6 +39,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.10.30
+
+- Calendar modal is now working including the datas and mark as complete.
+
 ### Version 0.10.29
 
 - Functions of save as PDF is now working but not implemented to real pages.

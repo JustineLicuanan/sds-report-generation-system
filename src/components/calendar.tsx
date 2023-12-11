@@ -1,3 +1,5 @@
+import { EventInput, EventSourceInput } from '@fullcalendar/core';
+import { EventImpl } from '@fullcalendar/core/internal';
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
@@ -27,25 +29,44 @@ export default function Calendar({
     },
   ];
 
-  const data = date.map((item) => ({
-    id: item.id,
-    title: item.createdBy.organizationName,
-    start: item.due?.toISOString() ?? '',
-    end: item.due?.toISOString() ?? '',
-    color: '',
-  }));
+  const data = date.map(
+    (item) =>
+      ({
+        id: item.id,
+        title: item.createdBy.organizationName!,
+        start: item.due?.toISOString() ?? '',
+        end: item.due?.toISOString() ?? '',
+        isCompleted: item.isCompleted,
+        backgroundColor: item.isCompleted ? 'green' : 'red',
+        textColor: '##ff9f89',
+      }) satisfies EventInput
+  );
 
-  const events: any[] = [...restricted, ...data];
+  const events = [...restricted, ...data] as EventSourceInput;
 
   const updateReportMutation = api.admin.report.update.useMutation({
     onSuccess: async () => {
-      toast.success('Success');
+      toast.success('Appointment updated', { position: 'bottom-right' });
       await utils.admin.report.get.invalidate({ includeCreatedBy: true });
+    },
+  });
+
+  const updateMarkAsCompleteMutation = api.admin.report.markAsCompleted.useMutation({
+    onSuccess: async () => {
+      toast.success('Mark as completed updated', { position: 'bottom-right' });
+      await utils.admin.report.invalidate();
     },
   });
 
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState();
+  const [appointmentData, setAppointmentData] = useState<EventImpl | undefined>();
+  console.log(
+    data
+      .filter((item) => item.id === appointmentData?.id)
+      .map((item) => item.isCompleted)
+      .pop()
+  );
 
   return (
     <>
@@ -59,6 +80,11 @@ export default function Calendar({
           prevYear: 'chevrons-left', // double chevron
           nextYear: 'chevrons-right', // double chevron
         }}
+        headerToolbar={{
+          left: 'prev',
+          center: 'title',
+          right: 'next',
+        }}
         buttonText={{
           today: 'Today',
           month: 'Month',
@@ -68,11 +94,6 @@ export default function Calendar({
         }}
         events={events}
         // dateClick={(arg) => alert(arg.dateStr)}
-        headerToolbar={{
-          start: 'today prev,next', // will normally be on the left. if RTL, will be on the right
-          center: 'title',
-          end: 'dayGridMonth,dayGridWeek', // will normally be on the right. if RTL, will be on the left
-        }}
         height={'70vh'}
         droppable={true}
         editable={true}
@@ -82,39 +103,71 @@ export default function Calendar({
             due: props.event.start?.toISOString(),
           })
         }
-        eventClick={() => {
+        eventClick={(info) => {
+          setAppointmentData(info.event);
           setShowModal(!showModal);
         }}
         eventBackgroundColor="green"
       />
-      {showModal && selectedEvent !== null && (
+      {showModal && (
         <div
-          className={`fixed left-0 top-0 z-[999]  flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out
+          className={`fixed left-0 top-0 z-[999] flex h-full w-full items-center  justify-center bg-black/[.50] transition-opacity duration-300 ease-in-out
       `}
         >
           <div
-            className={`relative z-[5] h-fit w-[450px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out `}
+            className={`relative z-[5] mx-3 h-fit w-[450px] rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]  duration-300 ease-in-out `}
           >
             <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Announcement</h1>
             <div className="h-[1px] w-full bg-black "></div>
             <div className="px-3 py-2">
-              <div className="flex  text-xl">
-                <h4 className="font-semibold">Date:</h4>
+              <div className="mb-2 flex text-2xl">
+                {data
+                  .filter((item) => item.id === appointmentData?.id)
+                  .map((item) => item.isCompleted)
+                  .pop() ? (
+                  <h4 className=" font-semibold text-green">Completed</h4>
+                ) : (
+                  <h4 className=" font-semibold text-red">Uncomplete</h4>
+                )}
                 <div className="ms-1 text-xl font-medium"></div>
+              </div>
+              <div className="flex text-xl">
+                <h4 className="font-semibold">Date:</h4>
+                <div className="ms-1 text-xl font-medium">
+                  {appointmentData?.start?.toLocaleString()}
+                </div>
               </div>
               <div className="flex py-2 text-xl">
                 <h4 className="font-semibold">Organization:</h4>
-                <div className="ms-1 text-xl font-medium"></div>
+                <div className="ms-1 text-xl font-medium">{appointmentData?.title}</div>
               </div>
             </div>
-            <div className="flex justify-end px-4">
+            <div className="flex justify-between px-4">
               <button
                 type="button"
-                className="my-4 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+                className="my-4 cursor-pointer rounded-md bg-gray px-8 py-2 text-lg font-medium"
                 onClick={() => setShowModal(!showModal)}
               >
-                Mark as complete
+                Close
               </button>
+
+              {data
+                .filter((item) => item.id === appointmentData?.id)
+                .map((item) => item.isCompleted)
+                .pop() ? (
+                <div></div>
+              ) : (
+                <button
+                  type="button"
+                  className="my-4 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium"
+                  onClick={() => {
+                    updateMarkAsCompleteMutation.mutate({ id: appointmentData?.id ?? '' });
+                    setShowModal(!showModal);
+                  }}
+                >
+                  Mark as complete
+                </button>
+              )}
             </div>
           </div>
         </div>
