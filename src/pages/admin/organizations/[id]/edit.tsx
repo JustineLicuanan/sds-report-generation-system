@@ -57,13 +57,6 @@ export default function EditInfoPage() {
     },
   });
 
-  const addMemberMutation = api.admin.user.create.useMutation({
-    onSuccess: (data) => {
-      utils.admin.org.get.invalidate({ id: getOrgQuery.data?.[0]?.id, includeMembers: true });
-      setSuccessAlert(true);
-    },
-  });
-
   const updateOrgForm = useForm<UpdateOrgInputs>({
     resolver: zodResolver(orgSchemas.update),
     values: {
@@ -81,10 +74,19 @@ export default function EditInfoPage() {
     values: {
       name: '',
       email: '',
+      isActive: true,
       organization: {
         id: getOrgQuery.data?.[0]?.id ?? '',
         name: getOrgQuery.data?.[0]?.name ?? '',
       },
+    },
+  });
+
+  const addMemberMutation = api.admin.user.create.useMutation({
+    onSuccess: async (data) => {
+      await utils.admin.org.invalidate();
+      addMemberForm.reset(undefined, { keepDefaultValues: true });
+      setSuccessAlert(true);
     },
   });
 

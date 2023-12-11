@@ -1,5 +1,8 @@
 export const meta = {
-  NAME: 'SDS Scheduling System',
+  NAME: 'Office of Student Development Services',
+  SHORT_NAME: 'SDS',
+  LOGO: '/cvsu_logo.png',
+  DESCRIPTION: 'Report-File Scheduling & Management System',
   SEPARATOR: '|',
 } as const;
 

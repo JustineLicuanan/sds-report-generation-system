@@ -3,6 +3,7 @@ import { LogAction, LogType, UserRole, type Session } from '@prisma/client';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
+import GoogleProvider from 'next-auth/providers/google';
 
 import { env } from '~/env.mjs';
 import { paths } from '~/meta';
@@ -49,19 +50,27 @@ export const authOptions: NextAuthOptions = {
         organizationIsArchived: user.organizationIsArchived,
       },
     }),
-    async signIn({ user }) {
-      const userExists = !!(await db.user.count({
+    async signIn({ user, account }) {
+      const existingUser = await db.user.findFirst({
         where: {
-          AND: { email: user.email ?? '' },
+          AND: { email: user.email ?? '', isActive: true },
           OR: [{ role: UserRole.ADMIN }, { organizationIsArchived: false }],
         },
-      }));
+        include: { accounts: true },
+      });
 
-      return userExists;
+      if (!existingUser) return false;
+
+      if (account?.type === 'oauth' && !existingUser.accounts.length) {
+        await db.account.create({ data: { ...account, userId: existingUser.id } });
+      }
+
+      return true;
     },
   },
   adapter: PrismaAdapter(db),
   providers: [
+    GoogleProvider({ clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET }),
     EmailProvider({
       server: env.EMAIL_SERVER,
       from: env.EMAIL_FROM,
@@ -81,7 +90,7 @@ export const authOptions: NextAuthOptions = {
      * model.
      */
   ],
-  pages: { signIn: paths.SIGN_IN, signOut: paths.SIGN_OUT },
+  pages: { signIn: paths.SIGN_IN, error: paths.SIGN_IN, signOut: paths.SIGN_OUT },
   events: {
     async signIn({ user }) {
       await db.log.create({

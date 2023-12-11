@@ -31,6 +31,8 @@ model Organization {
     category      OrganizationCategory
     image         String?
     imageId       String?
+    cbl           String?
+    cblId         String?
     isArchived    Boolean              @default(false)
     members       User[]
     reports       Report[]
@@ -49,6 +51,8 @@ model Announcement {
     id                 String              @id @default(cuid())
     subject            String
     description        String
+    file               String?
+    fileId             String?
     start              DateTime?
     due                DateTime?
     hasReport          Boolean
@@ -218,6 +222,7 @@ model User {
     emailVerified DateTime?
     image         String?
     role          UserRole       @default(STUDENT_LEADER)
+    isActive      Boolean        @default(false)
     accounts      Account[]
     sessions      Session[]
     reports       Report[]

@@ -16,5 +16,6 @@
   "editor.linkedEditing": true,
   "workbench.iconTheme": "material-icon-theme",
   // "workbench.sideBar.location": "right",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifier": "non-relative"
 }

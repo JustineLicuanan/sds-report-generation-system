@@ -39,6 +39,17 @@ respective docs.
 
 ## Changelog
 
+### Version 0.11.0
+
+- feat: add Google OAuth 2.0 option
+- chore: update Prisma schema
+- style: revamp the navbar & sidebar
+- style: revamp the sign in page
+- chore: partially move 'create announcement' to page
+- chore: move 'create organization' to page
+- feat: add 'upload cbl' mutation procedure
+- feat: add Organization Members CRUD procedures
+
 ### Version 0.10.30
 
 - Calendar modal is now working including the datas and mark as complete.
