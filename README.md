@@ -53,6 +53,8 @@ respective docs.
 ### Version 0.10.30
 
 - Calendar modal is now working including the datas and mark as complete.
+- CBL is now working in organization
+- Save as PDF is now working in logs.
 
 ### Version 0.10.29
 

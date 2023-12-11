@@ -11,7 +11,9 @@ export enum ResourceType {
 }
 
 export type OnSuccessUpload = (
-  result: CldUploadWidgetResults & { info?: { secure_url: string; public_id: string } }
+  result: CldUploadWidgetResults & {
+    info?: { secure_url: string; public_id: string; original_filename: string };
+  }
 ) => void;
 
 type Props = {

@@ -153,7 +153,7 @@ export default function AnnouncementPage() {
                 className="my-4 cursor-pointer rounded-md bg-yellow px-8 py-2 text-lg font-medium "
                 onClick={async () => {
                   await router.push(
-                    `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`
+                    `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}?announcementId=${selectedNotification}`
                   );
                 }}
               >

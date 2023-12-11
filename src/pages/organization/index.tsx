@@ -1,4 +1,4 @@
-import { LogAction, LogType } from '@prisma/client';
+import { LogAction } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
@@ -26,37 +26,17 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function OrganizationPage() {
-  const getLogQuery = api.shared.log.get.useQuery({ type: LogType.REPORT });
-  const logList = getLogQuery.data ?? [];
+  const getReportQuery = api.shared.report.get.useQuery();
+  const reportList = getReportQuery.data ?? [];
 
   const getOrgQuery = api.shared.organization.get.useQuery();
   const org = getOrgQuery.data;
 
-  // const [search, setSearch] = useState('');
-  // const [status, setStatus] = useState('');
-  // const [date] = useState('');
-
-  logList.sort((a, b) => {
+  reportList.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
   const { data: session } = useSession();
-
-  // if (date.toLowerCase() === 'oldest') {
-  //   logList.sort((a, b) => {
-  //     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-  //   });
-  // } else if (date.toLowerCase() === 'latest') {
-  //   logList.sort((a, b) => {
-  //     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  //   });
-  // }
-  // const filtedData = logList.filter((item) => {
-  //   return (
-  //     (status.toLowerCase() === '' || item.status.toLowerCase().includes(status)) &&
-  //     (search.toLowerCase() === '' || item.subject.toLowerCase().includes(search))
-  //   );
-  // });
   const router = useRouter();
   return (
     <>
@@ -115,8 +95,8 @@ export default function OrganizationPage() {
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
             <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
-            {logList.filter((log) => log.action === LogAction.PENDING).length > 0 ? (
-              <Report logs={logList.filter((log) => log.action === LogAction.PENDING)} />
+            {reportList.filter((report) => report.status === LogAction.PENDING).length > 0 ? (
+              <Report logs={reportList.filter((report) => report.status === LogAction.PENDING)} />
             ) : (
               <div className="flex items-center justify-center text-xl font-semibold">
                 There are no pending report
@@ -133,12 +113,12 @@ export default function OrganizationPage() {
             )}
           </div>
           <div className="my-2 h-2 rounded-md bg-green"> </div>
-          {logList.filter(
-            (log) => log.action === LogAction.APPROVED || log.action === LogAction.REJECTED
+          {reportList.filter(
+            (report) => report.status === LogAction.APPROVED || report.status === LogAction.REJECTED
           ).length > 0 ? (
             <Report
-              logs={logList.filter(
-                (log) => log.action === LogAction.APPROVED || log.action === LogAction.REJECTED
+              logs={reportList.filter(
+                (report) => report.status === LogAction.APPROVED || report.status === LogAction.REJECTED
               )}
             />
           ) : (

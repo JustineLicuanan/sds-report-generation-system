@@ -43,7 +43,9 @@ export default function CreateReportPage() {
   });
   const createReportForm = useForm<InputsReport>({ resolver: zodResolver(reportSchemas.create) });
 
-  const getAnnouncementQuery = api.shared.announcement.get.useQuery();
+  const getAnnouncementQuery = api.shared.announcement.get.useQuery({
+    id: (router.query.announcementId ?? '') as string,
+  });
 
   const onSubmitReport: SubmitHandler<InputsReport> = async (values) => {
     await createReportMutation.mutateAsync(values);
@@ -53,7 +55,7 @@ export default function CreateReportPage() {
     createReportForm.setValue('file', result.info?.secure_url);
     createReportForm.setValue('fileId', result.info?.public_id);
   };
-
+  console.log(getAnnouncementQuery.data);
   return (
     <>
       <Head>
@@ -103,18 +105,34 @@ export default function CreateReportPage() {
             <label htmlFor="category" className="mt-1 text-xl font-bold">
               Link to Announcement
             </label>
-            <select
-              id=""
-              className="mt-1 h-9 w-2/5 border-[1px] border-green px-2  py-1 text-lg outline-none"
-              {...createReportForm.register('announcementId')}
-            >
-              <option value="n/a">N/A</option>
-              {getAnnouncementQuery.data?.map((announcement) => (
-                <option key={announcement.id} value={announcement.id}>
-                  {announcement.subject}
-                </option>
-              ))}
-            </select>
+            {router.query.announcementId ? (
+              <select
+                id=""
+                className="mt-1 h-9 w-2/5 border-[1px] border-green px-2  py-1 text-lg outline-none"
+                {...createReportForm.register('announcementId')}
+              >
+                {getAnnouncementQuery.data
+                  ?.filter((announcement) => announcement.id)
+                  .map((announcement) => (
+                    <option key={announcement.id} value={announcement.id}>
+                      {announcement.subject}
+                    </option>
+                  ))}
+              </select>
+            ) : (
+              <select
+                id=""
+                className="mt-1 h-9 w-2/5 border-[1px] border-green px-2  py-1 text-lg outline-none"
+                {...createReportForm.register('announcementId')}
+              >
+                <option value="n/a">N/A</option>
+                {getAnnouncementQuery.data?.map((announcement) => (
+                  <option key={announcement.id} value={announcement.id}>
+                    {announcement.subject}
+                  </option>
+                ))}
+              </select>
+            )}
             <label htmlFor="visibility" className="mt-1 text-xl font-bold">
               Visibility
             </label>

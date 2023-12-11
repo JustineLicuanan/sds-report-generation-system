@@ -1,9 +1,9 @@
-import { LogAction, type Log } from '@prisma/client';
+import { LogAction, Report } from '@prisma/client';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { paths } from '~/meta';
 
-export default function Report({ logs }: { logs: Log[] }) {
+export default function Report({ logs }: { logs: Report[] }) {
   // const [activeReport, setActiveReport] = useState<number | null>(null);
   // const [reportsState, setReportsState] = useState(reports);
   // const toggleShowOption = (id: number) => {
@@ -64,9 +64,7 @@ export default function Report({ logs }: { logs: Log[] }) {
                 <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
                   <button
                     onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${log.reportId}`
-                      )
+                      router.push(`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${log.id}`)
                     }
                     className="justify-center p-1 text-lg underline underline-offset-2 hover:text-black/80"
                   >
@@ -79,30 +77,30 @@ export default function Report({ logs }: { logs: Log[] }) {
                 <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
                   {log.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
                 </td>
-                {(log.action === LogAction.REJECTED && (
+                {(log.status === LogAction.REJECTED && (
                   <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#FF0000]">
-                    {log.action}
+                    {log.status}
                   </td>
                 )) ||
-                  (log.action === LogAction.APPROVED && (
+                  (log.status === LogAction.APPROVED && (
                     <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#00FF00]">
-                      {log.action}
+                      {log.status}
                     </td>
                   )) ||
-                  (log.action === LogAction.PENDING && (
-                    <td className="border border-x-0 border-black px-2 py-4 ">{log.action}</td>
+                  (log.status === LogAction.PENDING && (
+                    <td className="border border-x-0 border-black px-2 py-4 ">{log.status}</td>
                   ))}
                 <td className="border border-x-0 border-black px-2 py-4">
                   <div className="flex items-center justify-center ">
                     <button
                       type="button"
                       onClick={() => {
-                        if (log.action === LogAction.PENDING) {
+                        if (log.status === LogAction.PENDING) {
                           alert('Update button clicked!');
                         }
                       }}
                       className={`${
-                        log.action !== LogAction.PENDING
+                        log.status !== LogAction.PENDING
                           ? 'cursor-not-allowed opacity-50'
                           : 'group/update'
                       } relative mx-2 flex flex-col items-center justify-center rounded-sm bg-gray p-2`}
@@ -115,12 +113,12 @@ export default function Report({ logs }: { logs: Log[] }) {
                     <button
                       type="button"
                       onClick={() => {
-                        if (log.action === LogAction.PENDING) {
+                        if (log.status === LogAction.PENDING) {
                           alert('Delete button clicked!');
                         }
                       }}
                       className={`${
-                        log.action !== LogAction.PENDING
+                        log.status !== LogAction.PENDING
                           ? 'cursor-not-allowed opacity-50'
                           : 'group/delete'
                       }  relative mx-2 flex flex-col items-center justify-center rounded-sm bg-red p-2`}

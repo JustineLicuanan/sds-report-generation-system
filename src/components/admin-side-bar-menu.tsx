@@ -619,7 +619,11 @@ export default function AdminSidebarMenu() {
     { Icon: CalendarCheck2, name: 'Appointments', href: `${paths.ADMIN}${paths.APPOINTMENTS}` },
     { Icon: Users, name: 'Organizations', href: `${paths.ADMIN}${paths.ORGANIZATIONS}` },
     { Icon: Megaphone, name: 'Announcements', href: `${paths.ADMIN}${paths.ANNOUNCEMENTS}` },
-    { Icon: History, name: 'Logs', href: `${paths.ADMIN}${paths.AUTH_LOGS}` },
+    {
+      Icon: History,
+      name: 'Logs',
+      href: `${paths.ADMIN}${paths.ORGANIZATION_REPORTS}${paths.LOGS}`,
+    },
   ];
 
   return (
