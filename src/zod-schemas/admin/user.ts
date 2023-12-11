@@ -4,6 +4,7 @@ export const userSchemas = {
   create: z.object({
     name: z.string().trim().min(1),
     email: z.string().trim().toLowerCase().email(),
+    isActive: z.boolean().optional(),
     organization: z.object({ id: z.string().cuid(), name: z.string().trim().min(1) }),
   }),
 
@@ -11,6 +12,7 @@ export const userSchemas = {
     id: z.string().cuid(),
     name: z.string().trim().min(1).optional(),
     email: z.string().trim().toLowerCase().email().optional(),
+    isActive: z.boolean().optional(),
   }),
 
   countSessions: z.object({ id: z.string().cuid() }),

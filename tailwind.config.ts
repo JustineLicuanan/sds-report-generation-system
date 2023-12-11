@@ -34,6 +34,14 @@ export default {
         accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
         popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
         card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+        'c-primary': {
+          DEFAULT: 'hsl(var(--c-primary))',
+          foreground: 'hsl(var(--c-primary-foreground))',
+        },
+        'c-secondary': {
+          DEFAULT: 'hsl(var(--c-secondary))',
+          foreground: 'hsl(var(--c-secondary-foreground))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

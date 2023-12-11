@@ -21,4 +21,15 @@ export const organizationRouter = createTRPCRouter({
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
     }
   }),
+
+  uploadCbl: protectedProcedure.input(organizationSchemas.uploadCbl).mutation(({ ctx, input }) => {
+    try {
+      return ctx.db.organization.update({
+        where: { id: ctx.session.user.organizationId },
+        data: input,
+      });
+    } catch (err) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+    }
+  }),
 });

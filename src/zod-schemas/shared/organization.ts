@@ -11,4 +11,6 @@ export const organizationSchemas = {
       includeAnnouncements: z.literal(true).optional(),
     })
     .optional(),
+
+  uploadCbl: z.object({ cbl: z.string().url(), cblId: z.string() }),
 };

@@ -3,13 +3,19 @@ import { z } from 'zod';
 
 export const orgSchemas = {
   create: z.object({
-    name: z.string().trim().min(1),
+    name: z.string().trim().min(1, 'Name is required'),
     description: z.string().trim().optional(),
     category: z.nativeEnum(OrganizationCategory),
     image: z.string().url().nullable().optional(),
     imageId: z.string().nullable().optional(),
+    cbl: z.string().url().nullable().optional(),
+    cblId: z.string().nullable().optional(),
     members: z
-      .object({ name: z.string().trim().min(1), email: z.string().trim().toLowerCase().email() })
+      .object({
+        name: z.string().trim().min(1, 'Position is required'),
+        email: z.string().trim().toLowerCase().email(),
+        isActive: z.boolean().optional(),
+      })
       .array(),
   }),
 
@@ -34,6 +40,8 @@ export const orgSchemas = {
     category: z.nativeEnum(OrganizationCategory).optional(),
     image: z.string().url().nullable().optional(),
     imageId: z.string().nullable().optional(),
+    cbl: z.string().url().nullable().optional(),
+    cblId: z.string().nullable().optional(),
   }),
 
   archive: z.object({ id: z.string().cuid() }),

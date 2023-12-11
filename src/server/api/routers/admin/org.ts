@@ -11,6 +11,7 @@ export const orgRouter = createTRPCRouter({
       const userExists = !!(await ctx.db.user.count({
         where: {
           email: { in: members.map(({ email }) => email) },
+          isActive: true,
           organizationIsArchived: false,
         },
       }));

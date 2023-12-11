@@ -5,6 +5,8 @@ export const announcementSchemas = {
   create: z.object({
     subject: z.string().trim().min(1),
     description: z.string().trim().min(1),
+    file: z.string().url().nullable().optional(),
+    fileId: z.string().nullable().optional(),
     start: z.string().datetime({ offset: true }).nullable().optional(),
     due: z.string().datetime({ offset: true }).nullable().optional(),
     hasReport: z.boolean(),
@@ -30,6 +32,8 @@ export const announcementSchemas = {
     id: z.string().cuid(),
     subject: z.string().trim().min(1).optional(),
     description: z.string().trim().min(1).optional(),
+    file: z.string().url().nullable().optional(),
+    fileId: z.string().nullable().optional(),
     start: z.string().datetime({ offset: true }).nullable().optional(),
     due: z.string().datetime({ offset: true }).nullable().optional(),
     hasReport: z.boolean().optional(),

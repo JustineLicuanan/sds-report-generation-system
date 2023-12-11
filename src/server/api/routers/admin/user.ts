@@ -9,7 +9,7 @@ export const userRouter = createTRPCRouter({
 
     try {
       const userExists = !!(await ctx.db.user.count({
-        where: { email, organizationIsArchived: false },
+        where: { email, isActive: true, organizationIsArchived: false },
       }));
 
       if (userExists) {

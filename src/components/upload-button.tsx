@@ -23,9 +23,17 @@ type Props = {
     | CldUploadWidgetProps['onSuccess']
     | OnSuccessUpload
     | (CldUploadWidgetProps['onSuccess'] & OnSuccessUpload);
+  disabled?: boolean;
 };
 
-export function UploadButton({ folder, resourceType, onSuccess, className, children }: Props) {
+export function UploadButton({
+  folder,
+  resourceType,
+  onSuccess,
+  className,
+  children,
+  disabled,
+}: Props) {
   return (
     <CldUploadWidget
       uploadPreset={env.NEXT_PUBLIC_UPLOAD_PRESET}
@@ -39,7 +47,7 @@ export function UploadButton({ folder, resourceType, onSuccess, className, child
       onSuccess={onSuccess as CldUploadWidgetProps['onSuccess']}
     >
       {({ open }) => (
-        <button type="button" className={className} onClick={() => open()}>
+        <button type="button" className={className} onClick={() => open()} disabled={disabled}>
           {children}
         </button>
       )}

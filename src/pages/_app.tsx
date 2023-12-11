@@ -4,6 +4,7 @@ import { type AppType } from 'next/app';
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 
+import { Toaster } from '~/components/ui/toaster';
 import { api } from '~/utils/api';
 
 import '~/styles/globals.css';
@@ -19,6 +20,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
       </Head>
 
       <Component {...pageProps} />
+
+      <Toaster />
 
       <ToastContainer />
     </SessionProvider>
