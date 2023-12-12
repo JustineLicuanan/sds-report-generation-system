@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
@@ -37,7 +37,7 @@ export default function MemberPage() {
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Members</h1>
             <div className="my-4">
               <div className="text-center text-xl font-medium  md:text-2xl lg:text-3xl">
-                This organization doesn't have a member.
+                This organization doesn&apos;t have a member.
               </div>
             </div>
           </div>

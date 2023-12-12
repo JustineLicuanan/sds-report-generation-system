@@ -100,15 +100,14 @@ export default function OrganizationPage() {
             ) : (
               <div className="flex items-center justify-center text-xl font-semibold">
                 There are no pending report
-                <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />, Create
-                a&nbsp;
+                <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />,{' '}
                 <Link
                   href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`}
                   className="text-xl text-blue-500 hover:underline"
                 >
-                  new
+                  Create a new one
                 </Link>
-                &nbsp;one.
+                .
               </div>
             )}
           </div>
@@ -118,7 +117,8 @@ export default function OrganizationPage() {
           ).length > 0 ? (
             <Report
               logs={reportList.filter(
-                (report) => report.status === LogAction.APPROVED || report.status === LogAction.REJECTED
+                (report) =>
+                  report.status === LogAction.APPROVED || report.status === LogAction.REJECTED
               )}
             />
           ) : (

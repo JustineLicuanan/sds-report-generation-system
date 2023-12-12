@@ -39,6 +39,8 @@ export default function SignInPage() {
               variant: 'destructive',
               description: '❌ Email has no permission to sign in.',
             });
+
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             router.replace('/auth/sign-in');
             return;
 
@@ -47,6 +49,8 @@ export default function SignInPage() {
               variant: 'destructive',
               description: '❌ Token has expired.',
             });
+
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             router.replace('/auth/sign-in');
             return;
 
@@ -56,6 +60,8 @@ export default function SignInPage() {
               title: '❌ Internal Server Error',
               description: 'Sign in failed.',
             });
+
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             router.replace('/auth/sign-in');
             return;
         }
@@ -63,6 +69,7 @@ export default function SignInPage() {
 
       return () => clearTimeout(timeout);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

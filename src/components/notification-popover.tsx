@@ -88,7 +88,7 @@ export function NotificationPopover() {
                 </Link>
               ))
             ) : (
-              <h4 className="text-center text-lg text-c-primary">You're all caught up! 🎉</h4>
+              <h4 className="text-center text-lg text-c-primary">You&apos;re all caught up! 🎉</h4>
             )}
 
             {!!getReadNotifications.data?.length && (
@@ -209,7 +209,7 @@ export function OrganizationNotificationPopover() {
                 </Link>
               ))
             ) : (
-              <h4 className="text-center text-lg text-c-primary">You're all caught up! 🎉</h4>
+              <h4 className="text-center text-lg text-c-primary">You&apos;re all caught up! 🎉</h4>
             )}
 
             {!!getReadNotifications.data?.length && (

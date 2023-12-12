@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { OrganizationCategory } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
+import { type z } from 'zod';
 
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebarMenu from '~/components/admin-side-bar-menu';
@@ -26,10 +27,23 @@ import { Separator } from '~/components/ui/separator';
 import { Switch } from '~/components/ui/switch';
 import { Textarea } from '~/components/ui/textarea';
 import { meta, paths } from '~/meta';
+import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
+import { authRedirects } from '~/utils/auth-redirects';
 import { announcementSchemas } from '~/zod-schemas/admin/announcement';
 
 type CreateAnnouncementInputs = z.infer<typeof announcementSchemas.create>;
+
+export const getServerSideProps = (async (ctx) => {
+  const authSession = await getServerAuthSession(ctx);
+  const authRedirect = authRedirects.admin(authSession);
+
+  // if(!authRedirect.props) {
+  //   return authRedirect;
+  // }
+
+  return authRedirect;
+}) satisfies GetServerSideProps;
 
 export default function CreateAnnouncement() {
   const router = useRouter();
@@ -54,7 +68,7 @@ export default function CreateAnnouncement() {
     onSuccess: async ({ id }) => {
       toast.success('Announcement has been created.');
       await utils.admin.announcement.invalidate();
-      router.push(`${paths.ADMIN}${paths.ANNOUNCEMENTS}/#${id}`);
+      await router.push(`${paths.ADMIN}${paths.ANNOUNCEMENTS}/#${id}`);
     },
   });
 
@@ -165,6 +179,7 @@ export default function CreateAnnouncement() {
 
                   {Object.values(OrganizationCategory).map((category) => (
                     <Button
+                      key={category}
                       type="button"
                       variant="c-secondary"
                       className="capitalize"

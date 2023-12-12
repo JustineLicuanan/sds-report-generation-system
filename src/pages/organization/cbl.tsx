@@ -1,10 +1,10 @@
-import { GetServerSideProps } from 'next';
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
-import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -63,7 +63,7 @@ export default function MemberPage() {
                 </div>
               ) : (
                 <div className="text-center text-xl font-medium  md:text-2xl lg:text-3xl">
-                  You haven't uploaded your CBL yet.
+                  You haven&apos;t uploaded your CBL yet.
                 </div>
               )}
             </div>

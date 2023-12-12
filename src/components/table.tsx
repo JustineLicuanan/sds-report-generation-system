@@ -1,7 +1,7 @@
 import { LogAction } from '@prisma/client';
-import { inferRouterOutputs } from '@trpc/server';
+import { type inferRouterOutputs } from '@trpc/server';
 import { type MutableRefObject } from 'react';
-import { AppRouter } from '~/server/api/root';
+import { type AppRouter } from '~/server/api/root';
 
 type YourComponentProps = {
   data: inferRouterOutputs<AppRouter>['admin']['log']['get'];

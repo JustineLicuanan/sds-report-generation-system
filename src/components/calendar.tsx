@@ -1,13 +1,13 @@
-import { EventInput, EventSourceInput } from '@fullcalendar/core';
-import { EventImpl } from '@fullcalendar/core/internal';
+import { type EventInput, type EventSourceInput } from '@fullcalendar/core';
+import { type EventImpl } from '@fullcalendar/core/internal';
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { inferRouterOutputs } from '@trpc/server';
+import { type inferRouterOutputs } from '@trpc/server';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { AppRouter } from '~/server/api/root';
+import { type AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
 
 export default function Calendar({
@@ -59,7 +59,7 @@ export default function Calendar({
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState();
+  // const [selectedEvent, setSelectedEvent] = useState();
   const [appointmentData, setAppointmentData] = useState<EventImpl | undefined>();
   console.log(
     data

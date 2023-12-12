@@ -39,11 +39,11 @@ export default function EditInfoPage() {
   const utils = api.useContext();
 
   const [visibility, setVisibility] = useState(true); // VISIBILITY OF BUTTON
-  const [showSignOut, setShowSignOut] = useState(false); // ENABLE OR DISABLED SIGNOUT BUTTON
-  const [confirmSignout, setConfirmSignOut] = useState(''); // CHECK IF THE INPUT BOX IS CORRECT
+  // const [showSignOut, setShowSignOut] = useState(false); // ENABLE OR DISABLED SIGNOUT BUTTON
+  // const [confirmSignout, setConfirmSignOut] = useState(''); // CHECK IF THE INPUT BOX IS CORRECT
   const [successAlert, setSuccessAlert] = useState(false); // SHOW SUCCESS ALERT
   const [addOther, setAddOther] = useState(false);
-  const [updateOther, setuUpdateOther] = useState(false);
+  // const [updateOther, setuUpdateOther] = useState(false);
 
   const getOrgQuery = api.admin.org.get.useQuery({
     id: router.query.id as UpdateOrgInputs['id'],
@@ -51,8 +51,8 @@ export default function EditInfoPage() {
   });
 
   const updateOrgMutation = api.admin.org.update.useMutation({
-    onSuccess: (data) => {
-      utils.admin.org.invalidate();
+    onSuccess: async () => {
+      await utils.admin.org.invalidate();
       setSuccessAlert(true);
     },
   });
@@ -83,7 +83,7 @@ export default function EditInfoPage() {
   });
 
   const addMemberMutation = api.admin.user.create.useMutation({
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await utils.admin.org.invalidate();
       addMemberForm.reset(undefined, { keepDefaultValues: true });
       setSuccessAlert(true);
@@ -265,7 +265,7 @@ export default function EditInfoPage() {
                     }}
                   >
                     <option value="">Select a position</option>
-                    {Object.values(UserPosition).map((position, index) => (
+                    {Object.values(UserPosition).map((position) => (
                       <option key={position} value={position}>
                         {position}
                       </option>

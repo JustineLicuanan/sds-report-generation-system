@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
@@ -36,7 +36,7 @@ export default function MemberPage() {
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">CBL</h1>
             <div className="my-4">
               <div className="text-center text-xl font-medium  md:text-2xl lg:text-3xl">
-                This organization hasn't uploaded their CBL yet.
+                This organization hasn&apos;t uploaded their CBL yet.
               </div>
               {/* <div className="mt-1 flex h-[50vh] w-full items-center justify-center border-[5px] border-green text-4xl">
                 <PdfViewer />

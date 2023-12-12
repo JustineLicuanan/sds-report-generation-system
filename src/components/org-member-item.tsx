@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 import Image from 'next/image';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 
 import { UserPosition } from '~/enums/user-position';
 import { api } from '~/utils/api';
@@ -16,7 +16,7 @@ type Props = {
   setSuccessAlert: (value: React.SetStateAction<boolean>) => void;
 };
 
-export function OrgMemberItem({ member, orgId, setSuccessAlert }: Props) {
+export function OrgMemberItem({ member, setSuccessAlert }: Props) {
   const utils = api.useContext();
   const [isOther, setIsOther] = useState(
     () => !Object.values(UserPosition).includes(member.name as UserPosition)
@@ -99,7 +99,7 @@ export function OrgMemberItem({ member, orgId, setSuccessAlert }: Props) {
           value={isOther ? 'other' : updateMemberForm.watch('name')}
         >
           <option value="">Select a position</option>
-          {Object.values(UserPosition).map((position, index) => (
+          {Object.values(UserPosition).map((position) => (
             <option key={position} value={position}>
               {position}
             </option>

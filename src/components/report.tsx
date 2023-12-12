@@ -1,4 +1,4 @@
-import { LogAction, Report } from '@prisma/client';
+import { LogAction, type Report } from '@prisma/client';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { paths } from '~/meta';

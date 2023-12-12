@@ -6,9 +6,9 @@ import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { z } from 'zod';
+import { type z } from 'zod';
 
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebarMenu from '~/components/admin-side-bar-menu';
@@ -34,7 +34,7 @@ import {
 } from '~/components/ui/select';
 import { Separator } from '~/components/ui/separator';
 import { Textarea } from '~/components/ui/textarea';
-import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { UserPosition } from '~/enums/user-position';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -80,7 +80,7 @@ export default function CreateOrganizationPage() {
     onSuccess: async ({ id }) => {
       toast.success('Organization has been created.');
       await utils.admin.org.invalidate();
-      router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${id}`);
+      await router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${id}`);
     },
   });
 
