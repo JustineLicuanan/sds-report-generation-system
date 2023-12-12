@@ -1,7 +1,6 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import AdminCalendar from '~/components/admin-calendar';
-import Calendar from '~/components/admin-calendar';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import { meta } from '~/meta';

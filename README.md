@@ -39,6 +39,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.12.0
+
+- fix: correct 'select announcement' value
+- fix: remove lint errors
+
 ### Version 0.11.8
 
 - implemented appointment page in organizations.

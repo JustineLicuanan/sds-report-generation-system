@@ -9,6 +9,14 @@ import NotificationAlert from '~/components/notification-alert';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select';
 import { useToast } from '~/components/ui/use-toast';
 import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { meta, paths } from '~/meta';
@@ -120,19 +128,34 @@ export default function CreateReportPage() {
                   ))}
               </select>
             ) : (
-              <select
-                id=""
-                className="mt-1 h-9 w-2/5 border-[1px] border-green px-2  py-1 text-lg outline-none"
-                {...createReportForm.register('announcementId')}
+              <Select
+                onValueChange={(value) => {
+                  if (value === 'n/a') {
+                    createReportForm.setValue('announcementId', undefined);
+                    return;
+                  }
+
+                  createReportForm.setValue('announcementId', value);
+                }}
               >
-                <option value="not applicable">N/A</option>
-                {getAnnouncementQuery.data?.map((announcement) => (
-                  <option key={announcement.id} value={announcement.id}>
-                    {announcement.subject}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-2/5 border-c-primary">
+                  <SelectValue placeholder="Select an announcement to link" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="n/a">N/A</SelectItem>
+
+                  <SelectGroup>
+                    {getAnnouncementQuery.data?.map((announcement) => (
+                      <SelectItem key={announcement.id} value={announcement.id}>
+                        {announcement.subject}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             )}
+
             <label htmlFor="visibility" className="mt-1 text-xl font-bold">
               Visibility
             </label>

@@ -6,7 +6,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import AdminCalendar from '~/components/admin-calendar';
-import Calendar from '~/components/admin-calendar';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import { meta, paths } from '~/meta';
