@@ -53,14 +53,15 @@ export function NotificationPopover() {
 
         <ScrollArea className="h-96">
           <section className="flex flex-col justify-center gap-2">
-            <h4 className="text-center text-lg">Unread Notifications:</h4>
-
             <Button
               variant="c-secondary"
-              onClick={() => readNotifications.mutate()}
-              disabled={!getUnreadNotifications.data?.length}
+              onClick={() =>
+                getUnreadNotifications.data?.length
+                  ? readNotifications.mutate()
+                  : readNotifications.mutate({ isRead: false })
+              }
             >
-              Mark all as read
+              Mark all as {getUnreadNotifications.data?.length ? 'read' : 'unread'}
             </Button>
 
             {!!getUnreadNotifications.data?.length ? (
@@ -94,16 +95,6 @@ export function NotificationPopover() {
             {!!getReadNotifications.data?.length && (
               <>
                 <Separator className="mt-8" />
-
-                <h4 className="text-center text-lg">Read Notifications:</h4>
-
-                <Button
-                  variant="c-secondary"
-                  onClick={() => readNotifications.mutate({ isRead: false })}
-                  disabled={!getReadNotifications.data?.length}
-                >
-                  Mark all as unread
-                </Button>
 
                 {getReadNotifications.data.map((notification) => (
                   <Link
@@ -174,14 +165,15 @@ export function OrganizationNotificationPopover() {
 
         <ScrollArea className="h-96">
           <section className="flex flex-col justify-center gap-2">
-            <h4 className="text-center text-lg">Unread Notifications:</h4>
-
             <Button
               variant="c-secondary"
-              onClick={() => readNotifications.mutate()}
-              disabled={!getUnreadNotifications.data?.length}
+              onClick={() =>
+                getUnreadNotifications.data?.length
+                  ? readNotifications.mutate()
+                  : readNotifications.mutate({ isRead: false })
+              }
             >
-              Mark all as read
+              Mark all as {getUnreadNotifications.data?.length ? 'read' : 'unread'}
             </Button>
 
             {!!getUnreadNotifications.data?.length ? (
@@ -215,16 +207,6 @@ export function OrganizationNotificationPopover() {
             {!!getReadNotifications.data?.length && (
               <>
                 <Separator className="mt-8" />
-
-                <h4 className="text-center text-lg">Read Notifications:</h4>
-
-                <Button
-                  variant="c-secondary"
-                  onClick={() => readNotifications.mutate({ isRead: false })}
-                  disabled={!getReadNotifications.data?.length}
-                >
-                  Mark all as unread
-                </Button>
 
                 {getReadNotifications.data.map((notification) => (
                   <Link

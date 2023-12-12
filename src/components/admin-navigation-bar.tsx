@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AccountDropdown } from '~/components/account-dropdown';
 import { CreateDropdown } from '~/components/create-dropdown';
 import { ExpandSidebarButton } from '~/components/expanded-sidebar-button';
+import { MobileSidebar } from '~/components/mobile-sidebar';
 import { NotificationPopover } from '~/components/notification-popover';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
 import { buttonVariants } from '~/components/ui/button';
@@ -16,7 +17,9 @@ export default function AdminNavbar() {
     <header className="sticky top-0 z-50 w-full bg-c-primary text-c-primary-foreground">
       <section className="container flex h-14 items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <ExpandSidebarButton />
+          <MobileSidebar className="md:hidden" />
+
+          <ExpandSidebarButton className="hidden md:inline-flex" />
 
           <Link
             href={paths.ADMIN}

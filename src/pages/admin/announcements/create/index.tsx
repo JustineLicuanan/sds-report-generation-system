@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import Select from 'react-select';
-import { toast } from 'react-toastify';
 import { type z } from 'zod';
 
 import AdminNavbar from '~/components/admin-navigation-bar';
@@ -26,6 +25,7 @@ import { Label } from '~/components/ui/label';
 import { Separator } from '~/components/ui/separator';
 import { Switch } from '~/components/ui/switch';
 import { Textarea } from '~/components/ui/textarea';
+import { useToast } from '~/components/ui/use-toast';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -48,6 +48,7 @@ export const getServerSideProps = (async (ctx) => {
 export default function CreateAnnouncement() {
   const router = useRouter();
   const utils = api.useContext();
+  const { toast } = useToast();
 
   const getOrganizations = api.admin.org.get.useQuery();
 
@@ -66,7 +67,7 @@ export default function CreateAnnouncement() {
 
   const createAnnouncement = api.admin.announcement.create.useMutation({
     onSuccess: async ({ id }) => {
-      toast.success('Announcement has been created.');
+      toast({ variant: 'c-primary', description: '✔️ Announcement has been created.' });
       await utils.admin.announcement.invalidate();
       await router.push(`${paths.ADMIN}${paths.ANNOUNCEMENTS}/#${id}`);
     },

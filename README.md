@@ -39,6 +39,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.11.7
+
+- style: redesign mobile sidebar
+- style: redesign notification popover
+- style: replace toast used for 'create organization' & 'create announcement'
+
 ### Version 0.11.4
 
 - fix: query invalidations

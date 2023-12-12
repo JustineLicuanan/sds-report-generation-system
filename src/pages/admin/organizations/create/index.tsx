@@ -7,7 +7,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { type z } from 'zod';
 
 import AdminNavbar from '~/components/admin-navigation-bar';
@@ -34,6 +33,7 @@ import {
 } from '~/components/ui/select';
 import { Separator } from '~/components/ui/separator';
 import { Textarea } from '~/components/ui/textarea';
+import { useToast } from '~/components/ui/use-toast';
 import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { UserPosition } from '~/enums/user-position';
 import { meta, paths } from '~/meta';
@@ -58,6 +58,7 @@ type CreateOrganizationInputs = z.infer<typeof orgSchemas.create>;
 export default function CreateOrganizationPage() {
   const router = useRouter();
   const utils = api.useContext();
+  const { toast } = useToast();
 
   const [isOther, setIsOther] = useState(false);
 
@@ -78,7 +79,7 @@ export default function CreateOrganizationPage() {
 
   const createOrganization = api.admin.org.create.useMutation({
     onSuccess: async ({ id }) => {
-      toast.success('Organization has been created.');
+      toast({ variant: 'c-primary', description: '✔️ Organization has been created.' });
       await utils.admin.org.invalidate();
       await router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${id}`);
     },
