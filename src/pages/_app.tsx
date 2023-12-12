@@ -16,7 +16,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/sds_icon.png" />
       </Head>
 
       <Component {...pageProps} />
