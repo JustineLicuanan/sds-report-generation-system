@@ -4,12 +4,12 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { type z } from 'zod';
 import NotificationAlert from '~/components/notification-alert';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
+import { useToast } from '~/components/ui/use-toast';
 import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -33,12 +33,10 @@ export const getServerSideProps = (async (ctx) => {
 export default function CreateReportPage() {
   const router = useRouter();
   const utils = api.useContext();
-
+  const { toast } = useToast();
   const createReportMutation = api.shared.report.create.useMutation({
     onSuccess: async ({ id }) => {
-      toast.success('Created Report Successfully!', {
-        position: 'bottom-right',
-      });
+      toast({ variant: 'c-primary', description: '✔️ Created report successfully.' });
       await utils.shared.report.invalidate();
       await router.push(`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${id}`);
     },
@@ -127,7 +125,7 @@ export default function CreateReportPage() {
                 className="mt-1 h-9 w-2/5 border-[1px] border-green px-2  py-1 text-lg outline-none"
                 {...createReportForm.register('announcementId')}
               >
-                <option value="n/a">N/A</option>
+                <option value="not applicable">N/A</option>
                 {getAnnouncementQuery.data?.map((announcement) => (
                   <option key={announcement.id} value={announcement.id}>
                     {announcement.subject}

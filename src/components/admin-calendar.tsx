@@ -6,11 +6,11 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { type inferRouterOutputs } from '@trpc/server';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useToast } from '~/components/ui/use-toast';
 import { type AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
 
-export default function Calendar({
+export default function AdminCalendar({
   date,
 }: {
   date: inferRouterOutputs<AppRouter>['admin']['report']['get'];
@@ -18,7 +18,7 @@ export default function Calendar({
   const utils = api.useContext();
   const startDate = new Date(0); // January 1, 1970
   const endDate = new Date();
-
+  const { toast } = useToast();
   const restricted = [
     {
       start: startDate.toISOString().split('T')[0]!,
@@ -46,14 +46,14 @@ export default function Calendar({
 
   const updateReportMutation = api.admin.report.update.useMutation({
     onSuccess: async () => {
-      toast.success('Appointment updated', { position: 'bottom-right' });
+      toast({ variant: 'c-primary', description: '✔️ Appointment updated.' });
       await utils.admin.report.invalidate();
     },
   });
 
   const updateMarkAsCompleteMutation = api.admin.report.markAsCompleted.useMutation({
     onSuccess: async () => {
-      toast.success('Mark as completed updated', { position: 'bottom-right' });
+      toast({ variant: 'c-primary', description: '✔️ Marked as complete.' });
       await utils.admin.report.invalidate();
     },
   });

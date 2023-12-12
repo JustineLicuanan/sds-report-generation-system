@@ -1,17 +1,16 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
-import AdminCalendar from '~/components/admin-calendar';
-import Calendar from '~/components/admin-calendar';
-import AdminNavBar from '~/components/admin-navigation-bar';
-import AdminSideBarMenu from '~/components/admin-side-bar-menu';
+import OrgCalendar from '~/components/organization-calendar';
+import OrganizationSidebar from '~/components/organization-side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
+import OrgNavbar from '~/components/organization-navigation-bar';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
-  const authRedirect = authRedirects.admin(authSession);
+  const authRedirect = authRedirects.organization(authSession);
 
   // if(!authRedirect.props) {
   //   return authRedirect;
@@ -21,7 +20,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AppointmentPage() {
-  const getReportQuery = api.admin.report.get.useQuery({ includeCreatedBy: true });
+  const getReportQuery = api.shared.report.get.useQuery({ includeCreatedBy: true });
   const report = getReportQuery.data ?? [];
 
   return (
@@ -32,10 +31,10 @@ export default function AppointmentPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <AdminNavBar />
+      <OrgNavbar />
       <main className="flex">
         {/* SIDE BAR */}
-        <AdminSideBarMenu />
+        <OrganizationSidebar />
 
         {/* MAIN CONTENT */}
 
@@ -45,7 +44,7 @@ export default function AppointmentPage() {
               Appointments
             </h1>
             <div className="my-5 p-1 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
-              <AdminCalendar date={report} />
+              <OrgCalendar date={report} />
             </div>
           </div>
         </div>

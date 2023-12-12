@@ -36,6 +36,11 @@ export const useSidebarStore = create<SidebarState>((set) => ({
 
   organizationSidebarLinks: [
     { Icon: LayoutDashboard, name: 'Dashboard', href: paths.ORGANIZATION },
+    {
+      Icon: CalendarCheck2,
+      name: 'Appointments',
+      href: `${paths.ORGANIZATION}${paths.APPOINTMENTS}`,
+    },
     { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MEMBERS}` },
     { Icon: Megaphone, name: 'Announcements', href: `${paths.ORGANIZATION}${paths.ANNOUNCEMENTS}` },
   ],

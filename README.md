@@ -39,6 +39,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.11.8
+
+- implemented appointment page in organizations.
+- fix the toast.
+
 ### Version 0.11.7
 
 - style: redesign mobile sidebar

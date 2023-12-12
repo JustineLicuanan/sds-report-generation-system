@@ -6,12 +6,12 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { type z } from 'zod';
 import NotificationAlert from '~/components/notification-alert';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
+import { useToast } from '~/components/ui/use-toast';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -35,7 +35,7 @@ export default function UserOrgReportPage() {
   const router = useRouter();
   const utils = api.useContext();
   const { data: session } = useSession();
-
+  const { toast } = useToast();
   const getReportQuery = api.shared.report.get.useQuery({
     id: router.query.id as string,
     includeComments: true,
@@ -54,9 +54,7 @@ export default function UserOrgReportPage() {
 
   const onSubmitComment: SubmitHandler<InputsComment> = async (values) => {
     await createCommentMutation.mutateAsync(values);
-    toast.success('Commented Successfully!', {
-      position: 'bottom-right',
-    });
+    toast({ variant: 'c-primary', description: '✔️ Commented successfully.' });
     createCommentForm.reset(undefined, { keepDefaultValues: true });
   };
 

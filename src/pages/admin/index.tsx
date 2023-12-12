@@ -5,9 +5,10 @@ import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import AdminCalendar from '~/components/admin-calendar';
+import Calendar from '~/components/admin-calendar';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import Calendar from '~/components/calendar';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -118,7 +119,7 @@ export default function AdminDashboardPage() {
             </Splide>
           </div>
           <div className="col-span-3 row-span-2 bg-gray/30 p-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-2 md:row-span-4">
-            <Calendar date={report} />
+            <AdminCalendar date={report} />
           </div>
           <Link
             href={`${paths.ADMIN}${paths.APPOINTMENTS}`}
