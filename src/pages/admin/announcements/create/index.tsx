@@ -1,6 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { OrganizationCategory } from '@prisma/client';
+import { Loader2 } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -8,6 +11,7 @@ import { z } from 'zod';
 
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebarMenu from '~/components/admin-side-bar-menu';
+import { Button } from '~/components/ui/button';
 import {
   Form,
   FormControl,
@@ -39,11 +43,12 @@ export default function CreateAnnouncement() {
     category,
   }));
 
+  const [selectValues, setSelectValues] = useState<typeof options>([]);
+
   const createAnnouncementForm = useForm<CreateAnnouncementInputs>({
     resolver: zodResolver(announcementSchemas.create),
     defaultValues: { subject: '', description: '', hasReport: false, audience: [] },
   });
-  // console.log(createAnnouncementForm.watch('audience'));
 
   const createAnnouncement = api.admin.announcement.create.useMutation({
     onSuccess: async ({ id }) => {
@@ -123,25 +128,68 @@ export default function CreateAnnouncement() {
                   )}
                 />
 
-                <FormField
-                  control={createAnnouncementForm.control}
-                  name="audience"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center gap-2 space-y-0 pb-6">
-                      <FormLabel>Audience:</FormLabel>
+                <div className="flex items-center gap-2 space-y-0">
+                  <Label htmlFor="audience">Audience:</Label>
 
-                      <FormControl>
-                        <Select
-                          closeMenuOnSelect={false}
-                          options={options ?? []}
-                          className="w-full"
-                          isMulti
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+                  <Select
+                    id="audience"
+                    closeMenuOnSelect={false}
+                    options={options}
+                    className="w-full"
+                    onChange={(newValues) => {
+                      setSelectValues(() => newValues as typeof options);
+                      createAnnouncementForm.setValue(
+                        'audience',
+                        newValues.map(({ value }) => ({ id: value }))
+                      );
+                    }}
+                    value={selectValues}
+                    isMulti
+                  />
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 pb-6">
+                  <Button
+                    type="button"
+                    variant="c-secondary"
+                    onClick={() => {
+                      setSelectValues(() => options);
+                      createAnnouncementForm.setValue(
+                        'audience',
+                        options?.map(({ value }) => ({ id: value })) ?? []
+                      );
+                    }}
+                  >
+                    All
+                  </Button>
+
+                  {Object.values(OrganizationCategory).map((category) => (
+                    <Button
+                      type="button"
+                      variant="c-secondary"
+                      className="capitalize"
+                      onClick={() => {
+                        setSelectValues(() => {
+                          return options?.filter((option) => option.category === category);
+                        });
+
+                        createAnnouncementForm.setValue(
+                          'audience',
+                          options?.reduce(
+                            (acc, option) => {
+                              if (option.category === category) acc.push({ id: option.value });
+
+                              return acc;
+                            },
+                            [] as CreateAnnouncementInputs['audience']
+                          ) ?? []
+                        );
+                      }}
+                    >
+                      {category.replace(/_/g, ' ').toLowerCase()}
+                    </Button>
+                  ))}
+                </div>
 
                 <div className="flex flex-wrap items-center gap-6">
                   <div className="flex flex-col justify-center">
@@ -154,7 +202,12 @@ export default function CreateAnnouncement() {
                         id="start-date"
                         type="datetime-local"
                         disabled={createAnnouncement.isLoading || createAnnouncement.isSuccess}
-                        {...createAnnouncementForm.register('start')}
+                        onChange={(e) => {
+                          createAnnouncementForm.setValue(
+                            'start',
+                            e.target.value ? new Date(e.target.value).toISOString() : undefined
+                          );
+                        }}
                       />
                     </div>
 
@@ -173,7 +226,12 @@ export default function CreateAnnouncement() {
                         id="due-date"
                         type="datetime-local"
                         disabled={createAnnouncement.isLoading || createAnnouncement.isSuccess}
-                        {...createAnnouncementForm.register('due')}
+                        onChange={(e) => {
+                          createAnnouncementForm.setValue(
+                            'due',
+                            e.target.value ? new Date(e.target.value).toISOString() : undefined
+                          );
+                        }}
                       />
                     </div>
 
@@ -200,6 +258,17 @@ export default function CreateAnnouncement() {
                     </FormItem>
                   )}
                 />
+
+                <Button
+                  type="submit"
+                  variant="c-primary"
+                  disabled={createAnnouncement.isLoading || createAnnouncement.isSuccess}
+                >
+                  {createAnnouncement.isLoading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}{' '}
+                  Create an Announcement
+                </Button>
               </form>
             </Form>
           </main>

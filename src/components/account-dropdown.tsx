@@ -1,4 +1,4 @@
-import { LifeBuoy, Settings, User, UserPlus, Users } from 'lucide-react';
+import { Layers, Megaphone, Scale, Users } from 'lucide-react';
 import Link from 'next/link';
 import { Fragment } from 'react';
 
@@ -14,25 +14,37 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 import { cn } from '~/lib/utils';
+import { paths } from '~/meta';
 
-type Props = { children: React.ReactNode };
+type Props = { isOrganization?: true; children: React.ReactNode };
 
-export function AccountDropdown({ children }: Props) {
-  const dropdownGroups = [
-    [
-      { Icon: User, name: 'Profile', href: '#' },
-      { Icon: Settings, name: 'Edit profile', href: '#' },
-    ],
-    [{ Icon: LifeBuoy, name: 'Support', href: '#' }],
-  ];
+export function AccountDropdown({ isOrganization, children }: Props) {
+  const dropdownGroups = isOrganization
+    ? [
+        // [
+        //   { Icon: User, name: 'Profile', href: '#' },
+        //   { Icon: Settings, name: 'Edit profile', href: '#' },
+        // ],
+        // [{ Icon: LifeBuoy, name: 'Support', href: '#' }],
+        [
+          { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MEMBERS}` },
+          { Icon: Scale, name: 'Organization CBL', href: `${paths.ORGANIZATION}${paths.CBL}` },
+          { Icon: Layers, name: 'My Reports', href: `${paths.ORGANIZATION}` },
+        ],
+      ]
+    : [
+        // [
+        //   { Icon: User, name: 'Profile', href: '#' },
+        //   { Icon: Settings, name: 'Edit profile', href: '#' },
+        // ],
+        // [{ Icon: LifeBuoy, name: 'Support', href: '#' }],
+        [{ Icon: Megaphone, name: 'Appointments', href: `${paths.ADMIN}${paths.APPOINTMENTS}` }],
+      ];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={cn(
-          buttonVariants({ variant: 'c-secondary', size: 'icon' }),
-          'rounded-full'
-        )}
+        className={cn(buttonVariants({ variant: 'c-secondary', size: 'icon' }), 'rounded-full')}
       >
         {children}
       </DropdownMenuTrigger>

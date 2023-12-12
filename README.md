@@ -39,6 +39,12 @@ respective docs.
 
 ## Changelog
 
+### Version 0.11.3
+
+- style: revamp the organization navbar & sidebar
+- fix: complete the 'create announcement' page
+- fix: null in authentication logs
+
 ### Version 0.11.0
 
 - feat: add Google OAuth 2.0 option

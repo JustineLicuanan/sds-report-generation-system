@@ -57,7 +57,7 @@ export default function AdminLogPage() {
     <>
       {/* HEADER */}
       <Head>
-        <title>{`Auth Logs ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Authentication Logs ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -70,7 +70,9 @@ export default function AdminLogPage() {
 
         <div className="mx-3 my-4 w-full">
           <div className="mx-auto my-0 min-h-[87vh] max-w-5xl rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
-            <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Log</h1>
+            <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
+              Authentication Logs
+            </h1>
             <div className="my-4 flex flex-col justify-between md:my-6 md:flex-row">
               {/* SEARCH */}
               <div className="flex">

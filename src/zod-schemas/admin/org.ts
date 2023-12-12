@@ -35,7 +35,7 @@ export const orgSchemas = {
 
   update: z.object({
     id: z.string().cuid(),
-    name: z.string().trim().min(1).optional(),
+    name: z.string().trim().min(1, 'Name is required').optional(),
     description: z.string().trim().optional(),
     category: z.nativeEnum(OrganizationCategory).optional(),
     image: z.string().url().nullable().optional(),

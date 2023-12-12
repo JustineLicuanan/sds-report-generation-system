@@ -3,8 +3,8 @@ import { OrderBy } from '~/zod-schemas/shared/notification';
 
 export const announcementSchemas = {
   create: z.object({
-    subject: z.string().trim().min(1),
-    description: z.string().trim().min(1),
+    subject: z.string().trim().min(1, 'Subject is required'),
+    description: z.string().trim().min(1, 'Description is required'),
     file: z.string().url().nullable().optional(),
     fileId: z.string().nullable().optional(),
     start: z.string().datetime({ offset: true }).nullable().optional(),
@@ -30,8 +30,8 @@ export const announcementSchemas = {
 
   update: z.object({
     id: z.string().cuid(),
-    subject: z.string().trim().min(1).optional(),
-    description: z.string().trim().min(1).optional(),
+    subject: z.string().trim().min(1, 'Subject is required').optional(),
+    description: z.string().trim().min(1, 'Description is required').optional(),
     file: z.string().url().nullable().optional(),
     fileId: z.string().nullable().optional(),
     start: z.string().datetime({ offset: true }).nullable().optional(),

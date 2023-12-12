@@ -100,7 +100,9 @@ export default function AdminLogPage() {
         <div className="mx-3 my-4 w-full">
           <div className="mx-auto my-0 min-h-[87vh] max-w-5xl rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
             {/* <div className="flex justify-between"> */}
-            <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">Log</h1>
+            <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
+              Report Logs
+            </h1>
             {/* <select
                 name="logs-dropdown"
                 id="logs-dropdown"
