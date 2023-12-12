@@ -33,10 +33,7 @@ export default function AnnouncementPage() {
   });
   const archiveAnnouncementMutation = api.admin.announcement.archive.useMutation({
     onSuccess: async () => {
-      await utils.admin.announcement.get.invalidate({
-        includeAudience: true,
-        orderByDue: OrderBy.ASC,
-      });
+      await utils.admin.announcement.invalidate();
     },
   });
 

@@ -45,11 +45,7 @@ export default function AdminOrgReportPage() {
 
   const createCommentMutation = api.admin.comment.createInReport.useMutation({
     onSuccess: async () => {
-      await utils.admin.report.get.invalidate({
-        id: router.query.id as string,
-        includeComments: true,
-        includeOrganization: true,
-      });
+      await utils.admin.report.invalidate();
     },
   });
 
@@ -68,11 +64,7 @@ export default function AdminOrgReportPage() {
 
   const updateReportStatusMutation = api.admin.report.updateStatus.useMutation({
     onSuccess: async () => {
-      await utils.admin.report.get.invalidate({
-        id: router.query.id as string,
-        includeComments: true,
-        includeOrganization: true,
-      });
+      await utils.admin.report.invalidate();
     },
   });
 

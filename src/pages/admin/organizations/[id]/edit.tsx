@@ -52,7 +52,7 @@ export default function EditInfoPage() {
 
   const updateOrgMutation = api.admin.org.update.useMutation({
     onSuccess: (data) => {
-      utils.admin.org.get.invalidate({ id: getOrgQuery.data?.[0]?.id, includeMembers: true });
+      utils.admin.org.invalidate();
       setSuccessAlert(true);
     },
   });

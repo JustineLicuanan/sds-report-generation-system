@@ -47,7 +47,7 @@ export default function Calendar({
   const updateReportMutation = api.admin.report.update.useMutation({
     onSuccess: async () => {
       toast.success('Appointment updated', { position: 'bottom-right' });
-      await utils.admin.report.get.invalidate({ includeCreatedBy: true });
+      await utils.admin.report.invalidate();
     },
   });
 

@@ -44,10 +44,7 @@ export default function UserOrgReportPage() {
 
   const createCommentMutation = api.shared.comment.createInReport.useMutation({
     onSuccess: async () => {
-      await utils.shared.report.get.invalidate({
-        id: router.query.id as string,
-        includeComments: true,
-      });
+      await utils.shared.report.invalidate();
     },
   });
   const createCommentForm = useForm<InputsComment>({

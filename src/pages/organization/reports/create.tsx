@@ -32,12 +32,14 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function CreateReportPage() {
   const router = useRouter();
+  const utils = api.useContext();
 
   const createReportMutation = api.shared.report.create.useMutation({
     onSuccess: async ({ id }) => {
       toast.success('Created Report Successfully!', {
         position: 'bottom-right',
       });
+      await utils.shared.report.invalidate();
       await router.push(`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${id}`);
     },
   });

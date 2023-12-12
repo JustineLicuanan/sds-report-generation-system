@@ -35,21 +35,21 @@ export function OrgMemberItem({ member, orgId, setSuccessAlert }: Props) {
 
   const updateMemberMutation = api.admin.user.update.useMutation({
     onSuccess: async () => {
-      await utils.admin.org.get.invalidate({ id: orgId, includeMembers: true });
+      await utils.admin.org.invalidate();
       setSuccessAlert(true);
     },
   });
 
   const removeMemberMutation = api.admin.user.remove.useMutation({
     onSuccess: async () => {
-      await utils.admin.org.get.invalidate({ id: orgId, includeMembers: true });
+      await utils.admin.org.invalidate();
       setSuccessAlert(true);
     },
   });
 
   const clearAllUserSessionsMutation = api.admin.user.clearAllSessions.useMutation({
     onSuccess: async () => {
-      await utils.admin.user.countSessions.invalidate({ id: member.id });
+      await utils.admin.user.invalidate();
       setSuccessAlert(true);
     },
   });

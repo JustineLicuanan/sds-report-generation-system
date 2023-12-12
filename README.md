@@ -39,6 +39,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.11.4
+
+- fix: query invalidations
+
 ### Version 0.11.3
 
 - style: revamp the organization navbar & sidebar
