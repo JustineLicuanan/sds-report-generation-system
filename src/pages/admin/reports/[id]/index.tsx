@@ -354,7 +354,7 @@ export default function AdminOrgReportPage() {
           scheduleAppointment ? '' : 'invisible opacity-0'
         }`}
       >
-        <div className="relative h-[200px] w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+        <div className="relative h-fit w-[350px]  rounded-3xl bg-white shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
           <h1 className="py-3 text-center text-3xl font-bold tracking-tight">Appointment</h1>
           <div className="h-[1px] w-full bg-black "></div>
           <div className="flex flex-col items-center justify-around p-2">
@@ -370,7 +370,7 @@ export default function AdminOrgReportPage() {
               value={due}
             />
           </div>
-          <div className="absolute bottom-3 left-7">
+          <div className="flex justify-between p-2">
             <button
               type="button"
               onClick={() => setScheduleAppointment(!scheduleAppointment)}
@@ -378,8 +378,6 @@ export default function AdminOrgReportPage() {
             >
               Cancel
             </button>
-          </div>
-          <div className="absolute bottom-3 right-7">
             <button
               type="button"
               className="rounded-md bg-green px-8 py-2 text-lg font-medium text-white"
