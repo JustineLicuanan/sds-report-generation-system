@@ -2,7 +2,7 @@ export const meta = {
   NAME: 'Office of Student Development Services',
   SHORT_NAME: 'SDS',
   LOGO: '/cvsu_logo.png',
-  DESCRIPTION: 'Report-File Scheduling & Management System',
+  DESCRIPTION: 'AR & FS Generator with File Management System',
   SEPARATOR: '|',
 } as const;
 

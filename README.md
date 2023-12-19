@@ -39,6 +39,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.13.0
+
+- redesigned the admin dasboard.
+- redesigned organization's list.
+
 ### Version 0.12.0
 
 - fix: correct 'select announcement' value
