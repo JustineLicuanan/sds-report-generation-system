@@ -5,6 +5,7 @@ import { CalendarCheck2, CalendarDays } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
@@ -12,7 +13,9 @@ import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { generateNotificationLink } from '~/utils/generateNotificationLink';
 import { getOrganizationsCounts } from '~/utils/getOrganizationsCounts';
+import { OrderBy } from '~/zod-schemas/shared/notification';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -41,6 +44,10 @@ export default function AdminDashboardPage() {
   const getReportQuery = api.admin.report.get.useQuery({ includeCreatedBy: true });
   const report = getReportQuery.data ?? [];
 
+  const getNotificationQuery = api.admin.notification.get.useQuery({
+    orderByCreatedAt: OrderBy.DESC,
+  });
+
   const router = useRouter();
   return (
     <>
@@ -57,7 +64,7 @@ export default function AdminDashboardPage() {
         <AdminSideBarMenu />
         <div
           id="main-content"
-          className="grid w-full grid-cols-3 grid-rows-6 flex-col gap-4 mx-4 my-4"
+          className="mx-4 my-4 grid w-full grid-cols-3 grid-rows-6 flex-col gap-4"
         >
           {/* Carousel */}
           <div className="col-span-3 row-span-2">
@@ -172,38 +179,31 @@ export default function AdminDashboardPage() {
             <div className="rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="text-center text-2xl font-bold">Organization's Recent Activity</div>
               <div className="my-1 h-[23vh] overflow-auto">
-                {getAuthLogsQuery?.data
+                {getNotificationQuery?.data
                   ?.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
                   })
-                  .filter((auth) => auth.name !== 'Admin')
                   .slice(0, 15)
-                  .map((auth) => (
+                  .map((notification) => (
                     <div className="mt-2 flex w-full justify-between overflow-auto rounded-sm border border-input px-4 py-2">
-                      <div className="text-medium">
-                        {auth.name} - {auth.action.replace(/_/g, ' ')}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${auth.createdBy.id}`)
-                        }
+                      <div className="text-medium">{notification.message}</div>
+                      <Link
+                        href={`${paths.ADMIN}${generateNotificationLink(notification)}`}
                         className="flex items-center rounded-sm bg-yellow  px-3 text-xs active:scale-95"
                       >
                         View
-                      </button>
+                      </Link>
                     </div>
                   ))}
               </div>
             </div>
             <div className="flex justify-end  pt-2 text-xs">
-              <button
-                type="button"
-                onClick={() => router.push(`${paths.ADMIN}${paths.AUTH_LOGS}`)}
+              <Link
+                href={`${paths.ADMIN}${paths.AUTH_LOGS}`}
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 See all
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -233,37 +233,14 @@ export default function AdminDashboardPage() {
               </div>
             </div>
             <div className="flex justify-end  pt-2 text-xs">
-              <button
-                type="button"
-                onClick={() => router.push(`${paths.ADMIN}${paths.APPOINTMENTS}`)}
+              <Link
+                href={`${paths.ADMIN}${paths.APPOINTMENTS}`}
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Check Calendar
-              </button>
+              </Link>
             </div>
           </div>
-          {/*<Link
-            href={`${paths.ADMIN}${paths.ANNOUNCEMENTS}`}
-            className="group col-span-3  row-span-1 bg-gray px-2 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:col-span-1 md:row-span-2 "
-          >
-            <div className="flex items-center">
-              <h1 className=" py-2 text-2xl font-bold group-hover:text-blue-500 group-hover:underline ">
-                Announcements
-              </h1>
-              <Image width={30} height={30} src="/announcement_icon.svg" alt="Announcement Icon" />
-            </div>
-            <div className="h-[80%] overflow-auto">
-              {announcement.length ? (
-                announcement.map((announcement, index) => (
-                  <div key={index} className="text-xl font-medium ">
-                    {announcement.subject}
-                  </div>
-                ))
-              ) : (
-                <div className="text-xl font-medium ">There are no announcement.</div>
-              )}
-            </div>
-          </Link> */}
         </div>
       </main>
     </>

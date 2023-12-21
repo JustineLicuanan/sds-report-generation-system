@@ -34,10 +34,14 @@ respective docs.
 
 ## Upcoming Changes
 
-- Make it more mobile responsive
-- Change the web page link for user and admin in some pages e.g logs.
+- UI Revamp.
+- AR and FS Generator.
 
 ## Changelog
+
+### Version 0.13.2
+
+- redesigned the student leader's dashboard.
 
 ### Version 0.13.0
 
