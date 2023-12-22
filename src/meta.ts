@@ -19,9 +19,10 @@ export const paths = {
   ANNOUNCEMENTS: '/announcements',
   EDIT_ANNOUNCEMENTS: '/edit',
   APPOINTMENTS: '/appointments',
-  MEMBERS: '/members',
-  CBL: '/cbl',
+  MY_ORGANIZATION: '/information',
   ORGANIZATION_CREATE: '/create',
   REPORT_CREATE: '/create',
   AUTH_LOGS: '/auth/logs',
+  ACCOMPLISHMENT_REPORT: '/accomplishment-report',
+  FINANCIAL_STATEMENT: '/financial-statement',
 } as const;

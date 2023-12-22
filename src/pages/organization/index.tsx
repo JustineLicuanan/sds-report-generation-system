@@ -55,16 +55,13 @@ export default function OrganizationPage() {
         {/* SIDE BAR*/}
         <OrganizationSideBarMenu />
 
-        <div
-          id="main-content"
-          className="mx-4 my-4 grid w-full grid-cols-4 grid-rows-6 flex-col gap-8"
-        >
+        <div id="main-content" className="mx-4 my-4 grid w-full grid-cols-4 grid-rows-6  gap-8">
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-4xl font-semibold">Hi! {session?.user.name}</div>
           </div>
 
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-lg font-bold">AR & FS Submission Date::</div>
+            <div className="text-lg font-bold">AR & FS Submission Date:</div>
             <div className="flex items-center gap-2 ">
               <div className="text-2xl font-semibold text-yellow">10/25/2023</div>
               <button type="button" className="hover:text-yellow active:scale-95">
@@ -84,7 +81,7 @@ export default function OrganizationPage() {
                   className=" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-36 lg:w-36"
                 />
               ) : (
-                <div className='className=" lg:w-28" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28'></div>
+                <div className='className=" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28'></div>
               )}
               <div className="text-2xl font-bold">{org?.name}</div>
             </div>
@@ -160,81 +157,6 @@ export default function OrganizationPage() {
             <div className="text-2xl font-semibold ">[Actions]</div>
           </div>
         </div>
-
-        {/* <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
-          <div className="my-2 h-2 rounded-md bg-green"> </div>
-          <div className="mx-4 flex justify-between ">
-            <div className="flex items-center gap-4">
-              {org?.imageId ? (
-                <CldImage
-                  width="100"
-                  height="100"
-                  src={`/${org?.imageId}`}
-                  alt="Organization Logo"
-                  className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"
-                />
-              ) : (
-                <div className='className="my-4 lg:w-28" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28'></div>
-              )}
-              <div className="">
-                <div className="ms-4 text-2xl font-bold lg:text-3xl">
-                  {org?.name} - {session?.user.name}
-                </div>
-                <div className="ms-12 text-lg font-semibold text-black/80 lg:text-xl">
-                  {org?.category.replace(/_/g, ' ')}
-                </div>
-              </div>
-            </div>
-            <div className="flex items-end gap-2">
-              <button
-                onClick={() => router.push(`${paths.ORGANIZATION}${paths.CBL}`)}
-                type="button"
-                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
-              >
-                View CBL
-              </button>
-              <button
-                type="button"
-                onClick={() => router.push(`${paths.ORGANIZATION}${paths.MEMBERS}`)}
-                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
-              >
-                View Members
-              </button>
-            </div>
-          </div>
-          <div className="my-2 h-2 rounded-md bg-green"> </div>
-          <div>
-            <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
-            {reportList.filter((report) => report.status === LogAction.PENDING).length > 0 ? (
-              <Report logs={reportList.filter((report) => report.status === LogAction.PENDING)} />
-            ) : (
-              <div className="flex items-center justify-center text-xl font-semibold">
-                There are no pending report
-                <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />,{' '}
-                <Link
-                  href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`}
-                  className="text-xl text-blue-500 hover:underline"
-                >
-                  Create a new one
-                </Link>
-                .
-              </div>
-            )}
-          </div>
-          <div className="my-2 h-2 rounded-md bg-green"> </div>
-          {reportList.filter(
-            (report) => report.status === LogAction.APPROVED || report.status === LogAction.REJECTED
-          ).length > 0 ? (
-            <Report
-              logs={reportList.filter(
-                (report) =>
-                  report.status === LogAction.APPROVED || report.status === LogAction.REJECTED
-              )}
-            />
-          ) : (
-            <></>
-          )}
-        </div> */}
       </main>
     </>
   );

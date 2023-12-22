@@ -39,6 +39,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.13.3
+
+- Implemented a financial statement.
+
 ### Version 0.13.2
 
 - redesigned the student leader's dashboard.

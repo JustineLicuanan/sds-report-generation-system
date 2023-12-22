@@ -1,5 +1,7 @@
 import {
   CalendarCheck2,
+  FileSpreadsheet,
+  FileText,
   Fingerprint,
   History,
   LayoutDashboard,
@@ -36,12 +38,22 @@ export const useSidebarStore = create<SidebarState>((set) => ({
 
   organizationSidebarLinks: [
     { Icon: LayoutDashboard, name: 'Dashboard', href: paths.ORGANIZATION },
+    { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MY_ORGANIZATION}` },
+    {
+      Icon: FileText,
+      name: 'Accomplishment Report',
+      href: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}`,
+    },
+    {
+      Icon: FileSpreadsheet,
+      name: 'Financial Statement',
+      href: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}`,
+    },
     {
       Icon: CalendarCheck2,
       name: 'Appointments',
       href: `${paths.ORGANIZATION}${paths.APPOINTMENTS}`,
     },
-    { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MEMBERS}` },
     { Icon: Megaphone, name: 'Announcements', href: `${paths.ORGANIZATION}${paths.ANNOUNCEMENTS}` },
   ],
 
