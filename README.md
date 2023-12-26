@@ -41,6 +41,10 @@ respective docs.
 
 ### Version 0.13.3
 
+- Added a modify page for financial statement.
+
+### Version 0.13.3
+
 - Implemented a financial statement.
 
 ### Version 0.13.2

@@ -3,6 +3,7 @@ import { type GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
@@ -112,16 +113,28 @@ export default function OrganizationPage() {
                 <CalendarCheck2 />
               </div>
               <div className="my-1 h-[23vh] overflow-auto ">
-                {report
-                  .filter((report) => report.due !== null)
-                  .map((report, index) => (
-                    <div
-                      key={index}
-                      className="border-sm my-2 flex flex-col items-center gap-2 border border-input p-2"
-                    >
-                      <div className="text-xl font-medium">{report.due?.toLocaleString()}</div>
-                    </div>
-                  ))}
+                {report.length ? (
+                  report
+                    .filter((report) => report.due !== null)
+                    .map((report, index) => (
+                      <div
+                        key={index}
+                        className="border-sm my-2 flex flex-col items-center gap-2 border border-input p-2"
+                      >
+                        <div className="text-xl font-medium">{report.due?.toLocaleString()}</div>
+                      </div>
+                    ))
+                ) : (
+                  <div className="flex flex-col items-center ">
+                    <div className="text-lg font-medium">No appointments</div>
+                    <Image
+                      src="/no_appointment_icon.svg"
+                      alt="No Appointment"
+                      width={140}
+                      height={100}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -135,19 +148,26 @@ export default function OrganizationPage() {
                 <Megaphone />
               </div>
               <div className="my-1 h-[23vh] overflow-auto ">
-                {announcement.map((announcement, index) => (
-                  <div
-                    key={index}
-                    className="border-sm my-2 flex flex-col items-center gap-2 border border-input p-2"
-                  >
-                    <div className="text-lg font-medium">
-                      {announcement.createdAt.toLocaleString('en-US', {
-                        timeZone: 'Asia/Manila',
-                      })}
+                {announcement.length ? (
+                  announcement.map((announcement, index) => (
+                    <div
+                      key={index}
+                      className="border-sm my-2 flex flex-col items-center gap-2 border border-input p-2"
+                    >
+                      <div className="text-lg font-medium">
+                        {announcement.createdAt.toLocaleString('en-US', {
+                          timeZone: 'Asia/Manila',
+                        })}
+                      </div>
+                      <div className="text-xl font-bold">{announcement.subject}</div>
                     </div>
-                    <div className="text-xl font-bold">{announcement.subject}</div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center ">
+                    <div className="text-lg font-medium">No announcements</div>
+                    <Image src="/empty_data_icon.svg" alt="Empty Data" width={100} height={100} />
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
