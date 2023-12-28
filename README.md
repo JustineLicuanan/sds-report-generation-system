@@ -39,6 +39,12 @@ respective docs.
 
 ## Changelog
 
+
+### Version 0.13.4
+
+- Implemented add details for outflow page.
+- Implemented add details for inflow page.
+
 ### Version 0.13.3
 
 - Added a modify page for financial statement.

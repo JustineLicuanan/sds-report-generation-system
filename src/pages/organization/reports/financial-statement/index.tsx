@@ -1,8 +1,9 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
 
@@ -17,7 +18,8 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-export default function OrganizationPage() {
+export default function FinancialStatementPage() {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -40,12 +42,20 @@ export default function OrganizationPage() {
                 Submit a concise financial statement that provides a brief overview of the
                 organization's financial status and transactions.
               </div>
-              <button
-                type="button"
-                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-              >
-                Upload
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Done
+                </button>
+                <button
+                  type="button"
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Upload
+                </button>
+              </div>
             </div>
 
             <div className="col-span-2 row-span-1 flex flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
@@ -76,6 +86,11 @@ export default function OrganizationPage() {
                 <button
                   type="button"
                   className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                  onClick={() =>
+                    router.push(
+                      `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MODIFY_FINANCIAL_STATEMENT}`
+                    )
+                  }
                 >
                   Modify
                 </button>

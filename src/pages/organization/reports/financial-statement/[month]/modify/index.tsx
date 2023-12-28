@@ -40,7 +40,7 @@ export default function ModifyFinancialStatementPage() {
                 <label htmlFor="inflows" className="text-lg font-bold">
                   Inflows:
                 </label>
-                <select name="" id="inflows" className="p-1">
+                <select name="" id="inflows" className="rounded-sm border p-1">
                   <option value="collection">Collection</option>
                   <option value="igp">IGP</option>
                 </select>
@@ -55,7 +55,7 @@ export default function ModifyFinancialStatementPage() {
 
             {/* NET */}
             <div className="col-span-1 row-span-4 flex flex-col justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-              <select name="" id="inflows" className="self-end p-2">
+              <select name="" id="inflows" className="self-end rounded-sm border p-2">
                 <option value="collection">Collection</option>
                 <option value="igp">IGP</option>
               </select>
@@ -69,7 +69,7 @@ export default function ModifyFinancialStatementPage() {
                 <label htmlFor="inflows" className="text-lg font-bold">
                   Outflows:
                 </label>
-                <select name="" id="inflows" className="p-1">
+                <select name="" id="inflows" className="rounded-sm border p-1">
                   <option value="collection">Collection</option>
                   <option value="igp">IGP</option>
                 </select>
@@ -88,6 +88,7 @@ export default function ModifyFinancialStatementPage() {
               <input
                 name="search"
                 id="search-item"
+                placeholder="Search"
                 className="h-7 rounded-l-sm border-[1px] border-green px-2 py-2 outline-none"
               />
               <label

@@ -25,4 +25,5 @@ export const paths = {
   AUTH_LOGS: '/auth/logs',
   ACCOMPLISHMENT_REPORT: '/accomplishment-report',
   FINANCIAL_STATEMENT: '/financial-statement',
+  MODIFY_FINANCIAL_STATEMENT: '/modify'
 } as const;
