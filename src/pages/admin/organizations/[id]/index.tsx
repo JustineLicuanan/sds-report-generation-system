@@ -1,13 +1,11 @@
-import { LogAction, ReportStatus } from '@prisma/client';
-import { type GetServerSideProps } from 'next';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import { GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import AdminNavBar from '~/components/admin-navigation-bar';
-import AdminSideBarMenu from '~/components/admin-side-bar-menu';
-import ReportList from '~/components/report-list';
-import { meta, paths } from '~/meta';
+import AdminNavbar from '~/components/admin-navigation-bar';
+import AdminSidebar from '~/components/admin-side-bar-menu';
+import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -23,17 +21,12 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-export default function ListOfReportPage() {
+export default function OrganizationInformationPage() {
   const router = useRouter();
-  const getOrgWithReportsQuery = api.admin.org.get.useQuery({
+  const getOrgQuery = api.admin.org.get.useQuery({
     id: router.query.id as string,
-    includeReports: true,
   });
-  const org = getOrgWithReportsQuery?.data?.[0];
-
-  org?.reports.sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+  const org = getOrgQuery?.data?.[0];
 
   return (
     <>
@@ -42,79 +35,222 @@ export default function ListOfReportPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
-      <AdminNavBar />
+      <AdminNavbar />
 
       <main className="flex">
         {/* SIDE BAR*/}
-        <AdminSideBarMenu />
+        <AdminSidebar />
 
-        <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
-          <div className="my-2 h-2 rounded-md bg-green"> </div>
-          <div className="mx-4 flex justify-between ">
-            <div className="flex items-center gap-4">
+        <div id="main-content" className="mx-5 my-4 w-full">
+          <div className="flex gap-4">
+            {/* ORG NAME */}
+            <div className=" flex w-1/3 flex-col items-center gap-4">
               {org?.imageId ? (
                 <CldImage
                   width="100"
                   height="100"
                   src={`/${org?.imageId}`}
                   alt="Organization Logo"
-                  className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"
+                  className="my-4 me-1 h-40 w-40 rounded-full bg-green"
                 />
               ) : (
-                <div className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"></div>
+                <div className="my-4 me-1 h-40 w-40 rounded-full bg-green"></div>
               )}
               <div className="">
-                <div className="text-2xl font-bold lg:text-3xl">{org?.name}</div>
-                <div className="text-lg font-semibold text-black/80 lg:text-xl">
-                  {org?.category.replace(/_/g, ' ')}
+                <div className="text-lg font-bold">{org?.name}</div>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className=" flex w-1/3 flex-col justify-evenly">
+              <button type="button" className="rounded-sm bg-yellow px-4 py-2 text-xl">
+                Edit Profile
+              </button>
+              <button type="button" className="rounded-sm bg-yellow px-4 py-2 text-xl">
+                Messages
+              </button>
+              <button type="button" className="rounded-sm bg-yellow px-4 py-2 text-xl">
+                Archived Files
+              </button>
+            </div>
+
+            {/* Carousel */}
+            <div className="w-1/3 rounded-sm px-2 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)] ">
+              <Splide
+                aria-label="My Favorite Images"
+                options={{
+                  perPage: 1,
+                  focus: 'center',
+                  pagination: false,
+                  autoplay: true,
+                }}
+                data-splide='{"type":"loop"}'
+              >
+                <SplideSlide>
+                  <div className="mx-2 rounded-md pb-4 pt-2 text-center">
+                    <div className="text-lg font-bold">Vision</div>
+                    <div className="font-medium ">
+                      The premier university in historic Cavite globally recognized for excellence
+                      in character development, academics, research, innovation and sustainable
+                      community engagement.
+                    </div>
+                  </div>
+                </SplideSlide>
+                <SplideSlide>
+                  <div className="mx-2 rounded-md  pb-4 pt-2 text-center">
+                    <div className="text-lg font-bold">Mission</div>
+                    <div className="font-medium ">
+                      Cavite State University shall provide excellent, equitable and relevant
+                      educational opportunities in the arts, sciences and technology through quality
+                      instruction and responsive research and development activities. It shall
+                      produce professional, skilled and morally upright individuals for global
+                      competitiveness.
+                    </div>
+                  </div>
+                </SplideSlide>
+                <SplideSlide>
+                  <div className="mx-2 rounded-md pb-4 pt-2 text-center">
+                    <div className="text-lg font-bold">Goals</div>
+                    <div className="text-left text-xs font-medium">
+                      1. Produce technically competent and scientifically oriented graduates who are
+                      imbued with strong entrepreneurial spirit possess strong social consciousness,
+                      and guided by positive values and high ethical standards;
+                      <br /> 2. Conduct relevant research and development activities along
+                      agriculture, food, environment and natural resource management;
+                      <br /> 3. Implement effective training and outreach programs that emphasize
+                      self-help, critical thinking and life-long learning;
+                      <br />
+                      4. Manage agricultural enterprises, projects and technology incubators to
+                      promote economically viable and environment- friendly approaches and
+                      techniques; and <br /> 5. Establish strong linkage with non-governmental
+                      organizations, other government entities and the community for the realization
+                      of the common goals.
+                    </div>
+                  </div>
+                </SplideSlide>
+              </Splide>
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-3 grid-rows-2 gap-2">
+            <div className="col-span-2 rounded-sm px-2 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+              <div className="text-center text-xl font-bold">Financial Statement Status</div>
+
+              <div className="mt-2 flex justify-evenly gap-2  ">
+                <div className="flex flex-col items-center rounded-sm border border-input p-2">
+                  <div className="text-lg font-medium">Total Inflows Cost</div>
+                  <div className="flex">
+                    <div className=" font-medium">900</div>
+                    <div className="self-end text-sm">php</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center rounded-sm border border-input p-2">
+                  <div className="text-lg font-medium">Total Outflow Cost</div>
+                  <div className="flex">
+                    <div className=" font-medium">1000</div>
+                    <div className="self-end text-sm">php</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center rounded-sm border border-input p-2">
+                  <div className="text-lg font-medium">Total Cash</div>
+                  <div className="flex">
+                    <div className=" font-medium">1000</div>
+                    <div className="self-end text-sm">php</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center rounded-sm border border-input p-2">
+                  <div className="text-lg font-medium">Net Income (Gross/Loss)</div>
+                  <div className="flex text-red">
+                    <div className=" font-medium ">- 100</div>
+                    <div className="self-end text-sm">php</div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-end gap-2 ">
-              <button
-                onClick={() =>
-                  router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.CBL}`)
-                }
-                type="button"
-                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
-              >
-                View CBL
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.MEMBERS}`)
-                }
-                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
-              >
-                View Members
-              </button>
-            </div>
-          </div>
-          <div className="my-2 h-2 rounded-md bg-green"> </div>
-          <div>
-            <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
-            {org?.reports?.filter((log) => log.status === LogAction.PENDING)?.length ? (
-              <ReportList
-                reports={org?.reports?.filter((log) => log.status === LogAction.PENDING) ?? []}
-              />
-            ) : (
-              <div className="flex items-center justify-center text-xl font-semibold">
-                There are no pending reports
-                <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />
+              <div className="mt-2 flex justify-end gap-2">
+                <button
+                  type="button"
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Generate Summary
+                </button>
+                <button
+                  type="button"
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  View In-Depth
+                </button>
+                <button
+                  type="button"
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  View Submitted
+                </button>
               </div>
-            )}
-            <div className="my-2 h-2 rounded-md bg-green"> </div>
-            <ReportList
-              reports={
-                org?.reports?.filter(
-                  (report) =>
-                    report.status === ReportStatus.APPROVED ||
-                    report.status === ReportStatus.REJECTED
-                ) ?? []
-              }
-            />
+            </div>
+
+            <div className="col-span-1 flex flex-col items-center rounded-sm px-2 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+              <div className="text-lg font-bold">Updates</div>
+              <div>
+                <div className="text-lg font-medium">Financial Statement Last Update:</div>
+                <div className="text-center  font-medium">01/02/2024</div>
+              </div>
+              <div>
+                <div className="text-lg font-medium">Accomplishment Last Update:</div>
+                <div className="text-center  font-medium">01/02/2024</div>
+              </div>
+            </div>
+
+            <div className="col-span-1 flex flex-col items-center rounded-sm px-2 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+              <div className="text-lg font-bold">Accomplishment Report Status</div>
+              <div className="my-4 h-4 w-full rounded-full bg-gray">
+                <div className="h-4 w-[50%] rounded-full bg-green"></div>
+              </div>
+              <div className="mt-2 flex justify-between gap-2">
+                <button
+                  type="button"
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Generate
+                </button>
+                <button
+                  type="button"
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  View In-Depth
+                </button>
+                <button
+                  type="button"
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  View Submitted
+                </button>
+              </div>
+            </div>
+
+            <div className="col-span-1 flex flex-col items-center rounded-sm px-2 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+              <div className="text-lg font-bold">Submitted Reports</div>
+              <div className="mt-2 flex flex-col items-center  rounded-sm border border-input p-2">
+                <div className="text-lg font-medium">Total:</div>
+                <div className="text-4xl font-bold">11</div>
+              </div>
+            </div>
+
+            <div className="col-span-1 flex flex-col items-center rounded-sm px-2 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+              <div className="text-lg font-bold">Appointments</div>
+              <div>
+                <div className="text-lg font-medium">[Appointment Details]</div>
+                <div className="text-center  font-medium">01/02/2024</div>
+              </div>
+              <div>
+                <div className="text-lg font-medium">[Appointment Details]</div>
+                <div className="text-center  font-medium">01/02/2024</div>
+              </div>
+            </div>
           </div>
+          
         </div>
       </main>
     </>

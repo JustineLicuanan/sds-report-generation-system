@@ -39,6 +39,9 @@ respective docs.
 
 ## Changelog
 
+### Version 0.13.5
+
+- Implemented the UI for student leader's page in admin.
 
 ### Version 0.13.4
 
