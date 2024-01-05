@@ -90,7 +90,9 @@ export default function AdminLogPage() {
       </Head>
 
       {/* NAVIGATION BAR */}
+      <div id='hide-element'>
       <AdminNavBar />
+      </div>
       <main className="flex">
         {/* SIDE BAR */}
         <div id="hide-element">
