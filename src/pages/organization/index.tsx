@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta } from '~/meta';
@@ -42,7 +41,6 @@ export default function OrganizationPage() {
   });
 
   const { data: session } = useSession();
-  const router = useRouter();
   return (
     <>
       <Head>

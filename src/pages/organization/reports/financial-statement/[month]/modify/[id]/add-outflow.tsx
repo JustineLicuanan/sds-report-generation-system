@@ -90,8 +90,11 @@ export default function AddOutflowFinancialStatementPage() {
             <table className="w-full min-w-max border-collapse  border border-black text-center">
               <thead>
                 <tr>
-                  {header.map((header) => (
-                    <th className=" border-r-0 border-black bg-green p-1 text-lg font-bold tracking-tight text-white ">
+                  {header.map((header, index) => (
+                    <th
+                      key={index}
+                      className=" border-r-0 border-black bg-green p-1 text-lg font-bold tracking-tight text-white "
+                    >
                       {header}
                     </th>
                   ))}

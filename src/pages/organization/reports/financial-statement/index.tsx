@@ -40,7 +40,7 @@ export default function FinancialStatementPage() {
               <div className="text-lg font-bold">Submit a Financial Statement</div>
               <div className="text-center font-medium">
                 Submit a concise financial statement that provides a brief overview of the
-                organization's financial status and transactions.
+                organization&apos;s financial status and transactions.
               </div>
               <div className="flex gap-2">
                 <button

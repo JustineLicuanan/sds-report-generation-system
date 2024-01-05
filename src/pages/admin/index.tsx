@@ -1,4 +1,3 @@
-import { LogType } from '@prisma/client';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 import { CalendarCheck2, CalendarDays } from 'lucide-react';
@@ -31,15 +30,6 @@ export const getServerSideProps = (async (ctx) => {
 export default function AdminDashboardPage() {
   const getOrgQuery = api.admin.org.get.useQuery({ includeReports: true });
   const data = getOrgQuery.data ?? [];
-
-  const getAnnouncementQuery = api.admin.announcement.get.useQuery();
-  const announcement = getAnnouncementQuery.data ?? [];
-
-  const getAuthLogsQuery = api.admin.log.get.useQuery({
-    type: LogType.AUTH,
-    includeOrganization: true,
-    includeCreatedBy: true,
-  });
 
   const getReportQuery = api.admin.report.get.useQuery({ includeCreatedBy: true });
   const report = getReportQuery.data ?? [];
@@ -177,15 +167,20 @@ export default function AdminDashboardPage() {
           {/* Recent Activity */}
           <div className="col-span-2 row-span-2">
             <div className="rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-              <div className="text-center text-2xl font-bold">Organization's Recent Activity</div>
+              <div className="text-center text-2xl font-bold">
+                Organization&apos;s Recent Activity
+              </div>
               <div className="my-1 h-[23vh] overflow-auto">
                 {getNotificationQuery?.data
                   ?.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
                   })
                   .slice(0, 15)
-                  .map((notification) => (
-                    <div className="mt-2 flex w-full justify-between overflow-auto rounded-sm border border-input px-4 py-2">
+                  .map((notification, index) => (
+                    <div
+                      key={index}
+                      className="mt-2 flex w-full justify-between overflow-auto rounded-sm border border-input px-4 py-2"
+                    >
                       <div className="text-medium">{notification.message}</div>
                       <Link
                         href={`${paths.ADMIN}${generateNotificationLink(notification)}`}

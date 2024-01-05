@@ -2,7 +2,6 @@ import { BadgeAlert, BadgeCheck } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
@@ -26,7 +25,7 @@ export default function AccomplishmentReportPage() {
   const getOrgQuery = api.shared.organization.get.useQuery();
   const org = getOrgQuery.data;
 
-  const router = useRouter();
+  // const router = useRouter();
   const [markDone, setMarkDone] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,12 +33,15 @@ export default function AccomplishmentReportPage() {
 
   const divs = [
     // Organization Setup Status
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={0}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Organization Setup Status</div>
         <div className="font-medium">
-          Finalize the setup of your organization's information, as the details provided will be
-          essential for completing the accomplishment report.
+          Finalize the setup of your organization&apos;s information, as the details provided will
+          be essential for completing the accomplishment report.
         </div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
@@ -67,10 +69,13 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Calendar Of Activities
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={1}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Calendar Of Activities</div>
-        <div className="font-medium">Submit your organization's schedule of activities.</div>
+        <div className="font-medium">Submit your organization&apos;s schedule of activities.</div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
         <div className="h-4 w-full rounded-full bg-gray">
@@ -103,7 +108,10 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Approved Activity Proposals
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={2}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Approved Activity Proposals</div>
         <div className="font-medium">Compilation of approved activities proposals</div>
@@ -145,7 +153,10 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Approved Project Proposal
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={3}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Approved Project Proposal</div>
         <div className="font-medium">Compilation of approved project proposal</div>
@@ -187,7 +198,10 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Approved Resolutions
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={4}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Approved Resolutions</div>
         <div className="font-medium">Compilation of approved resolutions</div>
@@ -229,7 +243,10 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Approved Other Letters
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={5}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Approved Other Letters</div>
         <div className="font-medium">Compilation of approved other letters</div>
@@ -271,7 +288,10 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Summary of Conducted Events
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={6}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Summary of Conducted Events</div>
         <div className="font-medium">Summary of all events conducted throughout the semester.</div>
@@ -299,7 +319,10 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Community Extension Services
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={7}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Community Extension Services</div>
         <div className="font-medium">
@@ -344,7 +367,10 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Minutes of the Meeting
-    <div className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2">
+    <div
+      key={8}
+      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    >
       <div className="w-1/2 text-center">
         <div className="text-2xl font-bold">Minutes of the Meeting</div>
         <div className="font-medium">

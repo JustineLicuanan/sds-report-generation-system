@@ -19,11 +19,16 @@ export default function OrganizationAvatar({ organization }: { organization: Org
           <div className="z-2 flex w-full justify-end">
             <button
               type="button"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.stopPropagation();
-                router.push(
-                  `${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}${paths.ORGANIZATION_EDIT}`
-                );
+                try {
+                  await router.push(
+                    `${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}${paths.ORGANIZATION_EDIT}`
+                  );
+                } catch (error) {
+                  // Handle any errors here
+                  console.error(error);
+                }
               }}
               className="rounded-full p-1 hover:bg-yellow active:scale-95"
             >

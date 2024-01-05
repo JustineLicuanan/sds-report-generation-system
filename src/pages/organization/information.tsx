@@ -1,16 +1,13 @@
 import { BadgeAlert, BadgeCheck } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
-import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
-import { OrderBy } from '~/zod-schemas/shared/notification';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -30,18 +27,10 @@ export default function OrganizationPage() {
   const getOrgQuery = api.shared.organization.get.useQuery();
   const org = getOrgQuery.data;
 
-  const getAnnouncementQuery = api.shared.announcement.get.useQuery({
-    includeAudience: true,
-    orderByDue: OrderBy.ASC,
-  });
-  const announcement = getAnnouncementQuery.data ?? [];
-
   report.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  const { data: session } = useSession();
-  const router = useRouter();
   return (
     <>
       <Head>
@@ -137,7 +126,7 @@ export default function OrganizationPage() {
           </div>
 
           <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-2xl font-bold">ORGANIZATION'S MEMBERS INFORMATION</div>
+            <div className="text-2xl font-bold">ORGANIZATION&apos;S MEMBERS INFORMATION</div>
             <div className="text-center font-medium">
               This include contact details, roles, and any other relevant data.
             </div>
