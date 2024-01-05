@@ -27,8 +27,8 @@ export function AccountDropdown({ isOrganization, children }: Props) {
         // ],
         // [{ Icon: LifeBuoy, name: 'Support', href: '#' }],
         [
-          { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MEMBERS}` },
-          { Icon: Scale, name: 'Organization CBL', href: `${paths.ORGANIZATION}${paths.CBL}` },
+          { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}/members` },
+          { Icon: Scale, name: 'Organization CBL', href: `${paths.ORGANIZATION}/cbl` },
           { Icon: Layers, name: 'My Reports', href: `${paths.ORGANIZATION}` },
         ],
       ]
