@@ -25,5 +25,9 @@ export const paths = {
   AUTH_LOGS: '/auth/logs',
   ACCOMPLISHMENT_REPORT: '/accomplishment-report',
   FINANCIAL_STATEMENT: '/financial-statement',
-  MODIFY_FINANCIAL_STATEMENT: '/modify'
+  MODIFY_FINANCIAL_STATEMENT: '/modify',
+
+  // FIXME: To remove or replace
+  MEMBERS: '/members',
+  CBL: '/cbl',
 } as const;
