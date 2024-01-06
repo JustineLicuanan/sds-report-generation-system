@@ -39,6 +39,10 @@ respective docs.
 
 ## Changelog
 
+### Version 0.14.0
+
+- Implemented a print version for Semester Cash Flow.
+
 ### Version 0.13.5
 
 - Implemented the UI for student leader's page in admin.

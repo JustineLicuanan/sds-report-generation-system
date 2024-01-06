@@ -97,88 +97,32 @@ export default function FinancialStatementPage() {
               </div>
               <div className="flex w-1/2 items-center justify-between gap-2 p-2">
                 <div className="text-lg font-bold">Generate:</div>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                <select
+                  name=""
+                  id="fs-file-dropdown"
+                  className="rounded-sm border border-yellow px-1 py-1"
                 >
-                  Cashflow
-                </button>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Profit/Loss
-                </button>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Financial Position
-                </button>
-              </div>
-            </div>
-            <div className="border-sm  my-2 flex items-center justify-between gap-2 border border-input">
-              <div className="flex w-1/2 items-center justify-between gap-2  p-2">
-                <div className="text-lg font-bold">Month of October</div>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Modify
-                </button>
-              </div>
-              <div className="flex w-1/2 items-center justify-between gap-2 p-2">
-                <div className="text-lg font-bold">Generate:</div>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Cashflow
-                </button>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Profit/Loss
-                </button>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Financial Position
-                </button>
-              </div>
-            </div>
-            <div className="border-sm  my-2 flex items-center justify-between gap-2 border border-input">
-              <div className="flex w-1/2 items-center justify-between gap-2  p-2">
-                <div className="text-lg font-bold">Month of November</div>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Modify
-                </button>
-              </div>
-              <div className="flex w-1/2 items-center justify-between gap-2 p-2">
-                <div className="text-lg font-bold">Generate:</div>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Cashflow
-                </button>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Profit/Loss
-                </button>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Financial Position
-                </button>
+                  <option value="">Select a file below to generate</option>
+                  <option
+                    value="Sem Cash Flow"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.SEM_CASH_FLOW}`
+                      )
+                    }
+                  >
+                    Sem Cash Flow
+                  </option>
+                  <option value="">Signatories Sem</option>
+                  <option value="">Month Label</option>
+                  <option value="">Expense Summary</option>
+                  <option value="">Month Cash Flow</option>
+                  <option value="">Month Notes</option>
+                  <option value="">Signatories Per Month</option>
+                  <option value="">Receipts</option>
+                  <option value="">Forms</option>
+                  <option value="">Liquidation</option>
+                </select>
               </div>
             </div>
           </div>

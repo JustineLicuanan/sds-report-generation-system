@@ -62,12 +62,17 @@ nav {
 @media print {
   @page {
     size: A4;
-    margin: 0;
+    margin: 4px;
+    padding: 20px;
   }
 
   #hide-element {
     display: none;
     visibility: none;
+  }
+
+  td {
+    border: 1px solid black;
   }
 
   .print-header {

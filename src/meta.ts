@@ -26,6 +26,7 @@ export const paths = {
   ACCOMPLISHMENT_REPORT: '/accomplishment-report',
   FINANCIAL_STATEMENT: '/financial-statement',
   MODIFY_FINANCIAL_STATEMENT: '/modify',
+  SEM_CASH_FLOW: '/semester-cash-flow',
 
   // FIXME: To remove or replace
   MEMBERS: '/members',
