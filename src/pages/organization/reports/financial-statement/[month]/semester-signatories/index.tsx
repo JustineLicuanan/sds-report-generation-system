@@ -21,7 +21,7 @@ export default function SemSignatories() {
       <Head>
         <title>{`Semester Signatories ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
-      <div className="mx-auto my-0 flex flex-col items-center border border-b-4 border-black p-4">
+      <div className="mx-auto my-0 flex flex-col items-center p-4">
         <div className="font-bold">Financial Statement (1st Semester | 2023 - 2024)</div>
         <div className="mt-4 flex flex-col items-center gap-4">
           <div>Prepared By:</div>
