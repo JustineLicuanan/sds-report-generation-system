@@ -39,6 +39,11 @@ respective docs.
 
 ## Changelog
 
+### Version 0.14.1
+
+- Implemented a print version for Semester Signatories.
+- Implemented a print version for Month Label.
+
 ### Version 0.14.0
 
 - Implemented a print version for Semester Cash Flow.

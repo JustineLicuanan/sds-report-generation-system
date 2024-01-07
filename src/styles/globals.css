@@ -71,10 +71,6 @@ nav {
     visibility: none;
   }
 
-  td {
-    border: 1px solid black;
-  }
-
   .print-header {
     position: fixed;
     top: 0;

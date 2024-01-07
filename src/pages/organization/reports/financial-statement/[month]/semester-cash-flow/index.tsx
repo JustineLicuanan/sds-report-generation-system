@@ -1,4 +1,6 @@
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
 
@@ -16,6 +18,9 @@ export const getServerSideProps = (async (ctx) => {
 export default function SemCashFlow() {
   return (
     <>
+      <Head>
+        <title>{`Semester Cash Flow ${meta.SEPARATOR} ${meta.NAME}`}</title>
+      </Head>
       <div className="mx-auto my-0 flex flex-col items-center p-4">
         <div className="flex flex-col items-center">
           <div>[Org Name]</div>
