@@ -5,12 +5,12 @@ import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebarMenu from '~/components/admin-side-bar-menu';
+import { PositionSelect } from '~/components/position-select';
 import { Button, buttonVariants } from '~/components/ui/button';
 import {
   Form,
@@ -22,20 +22,10 @@ import {
 } from '~/components/ui/form';
 import { Input } from '~/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select';
 import { Separator } from '~/components/ui/separator';
 import { Textarea } from '~/components/ui/textarea';
 import { useToast } from '~/components/ui/use-toast';
 import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
-import { UserPosition } from '~/enums/user-position';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -59,8 +49,6 @@ export default function CreateOrganizationPage() {
   const router = useRouter();
   const utils = api.useContext();
   const { toast } = useToast();
-
-  const [isOther, setIsOther] = useState(false);
 
   const createOrganizationForm = useForm<CreateOrganizationInputs>({
     resolver: zodResolver(orgSchemas.create),
@@ -234,45 +222,11 @@ export default function CreateOrganizationPage() {
                         {...createOrganizationForm.register(`members.${idx}.email`)}
                       />
 
-                      <Select
-                        onValueChange={(value) => {
-                          if (value === 'other') {
-                            setIsOther(() => true);
-                            createOrganizationForm.setValue(`members.${idx}.name`, '');
-                            return;
-                          }
-
-                          setIsOther(() => false);
+                      <PositionSelect
+                        setValue={(value) => {
                           createOrganizationForm.setValue(`members.${idx}.name`, value);
                         }}
                         disabled={createOrganization.isLoading || createOrganization.isSuccess}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select a position" />
-                        </SelectTrigger>
-
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Positions</SelectLabel>
-
-                            {Object.values(UserPosition).map((position) => (
-                              <SelectItem key={position} value={position}>
-                                {position}
-                              </SelectItem>
-                            ))}
-
-                            <SelectItem value="other">Other</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-
-                      <Input
-                        placeholder="e.g.: President"
-                        className="w-32"
-                        disabled={
-                          !isOther || createOrganization.isLoading || createOrganization.isSuccess
-                        }
-                        {...createOrganizationForm.register(`members.${idx}.name`)}
                       />
 
                       <Button
