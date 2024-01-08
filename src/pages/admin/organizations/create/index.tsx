@@ -72,6 +72,20 @@ export default function CreateOrganizationPage() {
       await utils.admin.org.invalidate();
       await router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${id}`);
     },
+    onError: (error, variables) => {
+      if (error.data?.code === 'CONFLICT') {
+        const idx = variables.members.findIndex(({ email }) => error.message === email);
+        createOrganizationForm.setError(`members.${idx}.email`, {
+          message: 'Email is already taken',
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: '❌ Internal Server Error',
+          description: 'Creation of organization failed.',
+        });
+      }
+    },
   });
 
   const onSuccessUpload: OnSuccessUpload = (result) => {
@@ -234,21 +248,33 @@ export default function CreateOrganizationPage() {
 
                 {membersFieldArray.fields.map((field, idx) => (
                   <div key={field.id}>
-                    <div className="flex flex-wrap items-center gap-2 md:flex-nowrap">
-                      <Input
-                        type="email"
-                        placeholder="e.g.: juan.delacruz@cvsu.edu.ph"
-                        className="flex-auto md:flex-1"
-                        disabled={createOrganization.isLoading || createOrganization.isSuccess}
-                        {...createOrganizationForm.register(`members.${idx}.email`)}
-                      />
+                    <div className="flex flex-wrap gap-2 md:flex-nowrap">
+                      <div className="flex w-full flex-col justify-center gap-1 md:flex-1">
+                        <Input
+                          type="email"
+                          placeholder="e.g.: juan.delacruz@cvsu.edu.ph"
+                          className="flex-auto md:flex-1"
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                          {...createOrganizationForm.register(`members.${idx}.email`)}
+                        />
 
-                      <PositionSelect
-                        setValue={(value) => {
-                          createOrganizationForm.setValue(`members.${idx}.name`, value);
-                        }}
-                        disabled={createOrganization.isLoading || createOrganization.isSuccess}
-                      />
+                        <p className="h-4 text-sm font-medium text-destructive">
+                          {createOrganizationForm.formState.errors.members?.[idx]?.email?.message}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col justify-center gap-1">
+                        <PositionSelect
+                          setValue={(value) => {
+                            createOrganizationForm.setValue(`members.${idx}.name`, value);
+                          }}
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                        />
+
+                        <p className="h-4 text-sm font-medium text-destructive">
+                          {createOrganizationForm.formState.errors.members?.[idx]?.name?.message}
+                        </p>
+                      </div>
 
                       <Button
                         type="button"
@@ -264,11 +290,6 @@ export default function CreateOrganizationPage() {
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-
-                    <p className="h-4 text-sm font-medium text-destructive">
-                      {createOrganizationForm.formState.errors.members?.[idx]?.email?.message ??
-                        createOrganizationForm.formState.errors.members?.[idx]?.name?.message}
-                    </p>
                   </div>
                 ))}
 

@@ -8,16 +8,17 @@ export const orgRouter = createTRPCRouter({
     const { members, ...data } = input;
 
     try {
-      const userExists = !!(await ctx.db.user.count({
+      const existingUser = await ctx.db.user.findFirst({
+        select: { id: true, email: true },
         where: {
           email: { in: members.map(({ email }) => email) },
           isActive: true,
           organizationIsArchived: false,
         },
-      }));
+      });
 
-      if (userExists) {
-        throw new TRPCError({ code: 'CONFLICT' });
+      if (!!existingUser) {
+        throw new TRPCError({ code: 'CONFLICT', message: existingUser.email });
       }
 
       return ctx.db.organization.create({
