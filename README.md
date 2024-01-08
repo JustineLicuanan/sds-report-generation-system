@@ -39,6 +39,14 @@ respective docs.
 
 ## Changelog
 
+### Version 0.14.3
+
+- Implemented a print version for Expense Summary.
+- Implemented a print version for Month Cash Flow.
+- Implemented a print version for Month Notes.
+- Implemented a print version for Month Signatories.
+- Implemented a print version for Month Receipts.
+
 ### Version 0.14.1
 
 - Implemented a print version for Semester Signatories.

@@ -54,12 +54,17 @@ export default function MonthLabel() {
               <td colSpan={2} className="w-[90%] ">
                 Less: Expenses (Note 2)
               </td>
-              <td className="w-[13%] border-b-2 text-end ">(10.00)</td>
+              <td className="w-[13%]  text-end ">(10.00)</td>
             </tr>
             <tr>
               <td className="w-[85%] font-bold">Net Income/(Gross)</td>
-              <td className="w-[2%] text-end">P</td>
-              <td className="w-[13%] border-b-4 border-double text-end">90.00</td>
+              <td className="w-[2%] text-end font-bold">P</td>
+              <td
+                className="w-[13%] border-y text-end font-bold"
+                style={{ borderBottom: 'double' }}
+              >
+                90.00
+              </td>
             </tr>
           </tbody>
         </table>
@@ -87,12 +92,17 @@ export default function MonthLabel() {
               <td colSpan={2} className="w-[90%] ps-8">
                 IGP (Schedule 2)
               </td>
-              <td className="w-[13%] border-b-2 text-end ">50.00</td>
+              <td className="w-[13%] text-end ">50.00</td>
             </tr>
             <tr>
               <td className="w-[85%] font-bold">Total Inflows</td>
-              <td className="w-[2%] text-end">P</td>
-              <td className="w-[13%] border-b-4 border-double text-end">100.00</td>
+              <td className="w-[2%] text-end font-bold">P</td>
+              <td
+                className="w-[13%] border-y text-end font-bold"
+                style={{ borderBottom: 'double' }}
+              >
+                100.00
+              </td>
             </tr>
             <tr>
               <td colSpan={3} className="font-bold">
@@ -102,18 +112,23 @@ export default function MonthLabel() {
             <tr className="">
               <td className="w-[85%] ps-8">Food Expenses (Schedule 1)</td>
               <td className="w-[2%] text-end">P</td>
-              <td className="w-[13%] text-end ">5.00</td>
+              <td className="w-[13%] text-end">5.00</td>
             </tr>
             <tr>
               <td colSpan={2} className="w-[90%] ps-8">
                 Supplies Expenses (Schedule 2)
               </td>
-              <td className="w-[13%] border-b-2 text-end ">7.00</td>
+              <td className="w-[13%] text-end ">7.00</td>
             </tr>
             <tr>
               <td className="w-[85%] font-bold">Total Outflows</td>
-              <td className="w-[2%] text-end">P</td>
-              <td className="w-[13%] border-b-4 border-double text-end">12.00</td>
+              <td className="w-[2%] text-end font-bold">P</td>
+              <td
+                className="w-[13%] border-y text-end font-bold"
+                style={{ borderBottom: 'double' }}
+              >
+                12.00
+              </td>
             </tr>
 
             <tr>
@@ -126,13 +141,17 @@ export default function MonthLabel() {
               <td colSpan={2} className="w-[90%] font-bold">
                 Add: Cash Balance Remaining as of [DATE]
               </td>
-              <td className="w-[13%] border-b-2 text-end ">20,000.00</td>
+              <td className="w-[13%] text-end ">20,000.00</td>
             </tr>
             <tr>
-              <td colSpan={2} className="w-[90%] font-bold">
-                Cash
+              <td className="w-[85%] font-bold">Cash</td>
+              <td className="w-[2%] text-end font-bold">P</td>
+              <td
+                className="w-[13%]  border-y text-end font-bold"
+                style={{ borderBottom: 'double' }}
+              >
+                20,088.00
               </td>
-              <td className="w-[13%]  border-b-4 border-double text-end">20,088.00</td>
             </tr>
           </tbody>
         </table>
@@ -160,12 +179,17 @@ export default function MonthLabel() {
               <td colSpan={2} className="w-[90%] ps-8">
                 Noted Receivable (Note 3)
               </td>
-              <td className="w-[13%] border-b-2 text-end ">0.00</td>
+              <td className="w-[13%] text-end ">0.00</td>
             </tr>
             <tr>
               <td className="w-[85%] font-bold">TOTAL ASSETS</td>
-              <td className="w-[2%] text-end">P</td>
-              <td className="w-[13%] border-b-4 border-double text-end">20, 090.00</td>
+              <td className="w-[2%] text-end font-bold">P</td>
+              <td
+                className="w-[13%] border-y text-end font-bold"
+                style={{ borderBottom: 'double' }}
+              >
+                20, 090.00
+              </td>
             </tr>
             <tr>
               <td colSpan={3} className="font-bold">
@@ -181,12 +205,17 @@ export default function MonthLabel() {
               <td colSpan={2} className="w-[90%] ps-8">
                 Net Gross
               </td>
-              <td className="w-[13%] border-b-2 text-end ">90.00</td>
+              <td className="w-[13%] text-end ">90.00</td>
             </tr>
             <tr>
               <td className="w-[85%] font-bold">TOTAL EQUITY</td>
-              <td className="w-[2%] text-end">P</td>
-              <td className="w-[13%] border-b-4 border-double text-end">20, 090.00</td>
+              <td className="w-[2%] text-end font-bold">P</td>
+              <td
+                className="w-[13%] border-y text-end font-bold"
+                style={{ borderBottom: 'double' }}
+              >
+                20, 090.00
+              </td>
             </tr>
           </tbody>
         </table>

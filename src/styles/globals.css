@@ -62,10 +62,9 @@ nav {
 @media print {
   @page {
     size: A4;
-    margin: 4px;
-    padding: 20px;
+    margin: 1;
   }
-
+  
   #hide-element {
     display: none;
     visibility: none;
