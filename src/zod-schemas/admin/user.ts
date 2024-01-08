@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const userSchemas = {
   create: z.object({
-    name: z.string().trim().min(1),
+    name: z.string().trim().min(1, 'Position is required'),
     email: z.string().trim().toLowerCase().email(),
     isActive: z.boolean().optional(),
     organization: z.object({ id: z.string().cuid(), name: z.string().trim().min(1) }),
@@ -10,7 +10,7 @@ export const userSchemas = {
 
   update: z.object({
     id: z.string().cuid(),
-    name: z.string().trim().min(1).optional(),
+    name: z.string().trim().min(1, 'Position is required').optional(),
     email: z.string().trim().toLowerCase().email().optional(),
     isActive: z.boolean().optional(),
   }),

@@ -37,13 +37,14 @@ export const userRouter = createTRPCRouter({
     }
   }),
 
-  update: adminProcedure.input(userSchemas.update).mutation(({ ctx, input }) => {
+  update: adminProcedure.input(userSchemas.update).mutation(async ({ ctx, input }) => {
     const { id, ...data } = input;
 
     try {
-      return ctx.db.user.update({ where: { id }, data });
+      const user = await ctx.db.user.update({ where: { id }, data });
+      return user;
     } catch (err) {
-      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+      throw new TRPCError({ code: 'CONFLICT' });
     }
   }),
 
