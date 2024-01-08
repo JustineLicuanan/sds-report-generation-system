@@ -123,19 +123,71 @@ export default function MonthLabel() {
               <td className="w-[13%] pt-2 text-end">88.00</td>
             </tr>
             <tr>
-              <td colSpan={2} className="w-[90%] ps-8">
+              <td colSpan={2} className="w-[90%] font-bold">
                 Add: Cash Balance Remaining as of [DATE]
               </td>
               <td className="w-[13%] border-b-2 text-end ">20,000.00</td>
             </tr>
             <tr>
-              <td colSpan={2} className="w-[90%] ps-8">
+              <td colSpan={2} className="w-[90%] font-bold">
                 Cash
               </td>
-              <td className="w-[13%] border-b-2 text-end ">20,088.00</td>
+              <td className="w-[13%]  border-b-4 border-double text-end">20,088.00</td>
             </tr>
+          </tbody>
+        </table>
 
-            
+        <div>
+          <div className="flex flex-col items-center">
+            <div className="font-bold">ORG NAME</div>
+            <div className="font-bold">Financial Position</div>
+            <div className="font-bold">As of [DATE]</div>
+          </div>
+        </div>
+        <table className="w-full">
+          <tbody>
+            <tr>
+              <td colSpan={3} className="font-bold">
+                ASSETS
+              </td>
+            </tr>
+            <tr className="">
+              <td className="w-[85%] ps-8">Cash</td>
+              <td className="w-[2%] text-end">P</td>
+              <td className="w-[13%] text-end ">20, 090.00</td>
+            </tr>
+            <tr>
+              <td colSpan={2} className="w-[90%] ps-8">
+                Noted Receivable (Note 3)
+              </td>
+              <td className="w-[13%] border-b-2 text-end ">0.00</td>
+            </tr>
+            <tr>
+              <td className="w-[85%] font-bold">TOTAL ASSETS</td>
+              <td className="w-[2%] text-end">P</td>
+              <td className="w-[13%] border-b-4 border-double text-end">20, 090.00</td>
+            </tr>
+            <tr>
+              <td colSpan={3} className="font-bold">
+                EQUITY
+              </td>
+            </tr>
+            <tr className="">
+              <td className="w-[85%] ps-8">Fund</td>
+              <td className="w-[2%] text-end">P</td>
+              <td className="w-[13%] text-end ">20, 000.00</td>
+            </tr>
+            <tr>
+              <td colSpan={2} className="w-[90%] ps-8">
+                Net Gross
+              </td>
+              <td className="w-[13%] border-b-2 text-end ">90.00</td>
+            </tr>
+            <tr>
+              <td className="w-[85%] font-bold">TOTAL EQUITY</td>
+              <td className="w-[2%] text-end">P</td>
+              <td className="w-[13%] border-b-4 border-double text-end">20, 090.00</td>
+            </tr>
           </tbody>
         </table>
       </div>
