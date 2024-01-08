@@ -54,6 +54,7 @@ export default function CreateOrganizationPage() {
     resolver: zodResolver(orgSchemas.create),
     defaultValues: {
       name: '',
+      acronym: '',
       description: '',
       category: OrganizationCategory.STUDENT_GOVERNING_BODY,
       members: [{ email: '', name: '', isActive: true }],
@@ -144,6 +145,26 @@ export default function CreateOrganizationPage() {
                       <FormControl>
                         <Input
                           placeholder="Name of the organization"
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <div className="h-4">
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createOrganizationForm.control}
+                  name="acronym"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Acronym (e.g.: BITS)"
                           disabled={createOrganization.isLoading || createOrganization.isSuccess}
                           {...field}
                         />

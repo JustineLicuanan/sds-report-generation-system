@@ -27,6 +27,7 @@ model Settings {
 model Organization {
     id            String               @id @default(cuid())
     name          String
+    acronym       String
     description   String               @default("")
     category      OrganizationCategory
     image         String?

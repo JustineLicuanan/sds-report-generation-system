@@ -4,6 +4,7 @@ import { z } from 'zod';
 export const orgSchemas = {
   create: z.object({
     name: z.string().trim().min(1, 'Name is required'),
+    acronym: z.string().trim().min(1, 'Acronym is required'),
     description: z.string().trim().optional(),
     category: z.nativeEnum(OrganizationCategory),
     image: z.string().url().nullable().optional(),
@@ -36,6 +37,7 @@ export const orgSchemas = {
   update: z.object({
     id: z.string().cuid(),
     name: z.string().trim().min(1, 'Name is required').optional(),
+    acronym: z.string().trim().min(1, 'Acronym is required').optional(),
     description: z.string().trim().optional(),
     category: z.nativeEnum(OrganizationCategory).optional(),
     image: z.string().url().nullable().optional(),
