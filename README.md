@@ -46,6 +46,8 @@ respective docs.
 - Implemented a print version for Month Notes.
 - Implemented a print version for Month Signatories.
 - Implemented a print version for Month Receipts.
+- Implemented a print version for Forms.
+- Implemented a print version for Liquidation.
 
 ### Version 0.14.1
 

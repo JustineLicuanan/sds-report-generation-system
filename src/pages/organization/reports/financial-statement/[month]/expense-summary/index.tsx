@@ -15,7 +15,7 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-export default function MonthLabel() {
+export default function ExpenseSummary() {
   return (
     <>
       <Head>
