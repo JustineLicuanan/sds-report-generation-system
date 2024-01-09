@@ -113,15 +113,96 @@ export default function FinancialStatementPage() {
                   >
                     Sem Cash Flow
                   </option>
-                  <option value="">Signatories Sem</option>
-                  <option value="">Month Label</option>
-                  <option value="">Expense Summary</option>
-                  <option value="">Month Cash Flow</option>
-                  <option value="">Month Notes</option>
-                  <option value="">Signatories Per Month</option>
-                  <option value="">Receipts</option>
-                  <option value="">Forms</option>
-                  <option value="">Liquidation</option>
+                  <option
+                    value="Signatories Sem"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.SEM_SIGNATORIES}`
+                      )
+                    }
+                  >
+                    Sem Signatories
+                  </option>
+                  <option
+                    value="Month Label"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_LABEL}`
+                      )
+                    }
+                  >
+                    Month Label
+                  </option>
+                  <option
+                    value="Expense Summary"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.EXPENSE_SUMMARY}`
+                      )
+                    }
+                  >
+                    Expense Summary
+                  </option>
+                  <option
+                    value="Month Cash Flow"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_CASH_FLOW}`
+                      )
+                    }
+                  >
+                    Month Cash Flow
+                  </option>
+                  <option
+                    value="Month Notes"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_NOTES}`
+                      )
+                    }
+                  >
+                    Month Notes
+                  </option>
+                  <option
+                    value="Signatories Per Month"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_SIGNATORIES}`
+                      )
+                    }
+                  >
+                    Signatories Per Month
+                  </option>
+                  <option
+                    value="Receipts"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.RECEIPTS}`
+                      )
+                    }
+                  >
+                    Receipts
+                  </option>
+                  <option
+                    value="Forms"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.FORMS}`
+                      )
+                    }
+                  >
+                    Forms
+                  </option>
+                  <option
+                    value="Liquidation"
+                    onClick={() =>
+                      router.push(
+                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.LIQUIDATION}`
+                      )
+                    }
+                  >
+                    Liquidation
+                  </option>
                 </select>
               </div>
             </div>

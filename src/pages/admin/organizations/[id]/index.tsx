@@ -1,5 +1,5 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import {type GetServerSideProps } from 'next';
+import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -203,11 +203,9 @@ export default function OrganizationInformationPage() {
               </div>
             </div>
 
-            <div className="col-span-1 flex flex-col items-center rounded-sm px-2 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+            <div className="col-span-1 flex flex-col items-center justify-between rounded-sm px-2 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="text-lg font-bold">Accomplishment Report Status</div>
-              <div className="my-4 h-4 w-full rounded-full bg-gray">
-                <div className="h-4 w-[50%] rounded-full bg-green"></div>
-              </div>
+              <div className="text-xl  text-green">Done</div>
               <div className="mt-2 flex justify-between gap-2">
                 <button
                   type="button"
@@ -250,7 +248,6 @@ export default function OrganizationInformationPage() {
               </div>
             </div>
           </div>
-          
         </div>
       </main>
     </>

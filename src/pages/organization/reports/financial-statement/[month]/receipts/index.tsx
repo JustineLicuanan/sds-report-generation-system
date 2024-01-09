@@ -22,15 +22,15 @@ export default function MonthLabel() {
         <title>{`Receipts ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
       <div className="mx-auto my-0 flex flex-col items-center ">
-        <div className="flex h-[100vh]  flex-col items-center justify-center text-6xl">
+        <div className="mb-16 flex h-[100vh] flex-col items-center justify-center text-6xl">
           RECEIPTS
         </div>
 
-        <div className="flex h-[100vh]  flex-col items-center justify-center  text-6xl ">
+        <div className="mb-16 flex h-[100vh]  flex-col items-center justify-center  text-6xl">
           COLLECTIONS
         </div>
-        <div className="flex h-[100vh]  flex-col items-center justify-center  text-6xl "></div>
-        <div className="flex h-[100vh] w-full  flex-col items-center justify-end ">
+        <div className="mb-16 flex h-[100vh]  flex-col items-center justify-center  text-6xl "></div>
+        <div className="mb-16 flex h-[100vh] w-full  flex-col items-center justify-end ">
           <div className="flex justify-between gap-32">
             <div className="flex flex-col items-center gap-4">
               <div>Verified and Checked by:</div>
@@ -57,9 +57,11 @@ export default function MonthLabel() {
           </div>
         </div>
 
-        <div className="flex h-[100vh]  flex-col items-center justify-center  text-6xl ">IGP</div>
-        <div className="flex h-[100vh]   flex-col items-center justify-center  text-6xl "></div>
-        <div className="flex h-[100vh] w-full  flex-col items-center justify-end ">
+        <div className="mb-16 flex h-[100vh]  flex-col items-center justify-center  text-6xl ">
+          IGP
+        </div>
+        <div className="mb-16 flex h-[100vh]   flex-col items-center justify-center  text-6xl "></div>
+        <div className="mb-16 flex h-[100vh] w-full  flex-col items-center justify-end ">
           <div className="flex justify-between gap-32">
             <div className="flex flex-col items-center gap-4">
               <div>Verified and Checked by:</div>
@@ -86,20 +88,20 @@ export default function MonthLabel() {
           </div>
         </div>
 
-        <div className="flex h-[100vh]  flex-col items-center justify-center  text-6xl ">
+        <div className="mb-16 flex h-[100vh]  flex-col items-center justify-center  text-6xl ">
           Expenses
         </div>
-        <div className="flex h-[100vh]   flex-col items-center justify-center  text-6xl "></div>
+        <div className="mb-16 flex h-[100vh]   flex-col items-center justify-center  text-6xl "></div>
 
-        <div className="flex h-[100vh]  flex-col items-center justify-center  text-6xl ">
+        <div className="mb-16 flex h-[100vh]  flex-col items-center justify-center  text-6xl ">
           Food Expense Receipts
         </div>
 
-        <div className="flex h-[100vh]  flex-col items-center justify-center text-center text-6xl ">
+        <div className="mb-16 flex h-[100vh]  flex-col items-center justify-center text-center text-6xl ">
           Supplies Expense Receipts
         </div>
-        <div className="flex h-[100vh]   flex-col items-center justify-center  text-6xl "></div>
-        <div className="flex h-[100vh] w-full  flex-col items-center justify-end ">
+        <div className="mb-16 flex h-[100vh]   flex-col items-center justify-center  text-6xl "></div>
+        <div className="mb-16 flex h-[100vh] w-full  flex-col items-center justify-end ">
           <div className="flex justify-between gap-32">
             <div className="flex flex-col items-center gap-4">
               <div>Verified and Checked by:</div>
@@ -126,11 +128,11 @@ export default function MonthLabel() {
           </div>
         </div>
 
-        <div className="flex h-[100vh]  flex-col items-center justify-center text-center text-6xl ">
+        <div className="mb-16 flex h-[100vh]  flex-col items-center justify-center text-center text-6xl ">
           Transporation Expense Receipts
         </div>
-        <div className="flex h-[100vh]   flex-col items-center justify-center  text-6xl "></div>
-        <div className="flex h-[100vh] w-full  flex-col items-center justify-end ">
+        <div className="mb-16 flex h-[100vh]   flex-col items-center justify-center  text-6xl "></div>
+        <div className="mb-16 flex h-[100vh] w-full  flex-col items-center justify-end ">
           <div className="flex justify-between gap-32">
             <div className="flex flex-col items-center gap-4">
               <div>Verified and Checked by:</div>

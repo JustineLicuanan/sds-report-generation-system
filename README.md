@@ -39,6 +39,14 @@ respective docs.
 
 ## Changelog
 
+### Version 0.14.4
+
+- Removed all progress bars.
+- Removed recent activity section in both dashboard of student organization and admin.
+- Seperated the AR and FS submission date.
+- Changed the logo from CvSU to SDS.
+- Fixed the page layout of receipt's print version. 
+
 ### Version 0.14.3
 
 - Implemented a print version for Expense Summary.

@@ -45,9 +45,6 @@ export default function AccomplishmentReportPage() {
         </div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className="h-4 w-[50%] rounded-full bg-green"></div>
-        </div>
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -78,9 +75,7 @@ export default function AccomplishmentReportPage() {
         <div className="font-medium">Submit your organization&apos;s schedule of activities.</div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className="h-4 w-[25%] rounded-full bg-green"></div>
-        </div>
+        
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -117,9 +112,6 @@ export default function AccomplishmentReportPage() {
         <div className="font-medium">Compilation of approved activities proposals</div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className={`${markDone ? 'w-[100%]' : 'w-[0%]'} h-4 rounded-full bg-green`}></div>
-        </div>
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -162,9 +154,6 @@ export default function AccomplishmentReportPage() {
         <div className="font-medium">Compilation of approved project proposal</div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className={`${markDone ? 'w-[100%]' : 'w-[0%]'} h-4 rounded-full bg-green`}></div>
-        </div>
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -207,9 +196,7 @@ export default function AccomplishmentReportPage() {
         <div className="font-medium">Compilation of approved resolutions</div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className={`${markDone ? 'w-[100%]' : 'w-[0%]'} h-4 rounded-full bg-green`}></div>
-        </div>
+        
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -252,9 +239,7 @@ export default function AccomplishmentReportPage() {
         <div className="font-medium">Compilation of approved other letters</div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className={`${markDone ? 'w-[100%]' : 'w-[0%]'} h-4 rounded-full bg-green`}></div>
-        </div>
+        
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -297,9 +282,6 @@ export default function AccomplishmentReportPage() {
         <div className="font-medium">Summary of all events conducted throughout the semester.</div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className={`h-4 w-[100%] rounded-full bg-green`}></div>
-        </div>
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -331,9 +313,6 @@ export default function AccomplishmentReportPage() {
         </div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className={`${markDone ? 'w-[100%]' : 'w-[0%]'} h-4 rounded-full bg-green`}></div>
-        </div>
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -379,9 +358,6 @@ export default function AccomplishmentReportPage() {
         </div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        <div className="h-4 w-full rounded-full bg-gray">
-          <div className={`${markDone ? 'w-[100%]' : 'w-[0%]'} h-4 rounded-full bg-green`}></div>
-        </div>
         <div className="flex justify-end gap-2">
           <button
             type="button"

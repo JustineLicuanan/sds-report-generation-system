@@ -81,9 +81,7 @@ export default function OrganizationAvatar({ organization }: { organization: Org
             <div className="flex flex-col items-center gap-2">
               <div className="text-sm font-bold">Status</div>
               <div className="text-xs font-medium">Acomplishment Report:</div>
-              <div className="h-2 w-full rounded-md bg-gray">
-                <div className="h-2 w-[40%] rounded-md bg-green"></div>
-              </div>
+              <div className="text-sm font-bold text-green">Done</div>
               <div className="text-xs font-medium">Financial Statement</div>
               <div className="text-sm font-bold text-green">Done</div>
             </div>

@@ -1,7 +1,7 @@
 export const meta = {
   NAME: 'Office of Student Development Services',
   SHORT_NAME: 'SDS',
-  LOGO: '/cvsu_logo.png',
+  LOGO: '/sds_icon.png',
   DESCRIPTION: 'AR & FS Generator with File Management System',
   SEPARATOR: '|',
 } as const;
@@ -26,7 +26,18 @@ export const paths = {
   ACCOMPLISHMENT_REPORT: '/accomplishment-report',
   FINANCIAL_STATEMENT: '/financial-statement',
   MODIFY_FINANCIAL_STATEMENT: '/modify',
+  ADD_INFLOW: '/add-inflow',
+  ADD_OUTFLOW: '/add-outflow',
   SEM_CASH_FLOW: '/semester-cash-flow',
+  SEM_SIGNATORIES: '/semester-signatories',
+  MONTH_LABEL: '/month-label',
+  MONTH_SIGNATORIES: '/month-signatories',
+  MONTH_NOTES: '/month-notes',
+  MONTH_CASH_FLOW: '/month-cash-flow',
+  RECEIPTS: '/receipts',
+  EXPENSE_SUMMARY: '/expense-summary',
+  FORMS: '/forms',
+  LIQUIDATION: '/liquidation',
 
   // FIXME: To remove or replace
   MEMBERS: '/members',

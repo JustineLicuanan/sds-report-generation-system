@@ -12,7 +12,6 @@ import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
-import { generateNotificationLink } from '~/utils/generateNotificationLink';
 import { getOrganizationsCounts } from '~/utils/getOrganizationsCounts';
 import { OrderBy } from '~/zod-schemas/shared/notification';
 
@@ -155,7 +154,7 @@ export default function AdminDashboardPage() {
 
           {/* Submission */}
           <div className="col-span-1 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-lg font-bold">AR & FS Submission Date::</div>
+            <div className="text-lg font-bold">Accomplishment Report Submission Date:</div>
             <div className="flex items-center gap-2 ">
               <div className="text-2xl font-semibold text-yellow">10/25/2023</div>
               <button type="button" className="hover:text-yellow active:scale-95">
@@ -165,7 +164,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Recent Activity */}
-          <div className="col-span-2 row-span-2">
+          {/* <div className="col-span-2 row-span-2">
             <div className="rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="text-center text-2xl font-bold">
                 Organization&apos;s Recent Activity
@@ -200,10 +199,10 @@ export default function AdminDashboardPage() {
                 See all
               </Link>
             </div>
-          </div>
+          </div> */}
 
           {/* Appointments */}
-          <div className="col-span-1 row-span-2">
+          <div className="col-span-2 row-span-2">
             <div className=" rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="flex items-center justify-center gap-2">
                 <h1 className="text-2xl font-bold group-hover:text-blue-500 group-hover:underline">
@@ -234,6 +233,16 @@ export default function AdminDashboardPage() {
               >
                 Check Calendar
               </Link>
+            </div>
+          </div>
+
+          <div className="col-span-1 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+            <div className="text-lg font-bold">Financial Report Submission Date::</div>
+            <div className="flex items-center gap-2 ">
+              <div className="text-2xl font-semibold text-yellow">10/25/2023</div>
+              <button type="button" className="hover:text-yellow active:scale-95">
+                <CalendarDays />
+              </button>
             </div>
           </div>
         </div>

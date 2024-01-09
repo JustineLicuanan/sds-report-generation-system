@@ -1,9 +1,10 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
 
@@ -19,6 +20,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function ModifyFinancialStatementPage() {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -47,6 +49,11 @@ export default function ModifyFinancialStatementPage() {
               </div>
               <button
                 type="button"
+                onClick={() =>
+                  router.push(
+                    `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MODIFY_FINANCIAL_STATEMENT}/123${paths.ADD_INFLOW}`
+                  )
+                }
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Add
@@ -76,6 +83,11 @@ export default function ModifyFinancialStatementPage() {
               </div>
               <button
                 type="button"
+                onClick={() =>
+                  router.push(
+                    `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MODIFY_FINANCIAL_STATEMENT}/123${paths.ADD_OUTFLOW}`
+                  )
+                }
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Add
