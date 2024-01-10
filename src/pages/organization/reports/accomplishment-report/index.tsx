@@ -2,10 +2,11 @@ import { BadgeAlert, BadgeCheck } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -31,6 +32,7 @@ export default function AccomplishmentReportPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
+  const router = useRouter();
   const divs = [
     // Organization Setup Status
     <div
@@ -65,17 +67,16 @@ export default function AccomplishmentReportPage() {
       </div>
     </div>,
 
-    // Calendar Of Activities
+    // CBL
     <div
       key={1}
       className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
     >
       <div className="w-1/2 text-center">
-        <div className="text-2xl font-bold">Calendar Of Activities</div>
-        <div className="font-medium">Submit your organization&apos;s schedule of activities.</div>
+        <div className="text-2xl font-bold">Constitutional and By-Laws</div>
+        <div className="font-medium">Generate your Constitutional and By-Laws</div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
-        
         <div className="flex justify-end gap-2">
           <button
             type="button"
@@ -83,7 +84,7 @@ export default function AccomplishmentReportPage() {
           >
             Generate
           </button>
-          <button
+          {/* <button
             type="button"
             className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
           >
@@ -94,7 +95,7 @@ export default function AccomplishmentReportPage() {
             className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
           >
             Upload
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="absolute -right-2 -top-2 h-4 w-4 rounded-full bg-red text-white">
@@ -102,25 +103,26 @@ export default function AccomplishmentReportPage() {
       </div>
     </div>,
 
-    // Approved Activity Proposals
+    // Resolution
     <div
       key={2}
       className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
     >
       <div className="w-1/2 text-center">
-        <div className="text-2xl font-bold">Approved Activity Proposals</div>
-        <div className="font-medium">Compilation of approved activities proposals</div>
+        <div className="text-2xl font-bold">Resolution</div>
+        <div className="font-medium">
+          Resolution for appointing Committee or Advisers of the organization
+        </div>
       </div>
       <div className="flex w-1/2 flex-col gap-2">
         <div className="flex justify-end gap-2">
           <button
             type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Edit details
-          </button>
-          <button
-            type="button"
+            onClick={() =>
+              router.push(
+                `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.RESOLUTION}`
+              )
+            }
             className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
           >
             Generate
@@ -145,205 +147,203 @@ export default function AccomplishmentReportPage() {
     </div>,
 
     // Approved Project Proposal
-    <div
-      key={3}
-      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
-    >
-      <div className="w-1/2 text-center">
-        <div className="text-2xl font-bold">Approved Project Proposal</div>
-        <div className="font-medium">Compilation of approved project proposal</div>
-      </div>
-      <div className="flex w-1/2 flex-col gap-2">
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Edit details
-          </button>
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Generate
-          </button>
-          <label htmlFor="mark-as-done">Mark as done</label>
-          <input
-            type="checkbox"
-            name=""
-            id="mark-as-done"
-            onChange={() => setMarkDone(!markDone)}
-            value={markDone ? 1 : 0}
-          />
-        </div>
-      </div>
-      <div
-        className={`${
-          markDone ? 'bg-green' : 'bg-red'
-        } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
-      >
-        {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
-      </div>
-    </div>,
+    // <div
+    //   key={3}
+    //   className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    // >
+    //   <div className="w-1/2 text-center">
+    //     <div className="text-2xl font-bold">Approved Project Proposal</div>
+    //     <div className="font-medium">Compilation of approved project proposal</div>
+    //   </div>
+    //   <div className="flex w-1/2 flex-col gap-2">
+    //     <div className="flex justify-end gap-2">
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Edit details
+    //       </button>
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Generate
+    //       </button>
+    //       <label htmlFor="mark-as-done">Mark as done</label>
+    //       <input
+    //         type="checkbox"
+    //         name=""
+    //         id="mark-as-done"
+    //         onChange={() => setMarkDone(!markDone)}
+    //         value={markDone ? 1 : 0}
+    //       />
+    //     </div>
+    //   </div>
+    //   <div
+    //     className={`${
+    //       markDone ? 'bg-green' : 'bg-red'
+    //     } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
+    //   >
+    //     {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
+    //   </div>
+    // </div>,
 
     // Approved Resolutions
-    <div
-      key={4}
-      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
-    >
-      <div className="w-1/2 text-center">
-        <div className="text-2xl font-bold">Approved Resolutions</div>
-        <div className="font-medium">Compilation of approved resolutions</div>
-      </div>
-      <div className="flex w-1/2 flex-col gap-2">
-        
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Edit details
-          </button>
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Generate
-          </button>
-          <label htmlFor="mark-as-done">Mark as done</label>
-          <input
-            type="checkbox"
-            name=""
-            id="mark-as-done"
-            onChange={() => setMarkDone(!markDone)}
-            value={markDone ? 1 : 0}
-          />
-        </div>
-      </div>
-      <div
-        className={`${
-          markDone ? 'bg-green' : 'bg-red'
-        } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
-      >
-        {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
-      </div>
-    </div>,
+    // <div
+    //   key={4}
+    //   className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    // >
+    //   <div className="w-1/2 text-center">
+    //     <div className="text-2xl font-bold">Approved Resolutions</div>
+    //     <div className="font-medium">Compilation of approved resolutions</div>
+    //   </div>
+    //   <div className="flex w-1/2 flex-col gap-2">
+    //     <div className="flex justify-end gap-2">
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Edit details
+    //       </button>
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Generate
+    //       </button>
+    //       <label htmlFor="mark-as-done">Mark as done</label>
+    //       <input
+    //         type="checkbox"
+    //         name=""
+    //         id="mark-as-done"
+    //         onChange={() => setMarkDone(!markDone)}
+    //         value={markDone ? 1 : 0}
+    //       />
+    //     </div>
+    //   </div>
+    //   <div
+    //     className={`${
+    //       markDone ? 'bg-green' : 'bg-red'
+    //     } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
+    //   >
+    //     {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
+    //   </div>
+    // </div>,
 
     // Approved Other Letters
-    <div
-      key={5}
-      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
-    >
-      <div className="w-1/2 text-center">
-        <div className="text-2xl font-bold">Approved Other Letters</div>
-        <div className="font-medium">Compilation of approved other letters</div>
-      </div>
-      <div className="flex w-1/2 flex-col gap-2">
-        
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Edit details
-          </button>
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Generate
-          </button>
-          <label htmlFor="mark-as-done">Mark as done</label>
-          <input
-            type="checkbox"
-            name=""
-            id="mark-as-done"
-            onChange={() => setMarkDone(!markDone)}
-            value={markDone ? 1 : 0}
-          />
-        </div>
-      </div>
-      <div
-        className={`${
-          markDone ? 'bg-green' : 'bg-red'
-        } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
-      >
-        {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
-      </div>
-    </div>,
+    // <div
+    //   key={5}
+    //   className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    // >
+    //   <div className="w-1/2 text-center">
+    //     <div className="text-2xl font-bold">Approved Other Letters</div>
+    //     <div className="font-medium">Compilation of approved other letters</div>
+    //   </div>
+    //   <div className="flex w-1/2 flex-col gap-2">
+    //     <div className="flex justify-end gap-2">
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Edit details
+    //       </button>
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Generate
+    //       </button>
+    //       <label htmlFor="mark-as-done">Mark as done</label>
+    //       <input
+    //         type="checkbox"
+    //         name=""
+    //         id="mark-as-done"
+    //         onChange={() => setMarkDone(!markDone)}
+    //         value={markDone ? 1 : 0}
+    //       />
+    //     </div>
+    //   </div>
+    //   <div
+    //     className={`${
+    //       markDone ? 'bg-green' : 'bg-red'
+    //     } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
+    //   >
+    //     {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
+    //   </div>
+    // </div>,
 
     // Summary of Conducted Events
-    <div
-      key={6}
-      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
-    >
-      <div className="w-1/2 text-center">
-        <div className="text-2xl font-bold">Summary of Conducted Events</div>
-        <div className="font-medium">Summary of all events conducted throughout the semester.</div>
-      </div>
-      <div className="flex w-1/2 flex-col gap-2">
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Generate
-          </button>
-        </div>
-      </div>
-      <div
-        className={`${
-          markDone ? 'bg-green' : 'bg-red'
-        } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
-      >
-        {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
-      </div>
-    </div>,
+    // <div
+    //   key={6}
+    //   className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    // >
+    //   <div className="w-1/2 text-center">
+    //     <div className="text-2xl font-bold">Summary of Conducted Events</div>
+    //     <div className="font-medium">Summary of all events conducted throughout the semester.</div>
+    //   </div>
+    //   <div className="flex w-1/2 flex-col gap-2">
+    //     <div className="flex justify-end gap-2">
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Generate
+    //       </button>
+    //     </div>
+    //   </div>
+    //   <div
+    //     className={`${
+    //       markDone ? 'bg-green' : 'bg-red'
+    //     } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
+    //   >
+    //     {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
+    //   </div>
+    // </div>,
 
     // Community Extension Services
-    <div
-      key={7}
-      className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
-    >
-      <div className="w-1/2 text-center">
-        <div className="text-2xl font-bold">Community Extension Services</div>
-        <div className="font-medium">
-          A compilation of community extension services showcases diverse initiatives conducted
-          throughout the semester.
-        </div>
-      </div>
-      <div className="flex w-1/2 flex-col gap-2">
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Edit details
-          </button>
-          <button
-            type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Generate
-          </button>
-          <label htmlFor="mark-as-done">Mark as done</label>
-          <input
-            type="checkbox"
-            name=""
-            id="mark-as-done"
-            onChange={() => setMarkDone(!markDone)}
-            value={markDone ? 1 : 0}
-          />
-        </div>
-      </div>
-      <div
-        className={`${
-          markDone ? 'bg-green' : 'bg-red'
-        } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
-      >
-        {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
-      </div>
-    </div>,
+    // <div
+    //   key={7}
+    //   className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+    // >
+    //   <div className="w-1/2 text-center">
+    //     <div className="text-2xl font-bold">Community Extension Services</div>
+    //     <div className="font-medium">
+    //       A compilation of community extension services showcases diverse initiatives conducted
+    //       throughout the semester.
+    //     </div>
+    //   </div>
+    //   <div className="flex w-1/2 flex-col gap-2">
+    //     <div className="flex justify-end gap-2">
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Edit details
+    //       </button>
+    //       <button
+    //         type="button"
+    //         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+    //       >
+    //         Generate
+    //       </button>
+    //       <label htmlFor="mark-as-done">Mark as done</label>
+    //       <input
+    //         type="checkbox"
+    //         name=""
+    //         id="mark-as-done"
+    //         onChange={() => setMarkDone(!markDone)}
+    //         value={markDone ? 1 : 0}
+    //       />
+    //     </div>
+    //   </div>
+    //   <div
+    //     className={`${
+    //       markDone ? 'bg-green' : 'bg-red'
+    //     } absolute -right-2 -top-2 h-4 w-4 rounded-full text-white`}
+    //   >
+    //     {markDone ? <BadgeCheck className="h-4 w-4" /> : <BadgeAlert className="h-4 w-4" />}
+    //   </div>
+    // </div>,
 
     // Minutes of the Meeting
     <div
@@ -361,12 +361,11 @@ export default function AccomplishmentReportPage() {
         <div className="flex justify-end gap-2">
           <button
             type="button"
-            className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-          >
-            Edit details
-          </button>
-          <button
-            type="button"
+            onClick={() =>
+              router.push(
+                `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.MINUTES_OF_THE_MEETING}`
+              )
+            }
             className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
           >
             Generate

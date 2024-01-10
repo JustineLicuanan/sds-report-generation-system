@@ -6,6 +6,11 @@ export const meta = {
   SEPARATOR: '|',
 } as const;
 
+export const logo = {
+  PHILIPPINE_LOGO: '/bagong_pilipinas_logo.png',
+  CVSU_LOGO: '/cvsu_logo.png',
+  SDS_LOGO: '/sds_icon.png',
+};
 export const paths = {
   SIGN_IN: '/auth/sign-in',
   SIGN_OUT: '/auth/sign-out',
@@ -26,6 +31,7 @@ export const paths = {
   ACCOMPLISHMENT_REPORT: '/accomplishment-report',
   FINANCIAL_STATEMENT: '/financial-statement',
   MODIFY_FINANCIAL_STATEMENT: '/modify',
+
   ADD_INFLOW: '/add-inflow',
   ADD_OUTFLOW: '/add-outflow',
   SEM_CASH_FLOW: '/semester-cash-flow',
@@ -39,6 +45,10 @@ export const paths = {
   FORMS: '/forms',
   LIQUIDATION: '/liquidation',
 
+  RESOLUTION: '/resolution',
+  MINUTES_OF_THE_MEETING: '/minutes-of-the-meeting',
+
+  PRINT: '/print',
   // FIXME: To remove or replace
   MEMBERS: '/members',
   CBL: '/cbl',

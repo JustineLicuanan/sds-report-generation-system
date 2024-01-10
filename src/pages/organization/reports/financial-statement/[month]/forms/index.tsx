@@ -21,9 +21,13 @@ export default function Forms() {
       <Head>
         <title>{`Forms ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
-      <div className="mx-auto my-0 flex h-[200vh] flex-col items-center justify-center ">
-        <div className="flex h-[100vh] items-center justify-center text-6xl">RECEIVING FORM</div>
-        <div className="flex h-[100vh] items-center justify-center text-6xl">TRANSMITTAL FORM</div>
+      <div className="mx-auto my-0 flex h-[100vh] flex-col items-center justify-center ">
+        <div className="mb-16 flex h-[100vh] items-center justify-center text-6xl">
+          RECEIVING FORM
+        </div>
+        <div className="mb-16 flex h-[100vh] items-center justify-center text-6xl">
+          TRANSMITTAL FORM
+        </div>
       </div>
     </>
   );

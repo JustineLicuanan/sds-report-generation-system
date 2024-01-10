@@ -41,11 +41,17 @@ respective docs.
 
 ### Version 0.14.4
 
+- Implemented the print version for CBL.
+- Implemented the print version and form for Resolution.
+- Implemented the print version and form for Minutes of the Meeting.
+
+### Version 0.14.4
+
 - Removed all progress bars.
 - Removed recent activity section in both dashboard of student organization and admin.
 - Seperated the AR and FS submission date.
 - Changed the logo from CvSU to SDS.
-- Fixed the page layout of receipt's print version. 
+- Fixed the page layout of receipt's print version.
 
 ### Version 0.14.3
 
