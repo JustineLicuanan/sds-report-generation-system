@@ -2,9 +2,10 @@ import { BadgeAlert, BadgeCheck } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -31,6 +32,7 @@ export default function OrganizationPage() {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -59,7 +61,7 @@ export default function OrganizationPage() {
                   className=" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-36 lg:w-36"
                 />
               ) : (
-                <div className='className=" lg:w-28" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28'></div>
+                <div className='className=" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28'></div>
               )}
               <div className="text-2xl font-bold">{org?.name}</div>
             </div>
@@ -132,6 +134,9 @@ export default function OrganizationPage() {
             </div>
             <button
               type="button"
+              onClick={() =>
+                router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.MEMBER_INFO}`)
+              }
               className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
             >
               Add

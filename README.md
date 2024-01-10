@@ -44,6 +44,7 @@ respective docs.
 - Implemented the print version for CBL.
 - Implemented the print version and form for Resolution.
 - Implemented the print version and form for Minutes of the Meeting.
+- Implemented the print version and form for Curriculum Vitae.
 
 ### Version 0.14.4
 
