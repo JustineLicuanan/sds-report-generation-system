@@ -39,7 +39,7 @@ respective docs.
 
 ## Changelog
 
-### Version 0.14.4
+### Version 0.14.5
 
 - Implemented the print version for CBL.
 - Implemented the print version and form for Resolution.
