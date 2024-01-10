@@ -23,7 +23,7 @@ export default function CBL() {
       </Head>
       <div className="mx-auto my-0 flex max-w-[210mm] flex-col items-center justify-center ">
         <div className="mb-16 flex h-[100vh] flex-col items-center justify-center gap-8 text-center">
-          <div className="h-80 w-80 rounded-full bg-green"></div>
+          <div className="h-80 w-80 rounded-full border-2 bg-green">Org Logo</div>
           <div className="text-6xl">[ORG NAME]</div>
           <div className="text-6xl">CONSTITUTION AND BY-LAWS</div>
         </div>

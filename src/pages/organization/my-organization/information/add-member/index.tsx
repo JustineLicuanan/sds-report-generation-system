@@ -405,16 +405,13 @@ export default function AddMemberInformationPage() {
             <button
               type="button"
               onClick={() =>
-                router.push(
-                  `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.RESOLUTION}${paths.PRINT}`
-                )
+                router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.MEMBER_INFO}`)
               }
               className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
             >
               Add
             </button>
           </div>
-          
         </div>
       </main>
     </>
