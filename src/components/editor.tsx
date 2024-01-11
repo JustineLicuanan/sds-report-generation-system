@@ -11,7 +11,7 @@ type Props = {
   className?: string;
 };
 
-const EditorBlock = ({ data, onChange, holder, className }: Props) => {
+function EditorBlock({ data, onChange, holder, className }: Props) {
   const ref = useRef<EditorJS>();
 
   useEffect(() => {
@@ -37,6 +37,6 @@ const EditorBlock = ({ data, onChange, holder, className }: Props) => {
   }, []);
 
   return <div id={holder} className={cn('prose max-w-full', className)} />;
-};
+}
 
 export default memo(EditorBlock);

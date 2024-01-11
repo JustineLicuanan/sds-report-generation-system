@@ -6,6 +6,7 @@ import Underline from '@editorjs/underline';
 import Header from 'editorjs-header-with-alignment';
 import Paragraph from 'editorjs-paragraph-with-alignment';
 
+// TODO: Be careful! TypeScript is disabled in this file.
 export const EDITOR_TOOLS = {
   header: { class: Header, config: { placeholder: 'Enter a header...' } },
   paragraph: {
