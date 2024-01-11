@@ -31,9 +31,13 @@ export const paths = {
   AUTH_LOGS: '/auth/logs',
   ADD_MEMBER: '/add-member',
   ACCOMPLISHMENT_REPORT: '/accomplishment-report',
+  TEMPLATE: '/templates',
+  RESOLUTION: '/resolution',
+  MINUTES_OF_THE_MEETING: '/minutes-of-the-meeting',
+  ARCHIVES: '/archives',
+
   FINANCIAL_STATEMENT: '/financial-statement',
   MODIFY_FINANCIAL_STATEMENT: '/modify',
-
   ADD_INFLOW: '/add-inflow',
   ADD_OUTFLOW: '/add-outflow',
   SEM_CASH_FLOW: '/semester-cash-flow',
@@ -46,9 +50,6 @@ export const paths = {
   EXPENSE_SUMMARY: '/expense-summary',
   FORMS: '/forms',
   LIQUIDATION: '/liquidation',
-
-  RESOLUTION: '/resolution',
-  MINUTES_OF_THE_MEETING: '/minutes-of-the-meeting',
 
   PRINT: '/print',
   // FIXME: To remove or replace

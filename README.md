@@ -39,6 +39,13 @@ respective docs.
 
 ## Changelog
 
+### Version 0.14.6
+
+- Implemented the form for CBL.
+- Moved the accomplishment report page to accomplishment report templates page.
+- Accomplishment Report page is now for submitting a file.
+- Implemented an archived file page. 
+
 ### Version 0.14.5
 
 - Implemented the print version for CBL.

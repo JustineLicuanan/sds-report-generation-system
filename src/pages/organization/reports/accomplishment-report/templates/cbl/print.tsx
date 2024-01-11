@@ -16,6 +16,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function CBL() {
+  
   return (
     <>
       <Head>
