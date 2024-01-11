@@ -27,6 +27,7 @@ const config = {
     '@typescript-eslint/no-misused-promises': [2, { checksVoidReturn: { attributes: false } }],
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/non-nullable-type-assertion-style': 'off',
+    // '@typescript-eslint/ban-ts-comment': 'off',
   },
 };
 
