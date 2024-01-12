@@ -157,7 +157,7 @@ model ARUpload {
 
 model ARGenerated {
     id            String                  @id @default(cuid())
-    templateType  ARGeneratedTemplateType @default(FORM)
+    templateType  ARGeneratedTemplateType
     contentType   ARGeneratedContentType
     contentNumber Int
     content       String
