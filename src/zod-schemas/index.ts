@@ -1,3 +1,4 @@
+import { accomplishmentReportSchemas } from '~/zod-schemas/accomplishmentReport';
 import { reportSemesterSchemas } from '~/zod-schemas/reportSemester';
 
 export enum OrderBy {
@@ -6,7 +7,7 @@ export enum OrderBy {
 }
 
 export const schemas = {
-  admin: { reportSemester: reportSemesterSchemas.admin },
+  admin: { reportSemester: reportSemesterSchemas.admin, AR: accomplishmentReportSchemas.admin },
 
-  shared: {},
+  shared: { AR: accomplishmentReportSchemas.shared },
 };

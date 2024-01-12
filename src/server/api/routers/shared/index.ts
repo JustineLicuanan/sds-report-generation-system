@@ -1,3 +1,4 @@
+import { accomplishmentReportRouter } from '~/server/api/routers/shared/accomplishmentReport';
 import { announcementRouter } from '~/server/api/routers/shared/announcement';
 import { commentRouter } from '~/server/api/routers/shared/comment';
 import { logRouter } from '~/server/api/routers/shared/log';
@@ -16,6 +17,7 @@ export const sharedRouter = createTRPCRouter({
 
   // Extras
   reportSemester: reportSemesterRouter,
+  AR: accomplishmentReportRouter,
 
   // TODO: To remove
   announcement: announcementRouter,
