@@ -25,24 +25,42 @@ model Settings {
 }
 
 model Organization {
-    id            String               @id @default(cuid())
-    name          String
-    acronym       String
-    description   String               @default("")
-    category      OrganizationCategory
-    image         String?
-    imageId       String?
-    cbl           String?
-    cblId         String?
-    isArchived    Boolean              @default(false)
-    members       User[]
+    id          String               @id @default(cuid())
+    name        String
+    acronym     String
+    description String               @default("")
+    category    OrganizationCategory
+    image       String?
+    imageId     String?
+    isArchived  Boolean              @default(false)
+    members     User[]
+    comments    Comment[]
+    logs        Log[]
+    createdAt   DateTime             @default(now())
+    updatedAt   DateTime             @updatedAt
+
+    // Extras
+    pmvgContent           String?
+    pmvg                  String?
+    pmvgId                String?
+    chart                 String?
+    chartId               String?
+    cbl                   String?
+    cblId                 String?
+    accomplishmentReports AccomplishmentReport[]
+    ARUploads             ARUpload[]
+    ARGenerated           ARGenerated[]
+    financialStatements   FinancialStatement[]
+    FSMonthly             FSMonthly[]
+    FSInflows             FSInflow[]
+    FSInflowRows          FSInflowRow[]
+    FSOutflows            FSOutflow[]
+    FSOutflowRows         FSOutflowRow[]
+
+    // TODO: To remove
     reports       Report[]
-    comments      Comment[]
     notifications Notification[]
-    logs          Log[]
     announcements Announcement[]
-    createdAt     DateTime             @default(now())
-    updatedAt     DateTime             @updatedAt
 
     @@unique([id, name])
     @@unique([id, name, isArchived])
@@ -66,6 +84,254 @@ model Announcement {
     notifications      Notification[]
     createdAt          DateTime            @default(now())
     updatedAt          DateTime            @updatedAt
+}
+
+model ReportSemester {
+    id                    String                 @id @default(cuid())
+    yearStart             Int
+    yearEnd               Int
+    term                  SemesterTerm
+    dueDateAR             DateTime?
+    dueDateFS             DateTime?
+    accomplishmentReports AccomplishmentReport[]
+    ARUploads             ARUpload[]
+    ARGenerated           ARGenerated[]
+    financialStatements   FinancialStatement[]
+    FSMonthly             FSMonthly[]
+    FSInflows             FSInflow[]
+    FSInflowRows          FSInflowRow[]
+    FSOutflows            FSOutflow[]
+    FSOutflowRows         FSOutflowRow[]
+    createdAt             DateTime               @default(now())
+    updatedAt             DateTime               @updatedAt
+    archivedAt            String                 @unique @default("")
+
+    @@unique([id, archivedAt])
+}
+
+model AccomplishmentReport {
+    id        String          @id @default(cuid())
+    status    SemReportStatus @default(DRAFT)
+    uploads   ARUpload[]
+    generated ARGenerated[]
+    createdAt DateTime        @default(now())
+    updatedAt DateTime        @updatedAt
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    @@unique([reportSemesterId, organizationId])
+}
+
+model ARUpload {
+    id            String              @id @default(cuid())
+    contentType   ARUploadContentType
+    contentNumber Int
+    file          String
+    fileId        String
+    createdAt     DateTime            @default(now())
+    updatedAt     DateTime            @updatedAt
+    deletedAt     String              @default("")
+
+    accomplishmentReport   AccomplishmentReport @relation(fields: [accomplishmentReportId], references: [id])
+    accomplishmentReportId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    @@unique([contentType, contentNumber, deletedAt])
+}
+
+model ARGenerated {
+    id            String                  @id @default(cuid())
+    templateType  ARGeneratedTemplateType @default(FORM)
+    contentType   ARGeneratedContentType
+    contentNumber Int
+    content       String
+    status        GeneratedReportStatus   @default(DRAFT)
+    createdAt     DateTime                @default(now())
+    updatedAt     DateTime                @updatedAt
+    deletedAt     String                  @default("")
+
+    accomplishmentReport   AccomplishmentReport @relation(fields: [accomplishmentReportId], references: [id])
+    accomplishmentReportId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+}
+
+model ARTemplate {
+    id          String                 @id @default(cuid())
+    name        String                 @default("")
+    description String                 @default("")
+    contentType ARGeneratedContentType
+    content     String
+    isActive    Boolean                @default(false)
+    createdAt   DateTime               @default(now())
+    updatedAt   DateTime               @updatedAt
+    deletedAt   String                 @default("")
+
+    @@unique([contentType, name, deletedAt])
+}
+
+model FinancialStatement {
+    id        String          @id @default(cuid())
+    status    SemReportStatus @default(DRAFT)
+    monthly   FSMonthly[]
+    createdAt DateTime        @default(now())
+    updatedAt DateTime        @updatedAt
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    @@unique([reportSemesterId, organizationId])
+}
+
+model FSMonthly {
+    id          String         @id @default(cuid())
+    month       Int
+    year        Int
+    inflows     FSInflow[]
+    inflowRows  FSInflowRow[]
+    outflows    FSOutflow[]
+    outflowRows FSOutflowRow[]
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+
+    financialStatement   FinancialStatement @relation(fields: [financialStatementId], references: [id])
+    financialStatementId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    @@unique([month, year, financialStatementId])
+}
+
+model FSInflow {
+    id          String           @id @default(cuid())
+    category    FSInflowCategory
+    date        DateTime
+    description String           @default("")
+    rows        FSInflowRow[]
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+    deletedAt   String           @default("")
+
+    monthly   FSMonthly @relation(fields: [monthlyId], references: [id])
+    monthlyId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+}
+
+model FSInflowRow {
+    id        String           @id @default(cuid())
+    category  FSInflowCategory
+    date      DateTime
+    name      String
+    ORNumber  String
+    amount    Decimal?         @db.Money
+    receipt   String?
+    receiptId String?
+    createdAt DateTime         @default(now())
+    updatedAt DateTime         @updatedAt
+    deletedAt String           @default("")
+
+    // Additional for IGP
+    quantity Int?
+    unit     String?
+    price    Decimal? @db.Money
+
+    monthly   FSMonthly @relation(fields: [monthlyId], references: [id])
+    monthlyId String
+
+    inflow   FSInflow @relation(fields: [inflowId], references: [id])
+    inflowId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+}
+
+model FSOutflow {
+    id          String            @id @default(cuid())
+    category    FSOutflowCategory
+    date        DateTime
+    description String            @default("")
+    rows        FSOutflowRow[]
+    createdAt   DateTime          @default(now())
+    updatedAt   DateTime          @updatedAt
+    deletedAt   String            @default("")
+
+    monthly   FSMonthly @relation(fields: [monthlyId], references: [id])
+    monthlyId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+}
+
+model FSOutflowRow {
+    id          String   @id @default(cuid())
+    date        DateTime
+    quantity    Int
+    particulars String
+    unit        String
+    price       Decimal  @db.Money
+    receipt     String?
+    receiptId   String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    deletedAt   String   @default("")
+
+    monthly   FSMonthly @relation(fields: [monthlyId], references: [id])
+    monthlyId String
+
+    outflow   FSOutflow @relation(fields: [outflowId], references: [id])
+    outflowId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
 }
 
 model Report {
@@ -217,24 +483,30 @@ model Session {
 }
 
 model User {
-    id            String         @id @default(cuid())
+    id            String    @id @default(cuid())
     name          String
-    email         String         @unique
+    email         String    @unique
     emailVerified DateTime?
     image         String?
-    role          UserRole       @default(STUDENT_LEADER)
-    isActive      Boolean        @default(false)
+    role          UserRole  @default(STUDENT_LEADER)
+    isActive      Boolean   @default(false)
     accounts      Account[]
     sessions      Session[]
-    reports       Report[]
     comments      Comment[]
-    notifications Notification[]
     logs          Log[]
 
     organization           Organization? @relation(fields: [organizationId, organizationName, organizationIsArchived], references: [id, name, isArchived])
     organizationId         String?
     organizationName       String?
     organizationIsArchived Boolean?
+
+    // Extras
+    ARUploads   ARUpload[]
+    ARGenerated ARGenerated[]
+
+    // TODO: To remove
+    reports       Report[]
+    notifications Notification[]
 
     @@unique([id, name])
 }
@@ -256,6 +528,83 @@ enum OrganizationCategory {
     STUDENT_GOVERNING_BODY
     ACADEMIC_ORGANIZATION
     NON_ACADEMIC_ORGANIZATION
+}
+
+enum SemesterTerm {
+    FIRST
+    SECOND
+    SUMMER
+}
+
+enum SemReportStatus {
+    DRAFT
+    TURNED_IN
+    FOR_REVISION
+    COMPLETED
+}
+
+enum GeneratedReportStatus {
+    DRAFT
+    TURNED_IN
+    FOR_REVISION
+    READY_FOR_SIGNING
+}
+
+enum ARGeneratedTemplateType {
+    FORM
+    EDITOR
+}
+
+enum ARUploadContentType {
+    ACCEPTANCE_LETTER_OF_ADVISERS
+    CALENDAR_OF_ACTIVITIES
+    APPROVED_ACTIVITY_PROPOSAL
+    APPROVED_PROJECT_PROPOSAL
+    APPROVED_RESOLUTION
+    APPROVED_OTHER_LETTER
+    SUMMARY_OF_CONDUCTED_EVENTS
+    COMMUNITY_EXTENSION_SERVICES
+    MINUTES_OF_THE_MEETING
+    CERTIFICATES
+    FEEDBACK_FORM
+
+    // For completion & archive
+    PREAMBLE_MISSION_VISION_AND_GOAL
+    CONSTITUTION_AND_BY_LAWS
+    ORGANIZATIONAL_CHART
+    CURRICULUM_VITAE_OF_OFFICERS
+}
+
+enum ARGeneratedContentType {
+    ACCEPTANCE_LETTER_OF_ADVISERS
+    ORGANIZATIONAL_CHART
+    CURRICULUM_VITAE_OF_OFFICERS
+    CALENDAR_OF_ACTIVITIES
+    APPROVED_ACTIVITY_PROPOSAL
+    APPROVED_PROJECT_PROPOSAL
+    APPROVED_RESOLUTION
+    APPROVED_OTHER_LETTER
+    SUMMARY_OF_CONDUCTED_EVENTS
+    COMMUNITY_EXTENSION_SERVICES
+    MINUTES_OF_THE_MEETING
+    FEEDBACK_FORM
+}
+
+enum FSInflowCategory {
+    COLLECTION
+    IGP
+}
+
+enum FSOutflowCategory {
+    FOOD_EXPENSE
+    SUPPLIES_EXPENSE
+    TRANSPORTATION_EXPENSE
+    RENT_EXPENSE
+    REPRESENTATION_EXPENSE
+    MEDICAL_EXPENSE
+    COMMUNICATION_EXPENSE
+    MISCELLANEOUS_EXPENSE
+    TOKEN_EXPENSE
 }
 
 enum ReportCategory {
