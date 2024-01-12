@@ -142,6 +142,18 @@ export default function AccomplishmentReportPage() {
                 type="button"
                 onClick={() =>
                   router.push(
+                    `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}`
+                  )
+                }
+                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+              >
+                Generated Files
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(
                     `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}`
                   )
                 }

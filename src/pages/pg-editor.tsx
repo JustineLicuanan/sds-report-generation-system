@@ -8,7 +8,29 @@ import { Textarea } from '~/components/ui/textarea';
 const EditorBlock = dynamic(() => import('~/components/editor'), { ssr: false });
 
 export default function EditorPlayground() {
-  const [content, setContent] = useState<OutputData>();
+  const [content, setContent] = useState<OutputData>({
+    "time": 1705024403002,
+    "blocks": [
+      {
+        "id": "9ZBe65sOOu",
+        "type": "header",
+        "data": {
+          "text": "asd",
+          "level": 2,
+          "alignment": "center"
+        }
+      },
+      {
+        "id": "BTY9n_0iqJ",
+        "type": "paragraph",
+        "data": {
+          "text": "",
+          "alignment": "left"
+        }
+      }
+    ],
+    "version": "2.28.2"
+  });
 
   return (
     <>

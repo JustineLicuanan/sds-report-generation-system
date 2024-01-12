@@ -149,7 +149,18 @@ export default function AdminDashboardPage() {
           {/* Current Sem */}
           <div className="col-span-1 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Current Semester:</div>
-            <div className="text-2xl font-semibold text-yellow">1st semester (2023 - 2024)</div>
+            <div className="flex items-center gap-2 ">
+              <div className="text-2xl font-semibold text-yellow">First Semester (2023 - 2024)</div>
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(`${paths.ADMIN}${paths.SEMESTER}${paths.SEMESTER_CREATE}`)
+                }
+                className="hover:text-yellow active:scale-95"
+              >
+                <CalendarDays />
+              </button>
+            </div>
           </div>
 
           {/* Submission */}

@@ -91,8 +91,8 @@ export default function SignInPage() {
           <Image
             src={meta.LOGO}
             alt={`${meta.NAME} Logo`}
-            height={48}
-            width={48}
+            height={60}
+            width={60}
             className="hidden md:block"
           />
 

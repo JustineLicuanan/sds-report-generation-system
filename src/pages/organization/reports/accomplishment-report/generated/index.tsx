@@ -35,32 +35,32 @@ export default function AccomplishmentReportTemplatePage() {
     {
       filePath: `${paths.CBL}`,
       title: 'Constitutional and By-Laws',
-      description: 'Generate the Constitutional and By-Laws',
+      description: 'View the Constitutional and By-Laws',
     },
     {
       filePath: `${paths.RESOLUTION}`,
       title: 'Resolution',
-      description: 'Generate the Resolution',
+      description: 'View the Resolution',
     },
     {
       filePath: `${paths.MINUTES_OF_THE_MEETING}`,
       title: 'Minutes of the Meeting',
-      description: 'Generate the Minutes of the Meeting',
+      description: 'View the Minutes of the Meeting',
     },
     {
       filePath: `${paths.ACTIVITY_PROPOSAL}`,
       title: 'Activity Proposal',
-      description: 'Generate the Activity Proposal',
+      description: 'View the Activity Proposal',
     },
     {
       filePath: `${paths.CALENDAR_OF_ACTIVITIES}`,
       title: 'Calendar of Activities',
-      description: 'Generate the Calendar of Activities',
+      description: 'View the Calendar of Activities',
     },
     {
       filePath: `${paths.OTHER_LETTERS}`,
       title: 'Other Letters',
-      description: 'Generate the Other Letters',
+      description: 'View the Other Letters',
     },
   ];
 
@@ -74,7 +74,7 @@ export default function AccomplishmentReportTemplatePage() {
   return (
     <>
       <Head>
-        <title>{`Accomplishment Report ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Generated Files ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -85,7 +85,7 @@ export default function AccomplishmentReportTemplatePage() {
         <OrganizationSideBarMenu />
         <div id="main-content" className="mx-4 my-4  w-full  gap-8">
           <div className="flex flex-col gap-2">
-            <div className="text-4xl font-bold">Generate Accomplishment Report</div>
+            <div className="text-4xl font-bold">Generated Files</div>
           </div>
 
           <div className="mt-8">
@@ -105,12 +105,12 @@ export default function AccomplishmentReportTemplatePage() {
                         type="button"
                         onClick={() =>
                           router.push(
-                            `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}${file.filePath}/message`
+                            `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${file.filePath}/message`
                           )
                         }
                         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                       >
-                        Generate Message
+                        View Message
                       </button>
                     )}
                     {file.title === 'Other Letters' && (
@@ -119,7 +119,7 @@ export default function AccomplishmentReportTemplatePage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}${file.filePath}${paths.REQUEST_LETTER}`
+                              `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${file.filePath}${paths.REQUEST_LETTER}`
                             )
                           }
                           className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
@@ -130,7 +130,7 @@ export default function AccomplishmentReportTemplatePage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}${file.filePath}${paths.EXCUSE_LETTER}`
+                              `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${file.filePath}${paths.EXCUSE_LETTER}`
                             )
                           }
                           className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
@@ -141,7 +141,7 @@ export default function AccomplishmentReportTemplatePage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}${file.filePath}${paths.INVITATION_LETTER}`
+                              `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${file.filePath}${paths.INVITATION_LETTER}`
                             )
                           }
                           className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
@@ -156,12 +156,12 @@ export default function AccomplishmentReportTemplatePage() {
                         type="button"
                         onClick={() =>
                           router.push(
-                            `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}${file.filePath}`
+                            `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${file.filePath}`
                           )
                         }
                         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                       >
-                        Generate
+                        View
                       </button>
                     )}
                   </div>

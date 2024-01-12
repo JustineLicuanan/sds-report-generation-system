@@ -95,7 +95,7 @@ export default function ResolutionPage() {
               type="button"
               onClick={() =>
                 router.push(
-                  `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}`
+                  `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}`
                 )
               }
               className="mt-4 rounded-sm border border-gray bg-gray px-3 active:scale-95"
@@ -104,9 +104,26 @@ export default function ResolutionPage() {
             </button>
             <button
               type="button"
+              className="mt-4 rounded-sm border border-red bg-red px-3 text-white active:scale-95"
+            >
+              Delete
+            </button>
+            <button
+              type="button"
               className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
             >
               Save
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                router.push(
+                  `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${paths.CBL}${paths.PRINT}`
+                )
+              }
+              className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+            >
+              Preview
             </button>
           </div>
         </div>
