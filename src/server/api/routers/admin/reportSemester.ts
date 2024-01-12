@@ -14,7 +14,7 @@ export const reportSemesterRouter = createTRPCRouter({
 
   create: adminProcedure
     .input(schemas.admin.reportSemester.create)
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
         const reportSemester = await ctx.db.reportSemester.create({ data: input });
         return reportSemester;
@@ -27,7 +27,7 @@ export const reportSemesterRouter = createTRPCRouter({
       }
     }),
 
-  update: adminProcedure.input(schemas.admin.reportSemester.update).query(({ ctx, input }) => {
+  update: adminProcedure.input(schemas.admin.reportSemester.update).mutation(({ ctx, input }) => {
     const { id, ...data } = input;
     return ctx.db.reportSemester.update({
       where: { id, archivedAt: !!input.id ? undefined : '' },
@@ -35,7 +35,7 @@ export const reportSemesterRouter = createTRPCRouter({
     });
   }),
 
-  archive: adminProcedure.query(({ ctx }) => {
+  archive: adminProcedure.mutation(({ ctx }) => {
     return ctx.db.reportSemester.update({
       where: { archivedAt: '' },
       data: { archivedAt: new Date().toISOString() },
@@ -44,7 +44,7 @@ export const reportSemesterRouter = createTRPCRouter({
 
   unarchive: adminProcedure
     .input(schemas.admin.reportSemester.unarchive)
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       try {
         const reportSemester = await ctx.db.reportSemester.update({
           where: { id: input.id },
