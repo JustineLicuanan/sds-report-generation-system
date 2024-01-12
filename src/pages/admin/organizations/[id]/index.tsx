@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebar from '~/components/admin-side-bar-menu';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -31,7 +31,7 @@ export default function OrganizationInformationPage() {
   return (
     <>
       <Head>
-        <title>{`List of Reports ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Organization Profile ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -63,13 +63,24 @@ export default function OrganizationInformationPage() {
 
             {/* Buttons */}
             <div className=" flex w-1/3 flex-col justify-evenly">
-              <button type="button" className="rounded-sm bg-yellow px-4 py-2 text-xl">
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(
+                    `${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.ORGANIZATION_EDIT}`
+                  )
+                }
+                className="rounded-sm bg-yellow px-4 py-2 text-xl"
+              >
                 Edit Profile
               </button>
-              <button type="button" className="rounded-sm bg-yellow px-4 py-2 text-xl">
-                Messages
-              </button>
-              <button type="button" className="rounded-sm bg-yellow px-4 py-2 text-xl">
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.ARCHIVES}`)
+                }
+                className="rounded-sm bg-yellow px-4 py-2 text-xl"
+              >
                 Archived Files
               </button>
             </div>
@@ -207,18 +218,6 @@ export default function OrganizationInformationPage() {
               <div className="text-lg font-bold">Accomplishment Report Status</div>
               <div className="text-xl  text-green">Done</div>
               <div className="mt-2 flex justify-between gap-2">
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  Generate
-                </button>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                >
-                  View In-Depth
-                </button>
                 <button
                   type="button"
                   className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"

@@ -45,6 +45,7 @@ export const paths = {
   INVITATION_LETTER: '/invitation',
   ARCHIVES: '/archives',
   GENERATED_FILES: '/generated',
+  UPLOADS: '/uploads',
 
   FINANCIAL_STATEMENT: '/financial-statement',
   MODIFY_FINANCIAL_STATEMENT: '/modify',
