@@ -5,7 +5,7 @@ import {
 } from '@prisma/client';
 import { z } from 'zod';
 
-import { OrderBy, jsonSchema } from '~/zod-schemas';
+import { OrderBy, jsonSchema } from '~/zod-schemas/utils';
 
 const adminSchemas = {
   get: z

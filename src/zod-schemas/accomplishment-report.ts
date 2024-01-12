@@ -1,7 +1,7 @@
 import { SemReportStatus } from '@prisma/client';
 import { z } from 'zod';
 
-import { OrderBy } from '~/zod-schemas';
+import { OrderBy } from '~/zod-schemas/utils';
 
 const adminSchemas = {
   get: z
