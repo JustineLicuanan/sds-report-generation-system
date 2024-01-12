@@ -1,5 +1,6 @@
 import { accomplishmentReportRouter } from '~/server/api/routers/admin/accomplishment-report';
 import { announcementRouter } from '~/server/api/routers/admin/announcement';
+import { ARGeneratedRouter } from '~/server/api/routers/admin/ar-generated';
 import { commentRouter } from '~/server/api/routers/admin/comment';
 import { logRouter } from '~/server/api/routers/admin/log';
 import { notificationRouter } from '~/server/api/routers/admin/notification';
@@ -22,6 +23,7 @@ export const adminRouter = createTRPCRouter({
   // Extras
   reportSemester: reportSemesterRouter,
   AR: accomplishmentReportRouter,
+  ARGenerated: ARGeneratedRouter,
 
   // TODO: To remove
   announcement: announcementRouter,
