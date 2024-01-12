@@ -30,7 +30,7 @@ export const reportSemesterRouter = createTRPCRouter({
   update: adminProcedure.input(schemas.admin.reportSemester.update).query(({ ctx, input }) => {
     const { id, ...data } = input;
     return ctx.db.reportSemester.update({
-      where: { id, archivedAt: input.id ? undefined : '' },
+      where: { id, archivedAt: !!input.id ? undefined : '' },
       data,
     });
   }),
