@@ -189,9 +189,8 @@ model ARTemplate {
     isActive    Boolean                @default(false)
     createdAt   DateTime               @default(now())
     updatedAt   DateTime               @updatedAt
-    deletedAt   String                 @default("")
 
-    @@unique([contentType, name, deletedAt])
+    @@unique([contentType, name])
 }
 
 model FinancialStatement {
