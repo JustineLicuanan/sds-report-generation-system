@@ -1,6 +1,7 @@
 import { accomplishmentReportRouter } from '~/server/api/routers/shared/accomplishment-report';
 import { announcementRouter } from '~/server/api/routers/shared/announcement';
 import { ARGeneratedRouter } from '~/server/api/routers/shared/ar-generated';
+import { ARTemplateRouter } from '~/server/api/routers/shared/ar-template';
 import { ARUploadRouter } from '~/server/api/routers/shared/ar-upload';
 import { commentRouter } from '~/server/api/routers/shared/comment';
 import { logRouter } from '~/server/api/routers/shared/log';
@@ -22,6 +23,7 @@ export const sharedRouter = createTRPCRouter({
   AR: accomplishmentReportRouter,
   ARUpload: ARUploadRouter,
   ARGenerated: ARGeneratedRouter,
+  ARTemplate: ARTemplateRouter,
 
   // TODO: To remove
   announcement: announcementRouter,
