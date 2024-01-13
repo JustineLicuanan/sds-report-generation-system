@@ -5,6 +5,7 @@ import { ARGeneratedRouter } from '~/server/api/routers/shared/ar-generated';
 import { ARTemplateRouter } from '~/server/api/routers/shared/ar-template';
 import { ARUploadRouter } from '~/server/api/routers/shared/ar-upload';
 import { commentRouter } from '~/server/api/routers/shared/comment';
+import { financialStatementRouter } from '~/server/api/routers/shared/financial-statement';
 import { logRouter } from '~/server/api/routers/shared/log';
 import { notificationRouter } from '~/server/api/routers/shared/notification';
 import { organizationRouter } from '~/server/api/routers/shared/organization';
@@ -26,6 +27,7 @@ export const sharedRouter = createTRPCRouter({
   ARUpload: ARUploadRouter,
   ARGenerated: ARGeneratedRouter,
   ARTemplate: ARTemplateRouter,
+  FS: financialStatementRouter,
 
   // TODO: To remove
   announcement: announcementRouter,
