@@ -9,7 +9,7 @@ const adminSchemas = {
       where: z
         .object({
           id: z.string().cuid().optional(),
-          month: z.number().int().optional(),
+          month: z.number().int().min(1).max(12).optional(),
           year: z.number().int().optional(),
           financialStatementId: z.string().cuid().optional(),
           reportSemesterId: z.string().cuid().optional(),
@@ -37,7 +37,7 @@ const sharedSchemas = {
       where: z
         .object({
           id: z.string().cuid().optional(),
-          month: z.number().int().optional(),
+          month: z.number().int().min(1).max(12).optional(),
           year: z.number().int().optional(),
           financialStatementId: z.string().cuid().optional(),
           reportSemesterId: z.string().cuid().optional(),
@@ -55,11 +55,11 @@ const sharedSchemas = {
     })
     .optional(),
 
-  create: z.object({ month: z.number().int(), year: z.number().int() }),
+  create: z.object({ month: z.number().int().min(1).max(12), year: z.number().int() }),
 
   update: z.object({
     id: z.string().cuid(),
-    month: z.number().int().optional(),
+    month: z.number().int().min(1).max(12).optional(),
     year: z.number().int().optional(),
   }),
 
