@@ -18,13 +18,13 @@ const adminSchemas = {
       include: z
         .object({
           accomplishmentReports: z.literal(true).optional(),
-          ARUploads: z.literal(true).optional(),
-          ARGenerated: z.literal(true).optional(),
+          // ARUploads: z.literal(true).optional(),
+          // ARGenerated: z.literal(true).optional(),
           financialStatements: z.literal(true).optional(),
           FSMonthly: z.literal(true).optional(),
-          FSInflows: z.literal(true).optional(),
+          // FSInflows: z.literal(true).optional(),
           FSInflowRows: z.literal(true).optional(),
-          FSOutflows: z.literal(true).optional(),
+          // FSOutflows: z.literal(true).optional(),
           FSOutflowRows: z.literal(true).optional(),
         })
         .optional(),

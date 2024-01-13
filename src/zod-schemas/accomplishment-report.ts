@@ -17,8 +17,8 @@ const adminSchemas = {
         .optional(),
       include: z
         .object({
-          uploads: z.literal(true).optional(),
-          generated: z.literal(true).optional(),
+          // uploads: z.literal(true).optional(),
+          // generated: z.literal(true).optional(),
           reportSemester: z.literal(true).optional(),
           organization: z.literal(true).optional(),
         })
@@ -41,8 +41,8 @@ const sharedSchemas = {
         .optional(),
       include: z
         .object({
-          uploads: z.literal(true).optional(),
-          generated: z.literal(true).optional(),
+          // uploads: z.literal(true).optional(),
+          // generated: z.literal(true).optional(),
           reportSemester: z.literal(true).optional(),
           organization: z.literal(true).optional(),
         })
@@ -55,8 +55,8 @@ const sharedSchemas = {
     .object({
       include: z
         .object({
-          uploads: z.literal(true).optional(),
-          generated: z.literal(true).optional(),
+          // uploads: z.literal(true).optional(),
+          // generated: z.literal(true).optional(),
           reportSemester: z.literal(true).optional(),
           organization: z.literal(true).optional(),
         })
