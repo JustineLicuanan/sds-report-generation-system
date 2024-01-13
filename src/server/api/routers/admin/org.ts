@@ -46,6 +46,7 @@ export const orgRouter = createTRPCRouter({
       return ctx.db.organization.findMany({
         where: { id: input?.id, category: input?.category, isArchived: input?.isArchived ?? false },
         include: {
+          ...(input?.include ?? {}),
           members: input?.includeMembers,
           reports: input?.includeReports,
           comments: input?.includeComments,

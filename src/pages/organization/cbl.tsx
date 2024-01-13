@@ -35,7 +35,7 @@ export default function MemberPage() {
     setFileName(result.info?.original_filename);
   };
 
-  const uploadCBLMutation = api.shared.organization.uploadCbl.useMutation({
+  const uploadCBLMutation = api.shared.organization.update.useMutation({
     onSuccess: async () => {
       await utils.shared.organization.invalidate();
     },

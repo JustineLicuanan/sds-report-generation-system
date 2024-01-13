@@ -56,6 +56,9 @@ export default function CreateOrganizationPage() {
       name: '',
       acronym: '',
       description: '',
+      adviser1: '',
+      adviser2: '',
+      deptChairperson: '',
       category: OrganizationCategory.STUDENT_GOVERNING_BODY,
       members: [{ email: '', name: '', isActive: true }],
     },
@@ -115,7 +118,13 @@ export default function CreateOrganizationPage() {
             <Form {...createOrganizationForm}>
               <form
                 className="container flex max-w-screen-lg flex-col justify-center gap-4 px-4 py-6 md:px-8"
-                onSubmit={createOrganizationForm.handleSubmit(onSubmitCreateOrganization)}
+                onSubmit={createOrganizationForm.handleSubmit(onSubmitCreateOrganization, (err) => {
+                  toast({
+                    variant: 'destructive',
+                    title: '❌ Creation of Organization Failed',
+                    description: `${err.members?.root?.message}`,
+                  });
+                })}
               >
                 <header className="flex items-center gap-4 md:gap-2">
                   <Users className="h-8 w-8" />
@@ -199,8 +208,68 @@ export default function CreateOrganizationPage() {
                       <FormControl>
                         <Textarea
                           rows={6}
-                          placeholder="Description"
+                          placeholder="Description (Optional)"
                           className="resize-none"
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <div className="h-4">
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createOrganizationForm.control}
+                  name="adviser1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Organization Adviser 1 (Optional)"
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <div className="h-4">
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createOrganizationForm.control}
+                  name="adviser2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Organization Adviser 2 (Optional)"
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <div className="h-4">
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createOrganizationForm.control}
+                  name="deptChairperson"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Department Chairperson (Optional)"
                           disabled={createOrganization.isLoading || createOrganization.isSuccess}
                           {...field}
                         />
