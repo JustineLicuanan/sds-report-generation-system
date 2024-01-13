@@ -3,6 +3,7 @@ import { announcementRouter } from '~/server/api/routers/admin/announcement';
 import { appointmentRouter } from '~/server/api/routers/admin/appointment';
 import { ARGeneratedRouter } from '~/server/api/routers/admin/ar-generated';
 import { commentRouter } from '~/server/api/routers/admin/comment';
+import { curriculumVitaeRouter } from '~/server/api/routers/admin/curriculum-vitae';
 import { financialStatementRouter } from '~/server/api/routers/admin/financial-statement';
 import { FSInflowRouter } from '~/server/api/routers/admin/fs-inflow';
 import { FSInflowRowRouter } from '~/server/api/routers/admin/fs-inflow-row';
@@ -14,6 +15,7 @@ import { notificationRouter } from '~/server/api/routers/admin/notification';
 import { orgRouter } from '~/server/api/routers/admin/org';
 import { reportRouter } from '~/server/api/routers/admin/report';
 import { reportSemesterRouter } from '~/server/api/routers/admin/report-semester';
+import { reportSignatoryRouter } from '~/server/api/routers/admin/report-signatory';
 import { sessionRouter } from '~/server/api/routers/admin/session';
 import { settingsRouter } from '~/server/api/routers/admin/settings';
 import { userRouter } from '~/server/api/routers/admin/user';
@@ -29,9 +31,11 @@ export const adminRouter = createTRPCRouter({
 
   // Extras
   appointment: appointmentRouter,
+  reportSignatory: reportSignatoryRouter,
   reportSemester: reportSemesterRouter,
   AR: accomplishmentReportRouter,
   ARGenerated: ARGeneratedRouter,
+  curriculumVitae: curriculumVitaeRouter,
   FS: financialStatementRouter,
   FSMonthly: FSMonthlyRouter,
   FSInflow: FSInflowRouter,
