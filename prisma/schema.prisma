@@ -48,13 +48,13 @@ model Organization {
     updatedAt   DateTime             @updatedAt
 
     // Extras
-    adviser1              String?
-    adviser2              String?
-    deptChairperson       String?
-    preamble              String?
-    mission               String?
-    vision                String?
-    goals                 String?
+    adviser1              String                 @default("")
+    adviser2              String                 @default("")
+    deptChairperson       String                 @default("")
+    preamble              String                 @default("")
+    mission               String                 @default("")
+    vision                String                 @default("")
+    goals                 String                 @default("")
     chart                 String?
     chartId               String?
     cbl                   String?
