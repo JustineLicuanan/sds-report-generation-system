@@ -26,13 +26,13 @@ export const FSInflowRowRouter = createTRPCRouter({
           reportSemesterId: true,
           archivedAt: true,
         },
-        where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
+        where: { id: input.inflowId, organizationId: ctx.session.user.organizationId },
       });
 
       if (!fSInflow) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: 'Financial Statement not found.',
+          message: 'Inflow not found.',
         });
       }
 
@@ -51,13 +51,13 @@ export const FSInflowRowRouter = createTRPCRouter({
           reportSemesterId: true,
           archivedAt: true,
         },
-        where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
+        where: { id: input.inflowId, organizationId: ctx.session.user.organizationId },
       });
 
       if (!fSInflow) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: 'Financial Statement not found.',
+          message: 'Inflow not found.',
         });
       }
 

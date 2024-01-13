@@ -5,9 +5,10 @@ import { ARGeneratedRouter } from '~/server/api/routers/admin/ar-generated';
 import { commentRouter } from '~/server/api/routers/admin/comment';
 import { financialStatementRouter } from '~/server/api/routers/admin/financial-statement';
 import { FSInflowRouter } from '~/server/api/routers/admin/fs-inflow';
-import { FSInflowRowRowRouter } from '~/server/api/routers/admin/fs-inflow-row';
+import { FSInflowRowRouter } from '~/server/api/routers/admin/fs-inflow-row';
 import { FSMonthlyRouter } from '~/server/api/routers/admin/fs-monthly';
 import { FSOutflowRouter } from '~/server/api/routers/admin/fs-outflow';
+import { FSOutflowRowRouter } from '~/server/api/routers/admin/fs-outflow-row';
 import { logRouter } from '~/server/api/routers/admin/log';
 import { notificationRouter } from '~/server/api/routers/admin/notification';
 import { orgRouter } from '~/server/api/routers/admin/org';
@@ -34,8 +35,9 @@ export const adminRouter = createTRPCRouter({
   FS: financialStatementRouter,
   FSMonthly: FSMonthlyRouter,
   FSInflow: FSInflowRouter,
-  FSInflowRow: FSInflowRowRowRouter,
+  FSInflowRow: FSInflowRowRouter,
   FSOutflow: FSOutflowRouter,
+  FSOutflowRow: FSOutflowRowRouter,
 
   // TODO: To remove
   announcement: announcementRouter,
