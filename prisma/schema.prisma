@@ -268,20 +268,21 @@ model FSInflow {
 
     organization   Organization @relation(fields: [organizationId], references: [id])
     organizationId String
+
+    @@unique([id, category])
 }
 
 model FSInflowRow {
-    id        String           @id @default(cuid())
-    category  FSInflowCategory
+    id        String   @id @default(cuid())
     date      DateTime
     name      String
     ORNumber  String
-    amount    Decimal?         @db.Money
+    amount    Decimal? @db.Money
     receipt   String?
     receiptId String?
-    createdAt DateTime         @default(now())
-    updatedAt DateTime         @updatedAt
-    deletedAt String           @default("")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    // deletedAt String   @default("")
 
     // Additional for IGP
     quantity Int?
@@ -291,8 +292,9 @@ model FSInflowRow {
     monthly   FSMonthly @relation(fields: [monthlyId], references: [id])
     monthlyId String
 
-    inflow   FSInflow @relation(fields: [inflowId], references: [id])
+    inflow   FSInflow         @relation(fields: [inflowId, category], references: [id, category])
     inflowId String
+    category FSInflowCategory
 
     reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
     reportSemesterId String
@@ -334,7 +336,7 @@ model FSOutflowRow {
     receiptId   String?
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-    deletedAt   String   @default("")
+    // deletedAt   String   @default("")
 
     monthly   FSMonthly @relation(fields: [monthlyId], references: [id])
     monthlyId String
