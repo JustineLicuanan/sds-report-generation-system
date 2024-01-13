@@ -124,7 +124,7 @@ export default function AdminAccomplishmentReportPage() {
                     <button
                       type="button"
                       onClick={() => {
-                        router.push({
+                        void router.push({
                           pathname: `${paths.ADMIN}${paths.ORGANIZATION_REPORTS}${
                             paths.ACCOMPLISHMENT_REPORT
                           }/${encodeURIComponent(file.title)}${paths.UPLOADS}/${file.title}`,

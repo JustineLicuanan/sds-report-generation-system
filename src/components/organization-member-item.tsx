@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 import { Loader2, LogOut, Save, Trash2 } from 'lucide-react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 
 import { PositionSelect } from '~/components/position-select';
 import { Button } from '~/components/ui/button';

@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -16,7 +16,6 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function CBL() {
-  
   return (
     <>
       <Head>

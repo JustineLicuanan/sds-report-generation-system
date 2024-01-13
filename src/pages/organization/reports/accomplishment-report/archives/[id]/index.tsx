@@ -6,7 +6,6 @@ import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
-import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -21,8 +20,6 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AccomplishmentReportPage() {
-  const getOrgQuery = api.shared.organization.get.useQuery();
-  const org = getOrgQuery.data;
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -120,7 +117,7 @@ export default function AccomplishmentReportPage() {
                     <button
                       type="button"
                       onClick={() => {
-                        router.push({
+                        void router.push({
                           pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${
                             paths.ACCOMPLISHMENT_REPORT
                           }/${encodeURIComponent(file.title)}`,

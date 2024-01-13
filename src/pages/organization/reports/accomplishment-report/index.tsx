@@ -179,7 +179,7 @@ export default function AccomplishmentReportPage() {
                     <button
                       type="button"
                       onClick={() => {
-                        router.push({
+                        void router.push({
                           pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${
                             paths.ACCOMPLISHMENT_REPORT
                           }${paths.UPLOADS}/${encodeURIComponent(file.title)}`,

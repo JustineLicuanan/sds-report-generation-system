@@ -13,7 +13,6 @@ import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { getOrganizationsCounts } from '~/utils/getOrganizationsCounts';
-import { OrderBy } from '~/zod-schemas/shared/notification';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -33,11 +32,8 @@ export default function AdminDashboardPage() {
   const getReportQuery = api.admin.report.get.useQuery({ includeCreatedBy: true });
   const report = getReportQuery.data ?? [];
 
-  const getNotificationQuery = api.admin.notification.get.useQuery({
-    orderByCreatedAt: OrderBy.DESC,
-  });
-
   const router = useRouter();
+
   return (
     <>
       <Head>

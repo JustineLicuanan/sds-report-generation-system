@@ -1,19 +1,13 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { type z } from 'zod';
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebar from '~/components/admin-side-bar-menu';
 import NotificationAlert from '~/components/notification-alert';
-import OrgNavBar from '~/components/organization-navigation-bar';
-import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
-import { commentSchemas } from '~/zod-schemas/shared/comment';
-
-type InputsComment = z.infer<typeof commentSchemas.createInReport>;
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);

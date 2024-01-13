@@ -42,7 +42,7 @@ export default function AddMemberInformationPage() {
         <OrganizationSideBarMenu />
 
         <div id="main-content" className="mx-4 my-4  w-full">
-          <div className="text-2xl font-bold">Add Member's Curriculum Vitae</div>
+          <div className="text-2xl font-bold">Add Member&apos;s Curriculum Vitae</div>
           <div className="mt-8 flex flex-col gap-2">
             <div className="flex items-center gap-4">
               <label htmlFor="member-name">Name:</label>

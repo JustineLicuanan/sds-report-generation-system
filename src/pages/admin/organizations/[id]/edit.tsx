@@ -160,7 +160,7 @@ export default function UpdateOrganizationPage() {
                   <h1 className="text-3xl font-semibold">
                     Edit Organization:{' '}
                     <Link
-                      href={`${paths.ADMIN}${paths.ORGANIZATIONS}/${router.query.id}`}
+                      href={`${paths.ADMIN}${paths.ORGANIZATIONS}/${router.query.id as string}`}
                       className="text-c-primary hover:underline"
                     >
                       {organization?.acronym}

@@ -22,7 +22,6 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function AccomplishmentReportTemplatePage() {
   // const router = useRouter();
-  const [markDone, setMarkDone] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -108,7 +107,7 @@ export default function AccomplishmentReportTemplatePage() {
                     <button
                       type="button"
                       onClick={() => {
-                        router.push({
+                        void router.push({
                           pathname: `${paths.ADMIN}${paths.ORGANIZATION_REPORTS}${
                             paths.ACCOMPLISHMENT_REPORT
                           }${paths.GENERATED_FILES}/${encodeURIComponent(file.title)}`,
