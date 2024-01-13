@@ -7,6 +7,7 @@ import { financialStatementSchemas } from '~/zod-schemas/financial-statement';
 import { FSInflowSchemas } from '~/zod-schemas/fs-inflow';
 import { FSInflowRowSchemas } from '~/zod-schemas/fs-inflow-row';
 import { FSMonthlySchemas } from '~/zod-schemas/fs-monthly';
+import { FSOutflowSchemas } from '~/zod-schemas/fs-outflow';
 import { reportSemesterSchemas } from '~/zod-schemas/report-semester';
 
 export const schemas = {
@@ -21,6 +22,7 @@ export const schemas = {
     FSMonthly: FSMonthlySchemas.admin,
     FSInflow: FSInflowSchemas.admin,
     FSInflowRow: FSInflowRowSchemas.admin,
+    FSOutflow: FSOutflowSchemas.admin,
   },
 
   shared: {
@@ -32,5 +34,6 @@ export const schemas = {
     FSMonthly: FSMonthlySchemas.shared,
     FSInflow: FSInflowSchemas.shared,
     FSInflowRow: FSInflowRowSchemas.shared,
+    FSOutflow: FSOutflowSchemas.shared,
   },
 };

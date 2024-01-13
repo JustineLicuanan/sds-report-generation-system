@@ -9,6 +9,7 @@ import { financialStatementRouter } from '~/server/api/routers/shared/financial-
 import { FSInflowRouter } from '~/server/api/routers/shared/fs-inflow';
 import { FSInflowRowRouter } from '~/server/api/routers/shared/fs-inflow-row';
 import { FSMonthlyRouter } from '~/server/api/routers/shared/fs-monthly';
+import { FSOutflowRouter } from '~/server/api/routers/shared/fs-outflow';
 import { logRouter } from '~/server/api/routers/shared/log';
 import { notificationRouter } from '~/server/api/routers/shared/notification';
 import { organizationRouter } from '~/server/api/routers/shared/organization';
@@ -34,6 +35,7 @@ export const sharedRouter = createTRPCRouter({
   FSMonthly: FSMonthlyRouter,
   FSInflow: FSInflowRouter,
   FSInflowRow: FSInflowRowRouter,
+  FSOutflow: FSOutflowRouter,
 
   // TODO: To remove
   announcement: announcementRouter,
