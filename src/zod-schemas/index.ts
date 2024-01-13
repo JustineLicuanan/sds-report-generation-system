@@ -4,6 +4,7 @@ import { ARGeneratedSchemas } from '~/zod-schemas/ar-generated';
 import { ARTemplateSchemas } from '~/zod-schemas/ar-template';
 import { ARUploadSchemas } from '~/zod-schemas/ar-upload';
 import { financialStatementSchemas } from '~/zod-schemas/financial-statement';
+import { FSMonthlySchemas } from '~/zod-schemas/fs-monthly';
 import { reportSemesterSchemas } from '~/zod-schemas/report-semester';
 
 export const schemas = {
@@ -14,7 +15,8 @@ export const schemas = {
     ARUpload: ARUploadSchemas.admin,
     ARGenerated: ARGeneratedSchemas.admin,
     ARTemplate: ARTemplateSchemas.admin,
-    FS: financialStatementSchemas.admin
+    FS: financialStatementSchemas.admin,
+    FSMonthly: FSMonthlySchemas.admin,
   },
 
   shared: {
@@ -22,6 +24,7 @@ export const schemas = {
     ARUpload: ARUploadSchemas.shared,
     ARGenerated: ARGeneratedSchemas.shared,
     ARTemplate: ARTemplateSchemas.shared,
-    FS: financialStatementSchemas.shared
+    FS: financialStatementSchemas.shared,
+    FSMonthly: FSMonthlySchemas.shared,
   },
 };
