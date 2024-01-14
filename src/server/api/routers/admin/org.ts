@@ -24,6 +24,7 @@ export const orgRouter = createTRPCRouter({
       return ctx.db.organization.create({
         data: {
           ...data,
+          signatoryInfo: { create: {} },
           members: {
             connectOrCreate: members.map((member) => ({
               where: { email: member.email },

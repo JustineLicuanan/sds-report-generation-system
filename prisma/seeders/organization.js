@@ -11,6 +11,7 @@ exports.organizationSeeder = async () => {
       name: 'Builders of Innovative Technologist Society',
       acronym: 'BITS',
       category: OrganizationCategory.ACADEMIC_ORGANIZATION,
+      signatoryInfo: { create: {} },
     },
   });
 };

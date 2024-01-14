@@ -10,12 +10,14 @@ import { FSInflowRowSchemas } from '~/zod-schemas/fs-inflow-row';
 import { FSMonthlySchemas } from '~/zod-schemas/fs-monthly';
 import { FSOutflowSchemas } from '~/zod-schemas/fs-outflow';
 import { FSOutflowRowSchemas } from '~/zod-schemas/fs-outflow-row';
+import { orgSignatoryInfoSchemas } from '~/zod-schemas/org-signatory-info';
 import { reportSemesterSchemas } from '~/zod-schemas/report-semester';
 import { reportSignatorySchemas } from '~/zod-schemas/report-signatory';
 
 export const schemas = {
   admin: {
     appointment: appointmentSchemas.admin,
+    orgSignatoryInfo: orgSignatoryInfoSchemas.admin,
     reportSignatory: reportSignatorySchemas.admin,
     reportSemester: reportSemesterSchemas.admin,
     AR: accomplishmentReportSchemas.admin,
@@ -32,6 +34,7 @@ export const schemas = {
   },
 
   shared: {
+    orgSignatoryInfo: orgSignatoryInfoSchemas.shared,
     reportSignatory: reportSignatorySchemas.shared,
     AR: accomplishmentReportSchemas.shared,
     ARUpload: ARUploadSchemas.shared,

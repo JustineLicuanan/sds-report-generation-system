@@ -13,6 +13,7 @@ import { FSOutflowRowRouter } from '~/server/api/routers/admin/fs-outflow-row';
 import { logRouter } from '~/server/api/routers/admin/log';
 import { notificationRouter } from '~/server/api/routers/admin/notification';
 import { orgRouter } from '~/server/api/routers/admin/org';
+import { orgSignatoryInfoRouter } from '~/server/api/routers/admin/org-signatory-info';
 import { reportRouter } from '~/server/api/routers/admin/report';
 import { reportSemesterRouter } from '~/server/api/routers/admin/report-semester';
 import { reportSignatoryRouter } from '~/server/api/routers/admin/report-signatory';
@@ -31,6 +32,7 @@ export const adminRouter = createTRPCRouter({
 
   // Extras
   appointment: appointmentRouter,
+  orgSignatoryInfo: orgSignatoryInfoRouter,
   reportSignatory: reportSignatoryRouter,
   reportSemester: reportSemesterRouter,
   AR: accomplishmentReportRouter,

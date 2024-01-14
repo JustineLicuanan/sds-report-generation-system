@@ -14,6 +14,7 @@ import { FSOutflowRouter } from '~/server/api/routers/shared/fs-outflow';
 import { FSOutflowRowRouter } from '~/server/api/routers/shared/fs-outflow-row';
 import { logRouter } from '~/server/api/routers/shared/log';
 import { notificationRouter } from '~/server/api/routers/shared/notification';
+import { orgSignatoryInfoRouter } from '~/server/api/routers/shared/org-signatory-info';
 import { organizationRouter } from '~/server/api/routers/shared/organization';
 import { reportRouter } from '~/server/api/routers/shared/report';
 import { reportSemesterRouter } from '~/server/api/routers/shared/report-semester';
@@ -29,6 +30,7 @@ export const sharedRouter = createTRPCRouter({
 
   // Extras
   appointment: appointmentRouter,
+  orgSignatoryInfo: orgSignatoryInfoRouter,
   reportSignatory: reportSignatoryRouter,
   reportSemester: reportSemesterRouter,
   AR: accomplishmentReportRouter,
