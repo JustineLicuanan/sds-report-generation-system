@@ -45,7 +45,6 @@ respective docs.
 - Implemented a create semester.
 - Implemented the Generated file page.
 
-
 ### Version 0.14.6
 
 - Implemented the form for CBL.

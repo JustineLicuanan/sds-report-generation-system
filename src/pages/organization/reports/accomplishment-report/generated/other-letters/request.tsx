@@ -7,7 +7,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -101,6 +103,10 @@ export default function RequestLetterPage() {
     ],
     version: '2.28.2',
   });
+  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
+  const repSignatory = getReportSignatoryQuery?.data ?? [];
+  const signatories = parseSignatoryObject(repSignatory);
+
   const router = useRouter();
   return (
     <>
@@ -108,7 +114,7 @@ export default function RequestLetterPage() {
         <title>{`Request Letter ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
       <div className="mx-auto my-0 flex max-w-[210mm] flex-col gap-8 ">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center justify-center">
           <Image
             src={logo.PHILIPPINE_LOGO}
             alt="Bagong Pilipinas"
@@ -147,33 +153,33 @@ export default function RequestLetterPage() {
         <div className="items-left mt-4 flex flex-col gap-8">
           <div>Respectfully yours,</div>
           <div className="items-left flex flex-col">
-            <div>[NAME]</div>
+            <div className='font-bold'>[NAME]</div>
             <div>[Org Name] President</div>
           </div>
           <div>Checked By:</div>
           <div className="items-left flex flex-col">
-            <div>[NAME]</div>
+            <div className='font-bold'>[NAME]</div>
             <div>CSG President</div>
           </div>
           <div>Noted By:</div>
           <div className="items-left flex gap-28">
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className='font-bold'>[NAME]</div>
               <div>[Org Name] Adviser</div>
             </div>
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className='font-bold'>[NAME]</div>
               <div>[Org Name] Adviser</div>
             </div>
           </div>
           <div>Recommending Approval:</div>
           <div className="items-left mt-4 flex flex-col">
-            <div>[NAME]</div>
-            <div>Department of Physical Education</div>
+            <div className='font-bold'>[NAME]</div>
+            <div>Chairperson of Department of Physical Education </div>
           </div>
           <div>Approved by:</div>
           <div className="items-left mt-4 flex flex-col">
-            <div>[NAME]</div>
+            <div>{signatories['Campus Administrator']}</div>
             <div>Campus Administrator</div>
           </div>
         </div>

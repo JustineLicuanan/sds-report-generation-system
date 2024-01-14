@@ -2,7 +2,9 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -16,6 +18,9 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function SemSignatories() {
+  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
+  const repSignatory = getReportSignatoryQuery?.data ?? [];
+  const signatories = parseSignatoryObject(repSignatory);
   return (
     <>
       <Head>
@@ -71,17 +76,17 @@ export default function SemSignatories() {
           </div>
           <div className="mt-4 flex justify-between gap-32">
             <div className="flex flex-col items-center">
-              <div>[NAME]</div>
+              <div>{signatories['SDS Coordinator']}</div>
               <div>SDS Coordinator</div>
             </div>
             <div className="flex flex-col items-center">
-              <div>[NAME]</div>
+              <div>{signatories['OSAS Head']}</div>
               <div>OSAS HEAD</div>
             </div>
           </div>
           <div>Approved By:</div>
           <div className="flex flex-col items-center">
-            <div>[NAME]</div>
+            <div>{signatories['Campus Administrator']}</div>
             <div>Campus Administrator</div>
           </div>
         </div>

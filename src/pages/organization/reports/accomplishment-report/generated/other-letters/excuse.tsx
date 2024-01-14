@@ -7,7 +7,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -22,7 +24,7 @@ export const getServerSideProps = (async (ctx) => {
 
 const EditorBlock = dynamic(() => import('~/components/editor'), { ssr: false });
 
-export default function RequestLetterPage() {
+export default function ExcuseLetterPage() {
   const [content, setContent] = useState<OutputData>({
     time: 1705037343671,
     blocks: [
@@ -104,14 +106,19 @@ export default function RequestLetterPage() {
     ],
     version: '2.28.2',
   });
+  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
+  const repSignatory = getReportSignatoryQuery?.data ?? [];
+  const signatories = parseSignatoryObject(repSignatory);
+
+  const [chairpersonName, setChairpersonName] = useState('');
   const router = useRouter();
   return (
     <>
       <Head>
-        <title>{`Request Letter ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Excuse Letter ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
       <div className="mx-auto my-0 flex max-w-[210mm] flex-col gap-8 ">
-        <div className="flex gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Image
             src={logo.PHILIPPINE_LOGO}
             alt="Bagong Pilipinas"
@@ -154,22 +161,32 @@ export default function RequestLetterPage() {
             <div className="flex flex-col gap-8">
               <div>Prepared by:</div>
               <div className="items-left flex flex-col">
-                <div>[NAME]</div>
+                <div className='font-bold'>[NAME]</div>
                 <div>[Org Name] Adviser</div>
               </div>
             </div>
             <div className="flex flex-col gap-8">
               <div>Recommending Approval:</div>
               <div className="items-left flex flex-col">
-                <div>[NAME]</div>
+                <div className='font-bold'>[NAME]</div>
                 <div>[Org Name] Adviser</div>
               </div>
             </div>
           </div>
           <div>Recommending Approval:</div>
           <div className="items-left mt-4 flex flex-col">
-            <div>[NAME]</div>
-            <div>Campus Administrator</div>
+            <div>
+              <input
+                type="text"
+                name=""
+                placeholder="Enter name"
+                id="chairperson-dept-pe"
+                onChange={(e) => setChairpersonName(e.target.value)}
+                className="rounded-sm border border-input px-1 print:hidden"
+                value={chairpersonName}
+              />
+              <div className="hidden print:block">{chairpersonName}</div>
+            </div>
           </div>
         </div>
         <div id="hide-element" className="mb-4 flex justify-end gap-4">

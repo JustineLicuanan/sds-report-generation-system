@@ -68,14 +68,20 @@ export default function OrganizationPage() {
           </div>
 
           <div className="col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-2xl font-bold">Setup your organization</div>
+            <div className="text-2xl font-bold">Setup your organization's positions</div>
             <div className="text-center font-medium">
               Establish your organization by completing the required fields and providing necessary
               information as indicated.
             </div>
-            <div className="h-4 w-full rounded-full bg-gray">
-              <div className="h-4 w-[50%] rounded-full bg-green"></div>
-            </div>
+            <button
+              type="button"
+              onClick={() =>
+                router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.POSITIONS}`)
+              }
+              className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+            >
+              Setup positions
+            </button>
           </div>
 
           <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">

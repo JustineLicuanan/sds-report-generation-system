@@ -7,7 +7,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -55,6 +57,10 @@ export default function GeneratedActivityProposalPage() {
     ],
     version: '2.28.2',
   });
+  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
+  const repSignatory = getReportSignatoryQuery?.data ?? [];
+  const signatories = parseSignatoryObject(repSignatory);
+
   const router = useRouter();
   return (
     <>
@@ -102,39 +108,39 @@ export default function GeneratedActivityProposalPage() {
         <div className="mt-4 flex flex-col items-center gap-8">
           <div>Prepared By:</div>
           <div className="flex flex-col items-center">
-            <div>[NAME]</div>
+            <div className="font-bold">[NAME]</div>
             <div>[Org Name] Assistant Secretary</div>
           </div>
           <div>Checked By:</div>
           <div className="flex flex-col items-center">
-            <div>[NAME]</div>
+            <div className="font-bold">[NAME]</div>
             <div>[Org Name] President</div>
           </div>
           <div>Noted By:</div>
           <div className="flex items-center gap-28">
             <div className="flex flex-col items-center">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Adviser</div>
             </div>
             <div className="flex flex-col items-center">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Adviser</div>
             </div>
           </div>
           <div>Recommending Approval:</div>
           <div className="flex items-center gap-28">
             <div className="mt-4 flex flex-col items-center">
-              <div>[NAME]</div>
+              <div className="font-bold">{signatories['SDS Coordinator']}</div>
               <div>SDS Coordinator</div>
             </div>
             <div className="mt-4 flex flex-col items-center">
-              <div>[NAME]</div>
+              <div className="font-bold">{signatories['OSAS Head']}</div>
               <div>OSAS Head</div>
             </div>
           </div>
           <div>Recommending Approval:</div>
           <div className="mt-4 flex flex-col items-center">
-            <div>[NAME]</div>
+            <div className="font-bold">{signatories['Campus Administrator']}</div>
             <div>Campus Administrator</div>
           </div>
         </div>

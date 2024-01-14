@@ -101,6 +101,10 @@ export default function InvitationLetterPage() {
     ],
     version: '2.28.2',
   });
+
+  const [invitedName, setInvitedName] = useState('');
+  const [invitedPosition, setInvitedPosition] = useState('');
+  const [invitedBusinessName, setInvitedBusinessName] = useState('');
   const router = useRouter();
   return (
     <>
@@ -148,49 +152,82 @@ export default function InvitationLetterPage() {
           <div>Respectfully yours,</div>
           <div className="items-left flex gap-28">
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] President</div>
             </div>
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Vice President</div>
             </div>
           </div>
           <div className="items-left flex gap-28">
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Secretary</div>
             </div>
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Finance</div>
             </div>
           </div>
           <div className="items-left flex gap-28">
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Training Director</div>
             </div>
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Recruitment Coordinator</div>
             </div>
           </div>
           <div>Noted By:</div>
           <div className="items-left flex gap-28">
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Adviser</div>
             </div>
             <div className="items-left flex flex-col">
-              <div>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Adviser</div>
             </div>
           </div>
           <div>Received by:</div>
-          <div className="items-left mt-4 flex flex-col">
-            <div>[NAME]</div>
-            <div>[Position], [Business name]</div>
+          <div className="items-left mt-4 flex flex-col gap-2 print:gap-0">
+            <div className="hidden font-bold print:block">{invitedName}</div>
+            <div className="hidden print:block">
+              {invitedPosition}, {invitedBusinessName}
+            </div>
+            <div>
+              <input
+                type="text"
+                name=""
+                placeholder="Name e.g John Doe"
+                id=""
+                onChange={(e) => setInvitedName(e.target.value)}
+                className="rounded-sm border border-input px-1 print:hidden"
+                value={invitedName}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                name=""
+                placeholder="Position e.g Owner"
+                id=""
+                onChange={(e) => setInvitedPosition(e.target.value)}
+                className="rounded-sm border border-input px-1 print:hidden"
+                value={invitedPosition}
+              />{' '}
+              <input
+                type="text"
+                name=""
+                placeholder="BusinessName e.g John Doe Inc."
+                id=""
+                onChange={(e) => setInvitedBusinessName(e.target.value)}
+                className="w-1/2 rounded-sm border border-input px-1 print:hidden"
+                value={invitedBusinessName}
+              />
+            </div>
           </div>
         </div>
         <div id="hide-element" className="mb-4 flex justify-end gap-4">

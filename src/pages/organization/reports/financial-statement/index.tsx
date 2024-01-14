@@ -59,23 +59,50 @@ export default function FinancialStatementPage() {
             </div>
 
             <div className="col-span-2 row-span-1 flex flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-              <div className="text-lg font-bold">NOTE</div>
-              <div className="font-medium">
-                Regularly update and organize your financial records for efficient analysis.
+              <div className="text-center text-lg font-bold">Organization and School Positions</div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="font-medium">
+                  Regularly update and organize your financial records for efficient analysis.
+                </div>
+                <button
+                  type="button"
+                  onClick={() => router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}`)}
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Go to my organization
+                </button>
               </div>
             </div>
 
             <div className="col-span-2 row-span-1 flex flex-col items-center justify-center  gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-              <div className="text-lg font-bold">Generate Financial Statement</div>
+              <div className="text-lg font-bold">Generate Semester Financial Statement</div>
               <div className="text-center font-medium">
                 The generated file will be based on the info below.
               </div>
-              <button
-                type="button"
-                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-              >
-                Generate
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    router.push(
+                      `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.SEM_CASH_FLOW}`
+                    )
+                  }
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Generate Cash Flow
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    router.push(
+                      `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.SEM_SIGNATORIES}`
+                    )
+                  }
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Generate Signatories
+                </button>
+              </div>
             </div>
           </div>
           <div className="mt-4 min-h-[40vh] rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
@@ -103,26 +130,6 @@ export default function FinancialStatementPage() {
                   className="rounded-sm border border-yellow px-1 py-1"
                 >
                   <option value="">Select a file below to generate</option>
-                  <option
-                    value="Sem Cash Flow"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.SEM_CASH_FLOW}`
-                      )
-                    }
-                  >
-                    Sem Cash Flow
-                  </option>
-                  <option
-                    value="Signatories Sem"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.SEM_SIGNATORIES}`
-                      )
-                    }
-                  >
-                    Sem Signatories
-                  </option>
                   <option
                     value="Month Label"
                     onClick={() =>

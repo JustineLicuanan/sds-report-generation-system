@@ -3,7 +3,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { logo, meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -17,6 +19,9 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function Resolution() {
+  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
+  const repSignatory = getReportSignatoryQuery?.data ?? [];
+  const signatories = parseSignatoryObject(repSignatory);
   return (
     <>
       <Head>
@@ -136,12 +141,12 @@ export default function Resolution() {
         </div>
         <div>Recommending Approval:</div>
         <div className="flex flex-col items-center">
-          <div className="font-bold">[NAME]</div>
+          <div className="font-bold">{signatories['SDS Coordinator']}</div>
           <div className="">SDS Coordinator</div>
         </div>
         <div>Approved by:</div>
         <div className="flex flex-col items-center">
-          <div className="font-bold">[NAME]</div>
+          <div className="font-bold">{signatories['OSAS Head']}</div>
           <div className="">OSAS Head</div>
         </div>
       </div>

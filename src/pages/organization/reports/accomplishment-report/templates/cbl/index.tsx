@@ -19,7 +19,7 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-export default function ResolutionPage() {
+export default function CBLPage() {
   const [data, setData] = useState([
     {
       title: '',
@@ -31,7 +31,7 @@ export default function ResolutionPage() {
   return (
     <>
       <Head>
-        <title>{`Resolution ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`CBL ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -64,6 +64,15 @@ export default function ResolutionPage() {
               ></textarea>
             </div>
           ))}
+          <div>
+            <label htmlFor="signed-date">Date Signed:</label>
+            <input
+              type="date"
+              name=""
+              id="signed-date"
+              className="rounded-sm border border-input bg-transparent px-1"
+            />
+          </div>
           <div className="flex justify-end gap-4">
             <button
               type="button"

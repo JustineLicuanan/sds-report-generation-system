@@ -25,6 +25,8 @@ export const paths = {
   EDIT_ANNOUNCEMENTS: '/edit',
   APPOINTMENTS: '/appointments',
   MY_ORGANIZATION: '/my-organization',
+  POSITIONS: '/positions',
+
   MEMBER_INFO: '/information',
   ORGANIZATION_CREATE: '/create',
   REPORT_CREATE: '/create',

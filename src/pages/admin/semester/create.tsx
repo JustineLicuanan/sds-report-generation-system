@@ -5,6 +5,7 @@ import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebar from '~/components/admin-side-bar-menu';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -20,6 +21,8 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function CreateSemPage() {
   const router = useRouter();
+  const getReportSignatoryQuery = api.admin.reportSignatory.get.useQuery();
+  const repSignatory = getReportSignatoryQuery?.data;
   return (
     <>
       <Head>
@@ -55,7 +58,7 @@ export default function CreateSemPage() {
               />
             </div>
             <div className="flex gap-4">
-              <label htmlFor="term">Term</label>
+              <label htmlFor="term">Term:</label>
               <input
                 type="text"
                 name=""
@@ -81,6 +84,20 @@ export default function CreateSemPage() {
                 className="rounded-sm border border-input bg-transparent px-1"
               />
             </div>
+          </div>
+          <div className="mt-4 flex flex-col gap-4">
+            <div className="font-bold">Position</div>
+            {repSignatory?.map((position) => (
+              <div className="flex gap-4">
+                <label htmlFor="position">{position.position}</label>
+                <input
+                  type="text"
+                  name=""
+                  id="position"
+                  className="rounded-sm border border-input bg-transparent px-1"
+                />
+              </div>
+            ))}
           </div>
           <div className="flex justify-end gap-4">
             <button
