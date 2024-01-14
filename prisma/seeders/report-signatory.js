@@ -16,7 +16,7 @@ exports.reportSignatorySeeder = async () => {
   await db.reportSignatory.upsert({
     where: { position: 'CSG Treasurer' },
     update: {},
-    create: { position: 'CSG Treasurer', name: 'Van Ellis V. Mercado' },
+    create: { position: 'CSG Treasurer', name: 'Djerramaine Marie A. Ramos' },
   });
 
   await db.reportSignatory.upsert({
@@ -35,11 +35,5 @@ exports.reportSignatorySeeder = async () => {
     where: { position: 'Campus Administrator' },
     update: {},
     create: { position: 'Campus Administrator', name: 'Dr. Jenny Beb F. Espineli' },
-  });
-
-  await db.reportSignatory.upsert({
-    where: { position: 'Chairperson of Department of Physical Education' },
-    update: {},
-    create: { position: 'Chairperson of Department of Physical Education', name: 'Mr. Sixto Ras' },
   });
 };
