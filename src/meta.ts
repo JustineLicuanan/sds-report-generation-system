@@ -45,6 +45,8 @@ export const paths = {
   REQUEST_LETTER: '/request',
   EXCUSE_LETTER: '/excuse',
   INVITATION_LETTER: '/invitation',
+  SUMMARY_OF_CONDUCTED_EVENTS: '/summary-of-conducted-events',
+  COMMUNITY_EXTENSION_SERVICES: '/community-extension-services',
   ARCHIVES: '/archives',
   GENERATED_FILES: '/generated',
   UPLOADS: '/uploads',
@@ -63,6 +65,8 @@ export const paths = {
   EXPENSE_SUMMARY: '/expense-summary',
   FORMS: '/forms',
   LIQUIDATION: '/liquidation',
+  CREATE_COLLECTION_ROW: '/create-collection-row',
+  ADD_NEW_MONTH: '/add-month',
 
   PRINT: '/print',
   // FIXME: To remove or replace

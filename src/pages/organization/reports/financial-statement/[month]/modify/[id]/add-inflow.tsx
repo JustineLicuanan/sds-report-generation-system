@@ -1,11 +1,18 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { meta } from '~/meta';
+import { useToast } from '~/components/ui/use-toast';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { schemas } from '~/zod-schemas';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -18,9 +25,14 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-export default function AddInflowFinancialStatementPage() {
-  const [disable, setDisable] = useState(false);
 
+export default function AddInflowFinancialStatementPage() {
+  const router = useRouter();
+
+  const getFSInflowRow = api.shared.FSInflowRow.get.useQuery();
+  const FSInflowRow = getFSInflowRow.data;
+
+  const [disable, setDisable] = useState(false);
   const header = ['Date', 'Name', 'OR No.', 'Amount', 'Receipt', 'Action'];
   return (
     <>
@@ -63,10 +75,17 @@ export default function AddInflowFinancialStatementPage() {
           </div>
 
           {/* TABLE */}
-          <div className="mt-4 flex min-h-[40vh] w-full flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+          <div
+            className="mt-4 flex min-h-[40vh] w-full flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]"
+          >
             <div className="flex justify-end gap-2">
               <button
                 type="button"
+                onClick={() =>
+                  router.push(
+                    `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MODIFY_FINANCIAL_STATEMENT}${paths.CREATE_COLLECTION_ROW}`
+                  )
+                }
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Add row
@@ -92,30 +111,32 @@ export default function AddInflowFinancialStatementPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="even:bg-[#808080]/20">
-                  <td className="border border-x-0 border-black py-2 text-base">12/26/2023</td>
-                  <td className="border border-x-0 border-black py-2 text-base">John Doe</td>
-                  <td className="border border-x-0 border-black py-2 text-base">0001</td>
-                  <td className="border border-x-0 border-black py-2 text-base">300</td>
-                  <td className="border border-x-0 border-black py-2 text-base">
-                    <button
-                      type="button"
-                      className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                    >
-                      Upload
-                    </button>
-                  </td>
-                  <td className="border border-x-0 border-black py-2 text-base">
-                    <div className="flex justify-center gap-2">
+                {FSInflowRow?.map((inflowRow) => (
+                  <tr className="even:bg-[#808080]/20">
+                    <td className="border border-x-0 border-black py-2 text-base">12/26/2023</td>
+                    <td className="border border-x-0 border-black py-2 text-base">John Doe</td>
+                    <td className="border border-x-0 border-black py-2 text-base">0001</td>
+                    <td className="border border-x-0 border-black py-2 text-base">300</td>
+                    <td className="border border-x-0 border-black py-2 text-base">
                       <button
                         type="button"
-                        className="rounded-sm border border-red bg-red px-3 text-white active:scale-95"
+                        className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                       >
-                        Delete
+                        Upload
                       </button>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      <div className="flex justify-center gap-2">
+                        <button
+                          type="button"
+                          className="rounded-sm border border-red bg-red px-3 text-white active:scale-95"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

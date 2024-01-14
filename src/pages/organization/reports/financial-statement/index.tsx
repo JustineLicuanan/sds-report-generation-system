@@ -5,6 +5,7 @@ import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -20,6 +21,14 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function FinancialStatementPage() {
   const router = useRouter();
+  const getReportSem = api.shared.reportSemester.get.useQuery();
+  const reportSem = getReportSem.data;
+
+  const getFinancialStatementQuery = api.shared.FS.getOrCreate.useQuery();
+  const FS = getFinancialStatementQuery?.data;
+
+  const getFSMonthQuery = api.shared.FSMonthly.get.useQuery();
+  const FSMonth = getFSMonthQuery?.data;
   return (
     <>
       <Head>
@@ -106,113 +115,132 @@ export default function FinancialStatementPage() {
             </div>
           </div>
           <div className="mt-4 min-h-[40vh] rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="mb-4 text-center text-2xl font-bold">First Semester 2023 - 2024</div>
-            <div className="border-sm  my-2 flex items-center justify-between gap-2 border border-input">
-              <div className="flex w-1/2 items-center justify-between gap-2  p-2">
-                <div className="text-lg font-bold">Month of September</div>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                  onClick={() =>
-                    router.push(
-                      `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MODIFY_FINANCIAL_STATEMENT}`
-                    )
-                  }
-                >
-                  Modify
-                </button>
-              </div>
-              <div className="flex w-1/2 items-center justify-between gap-2 p-2">
-                <div className="text-lg font-bold">Generate:</div>
-                <select
-                  name=""
-                  id="fs-file-dropdown"
-                  className="rounded-sm border border-yellow px-1 py-1"
-                >
-                  <option value="">Select a file below to generate</option>
-                  <option
-                    value="Month Label"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_LABEL}`
-                      )
-                    }
-                  >
-                    Month Label
-                  </option>
-                  <option
-                    value="Expense Summary"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.EXPENSE_SUMMARY}`
-                      )
-                    }
-                  >
-                    Expense Summary
-                  </option>
-                  <option
-                    value="Month Cash Flow"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_CASH_FLOW}`
-                      )
-                    }
-                  >
-                    Month Cash Flow
-                  </option>
-                  <option
-                    value="Month Notes"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_NOTES}`
-                      )
-                    }
-                  >
-                    Month Notes
-                  </option>
-                  <option
-                    value="Signatories Per Month"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_SIGNATORIES}`
-                      )
-                    }
-                  >
-                    Signatories Per Month
-                  </option>
-                  <option
-                    value="Receipts"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.RECEIPTS}`
-                      )
-                    }
-                  >
-                    Receipts
-                  </option>
-                  <option
-                    value="Forms"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.FORMS}`
-                      )
-                    }
-                  >
-                    Forms
-                  </option>
-                  <option
-                    value="Liquidation"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.LIQUIDATION}`
-                      )
-                    }
-                  >
-                    Liquidation
-                  </option>
-                </select>
-              </div>
+            <div className="mb-4 text-center text-2xl font-bold">
+              {reportSem?.term} SEMESTER {reportSem?.yearStart} - {reportSem?.yearEnd}
             </div>
+            <button
+              type="button"
+              className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+              onClick={() =>
+                router.push(
+                  `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}${paths.ADD_NEW_MONTH}`
+                )
+              }
+            >
+              Add new month
+            </button>
+            {FSMonth?.map((month) => (
+              <div
+                key={month.id}
+                className="border-sm  my-2 flex items-center justify-between gap-2 border border-input"
+              >
+                <div className="flex w-1/2 items-center justify-between gap-2  p-2">
+                  <div className="text-lg font-bold">Month of {month.month}</div>
+                  <button
+                    type="button"
+                    className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                    onClick={() =>
+                      router.push({
+                        pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/${month.id}${paths.MODIFY_FINANCIAL_STATEMENT}`,
+                        query: { monthlyID: month.id, reportSemesterID: reportSem?.id },
+                      })
+                    }
+                  >
+                    Modify
+                  </button>
+                </div>
+                <div className="flex w-1/2 items-center justify-between gap-2 p-2">
+                  <div className="text-lg font-bold">Generate:</div>
+                  <select
+                    name=""
+                    id="fs-file-dropdown"
+                    className="rounded-sm border border-yellow px-1 py-1"
+                  >
+                    <option value="">Select a file below to generate</option>
+                    <option
+                      value="Month Label"
+                      onClick={() =>
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_LABEL}`
+                        )
+                      }
+                    >
+                      Month Label
+                    </option>
+                    <option
+                      value="Expense Summary"
+                      onClick={() =>
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.EXPENSE_SUMMARY}`
+                        )
+                      }
+                    >
+                      Expense Summary
+                    </option>
+                    <option
+                      value="Month Cash Flow"
+                      onClick={() =>
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_CASH_FLOW}`
+                        )
+                      }
+                    >
+                      Month Cash Flow
+                    </option>
+                    <option
+                      value="Month Notes"
+                      onClick={() =>
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_NOTES}`
+                        )
+                      }
+                    >
+                      Month Notes
+                    </option>
+                    <option
+                      value="Signatories Per Month"
+                      onClick={() =>
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.MONTH_SIGNATORIES}`
+                        )
+                      }
+                    >
+                      Signatories Per Month
+                    </option>
+                    <option
+                      value="Receipts"
+                      onClick={() =>
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.RECEIPTS}`
+                        )
+                      }
+                    >
+                      Receipts
+                    </option>
+                    <option
+                      value="Forms"
+                      onClick={() =>
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.FORMS}`
+                        )
+                      }
+                    >
+                      Forms
+                    </option>
+                    <option
+                      value="Liquidation"
+                      onClick={() =>
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/september${paths.LIQUIDATION}`
+                        )
+                      }
+                    >
+                      Liquidation
+                    </option>
+                  </select>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </main>

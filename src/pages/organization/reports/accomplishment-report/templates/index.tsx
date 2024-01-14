@@ -57,6 +57,16 @@ export default function AccomplishmentReportTemplatePage() {
       title: 'Other Letters',
       description: 'Generate the Other Letters',
     },
+    {
+      filePath: `${paths.SUMMARY_OF_CONDUCTED_EVENTS}`,
+      title: 'Summary of Conducted Events',
+      description: 'Generate the Summary of Conducted Events',
+    },
+    {
+      filePath: `${paths.COMMUNITY_EXTENSION_SERVICES}`,
+      title: 'Summary of Community Extension Services',
+      description: 'Generate the Summary of Community Extension Services',
+    },
   ];
 
   const totalPages = Math.ceil(files.length / itemsPerPage);
