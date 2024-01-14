@@ -161,14 +161,14 @@ export default function ExcuseLetterPage() {
             <div className="flex flex-col gap-8">
               <div>Prepared by:</div>
               <div className="items-left flex flex-col">
-                <div className='font-bold'>[NAME]</div>
+                <div className="font-bold">[NAME]</div>
                 <div>[Org Name] Adviser</div>
               </div>
             </div>
             <div className="flex flex-col gap-8">
               <div>Recommending Approval:</div>
               <div className="items-left flex flex-col">
-                <div className='font-bold'>[NAME]</div>
+                <div className="font-bold">[NAME]</div>
                 <div>[Org Name] Adviser</div>
               </div>
             </div>
@@ -178,14 +178,25 @@ export default function ExcuseLetterPage() {
             <div>
               <input
                 type="text"
-                name=""
-                placeholder="Enter name"
-                id="chairperson-dept-pe"
+                placeholder="e.g: Juan Dela Cruz"
+                id="approval-of"
                 onChange={(e) => setChairpersonName(e.target.value)}
                 className="rounded-sm border border-input px-1 print:hidden"
                 value={chairpersonName}
               />
               <div className="hidden print:block">{chairpersonName}</div>
+            </div>
+
+            <div>
+              <input
+                type="text"
+                placeholder="e.g.: Chairperson, Department of Physical Education"
+                id="position-approval-of"
+                className="rounded-sm border border-input px-1 print:hidden"
+              />
+              <div className="hidden print:block">
+                <span className="font-bold">[Position]</span>
+              </div>
             </div>
           </div>
         </div>

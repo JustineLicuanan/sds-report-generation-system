@@ -33,19 +33,20 @@ model ReportSignatory {
 }
 
 model Organization {
-    id          String               @id @default(cuid())
-    name        String
-    acronym     String
-    description String               @default("")
-    category    OrganizationCategory
-    image       String?
-    imageId     String?
-    isArchived  Boolean              @default(false)
-    members     User[]
-    comments    Comment[]
-    logs        Log[]
-    createdAt   DateTime             @default(now())
-    updatedAt   DateTime             @updatedAt
+    id           String               @id @default(cuid())
+    name         String
+    acronym      String
+    contactEmail String
+    description  String               @default("")
+    category     OrganizationCategory
+    image        String?
+    imageId      String?
+    isArchived   Boolean              @default(false)
+    members      User[]
+    comments     Comment[]
+    logs         Log[]
+    createdAt    DateTime             @default(now())
+    updatedAt    DateTime             @updatedAt
 
     // Extras
     signatoryInfo         OrgSignatoryInfo?
@@ -638,6 +639,7 @@ enum ARUploadContentType {
 }
 
 enum ARGeneratedContentType {
+    CONSTITUTION_AND_BY_LAWS
     ACCEPTANCE_LETTER_OF_ADVISERS
     ORGANIZATIONAL_CHART
     CURRICULUM_VITAE_OF_OFFICERS

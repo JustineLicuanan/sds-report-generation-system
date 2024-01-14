@@ -114,7 +114,7 @@ export default function RequestLetterPage() {
         <title>{`Request Letter ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
       <div className="mx-auto my-0 flex max-w-[210mm] flex-col gap-8 ">
-        <div className="flex gap-2 items-center justify-center">
+        <div className="flex items-center justify-center gap-2">
           <Image
             src={logo.PHILIPPINE_LOGO}
             alt="Bagong Pilipinas"
@@ -153,29 +153,31 @@ export default function RequestLetterPage() {
         <div className="items-left mt-4 flex flex-col gap-8">
           <div>Respectfully yours,</div>
           <div className="items-left flex flex-col">
-            <div className='font-bold'>[NAME]</div>
+            <div className="font-bold">[NAME]</div>
             <div>[Org Name] President</div>
           </div>
           <div>Checked By:</div>
           <div className="items-left flex flex-col">
-            <div className='font-bold'>[NAME]</div>
+            <div className="font-bold">[NAME]</div>
             <div>CSG President</div>
           </div>
           <div>Noted By:</div>
           <div className="items-left flex gap-28">
             <div className="items-left flex flex-col">
-              <div className='font-bold'>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Adviser</div>
             </div>
             <div className="items-left flex flex-col">
-              <div className='font-bold'>[NAME]</div>
+              <div className="font-bold">[NAME]</div>
               <div>[Org Name] Adviser</div>
             </div>
           </div>
           <div>Recommending Approval:</div>
           <div className="items-left mt-4 flex flex-col">
-            <div className='font-bold'>[NAME]</div>
-            <div>Chairperson of Department of Physical Education </div>
+            <div className="font-bold">[NAME]</div>
+            <div className="font-bold">
+              [Position] (e.g.: Chairperson, Department of Physical Education)
+            </div>
           </div>
           <div>Approved by:</div>
           <div className="items-left mt-4 flex flex-col">

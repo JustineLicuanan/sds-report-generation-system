@@ -10,6 +10,7 @@ exports.organizationSeeder = async () => {
       id: 'clrco4fh4000008lbec6k8vkb',
       name: 'Builders of Innovative Technologist Society',
       acronym: 'BITS',
+      contactEmail: 'bits@cvsu-imus.com',
       category: OrganizationCategory.ACADEMIC_ORGANIZATION,
       signatoryInfo: { create: {} },
     },

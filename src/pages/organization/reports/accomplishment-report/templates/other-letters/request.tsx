@@ -175,7 +175,9 @@ export default function RequestLetterPage() {
           <div>Recommending Approval:</div>
           <div className="items-left mt-4 flex flex-col">
             <div className="font-bold">[NAME]</div>
-            <div>Chairperson of Department of Physical Education</div>
+            <div className="font-bold">
+              [Position] (e.g.: Chairperson, Department of Physical Education)
+            </div>
           </div>
           <div>Approved by:</div>
           <div className="items-left mt-4 flex flex-col">
