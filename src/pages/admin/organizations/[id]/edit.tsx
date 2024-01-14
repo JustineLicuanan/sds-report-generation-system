@@ -66,9 +66,6 @@ export default function UpdateOrganizationPage() {
       id: router.query.id as string,
       name: organization?.name ?? '',
       acronym: organization?.acronym ?? '',
-      adviser1: organization?.adviser1 ?? '',
-      adviser2: organization?.adviser2 ?? '',
-      deptChairperson: organization?.deptChairperson ?? '',
       description: organization?.description ?? '',
       category: organization?.category,
       image: organization?.image,
@@ -249,72 +246,6 @@ export default function UpdateOrganizationPage() {
                           rows={6}
                           placeholder="Description (Optional)"
                           className="resize-none"
-                          disabled={updateOrganization.isLoading}
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <div className="h-4">
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={updateOrganizationForm.control}
-                  name="adviser1"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Organization Adviser 1:</FormLabel>
-
-                      <FormControl>
-                        <Input
-                          placeholder="Organization Adviser 1 (Optional)"
-                          disabled={updateOrganization.isLoading}
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <div className="h-4">
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={updateOrganizationForm.control}
-                  name="adviser2"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Organization Adviser 2:</FormLabel>
-
-                      <FormControl>
-                        <Input
-                          placeholder="Organization Adviser 2 (Optional)"
-                          disabled={updateOrganization.isLoading}
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <div className="h-4">
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={updateOrganizationForm.control}
-                  name="deptChairperson"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Department Chairperson:</FormLabel>
-
-                      <FormControl>
-                        <Input
-                          placeholder="Department Chairperson (Optional)"
                           disabled={updateOrganization.isLoading}
                           {...field}
                         />

@@ -56,9 +56,6 @@ export default function CreateOrganizationPage() {
       name: '',
       acronym: '',
       description: '',
-      adviser1: '',
-      adviser2: '',
-      deptChairperson: '',
       category: OrganizationCategory.STUDENT_GOVERNING_BODY,
       members: [{ email: '', name: '', isActive: true }],
     },
@@ -210,66 +207,6 @@ export default function CreateOrganizationPage() {
                           rows={6}
                           placeholder="Description (Optional)"
                           className="resize-none"
-                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <div className="h-4">
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={createOrganizationForm.control}
-                  name="adviser1"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder="Organization Adviser 1 (Optional)"
-                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <div className="h-4">
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={createOrganizationForm.control}
-                  name="adviser2"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder="Organization Adviser 2 (Optional)"
-                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <div className="h-4">
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={createOrganizationForm.control}
-                  name="deptChairperson"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder="Department Chairperson (Optional)"
                           disabled={createOrganization.isLoading || createOrganization.isSuccess}
                           {...field}
                         />

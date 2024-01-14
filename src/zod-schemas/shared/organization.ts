@@ -27,9 +27,6 @@ export const organizationSchemas = {
 
   update: z.object({
     description: z.string().trim().optional(),
-    adviser1: z.string().trim().optional(),
-    adviser2: z.string().trim().optional(),
-    deptChairperson: z.string().trim().optional(),
     preamble: z.string().trim().optional(),
     mission: z.string().trim().optional(),
     vision: z.string().trim().optional(),
