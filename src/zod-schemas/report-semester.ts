@@ -36,11 +36,13 @@ const adminSchemas = {
     yearStart: z
       .string()
       .min(1, 'Start of year is required')
-      .transform((arg) => parseInt(arg)),
+      .transform((arg) => parseInt(arg))
+      .or(z.number()),
     yearEnd: z
       .string()
       .min(1, 'End of year is required')
-      .transform((arg) => parseInt(arg)),
+      .transform((arg) => parseInt(arg))
+      .or(z.number()),
     term: z.nativeEnum(SemesterTerm),
     dueDateAR: z
       .string()
@@ -60,11 +62,13 @@ const adminSchemas = {
       .string()
       .min(1, 'Start of year is required')
       .transform((arg) => parseInt(arg))
+      .or(z.number())
       .optional(),
     yearEnd: z
       .string()
       .min(1, 'End of year is required')
       .transform((arg) => parseInt(arg))
+      .or(z.number())
       .optional(),
     term: z.nativeEnum(SemesterTerm).optional(),
     dueDateAR: z

@@ -64,7 +64,8 @@ const sharedSchemas = {
     amount: z
       .string()
       .min(1, 'Amount is required')
-      .transform((arg) => parseFloat(arg).toFixed(2)),
+      .transform((arg) => parseFloat(arg).toFixed(2))
+      .or(z.number()),
     receipt: z.string().nullable().optional(),
     receiptId: z.string().nullable().optional(),
     inflowId: z.string().cuid(),
@@ -79,14 +80,16 @@ const sharedSchemas = {
       quantity: z
         .string()
         .min(1, 'Quantity is required')
-        .transform((arg) => parseInt(arg)),
+        .transform((arg) => parseInt(arg))
+        .or(z.number()),
       particulars: z.string().trim().min(1, 'Particulars is required'),
       ORNumber: z.string().trim().min(1, 'OR Number is required'),
       unit: z.string().trim().min(1, 'Unit is required'),
       price: z
         .string()
         .min(1, 'Price is required')
-        .transform((arg) => parseFloat(arg).toFixed(2)),
+        .transform((arg) => parseFloat(arg).toFixed(2))
+        .or(z.number()),
       receipt: z.string().nullable().optional(),
       receiptId: z.string().nullable().optional(),
       inflowId: z.string().cuid(),
@@ -106,6 +109,7 @@ const sharedSchemas = {
       .string()
       .min(1, 'Amount is required')
       .transform((arg) => parseFloat(arg).toFixed(2))
+      .or(z.number())
       .optional(),
     receipt: z.string().nullable().optional(),
     receiptId: z.string().nullable().optional(),
@@ -123,6 +127,7 @@ const sharedSchemas = {
         .string()
         .min(1, 'Quantity is required')
         .transform((arg) => parseInt(arg))
+        .or(z.number())
         .optional(),
       particulars: z.string().trim().min(1, 'Particulars is required').optional(),
       ORNumber: z.string().trim().min(1, 'OR Number is required').optional(),
@@ -131,6 +136,7 @@ const sharedSchemas = {
         .string()
         .min(1, 'Price is required')
         .transform((arg) => parseFloat(arg).toFixed(2))
+        .or(z.number())
         .optional(),
       receipt: z.string().nullable().optional(),
       receiptId: z.string().nullable().optional(),

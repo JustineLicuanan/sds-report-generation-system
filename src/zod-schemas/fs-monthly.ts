@@ -71,20 +71,22 @@ const sharedSchemas = {
     .optional(),
 
   create: z.object({
-    month: z.nativeEnum(Month).transform(Number),
-    year: z
-      .string()
-      .min(1, 'Year is required')
-      .transform((arg) => parseInt(arg)),
-  }),
-
-  update: z.object({
-    id: z.string().cuid(),
-    month: z.nativeEnum(Month).transform(Number).optional(),
+    month: z.nativeEnum(Month).transform(Number).or(z.number()),
     year: z
       .string()
       .min(1, 'Year is required')
       .transform((arg) => parseInt(arg))
+      .or(z.number()),
+  }),
+
+  update: z.object({
+    id: z.string().cuid(),
+    month: z.nativeEnum(Month).transform(Number).or(z.number()).optional(),
+    year: z
+      .string()
+      .min(1, 'Year is required')
+      .transform((arg) => parseInt(arg))
+      .or(z.number())
       .optional(),
   }),
 

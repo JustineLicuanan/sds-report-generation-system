@@ -61,7 +61,8 @@ const sharedSchemas = {
     contentNumber: z
       .string()
       .min(1, 'Content Number is required')
-      .transform((arg) => parseInt(arg)),
+      .transform((arg) => parseInt(arg))
+      .or(z.number()),
     content: jsonSchema.transform((arg) => JSON.stringify(arg)),
   }),
 
@@ -73,6 +74,7 @@ const sharedSchemas = {
       .string()
       .min(1, 'Content Number is required')
       .transform((arg) => parseInt(arg))
+      .or(z.number())
       .optional(),
     content: jsonSchema.transform((arg) => JSON.stringify(arg)).optional(),
   }),

@@ -33,7 +33,8 @@ const sharedSchemas = {
     contentNumber: z
       .string()
       .min(1, 'Content Number is required')
-      .transform((arg) => parseInt(arg)),
+      .transform((arg) => parseInt(arg))
+      .or(z.number()),
     file: z.string().url('File is required'),
     fileId: z.string(),
   }),
@@ -45,6 +46,7 @@ const sharedSchemas = {
       .string()
       .min(1, 'Content Number is required')
       .transform((arg) => parseInt(arg))
+      .or(z.number())
       .optional(),
     file: z.string().url('File is required').optional(),
     fileId: z.string().optional(),
