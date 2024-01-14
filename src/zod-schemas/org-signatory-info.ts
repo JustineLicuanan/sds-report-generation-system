@@ -31,6 +31,12 @@ const adminSchemas = {
 };
 
 const sharedSchemas = {
+  get: z
+    .object({
+      include: z.object({ organization: z.literal(true).optional() }).optional(),
+    })
+    .optional(),
+
   update: z.object({
     president: z.string().trim().optional(),
     vicePresident: z.string().trim().optional(),

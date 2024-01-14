@@ -7,7 +7,7 @@ export const accomplishmentReportRouter = createTRPCRouter({
   get: protectedProcedure.input(schemas.shared.AR.get).query(({ ctx, input }) => {
     return ctx.db.accomplishmentReport.findMany({
       where: { ...(input?.where ?? {}), organizationId: ctx.session.user.organizationId },
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),
@@ -35,7 +35,7 @@ export const accomplishmentReportRouter = createTRPCRouter({
           archivedAt: reportSemester.archivedAt,
           organizationId: ctx.session.user.organizationId!,
         },
-        include: input?.include,
+        include: { ...(input?.include ?? {}) },
       });
     }),
 

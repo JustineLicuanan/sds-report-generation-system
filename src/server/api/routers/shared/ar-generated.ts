@@ -12,7 +12,7 @@ export const ARGeneratedRouter = createTRPCRouter({
         archivedAt: input?.current && '',
         organizationId: ctx.session.user.organizationId,
       },
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),
@@ -25,7 +25,7 @@ export const ARGeneratedRouter = createTRPCRouter({
         organizationId: ctx.session.user.organizationId,
         NOT: { deletedAt: '' },
       },
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),

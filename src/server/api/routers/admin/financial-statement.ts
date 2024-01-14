@@ -5,7 +5,7 @@ export const financialStatementRouter = createTRPCRouter({
   get: adminProcedure.input(schemas.admin.FS.get).query(({ ctx, input }) => {
     return ctx.db.financialStatement.findMany({
       where: { ...(input?.where ?? {}), archivedAt: input?.current && '' },
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),

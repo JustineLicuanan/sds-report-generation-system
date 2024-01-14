@@ -5,7 +5,7 @@ export const curriculumVitaeRouter = createTRPCRouter({
   get: adminProcedure.input(schemas.admin.curriculumVitae.get).query(({ ctx, input }) => {
     return ctx.db.curriculumVitae.findMany({
       where: input?.where,
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),

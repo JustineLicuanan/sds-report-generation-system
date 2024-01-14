@@ -14,7 +14,7 @@ export const ARGeneratedRouter = createTRPCRouter({
         archivedAt: '',
         NOT: { status: GeneratedReportStatus.DRAFT },
       },
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),

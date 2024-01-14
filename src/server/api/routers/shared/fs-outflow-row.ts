@@ -11,7 +11,7 @@ export const FSOutflowRowRouter = createTRPCRouter({
         archivedAt: input?.current && '',
         organizationId: ctx.session.user.organizationId,
       },
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),

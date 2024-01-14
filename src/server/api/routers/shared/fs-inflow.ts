@@ -10,7 +10,7 @@ export const FSInflowRouter = createTRPCRouter({
         archivedAt: input?.current && '',
         organizationId: ctx.session.user.organizationId,
       },
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),
@@ -23,7 +23,7 @@ export const FSInflowRouter = createTRPCRouter({
         organizationId: ctx.session.user.organizationId,
         NOT: { deletedAt: '' },
       },
-      include: input?.include,
+      include: { ...(input?.include ?? {}) },
       orderBy: input?.orderBy,
     });
   }),
