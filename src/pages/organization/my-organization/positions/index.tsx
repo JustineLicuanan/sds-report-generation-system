@@ -27,20 +27,6 @@ export const getServerSideProps = (async (ctx) => {
 type UpdateOrgSignatoryInfoInputs = z.infer<typeof schemas.shared.orgSignatoryInfo.update>;
 
 export default function SetupPositionsPage() {
-  // const positions = [
-  //   'President',
-  //   'Vice President',
-  //   'Treasurer',
-  //   'Auditor',
-  //   'General Secretary',
-  //   'Assistant Secretary',
-  //   'Finance',
-  //   'Recruitment Coordinator',
-  //   'Training Director',
-  //   'Adviser 1',
-  //   'Adviser 2',
-  //   'Dept. Chairperson',
-  // ];
   const router = useRouter();
   const utils = api.useContext();
   const { toast } = useToast();
