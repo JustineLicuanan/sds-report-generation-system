@@ -1,8 +1,6 @@
 import { ARGeneratedContentType } from '@prisma/client';
 import { z } from 'zod';
 
-import { jsonSchema } from '~/zod-schemas/utils';
-
 const adminSchemas = {
   get: z
     .object({
@@ -15,7 +13,7 @@ const adminSchemas = {
     name: z.string().trim().optional(),
     description: z.string().trim().optional(),
     contentType: z.nativeEnum(ARGeneratedContentType),
-    content: jsonSchema.transform((arg) => JSON.stringify(arg)),
+    content: z.any(),
   }),
 
   update: z.object({
@@ -23,7 +21,7 @@ const adminSchemas = {
     name: z.string().trim().optional(),
     description: z.string().trim().optional(),
     contentType: z.nativeEnum(ARGeneratedContentType).optional(),
-    content: jsonSchema.transform((arg) => JSON.stringify(arg)).optional(),
+    content: z.any().optional(),
     isActive: z.boolean().optional(),
   }),
 

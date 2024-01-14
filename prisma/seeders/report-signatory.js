@@ -20,6 +20,12 @@ exports.reportSignatorySeeder = async () => {
   });
 
   await db.reportSignatory.upsert({
+    where: { position: 'CSG Auditor' },
+    update: {},
+    create: { position: 'CSG Auditor', name: 'Rhoda Mae C. Palen' },
+  });
+
+  await db.reportSignatory.upsert({
     where: { position: 'SDS Coordinator' },
     update: {},
     create: { position: 'SDS Coordinator', name: 'Armand G. Aton, MAEd' },

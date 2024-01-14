@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { OrderBy, jsonSchema } from '~/zod-schemas/utils';
+import { OrderBy } from '~/zod-schemas/utils';
 
 const adminSchemas = {
   get: z
@@ -25,14 +25,14 @@ const sharedSchemas = {
   create: z.object({
     name: z.string().trim().min(1, 'Name is required'),
     position: z.string().trim().min(1, 'Position is required'),
-    content: jsonSchema.transform((arg) => JSON.stringify(arg)),
+    content: z.any(),
   }),
 
   update: z.object({
     id: z.string().cuid(),
     name: z.string().trim().min(1, 'Name is required').optional(),
     position: z.string().trim().min(1, 'Position is required').optional(),
-    content: jsonSchema.transform((arg) => JSON.stringify(arg)).optional(),
+    content: z.any().optional(),
   }),
 
   delete: z.object({ id: z.string().cuid() }),

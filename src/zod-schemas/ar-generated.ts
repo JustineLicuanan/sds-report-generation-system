@@ -5,7 +5,7 @@ import {
 } from '@prisma/client';
 import { z } from 'zod';
 
-import { OrderBy, jsonSchema } from '~/zod-schemas/utils';
+import { OrderBy } from '~/zod-schemas/utils';
 
 const adminSchemas = {
   get: z
@@ -63,7 +63,7 @@ const sharedSchemas = {
       .min(1, 'Content Number is required')
       .transform((arg) => parseInt(arg))
       .or(z.number()),
-    content: jsonSchema.transform((arg) => JSON.stringify(arg)),
+    content: z.any(),
   }),
 
   update: z.object({
@@ -76,7 +76,7 @@ const sharedSchemas = {
       .transform((arg) => parseInt(arg))
       .or(z.number())
       .optional(),
-    content: jsonSchema.transform((arg) => JSON.stringify(arg)).optional(),
+    content: z.any().optional(),
   }),
 
   delete: z.object({ id: z.string().cuid() }),
