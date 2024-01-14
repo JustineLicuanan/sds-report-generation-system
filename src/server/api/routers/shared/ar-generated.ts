@@ -48,7 +48,6 @@ export const ARGeneratedRouter = createTRPCRouter({
       return ctx.db.aRGenerated.create({
         data: {
           ...input,
-          content: JSON.stringify(input.content),
           accomplishmentReportId: accomplishmentReport.id,
           reportSemesterId: accomplishmentReport.reportSemesterId,
           archivedAt: accomplishmentReport.archivedAt,
@@ -62,7 +61,7 @@ export const ARGeneratedRouter = createTRPCRouter({
     const { id, ...data } = input;
     return ctx.db.aRGenerated.update({
       where: { id, organizationId: ctx.session.user.organizationId },
-      data: { ...data, content: data.content ? JSON.stringify(input.content) : undefined },
+      data,
     });
   }),
 

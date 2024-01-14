@@ -58,16 +58,23 @@ const sharedSchemas = {
   create: z.object({
     templateType: z.nativeEnum(ARGeneratedTemplateType),
     contentType: z.nativeEnum(ARGeneratedContentType),
-    contentNumber: z.number().int(),
-    content: jsonSchema,
+    contentNumber: z
+      .string()
+      .min(1, 'Content Number is required')
+      .transform((arg) => parseInt(arg)),
+    content: jsonSchema.transform((arg) => JSON.stringify(arg)),
   }),
 
   update: z.object({
     id: z.string().cuid(),
     templateType: z.nativeEnum(ARGeneratedTemplateType).optional(),
     contentType: z.nativeEnum(ARGeneratedContentType).optional(),
-    contentNumber: z.number().int().optional(),
-    content: jsonSchema.optional(),
+    contentNumber: z
+      .string()
+      .min(1, 'Content Number is required')
+      .transform((arg) => parseInt(arg))
+      .optional(),
+    content: jsonSchema.transform((arg) => JSON.stringify(arg)).optional(),
   }),
 
   delete: z.object({ id: z.string().cuid() }),

@@ -12,7 +12,6 @@ export const curriculumVitaeRouter = createTRPCRouter({
       return ctx.db.curriculumVitae.create({
         data: {
           ...input,
-          content: JSON.stringify(input.content),
           organizationId: ctx.session.user.organizationId!,
         },
       });
@@ -22,10 +21,7 @@ export const curriculumVitaeRouter = createTRPCRouter({
     .input(schemas.shared.curriculumVitae.update)
     .mutation(({ ctx, input }) => {
       const { id, ...data } = input;
-      return ctx.db.curriculumVitae.update({
-        where: { id },
-        data: { ...data, content: data.content ? JSON.stringify(input.content) : undefined },
-      });
+      return ctx.db.curriculumVitae.update({ where: { id }, data });
     }),
 
   delete: protectedProcedure

@@ -15,7 +15,7 @@ exports.ARTemplateSeeder = async () => {
     create: {
       name: 'Table',
       contentType: ARGeneratedContentType.ACTIVITY_PROPOSAL,
-      content: JSON.stringify(ARTemplates.APPROVED_ACTIVITY_PROPOSAL.Table),
+      content: ARTemplates.APPROVED_ACTIVITY_PROPOSAL.Table,
       isActive: true,
     },
   });
@@ -31,7 +31,7 @@ exports.ARTemplateSeeder = async () => {
     create: {
       name: 'Message',
       contentType: ARGeneratedContentType.ACTIVITY_PROPOSAL,
-      content: JSON.stringify(ARTemplates.APPROVED_ACTIVITY_PROPOSAL.Message),
+      content: ARTemplates.APPROVED_ACTIVITY_PROPOSAL.Message,
       isActive: true,
     },
   });

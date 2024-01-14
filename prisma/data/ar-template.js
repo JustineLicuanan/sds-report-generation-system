@@ -1,6 +1,6 @@
 exports.ARTemplates = {
   APPROVED_ACTIVITY_PROPOSAL: {
-    Table: {
+    Table: JSON.stringify({
       time: 1705031866294,
       blocks: [
         {
@@ -31,9 +31,9 @@ exports.ARTemplates = {
         },
       ],
       version: '2.28.2',
-    },
+    }),
 
-    Message: {
+    Message: JSON.stringify({
       time: 1705030194807,
       blocks: [
         {
@@ -110,6 +110,6 @@ exports.ARTemplates = {
         },
       ],
       version: '2.28.2',
-    },
+    }),
   },
 };

@@ -30,16 +30,23 @@ const sharedSchemas = {
 
   create: z.object({
     contentType: z.nativeEnum(ARUploadContentType),
-    contentNumber: z.number().int(),
-    file: z.string().url(),
+    contentNumber: z
+      .string()
+      .min(1, 'Content Number is required')
+      .transform((arg) => parseInt(arg)),
+    file: z.string().url('File is required'),
     fileId: z.string(),
   }),
 
   update: z.object({
     id: z.string().cuid(),
     contentType: z.nativeEnum(ARUploadContentType).optional(),
-    contentNumber: z.number().int().optional(),
-    file: z.string().url().optional(),
+    contentNumber: z
+      .string()
+      .min(1, 'Content Number is required')
+      .transform((arg) => parseInt(arg))
+      .optional(),
+    file: z.string().url('File is required').optional(),
     fileId: z.string().optional(),
   }),
 

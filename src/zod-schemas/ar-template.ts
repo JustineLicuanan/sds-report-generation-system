@@ -12,18 +12,18 @@ const adminSchemas = {
     .optional(),
 
   create: z.object({
-    name: z.string().trim().min(1).optional(),
-    description: z.string().trim().min(1).optional(),
+    name: z.string().trim().optional(),
+    description: z.string().trim().optional(),
     contentType: z.nativeEnum(ARGeneratedContentType),
-    content: jsonSchema,
+    content: jsonSchema.transform((arg) => JSON.stringify(arg)),
   }),
 
   update: z.object({
     id: z.string().cuid(),
-    name: z.string().trim().min(1).optional(),
-    description: z.string().trim().min(1).optional(),
+    name: z.string().trim().optional(),
+    description: z.string().trim().optional(),
     contentType: z.nativeEnum(ARGeneratedContentType).optional(),
-    content: jsonSchema.optional(),
+    content: jsonSchema.transform((arg) => JSON.stringify(arg)).optional(),
     isActive: z.boolean().optional(),
   }),
 

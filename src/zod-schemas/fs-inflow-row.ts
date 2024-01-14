@@ -55,48 +55,87 @@ const sharedSchemas = {
     .optional(),
 
   createCollection: z.object({
-    date: z.string().datetime({ offset: true }),
-    name: z.string().min(1).trim(),
-    ORNumber: z.string().min(1).trim(),
-    amount: z.number(),
+    date: z
+      .string()
+      .min(1, 'Date is required')
+      .transform((arg) => new Date(arg).toISOString()),
+    name: z.string().trim().min(1, 'Name is required'),
+    ORNumber: z.string().trim().min(1, 'OR Number is required'),
+    amount: z
+      .string()
+      .min(1, 'Amount is required')
+      .transform((arg) => parseFloat(arg).toFixed(2)),
     receipt: z.string().nullable().optional(),
     receiptId: z.string().nullable().optional(),
     inflowId: z.string().cuid(),
   }),
 
-  createIGP: z.object({
-    date: z.string().datetime({ offset: true }),
-    quantity: z.number().int(),
-    name: z.string().min(1).trim(),
-    ORNumber: z.string().min(1).trim(),
-    unit: z.string().min(1).trim(),
-    price: z.number(),
-    receipt: z.string().nullable().optional(),
-    receiptId: z.string().nullable().optional(),
-    inflowId: z.string().cuid(),
-  }),
+  createIGP: z
+    .object({
+      date: z
+        .string()
+        .min(1, 'Date is required')
+        .transform((arg) => new Date(arg).toISOString()),
+      quantity: z
+        .string()
+        .min(1, 'Quantity is required')
+        .transform((arg) => parseInt(arg)),
+      particulars: z.string().trim().min(1, 'Particulars is required'),
+      ORNumber: z.string().trim().min(1, 'OR Number is required'),
+      unit: z.string().trim().min(1, 'Unit is required'),
+      price: z
+        .string()
+        .min(1, 'Price is required')
+        .transform((arg) => parseFloat(arg).toFixed(2)),
+      receipt: z.string().nullable().optional(),
+      receiptId: z.string().nullable().optional(),
+      inflowId: z.string().cuid(),
+    })
+    .transform(({ particulars, ...arg }) => ({ ...arg, name: particulars })),
 
   updateCollection: z.object({
     id: z.string().cuid(),
-    date: z.string().datetime({ offset: true }).optional(),
-    name: z.string().min(1).trim().optional(),
-    ORNumber: z.string().min(1).trim().optional(),
-    amount: z.number().optional(),
+    date: z
+      .string()
+      .min(1, 'Date is required')
+      .transform((arg) => new Date(arg).toISOString())
+      .optional(),
+    name: z.string().trim().min(1, 'Name is required').optional(),
+    ORNumber: z.string().trim().min(1, 'OR Number is required').optional(),
+    amount: z
+      .string()
+      .min(1, 'Amount is required')
+      .transform((arg) => parseFloat(arg).toFixed(2))
+      .optional(),
     receipt: z.string().nullable().optional(),
     receiptId: z.string().nullable().optional(),
   }),
 
-  updateIGP: z.object({
-    id: z.string().cuid(),
-    date: z.string().datetime({ offset: true }).optional(),
-    quantity: z.number().int().optional(),
-    name: z.string().min(1).trim().optional(),
-    ORNumber: z.string().min(1).trim().optional(),
-    unit: z.string().min(1).trim().optional(),
-    price: z.number().optional(),
-    receipt: z.string().nullable().optional(),
-    receiptId: z.string().nullable().optional(),
-  }),
+  updateIGP: z
+    .object({
+      id: z.string().cuid(),
+      date: z
+        .string()
+        .min(1, 'Date is required')
+        .transform((arg) => new Date(arg).toISOString())
+        .optional(),
+      quantity: z
+        .string()
+        .min(1, 'Quantity is required')
+        .transform((arg) => parseInt(arg))
+        .optional(),
+      particulars: z.string().trim().min(1, 'Particulars is required').optional(),
+      ORNumber: z.string().trim().min(1, 'OR Number is required').optional(),
+      unit: z.string().trim().min(1, 'Unit is required').optional(),
+      price: z
+        .string()
+        .min(1, 'Price is required')
+        .transform((arg) => parseFloat(arg).toFixed(2))
+        .optional(),
+      receipt: z.string().nullable().optional(),
+      receiptId: z.string().nullable().optional(),
+    })
+    .transform(({ particulars, ...arg }) => ({ ...arg, name: particulars })),
 
   delete: z.object({ id: z.string().cuid() }),
 };

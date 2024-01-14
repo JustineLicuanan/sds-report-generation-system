@@ -33,20 +33,50 @@ const adminSchemas = {
     .optional(),
 
   create: z.object({
-    yearStart: z.number().int(),
-    yearEnd: z.number().int(),
+    yearStart: z
+      .string()
+      .min(1, 'Start of year is required')
+      .transform((arg) => parseInt(arg)),
+    yearEnd: z
+      .string()
+      .min(1, 'End of year is required')
+      .transform((arg) => parseInt(arg)),
     term: z.nativeEnum(SemesterTerm),
-    dueDateAR: z.string().datetime({ offset: true }).nullable().optional(),
-    dueDateFS: z.string().datetime({ offset: true }).nullable().optional(),
+    dueDateAR: z
+      .string()
+      .transform((arg) => (arg.length <= 0 ? undefined : new Date(arg).toISOString()))
+      .nullable()
+      .optional(),
+    dueDateFS: z
+      .string()
+      .transform((arg) => (arg.length <= 0 ? undefined : new Date(arg).toISOString()))
+      .nullable()
+      .optional(),
   }),
 
   update: z.object({
     id: z.string().cuid().optional(),
-    yearStart: z.number().int().optional(),
-    yearEnd: z.number().int().optional(),
+    yearStart: z
+      .string()
+      .min(1, 'Start of year is required')
+      .transform((arg) => parseInt(arg))
+      .optional(),
+    yearEnd: z
+      .string()
+      .min(1, 'End of year is required')
+      .transform((arg) => parseInt(arg))
+      .optional(),
     term: z.nativeEnum(SemesterTerm).optional(),
-    dueDateAR: z.string().datetime({ offset: true }).nullable().optional(),
-    dueDateFS: z.string().datetime({ offset: true }).nullable().optional(),
+    dueDateAR: z
+      .string()
+      .transform((arg) => (arg.length <= 0 ? undefined : new Date(arg).toISOString()))
+      .nullable()
+      .optional(),
+    dueDateFS: z
+      .string()
+      .transform((arg) => (arg.length <= 0 ? undefined : new Date(arg).toISOString()))
+      .nullable()
+      .optional(),
   }),
 
   unarchive: z.object({ id: z.string().cuid() }),

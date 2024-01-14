@@ -13,7 +13,12 @@ const adminSchemas = {
     .optional(),
 
   update: z.object({
-    signatories: z.object({ position: z.string().trim().min(1), name: z.string().trim() }).array(),
+    signatories: z
+      .object({
+        position: z.string().trim().min(1, 'Position is required'),
+        name: z.string().trim(),
+      })
+      .array(),
   }),
 };
 

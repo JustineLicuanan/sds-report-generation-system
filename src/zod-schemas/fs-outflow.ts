@@ -54,7 +54,10 @@ const sharedSchemas = {
 
   create: z.object({
     category: z.nativeEnum(FSOutflowCategory),
-    date: z.string().datetime({ offset: true }),
+    date: z
+      .string()
+      .min(1, 'Date is required')
+      .transform((arg) => new Date(arg).toISOString()),
     description: z.string().trim().optional(),
     monthlyId: z.string().cuid(),
     reportSemesterId: z.string().cuid(),
@@ -63,7 +66,11 @@ const sharedSchemas = {
   update: z.object({
     id: z.string().cuid(),
     category: z.nativeEnum(FSOutflowCategory).optional(),
-    date: z.string().datetime({ offset: true }).optional(),
+    date: z
+      .string()
+      .min(1, 'Date is required')
+      .transform((arg) => new Date(arg).toISOString())
+      .optional(),
     description: z.string().trim().optional(),
   }),
 

@@ -52,11 +52,20 @@ const sharedSchemas = {
     .optional(),
 
   create: z.object({
-    date: z.string().datetime({ offset: true }),
-    quantity: z.number().int(),
-    particulars: z.string().min(1).trim(),
-    unit: z.string().min(1).trim(),
-    price: z.number(),
+    date: z
+      .string()
+      .min(1, 'Date is required')
+      .transform((arg) => new Date(arg).toISOString()),
+    quantity: z
+      .string()
+      .min(1, 'Quantity is required')
+      .transform((arg) => parseInt(arg)),
+    particulars: z.string().trim().min(1, 'Particulars is required'),
+    unit: z.string().trim().min(1, 'Unit is required'),
+    price: z
+      .string()
+      .min(1, 'Price is required')
+      .transform((arg) => parseFloat(arg).toFixed(2)),
     receipt: z.string().nullable().optional(),
     receiptId: z.string().nullable().optional(),
     outflowId: z.string().cuid(),
@@ -64,11 +73,23 @@ const sharedSchemas = {
 
   update: z.object({
     id: z.string().cuid(),
-    date: z.string().datetime({ offset: true }).optional(),
-    quantity: z.number().int().optional(),
-    particulars: z.string().min(1).trim().optional(),
-    unit: z.string().min(1).trim().optional(),
-    price: z.number().optional(),
+    date: z
+      .string()
+      .min(1, 'Date is required')
+      .transform((arg) => new Date(arg).toISOString())
+      .optional(),
+    quantity: z
+      .string()
+      .min(1, 'Quantity is required')
+      .transform((arg) => parseInt(arg))
+      .optional(),
+    particulars: z.string().trim().min(1, 'Particulars is required').optional(),
+    unit: z.string().trim().min(1, 'Unit is required').optional(),
+    price: z
+      .string()
+      .min(1, 'Price is required')
+      .transform((arg) => parseFloat(arg).toFixed(2))
+      .optional(),
     receipt: z.string().nullable().optional(),
     receiptId: z.string().nullable().optional(),
   }),

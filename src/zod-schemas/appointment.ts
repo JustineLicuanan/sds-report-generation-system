@@ -18,14 +18,21 @@ const adminSchemas = {
     .optional(),
 
   create: z.object({
-    due: z.string().datetime({ offset: true }),
+    due: z
+      .string()
+      .min(1, 'Date & Time is required')
+      .transform((arg) => new Date(arg).toISOString()),
     message: z.string().trim().optional(),
     organizationId: z.string().cuid(),
   }),
 
   update: z.object({
     id: z.string().cuid(),
-    due: z.string().datetime({ offset: true }).optional(),
+    due: z
+      .string()
+      .min(1, 'Date & Time is required')
+      .transform((arg) => new Date(arg).toISOString())
+      .optional(),
     message: z.string().trim().optional(),
     organizationId: z.string().cuid().optional(),
   }),

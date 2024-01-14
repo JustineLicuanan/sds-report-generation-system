@@ -23,16 +23,16 @@ const sharedSchemas = {
     .optional(),
 
   create: z.object({
-    name: z.string().trim().min(1),
-    position: z.string().trim().min(1),
-    content: jsonSchema,
+    name: z.string().trim().min(1, 'Name is required'),
+    position: z.string().trim().min(1, 'Position is required'),
+    content: jsonSchema.transform((arg) => JSON.stringify(arg)),
   }),
 
   update: z.object({
     id: z.string().cuid(),
-    name: z.string().trim().min(1).optional(),
-    position: z.string().trim().min(1).optional(),
-    content: jsonSchema.optional(),
+    name: z.string().trim().min(1, 'Name is required').optional(),
+    position: z.string().trim().min(1, 'Position is required').optional(),
+    content: jsonSchema.transform((arg) => JSON.stringify(arg)).optional(),
   }),
 
   delete: z.object({ id: z.string().cuid() }),
