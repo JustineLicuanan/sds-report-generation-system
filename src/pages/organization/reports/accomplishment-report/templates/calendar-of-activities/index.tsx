@@ -1,15 +1,21 @@
 import { type OutputData } from '@editorjs/editorjs';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ARGeneratedContentType, ARGeneratedTemplateType } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { useToast } from '~/components/ui/use-toast';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { parseSignatoryObject } from '~/utils/parse-signatory-object';
+import { schemas } from '~/zod-schemas';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -24,7 +30,13 @@ export const getServerSideProps = (async (ctx) => {
 
 const EditorBlock = dynamic(() => import('~/components/editor'), { ssr: false });
 
+type CreateARGeneratedInputs = z.infer<typeof schemas.shared.ARGenerated.create>;
+
 export default function CalendarOfActivitiesPage() {
+  const router = useRouter();
+  const utils = api.useContext();
+  const { toast } = useToast();
+
   const [content1stSem, setContent1stSem] = useState<OutputData>({
     time: 1705032952429,
     blocks: [
@@ -103,11 +115,50 @@ export default function CalendarOfActivitiesPage() {
     ],
     version: '2.28.2',
   });
-  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
-  const repSignatory = getReportSignatoryQuery?.data ?? [];
-  const signatories = parseSignatoryObject(repSignatory);
 
-  const router = useRouter();
+  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
+    include: { organization: true },
+  });
+  const orgSignatoryInfo = getOrgSignatoryInfo.data;
+
+  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
+  const signatories = parseSignatoryObject(getReportSignatoryQuery?.data ?? []);
+
+  // This is for AR auto creation when there's an active semester
+  api.shared.AR.getOrCreate.useQuery();
+
+  const createARGeneratedForm = useForm<CreateARGeneratedInputs>({
+    resolver: zodResolver(schemas.shared.ARGenerated.create),
+    // I use 'values' here because in the future(?), the Editor.js template (content) might come from database
+    values: {
+      templateType: ARGeneratedTemplateType.FORM,
+      contentType: ARGeneratedContentType.CALENDAR_OF_ACTIVITIES,
+      contentNumber: 1,
+      // This 'content' is JSON, you can structure it however you like
+      content: { letter1stSem: content1stSem, letter2ndSem: content2ndSem },
+    },
+  });
+
+  const createARGenerated = api.shared.ARGenerated.create.useMutation({
+    onSuccess: async ({ id }) => {
+      toast({ variant: 'c-primary', description: '✔️ An AR page has been generated.' });
+      await utils.admin.ARGenerated.invalidate();
+      await router.push({
+        pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${paths.ACTIVITY_PROPOSAL}`,
+        query: { ARGeneratedId: id },
+      });
+    },
+    onError: () => {
+      toast({ variant: 'destructive', description: '❌ Internal Server Error' });
+    },
+  });
+
+  const onSubmitCreateARGenerated: SubmitHandler<CreateARGeneratedInputs> = (values) => {
+    if (createARGenerated.isLoading) {
+      return;
+    }
+    createARGenerated.mutate(values);
+  };
   return (
     <>
       <Head>

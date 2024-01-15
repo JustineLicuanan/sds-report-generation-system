@@ -1,12 +1,18 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ARGeneratedContentType, ARGeneratedTemplateType } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
+import { useToast } from '~/components/ui/use-toast';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { schemas } from '~/zod-schemas';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -19,15 +25,53 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-export default function ResolutionPage() {
-  const [data, setData] = useState([
-    {
-      title: '',
-      content: '',
-    },
-  ]);
+type CreateARGeneratedInputs = z.infer<typeof schemas.shared.ARGenerated.create>;
 
+export default function ResolutionPage() {
   const router = useRouter();
+  const utils = api.useContext();
+  const { toast } = useToast();
+
+  // This is for AR auto creation when there's an active semester
+  api.shared.AR.getOrCreate.useQuery();
+
+  const createARGeneratedForm = useForm<CreateARGeneratedInputs>({
+    resolver: zodResolver(schemas.shared.ARGenerated.create),
+    // Use defaultValues if the values are NOT from the database
+    defaultValues: {
+      templateType: ARGeneratedTemplateType.FORM,
+      contentType: ARGeneratedContentType.RESOLUTION,
+      contentNumber: 1,
+      // This 'content' is JSON, you can structure it however you like
+      content: { resolution: [{ whereas: '', description: '' }] },
+    },
+  });
+
+  const resolutionFieldArray = useFieldArray({
+    name: 'content.resolution',
+    control: createARGeneratedForm.control,
+  });
+
+  const createARGenerated = api.shared.ARGenerated.create.useMutation({
+    onSuccess: async ({ id }) => {
+      toast({ variant: 'c-primary', description: '✔️ An AR page has been generated.' });
+      await utils.admin.ARGenerated.invalidate();
+      await router.push({
+        pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${paths.RESOLUTION}`,
+        query: { ARGeneratedId: id },
+      });
+    },
+    onError: () => {
+      toast({ variant: 'destructive', description: '❌ Internal Server Error' });
+    },
+  });
+
+  const onSubmitCreateARGenerated: SubmitHandler<CreateARGeneratedInputs> = (values) => {
+    if (createARGenerated.isLoading) {
+      return;
+    }
+    createARGenerated.mutate(values);
+  };
   return (
     <>
       <Head>
@@ -41,17 +85,22 @@ export default function ResolutionPage() {
         {/* SIDE BAR*/}
         <OrganizationSideBarMenu />
 
-        <div id="main-content" className="mx-4 my-4  w-full">
+        <form
+          id="main-content"
+          className="mx-4 my-4  w-full"
+          onSubmit={createARGeneratedForm.handleSubmit(onSubmitCreateARGenerated, (err) => {
+            console.error(err);
+          })}
+        >
           <div className="text-2xl font-bold">Generate Resolution</div>
           <div className="mt-8 flex flex-col gap-2">
             <div className="flex items-center gap-4">
               <label htmlFor="select-appointee">Select Appointees:</label>
               <select
-                name=""
                 id="select-appointee"
                 className="rounded-sm border border-input bg-transparent p-1"
+                {...createARGeneratedForm.register(`content.appointees`)}
               >
-                <option value="">Select appointees</option>
                 <option value="advisers">Advisers</option>
                 <option value="committees">Committees</option>
               </select>
@@ -60,41 +109,37 @@ export default function ResolutionPage() {
               <label htmlFor="resu-no">Resolution No:</label>
               <input
                 type="text"
-                name=""
                 id="resu-no"
                 placeholder="XXX"
                 className="rounded-sm border border-input bg-transparent px-1"
+                {...createARGeneratedForm.register(`content.resolutionNumber`)}
               />
             </div>
 
             <div className="mt-4 font-bold">Content</div>
-            {data.map((map, index) => (
-              <div key={index} className="my-1 flex flex-col justify-end gap-2">
+            {resolutionFieldArray.fields.map((field, idx) => (
+              <div key={field.id} className="my-1 flex flex-col justify-end gap-2">
                 <input
                   type="text"
-                  name=""
                   id="resu-no"
                   placeholder="WHEREAS"
                   className="rounded-sm border border-input bg-transparent px-1"
+                  {...createARGeneratedForm.register(`content.resolution.${idx}.whereas`)}
                 />
                 <textarea
-                  name=""
                   id=""
                   placeholder="Content"
                   cols={30}
                   rows={3}
                   className="rounded-sm border border-input px-1"
+                  {...createARGeneratedForm.register(`content.resolution.${idx}.description`)}
                 ></textarea>
               </div>
             ))}
             <div className="flex justify-end gap-4">
               <button
                 type="button"
-                onClick={() => {
-                  const newDataArray = [...data];
-                  newDataArray.pop(); // Remove the last item
-                  setData(newDataArray);
-                }}
+                onClick={() => resolutionFieldArray.remove(resolutionFieldArray.fields.length - 1)}
                 className="rounded-sm border border-red bg-red px-3 text-white active:scale-95"
               >
                 Remove content
@@ -102,11 +147,10 @@ export default function ResolutionPage() {
               <button
                 type="button"
                 onClick={() => {
-                  data.push({
-                    title: '',
-                    content: '',
+                  resolutionFieldArray.append({
+                    whereas: '',
+                    description: '',
                   });
-                  setData([...data]);
                 }}
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
@@ -118,9 +162,9 @@ export default function ResolutionPage() {
               <label htmlFor="signed-date">Signed Date:</label>
               <input
                 type="date"
-                name=""
                 id="signed-date"
                 className="rounded-sm border border-input bg-transparent px-1"
+                {...createARGeneratedForm.register(`content.signedDate`)}
               />
             </div>
           </div>
@@ -143,7 +187,7 @@ export default function ResolutionPage() {
               Save
             </button>
           </div>
-        </div>
+        </form>
       </main>
     </>
   );

@@ -57,7 +57,7 @@ export default function SetupPositionsPage() {
     // This is the callback function after successful backend execution
     onSuccess: async ({ id }) => {
       toast({ variant: 'c-primary', description: '✔️ Signatory Information has been updated.' });
-      await utils.admin.orgSignatoryInfo.invalidate();
+      await utils.shared.orgSignatoryInfo.invalidate();
     },
     // This is the callback function after failed backend execution. This is mostly used for 'unique' data conflict errors like unique email, etc.
     onError: () => {

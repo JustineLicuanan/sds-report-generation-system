@@ -1,8 +1,10 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { logo, meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -17,6 +19,15 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function MinutesOfTheMeeting() {
+  const router = useRouter();
+  const { ARGeneratedId } = router.query;
+
+  const getARGenerated = api.shared.ARGenerated.get.useQuery({
+    where: { id: ARGeneratedId as string },
+  });
+  const ARGenerated = getARGenerated.data?.[0];
+  const contentString = ARGenerated?.content;
+  const contentObject = contentString ? JSON.parse(contentString) : null;
   return (
     <>
       <Head>
@@ -59,7 +70,7 @@ export default function MinutesOfTheMeeting() {
         <div className="flex flex-col gap-4">
           <div>
             <span className="font-bold">DATE AND LOCATION: </span>
-            [date] - [location]
+            {contentObject?.[0]?.date} - {contentObject?.[0]?.location}
           </div>
           <div>
             <span className="font-bold">TIME STARTED: </span>
@@ -73,56 +84,42 @@ export default function MinutesOfTheMeeting() {
             <div className="font-bold">ATTENDEES</div>
             <table className="mx-auto my-0 w-1/2 ">
               <thead>
-                <tr className="">
+                <tr>
                   <th className="py-4 font-bold">(Name)</th>
                   <th className="py-4 font-bold">(Position)</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>• [Name]</td>
-                  <td>[Position]</td>
-                </tr>
-                <tr>
-                  <td>• [Name]</td>
-                  <td>[Position]</td>
-                </tr>
-                <tr>
-                  <td>• [Name]</td>
-                  <td>[Position]</td>
-                </tr>
+                {contentObject?.attendees.map((attendees, idx) => (
+                  <tr key={idx}>
+                    <td>• {attendees.name}</td>
+                    <td>{attendees.position}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
         <div>
           <div className="font-bold">AGENDA</div>
-          <div className="ms-4">
-            <div>
-              • Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga dignissimos nulla
-              voluptatem corporis, a libero.
+          {contentObject?.agenda.map((agenda, idx) => (
+            <div className="ms-4">
+              <div>{agenda.agendaContent ? `• ${agenda.agendaContent}` : 'No agendas'}</div>
             </div>
-            <div>• Lorem ipsum dolor sit amet.</div>
-            <div>
-              • Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur, culpa!
-            </div>
-          </div>
+          ))}
         </div>
         <hr />
         <div className="flex flex-col gap-4">
           <div className="font-bold">COMMENCEMENT:</div>
-          <div className="ms-4 flex flex-col gap-4">
-            <div>
-              • Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores impedit dolores
-              dicta excepturi architecto unde accusantium, eaque laudantium porro laborum, ad
-              ducimus aperiam sequi dolore?
+          {contentObject?.commencement.map((commencement, idx) => (
+            <div key={idx} className="ms-4 flex flex-col gap-4">
+              <div>
+                {commencement.commencementContent
+                  ? `• ${commencement.commencementContent}`
+                  : 'No Commencements'}
+              </div>
             </div>
-            <div>
-              • Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores impedit dolores
-              dicta excepturi architecto unde accusantium, eaque laudantium porro laborum, ad
-              ducimus aperiam sequi dolore?
-            </div>
-          </div>
+          ))}
         </div>
         <div>
           <span className="font-bold">TIME ADJOURNED: </span> [time]{' '}

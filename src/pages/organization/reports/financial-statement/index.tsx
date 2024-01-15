@@ -7,6 +7,7 @@ import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { getMonthName } from '~/utils/getMonthName';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -135,14 +136,14 @@ export default function FinancialStatementPage() {
                 className="border-sm  my-2 flex items-center justify-between gap-2 border border-input"
               >
                 <div className="flex w-1/2 items-center justify-between gap-2  p-2">
-                  <div className="text-lg font-bold">Month of {month.month}</div>
+                  <div className="text-lg font-bold">Month of {getMonthName(month.month)}</div>
                   <button
                     type="button"
                     className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                     onClick={() =>
                       router.push({
                         pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/${month.id}${paths.MODIFY_FINANCIAL_STATEMENT}`,
-                        query: { monthlyID: month.id, reportSemesterID: reportSem?.id },
+                        query: { monthlyID: month.id},
                       })
                     }
                   >

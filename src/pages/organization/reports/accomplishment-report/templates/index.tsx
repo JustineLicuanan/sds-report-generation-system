@@ -110,7 +110,7 @@ export default function AccomplishmentReportTemplatePage() {
                         type="button"
                         onClick={() =>
                           router.push(
-                            `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}${file.filePath}/message`
+                            `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.TEMPLATE}${file.filePath}${paths.MESSAGE}`
                           )
                         }
                         className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"

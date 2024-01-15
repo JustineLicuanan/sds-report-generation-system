@@ -1,10 +1,13 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { meta } from '~/meta';
+import { useToast } from '~/components/ui/use-toast';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -19,6 +22,32 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AddOutflowFinancialStatementPage() {
+  const router = useRouter();
+  const { monthlyID, FSOutflowID } = router.query;
+  const utils = api.useContext();
+  const { toast } = useToast();
+
+  const getFSOutflow = api.shared.FSOutflow.get.useQuery({ where: { id: FSOutflowID as string } });
+  const FSOutflow = getFSOutflow?.data?.[0];
+
+  const getReportSemQuery = api.shared.reportSemester.get.useQuery();
+  const reportSem = getReportSemQuery?.data;
+
+  const deleteFSOutflowRow = api.shared.FSOutflowRow.delete.useMutation({
+    // This is the callback function after successful backend execution
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ FS Outflow Row has been deleted' });
+      await utils.shared.orgSignatoryInfo.invalidate();
+    },
+    // This is the callback function after failed backend execution. This is mostly used for 'unique' data conflict errors like unique email, etc.
+    onError: () => {
+      toast({
+        variant: 'destructive',
+        title: '❌ Internal Server Error',
+        description: 'Deleting of FS Outflow Row failed.',
+      });
+    },
+  });
   const [disable, setDisable] = useState(false);
 
   const header = [
@@ -76,6 +105,12 @@ export default function AddOutflowFinancialStatementPage() {
             <div className="flex justify-end gap-2">
               <button
                 type="button"
+                onClick={() =>
+                  router.push({
+                    pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/${monthlyID}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${FSOutflowID}/${FSOutflow?.category}${paths.CREATE}`,
+                    query: { monthlyID: monthlyID, FSOutflowID: FSOutflowID },
+                  })
+                }
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Add row

@@ -1,13 +1,20 @@
 import { type OutputData } from '@editorjs/editorjs';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ARGeneratedContentType, ARGeneratedTemplateType } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { useToast } from '~/components/ui/use-toast';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { schemas } from '~/zod-schemas';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -22,7 +29,13 @@ export const getServerSideProps = (async (ctx) => {
 
 const EditorBlock = dynamic(() => import('~/components/editor'), { ssr: false });
 
+type CreateARGeneratedInputs = z.infer<typeof schemas.shared.ARGenerated.create>;
+
 export default function InvitationLetterPage() {
+  const router = useRouter();
+  const utils = api.useContext();
+  const { toast } = useToast();
+
   const [content, setContent] = useState<OutputData>({
     time: 1705030194807,
     blocks: [
@@ -105,7 +118,47 @@ export default function InvitationLetterPage() {
   const [invitedName, setInvitedName] = useState('');
   const [invitedPosition, setInvitedPosition] = useState('');
   const [invitedBusinessName, setInvitedBusinessName] = useState('');
-  const router = useRouter();
+
+  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
+    include: { organization: true },
+  });
+  const orgSignatoryInfo = getOrgSignatoryInfo.data;
+
+  // This is for AR auto creation when there's an active semester
+  api.shared.AR.getOrCreate.useQuery();
+
+  const createARGeneratedForm = useForm<CreateARGeneratedInputs>({
+    resolver: zodResolver(schemas.shared.ARGenerated.create),
+    // I use 'values' here because in the future(?), the Editor.js template (content) might come from database
+    values: {
+      templateType: ARGeneratedTemplateType.FORM,
+      contentType: ARGeneratedContentType.OTHER_LETTER,
+      contentNumber: 2,
+      // This 'content' is JSON, you can structure it however you like
+      content: { letter: content, receiveBy: '', positionReceiveBy: '' },
+    },
+  });
+
+  const createARGenerated = api.shared.ARGenerated.create.useMutation({
+    onSuccess: async ({ id }) => {
+      toast({ variant: 'c-primary', description: '✔️ An AR Generated has been generated.' });
+      await utils.admin.ARGenerated.invalidate();
+      await router.push({
+        pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.ACCOMPLISHMENT_REPORT}${paths.GENERATED_FILES}${paths.OTHER_LETTERS}${paths.INVITATION_LETTER}`,
+        query: { ARGeneratedId: id },
+      });
+    },
+    onError: () => {
+      toast({ variant: 'destructive', description: '❌ Internal Server Error' });
+    },
+  });
+
+  const onSubmitCreateARGenerated: SubmitHandler<CreateARGeneratedInputs> = (values) => {
+    if (createARGenerated.isLoading) {
+      return;
+    }
+    createARGenerated.mutate(values);
+  };
   return (
     <>
       <Head>
@@ -146,7 +199,11 @@ export default function InvitationLetterPage() {
         </div>
         <div className="rounded border p-2 print:border-none">
           {/* `holder` prop must be a unique ID for each EditorBlock instance */}
-          <EditorBlock data={content} onChange={setContent} holder="activity-proposal-message" />
+          <EditorBlock
+            data={createARGeneratedForm.watch('content.letter')}
+            onChange={(value) => createARGeneratedForm.setValue('content.letter', value)}
+            holder="other-letters-invitation"
+          />
         </div>
         <div className="items-left mt-4 flex flex-col gap-8">
           <div>Respectfully yours,</div>
@@ -193,39 +250,28 @@ export default function InvitationLetterPage() {
           </div>
           <div>Received by:</div>
           <div className="items-left mt-4 flex flex-col gap-2 print:gap-0">
-            <div className="hidden font-bold print:block">{invitedName}</div>
+            <div className="hidden font-bold print:block">
+              {...createARGeneratedForm.watch('content.receiveBy')}
+            </div>
             <div className="hidden print:block">
-              {invitedPosition}, {invitedBusinessName}
+              {...createARGeneratedForm.watch('content.positionReceiveBy')}
             </div>
             <div>
               <input
                 type="text"
-                name=""
                 placeholder="Name e.g John Doe"
                 id=""
-                onChange={(e) => setInvitedName(e.target.value)}
                 className="rounded-sm border border-input px-1 print:hidden"
-                value={invitedName}
+                {...createARGeneratedForm.register('content.receiveBy')}
               />
             </div>
             <div>
               <input
                 type="text"
-                name=""
-                placeholder="Position e.g Owner"
                 id=""
-                onChange={(e) => setInvitedPosition(e.target.value)}
-                className="rounded-sm border border-input px-1 print:hidden"
-                value={invitedPosition}
-              />{' '}
-              <input
-                type="text"
-                name=""
-                placeholder="BusinessName e.g John Doe Inc."
-                id=""
-                onChange={(e) => setInvitedBusinessName(e.target.value)}
+                placeholder="e.g.: Chairperson, Department of Physical Education"
                 className="w-1/2 rounded-sm border border-input px-1 print:hidden"
-                value={invitedBusinessName}
+                {...createARGeneratedForm.register('content.positionReceiveBy')}
               />
             </div>
           </div>
@@ -243,7 +289,7 @@ export default function InvitationLetterPage() {
             Back
           </button>
           <button
-            type="button"
+            type="submit"
             className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
           >
             Save

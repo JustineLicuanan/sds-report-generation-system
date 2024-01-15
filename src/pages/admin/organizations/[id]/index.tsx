@@ -67,7 +67,7 @@ export default function OrganizationInformationPage() {
                 type="button"
                 onClick={() =>
                   router.push(
-                    `${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.ORGANIZATION_EDIT}`
+                    `${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.ORGANIZATION_SAVE}`
                   )
                 }
                 className="rounded-sm bg-yellow px-4 py-2 text-xl"

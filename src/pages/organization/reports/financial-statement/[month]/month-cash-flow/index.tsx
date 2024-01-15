@@ -1,7 +1,9 @@
+import { FSInflowCategory } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 
 export const getServerSideProps = (async (ctx) => {
@@ -16,6 +18,12 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function SemCashFlow() {
+  const getFSInflowRowsQuery = api.shared.FSInflowRow.get.useQuery();
+  const FSInflowRows = getFSInflowRowsQuery?.data;
+
+  let runningBalance = 20000;
+  // const [currentBalance, setCurrentBalance] = useState(runningBalance);
+
   return (
     <>
       <Head>
@@ -56,15 +64,29 @@ export default function SemCashFlow() {
                   Inflows
                 </td>
               </tr>
-              <tr>
-                <td className=" p-1"></td>
-                <td className=" p-1">Collection</td>
-                <td className=" p-1">S-001</td>
-                <td className=" p-1"></td>
-                <td className=" p-1">50.00</td>
-                <td className=" p-1"></td>
-                <td className=" p-1">20,050.00</td>
-              </tr>
+              {FSInflowRows?.map((inflowRow, index) => {
+                // Assuming inflow.amount is a number
+
+                if (inflowRow.category === FSInflowCategory.IGP) {
+                  const amount = Number(inflowRow.price) * inflowRow.quantity!;
+                  runningBalance += amount;
+                } else {
+                  runningBalance += Number(inflowRow.amount);
+                }
+
+                return (
+                  <tr key={inflowRow.id}>
+                    <td className=" p-1"></td>
+                    <td className=" p-1">{inflowRow.category}</td>
+                    <td className=" p-1">S-00{index + 1}</td>
+                    <td className=" p-1"></td>
+                    <td className=" p-1">{inflowRow.amount?.toString()}</td>
+                    <td className=" p-1"></td>
+                    <td className=" p-1">{runningBalance}</td>
+                  </tr>
+                );
+              })}
+
               <tr>
                 <td className=" p-1"></td>
                 <td className=" p-1">IGP</td>
@@ -124,7 +146,7 @@ export default function SemCashFlow() {
                 <td className="border-y p-1">100.00</td>
                 <td className="border-y p-1">(10.00)</td>
                 <td className="border-y p-1" style={{ borderBottom: 'double' }}>
-                  20,090.00
+                  {runningBalance}
                 </td>
               </tr>
             </tbody>

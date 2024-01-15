@@ -1,5 +1,6 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -21,6 +22,20 @@ export default function CBL() {
   const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
   const repSignatory = getReportSignatoryQuery?.data ?? [];
   const signatories = parseSignatoryObject(repSignatory);
+
+  const router = useRouter();
+  const { ARGeneratedId } = router.query;
+
+  const getARGenerated = api.shared.ARGenerated.get.useQuery({
+    where: { id: ARGeneratedId as string },
+  });
+  const ARGenerated = getARGenerated.data?.[0];
+  const contentString = ARGenerated?.content;
+  const contentObject = contentString ? JSON.parse(contentString) : null;
+
+  // This is for AR auto creation when there's an active semester
+  api.shared.AR.getOrCreate.useQuery();
+
   return (
     <>
       <Head>
@@ -59,7 +74,15 @@ export default function CBL() {
             </div>
           </div>
         </div>
-        <div className=''>Signed at Cavite State University-Imus Campus on the [Nth] day of [Date]</div>
+        <div className="mb-16 flex h-[100vh] flex-col items-center  gap-8 text-justify">
+          {contentObject?.articles.map((article, idx) => (
+            <div key={idx}>
+              <div className="text-center font-bold">Article {article.articleNumber}</div>
+              <div className="text-center">{article.description}</div>
+            </div>
+          ))}
+        </div>
+        <div className="">Signed at Cavite State University-Imus Campus on the day of [Date]</div>
         <div className="mt-4 flex flex-col items-center gap-8">
           <div className="flex flex-col items-center">
             <div className="font-bold">[NAME]</div>
