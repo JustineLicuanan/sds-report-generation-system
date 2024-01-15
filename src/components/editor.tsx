@@ -7,11 +7,12 @@ import { EDITOR_TOOLS } from '~/utils/editor-tools';
 type Props = {
   data?: OutputData;
   onChange(val: OutputData): void;
+  setEditorInstance?(editor: () => EditorJS | undefined): void;
   holder: string;
   className?: string;
 };
 
-function EditorBlock({ data, onChange, holder, className }: Props) {
+function EditorBlock({ data, onChange, setEditorInstance, holder, className }: Props) {
   const ref = useRef<EditorJS>();
 
   useEffect(() => {
@@ -28,6 +29,9 @@ function EditorBlock({ data, onChange, holder, className }: Props) {
       });
       ref.current = editor;
     }
+
+    // Set Editor.js instance for access in the parent component
+    setEditorInstance?.(() => ref.current);
 
     // Add a return function handle cleanup
     return () => {

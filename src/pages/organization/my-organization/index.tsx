@@ -68,7 +68,7 @@ export default function OrganizationPage() {
           </div>
 
           <div className="col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-2xl font-bold">Setup your organization's positions</div>
+            <div className="text-2xl font-bold">Setup your Signatory Information</div>
             <div className="text-center font-medium">
               Establish your organization by completing the required fields and providing necessary
               information as indicated.
@@ -80,7 +80,7 @@ export default function OrganizationPage() {
               }
               className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
             >
-              Setup positions
+              Setup Signatory Information
             </button>
           </div>
 

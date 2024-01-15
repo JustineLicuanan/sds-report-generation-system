@@ -2,6 +2,7 @@ import { type OutputData } from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ARGeneratedContentType, ARGeneratedTemplateType } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -14,7 +15,6 @@ import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
-import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 import { schemas } from '~/zod-schemas';
 
 export const getServerSideProps = (async (ctx) => {
@@ -37,7 +37,6 @@ export default function ExcuseLetterPage() {
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const [chairpersonName, setChairpersonName] = useState('');
   const [content, setContent] = useState<OutputData>({
     time: 1705037343671,
     blocks: [
@@ -119,8 +118,11 @@ export default function ExcuseLetterPage() {
     ],
     version: '2.28.2',
   });
-  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
-  const signatories = parseSignatoryObject(getReportSignatoryQuery?.data ?? []);
+
+  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
+    include: { organization: true },
+  });
+  const orgSignatoryInfo = getOrgSignatoryInfo.data;
 
   // This is for AR auto creation when there's an active semester
   api.shared.AR.getOrCreate.useQuery();
@@ -189,8 +191,8 @@ export default function ExcuseLetterPage() {
             <div className="font-bold">CAVITE STATE UNIVERSITY</div>
             <div className="font-bold">Imus Campus</div>
             <div className="font-bold">Student Development Services</div>
-            <div className="font-bold">ORG NAME</div>
-            <div className="">org gmail account</div>
+            <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>
+            <div className="">{orgSignatoryInfo?.organization.contactEmail}</div>
           </div>
           <Image
             src={logo.SDS_LOGO}
@@ -199,7 +201,19 @@ export default function ExcuseLetterPage() {
             width={100}
             className="h-24 w-24 "
           />
-          <div className="h-24 w-24 rounded-full border"></div>
+          {orgSignatoryInfo?.organization.image ? (
+            <div className="h-24 w-24">
+              <CldImage
+                width="96"
+                height="96"
+                src={orgSignatoryInfo?.organization.imageId ?? ''}
+                alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="h-24 w-24 rounded-full border"></div>
+          )}
         </div>
         <div className="rounded border p-2 print:border-none">
           {/* `holder` prop must be a unique ID for each EditorBlock instance */}
@@ -217,15 +231,19 @@ export default function ExcuseLetterPage() {
             <div className="flex flex-col gap-8">
               <div>Prepared by:</div>
               <div className="items-left flex flex-col">
-                <div className="font-bold">[NAME]</div>
-                <div>[Org Name] Adviser</div>
+                <div className="font-bold">
+                  {orgSignatoryInfo?.adviser1 === '' ? '[NAME]' : orgSignatoryInfo?.adviser1}
+                </div>
+                <div>{orgSignatoryInfo?.organization.acronym} Adviser</div>
               </div>
             </div>
             <div className="flex flex-col gap-8">
               <div>Recommending Approval:</div>
               <div className="items-left flex flex-col">
-                <div className="font-bold">[NAME]</div>
-                <div>[Org Name] Adviser</div>
+                <div className="font-bold">
+                  {orgSignatoryInfo?.adviser2 === '' ? '[NAME]' : orgSignatoryInfo?.adviser2}
+                </div>
+                <div>{orgSignatoryInfo?.organization.acronym} Adviser</div>
               </div>
             </div>
           </div>

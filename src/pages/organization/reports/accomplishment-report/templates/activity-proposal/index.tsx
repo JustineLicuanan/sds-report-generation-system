@@ -2,6 +2,7 @@ import { type OutputData } from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ARGeneratedContentType, ARGeneratedTemplateType } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -70,6 +71,11 @@ export default function ActivityProposalPage() {
     version: '2.28.2',
   });
 
+  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
+    include: { organization: true },
+  });
+  const orgSignatoryInfo = getOrgSignatoryInfo.data;
+
   const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
   const signatories = parseSignatoryObject(getReportSignatoryQuery?.data ?? []);
 
@@ -130,7 +136,7 @@ export default function ActivityProposalPage() {
           />
           <Image
             src={logo.CVSU_LOGO}
-            alt="Bagong Pilipinas"
+            alt="CvSU Logo"
             height={100}
             width={100}
             className="h-24 w-24 "
@@ -140,17 +146,29 @@ export default function ActivityProposalPage() {
             <div className="font-bold">CAVITE STATE UNIVERSITY</div>
             <div className="font-bold">Imus Campus</div>
             <div className="font-bold">Student Development Services</div>
-            <div className="font-bold">ORG NAME</div>
-            <div className="">org gmail account</div>
+            <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>
+            <div className="">{orgSignatoryInfo?.organization.contactEmail}</div>
           </div>
           <Image
             src={logo.SDS_LOGO}
-            alt="Bagong Pilipinas"
+            alt="SDS Logo"
             height={100}
             width={100}
             className="h-24 w-24 "
           />
-          <div className="h-24 w-24 rounded-full border"></div>
+          {orgSignatoryInfo?.organization.image ? (
+            <div className="h-24 w-24">
+              <CldImage
+                width="96"
+                height="96"
+                src={orgSignatoryInfo?.organization.imageId ?? ''}
+                alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="h-24 w-24 rounded-full border"></div>
+          )}
         </div>
         <div className="text-center font-bold">ACTIVITY PROPOSAL</div>
         <div className="rounded border p-2 print:border-none">
@@ -165,23 +183,33 @@ export default function ActivityProposalPage() {
         <div className="mt-4 flex flex-col items-center gap-8">
           <div>Prepared By:</div>
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
-            <div>[Org Name] Assistant Secretary</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.assistantSecretary === ''
+                ? '[NAME]'
+                : orgSignatoryInfo?.assistantSecretary}
+            </div>
+            <div>{orgSignatoryInfo?.organization.acronym} Assistant Secretary</div>
           </div>
           <div>Checked By:</div>
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
-            <div>[Org Name] President</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.president === '' ? '[NAME]' : orgSignatoryInfo?.president}
+            </div>
+            <div>{orgSignatoryInfo?.organization.acronym} President</div>
           </div>
           <div>Noted By:</div>
           <div className="flex items-center gap-28">
             <div className="flex flex-col items-center">
-              <div className="font-bold">[NAME]</div>
-              <div>[Org Name] Adviser</div>
+              <div className="font-bold">
+                {orgSignatoryInfo?.adviser1 === '' ? '[NAME]' : orgSignatoryInfo?.adviser1}
+              </div>
+              <div>{orgSignatoryInfo?.organization.acronym} Adviser</div>
             </div>
             <div className="flex flex-col items-center">
-              <div className="font-bold">[NAME]</div>
-              <div>[Org Name] Adviser</div>
+              <div className="font-bold">
+                {orgSignatoryInfo?.adviser2 === '' ? '[NAME]' : orgSignatoryInfo?.adviser2}
+              </div>
+              <div>{orgSignatoryInfo?.organization.acronym} Adviser</div>
             </div>
           </div>
           <div>Recommending Approval:</div>

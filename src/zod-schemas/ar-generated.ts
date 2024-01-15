@@ -79,6 +79,10 @@ const sharedSchemas = {
     content: z.any().optional(),
   }),
 
+  turnIn: z.object({ id: z.string().cuid() }),
+
+  cancel: z.object({ id: z.string().cuid() }),
+
   delete: z.object({ id: z.string().cuid() }),
 };
 

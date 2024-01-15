@@ -1,3 +1,4 @@
+import { GeneratedReportStatus } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
@@ -66,6 +67,20 @@ export const ARGeneratedRouter = createTRPCRouter({
         ...data,
         content: input.content === undefined ? undefined : JSON.stringify(input.content),
       },
+    });
+  }),
+
+  turnIn: protectedProcedure.input(schemas.shared.ARGenerated.turnIn).mutation(({ ctx, input }) => {
+    return ctx.db.aRGenerated.update({
+      where: { id: input.id, organizationId: ctx.session.user.organizationId },
+      data: { status: GeneratedReportStatus.TURNED_IN },
+    });
+  }),
+
+  cancel: protectedProcedure.input(schemas.shared.ARGenerated.cancel).mutation(({ ctx, input }) => {
+    return ctx.db.aRGenerated.update({
+      where: { id: input.id, organizationId: ctx.session.user.organizationId },
+      data: { status: GeneratedReportStatus.DRAFT },
     });
   }),
 
