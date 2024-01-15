@@ -58,6 +58,15 @@ const sharedSchemas = {
         .optional(),
     })
     .optional(),
+
+  update: z.object({
+    actualCash: z
+      .string()
+      .min(1, 'Amount is required')
+      .transform((arg) => parseFloat(arg).toFixed(2))
+      .or(z.number())
+      .optional(),
+  }),
 };
 
 export const financialStatementSchemas = {

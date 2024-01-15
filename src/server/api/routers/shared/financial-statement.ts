@@ -39,6 +39,13 @@ export const financialStatementRouter = createTRPCRouter({
       });
     }),
 
+  update: protectedProcedure.input(schemas.shared.FS.update).mutation(({ ctx, input }) => {
+    return ctx.db.financialStatement.updateMany({
+      where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
+      data: input,
+    });
+  }),
+
   turnIn: protectedProcedure.mutation(({ ctx }) => {
     return ctx.db.financialStatement.updateMany({
       where: { archivedAt: '', organizationId: ctx.session.user.organizationId },

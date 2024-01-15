@@ -63,6 +63,7 @@ model Organization {
     accomplishmentReports AccomplishmentReport[]
     ARUploads             ARUpload[]
     ARGenerated           ARGenerated[]
+    ARGeneratedComments   ARGeneratedComment[]
     financialStatements   FinancialStatement[]
     FSMonthly             FSMonthly[]
     FSInflows             FSInflow[]
@@ -220,6 +221,7 @@ model ARGenerated {
     contentNumber Int
     content       String
     status        GeneratedReportStatus   @default(DRAFT)
+    comments      ARGeneratedComment[]
     createdAt     DateTime                @default(now())
     updatedAt     DateTime                @updatedAt
     deletedAt     String                  @default("")
@@ -238,6 +240,24 @@ model ARGenerated {
     userId String
 }
 
+model ARGeneratedComment {
+    id        String   @id @default(cuid())
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    ARGenerated   ARGenerated @relation(fields: [ARGeneratedId], references: [id])
+    ARGeneratedId String
+
+    createdBy     User   @relation(fields: [createdById, createdByName], references: [id, name])
+    createdById   String
+    createdByName String
+
+    organization     Organization? @relation(fields: [organizationId, organizationName], references: [id, name])
+    organizationId   String?
+    organizationName String?
+}
+
 model ARTemplate {
     id          String                 @id @default(cuid())
     name        String                 @default("")
@@ -253,6 +273,7 @@ model ARTemplate {
 
 model FinancialStatement {
     id         String          @id @default(cuid())
+    actualCash Decimal         @default(0) @db.Money
     compiled   String?
     compiledId String?
     status     SemReportStatus @default(DRAFT)
@@ -564,8 +585,9 @@ model User {
     organizationIsArchived Boolean?
 
     // Extras
-    ARUploads   ARUpload[]
-    ARGenerated ARGenerated[]
+    ARUploads           ARUpload[]
+    ARGenerated         ARGenerated[]
+    ARGeneratedComments ARGeneratedComment[]
 
     // TODO: To remove
     reports       Report[]
