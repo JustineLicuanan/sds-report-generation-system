@@ -215,16 +215,16 @@ model ARUpload {
 }
 
 model ARGenerated {
-    id                  String                  @id @default(cuid())
-    templateType        ARGeneratedTemplateType
-    contentType         ARGeneratedContentType
-    contentNumber       Int
-    content             String
-    status              GeneratedReportStatus   @default(DRAFT)
-    ARGeneratedComments ARGeneratedComment[]
-    createdAt           DateTime                @default(now())
-    updatedAt           DateTime                @updatedAt
-    deletedAt           String                  @default("")
+    id            String                  @id @default(cuid())
+    templateType  ARGeneratedTemplateType
+    contentType   ARGeneratedContentType
+    contentNumber Int
+    content       String
+    status        GeneratedReportStatus   @default(DRAFT)
+    comments      ARGeneratedComment[]
+    createdAt     DateTime                @default(now())
+    updatedAt     DateTime                @updatedAt
+    deletedAt     String                  @default("")
 
     accomplishmentReport   AccomplishmentReport @relation(fields: [accomplishmentReportId], references: [id])
     accomplishmentReportId String
