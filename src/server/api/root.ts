@@ -1,4 +1,5 @@
 import { adminRouter } from '~/server/api/routers/admin';
+// import { appRouter as rawRouter } from '~/server/api/routers/raw/routers';
 import { sharedRouter } from '~/server/api/routers/shared';
 import { createTRPCRouter } from '~/server/api/trpc';
 
@@ -10,6 +11,7 @@ import { createTRPCRouter } from '~/server/api/trpc';
 export const appRouter = createTRPCRouter({
   admin: adminRouter,
   shared: sharedRouter,
+  // raw: rawRouter,
 });
 
 // export type definition of API

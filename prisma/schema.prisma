@@ -5,6 +5,18 @@ generator client {
     provider = "prisma-client-js"
 }
 
+// generator trpc {
+//     provider             = "prisma-trpc-generator"
+//     withZod              = true
+//     withMiddleware       = true
+//     withShield           = false
+//     contextPath          = "../src/server/api/trpc"
+//     trpcOptionsPath      = "../src/server/api/trpc"
+//     output               = "../src/server/api/routers/raw"
+//     isGenerateInclude    = true
+//     generateModelActions = "count,create,delete,deleteMany,findFirst,findMany,findUnique,update,updateMany,upsert"
+// }
+
 datasource db {
     provider = "postgresql"
     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
@@ -13,6 +25,7 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+/// @@Gen.model(hide: true)
 model Settings {
     id             String   @id @default(cuid())
     ofAdmin        Boolean? @unique
@@ -24,6 +37,7 @@ model Settings {
     updatedAt      DateTime @updatedAt
 }
 
+/// @@Gen.model(hide: true)
 model ReportSignatory {
     id        String   @id @default(cuid())
     position  String   @unique
@@ -32,6 +46,7 @@ model ReportSignatory {
     updatedAt DateTime @updatedAt
 }
 
+/// @@Gen.model(hide: true)
 model Organization {
     id            String               @id @default(cuid())
     name          String
@@ -109,6 +124,7 @@ model CurriculumVitae {
     organizationId String
 }
 
+/// @@Gen.model(hide: true)
 model Announcement {
     id                 String              @id @default(cuid())
     subject            String
@@ -129,6 +145,7 @@ model Announcement {
     updatedAt          DateTime            @updatedAt
 }
 
+/// @@Gen.model(hide: true)
 model ReportSemester {
     id                  String               @id @default(cuid())
     yearStart           String
@@ -160,6 +177,7 @@ model GeneratedAR {
     userId String
 }
 
+/// @@Gen.model(hide: true)
 model FinancialStatement {
     id         String          @id @default(cuid())
     actualCash Decimal         @default(0) @db.Money
@@ -318,6 +336,7 @@ model OutflowRowFS {
     organizationId String
 }
 
+/// @@Gen.model(hide: true)
 model Report {
     id                 String              @id @default(cuid())
     subject            String
@@ -350,6 +369,7 @@ model Report {
     @@unique([id, visibility])
 }
 
+/// @@Gen.model(hide: true)
 model Comment {
     id                 String              @id @default(cuid())
     content            String
@@ -374,6 +394,7 @@ model Comment {
     organizationName String?
 }
 
+/// @@Gen.model(hide: true)
 model AdminNotification {
     id        String           @id @default(cuid())
     type      NotificationType
@@ -392,6 +413,7 @@ model AdminNotification {
     commentId String?
 }
 
+/// @@Gen.model(hide: true)
 model Notification {
     id        String           @id @default(cuid())
     type      NotificationType
@@ -417,6 +439,7 @@ model Notification {
     commentId String?
 }
 
+/// @@Gen.model(hide: true)
 model Log {
     id        String          @id @default(cuid())
     type      LogType
@@ -440,6 +463,7 @@ model Log {
 }
 
 // Necessary for auth
+/// @@Gen.model(hide: true)
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -458,6 +482,7 @@ model Account {
     @@unique([provider, providerAccountId])
 }
 
+/// @@Gen.model(hide: true)
 model Session {
     id           String   @id @default(cuid())
     sessionToken String   @unique
@@ -466,6 +491,7 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+/// @@Gen.model(hide: true)
 model User {
     id            String         @id @default(cuid())
     name          String
@@ -492,6 +518,7 @@ model User {
     @@unique([id, name])
 }
 
+/// @@Gen.model(hide: true)
 model VerificationToken {
     identifier String
     token      String   @unique
