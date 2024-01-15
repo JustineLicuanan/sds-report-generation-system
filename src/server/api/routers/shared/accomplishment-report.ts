@@ -39,17 +39,17 @@ export const accomplishmentReportRouter = createTRPCRouter({
       });
     }),
 
-  turnIn: protectedProcedure.mutation(({ ctx }) => {
+  turnIn: protectedProcedure.input(schemas.shared.AR.turnIn).mutation(({ ctx, input }) => {
     return ctx.db.accomplishmentReport.updateMany({
       where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
-      data: { status: SemReportStatus.TURNED_IN },
+      data: { ...input, status: SemReportStatus.TURNED_IN },
     });
   }),
 
   cancel: protectedProcedure.mutation(({ ctx }) => {
     return ctx.db.accomplishmentReport.updateMany({
       where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
-      data: { status: SemReportStatus.DRAFT },
+      data: { compiled: null, compiledId: null, status: SemReportStatus.DRAFT },
     });
   }),
 });
