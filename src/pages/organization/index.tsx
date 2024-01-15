@@ -36,11 +36,21 @@ export default function OrganizationPage() {
   });
   const announcement = getAnnouncementQuery.data ?? [];
 
+  const getReportSemester = api.shared.reportSemester.get.useQuery();
+  const reportSemester = getReportSemester.data;
+
+  const getAR = api.shared.AR.getOrCreate.useQuery();
+  const AR = getAR.data;
+
+  const getFS = api.shared.FS.getOrCreate.useQuery();
+  const FS = getFS.data;
+
   report.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
   const { data: session } = useSession();
+
   return (
     <>
       <Head>
@@ -62,7 +72,13 @@ export default function OrganizationPage() {
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Accomplishment Report Submission Date:</div>
             <div className="flex items-center gap-2 ">
-              <div className="text-2xl font-semibold text-yellow">10/25/2023</div>
+              <div className="text-2xl font-semibold text-yellow">
+                {reportSemester?.dueDateAR?.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                }) ?? 'N/A'}
+              </div>
               <button type="button" className="hover:text-yellow active:scale-95">
                 <CalendarDays />
               </button>
@@ -86,14 +102,25 @@ export default function OrganizationPage() {
             </div>
             <div className="flex flex-col items-center">
               <div className="text-lg font-bold">Current Semester:</div>
-              <div className="text-2xl font-semibold text-yellow">1st semester (2023 - 2024)</div>
+              <div className="text-2xl font-semibold text-yellow">
+                <span className="capitalize">
+                  {reportSemester?.term.replace(/_/g, ' ').toLowerCase()}
+                </span>{' '}
+                Semester ({reportSemester?.yearStart}-{reportSemester?.yearEnd})
+              </div>
             </div>
           </div>
 
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Financial Statement Submission Date:</div>
             <div className="flex items-center gap-2 ">
-              <div className="text-2xl font-semibold text-yellow">10/25/2023</div>
+              <div className="text-2xl font-semibold text-yellow">
+                {reportSemester?.dueDateFS?.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                }) ?? 'N/A'}
+              </div>
               <button type="button" className="hover:text-yellow active:scale-95">
                 <CalendarDays />
               </button>
@@ -102,12 +129,12 @@ export default function OrganizationPage() {
 
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Accomplishment Report Status:</div>
-            <div className="text-2xl font-semibold text-green">Done</div>
+            <div className="text-2xl font-semibold text-green">{AR?.status}</div>
           </div>
 
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center  gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Financial Report Status:</div>
-            <div className="text-2xl font-semibold text-green">Done</div>
+            <div className="text-2xl font-semibold text-green">{FS?.status}</div>
           </div>
 
           <div className="col-span-2 row-span-2">
