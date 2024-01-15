@@ -24,15 +24,23 @@ model Settings {
     updatedAt      DateTime @updatedAt
 }
 
+model ReportSignatory {
+    id        String   @id @default(cuid())
+    position  String   @unique
+    name      String   @default("")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
 model Organization {
     id            String               @id @default(cuid())
     name          String
+    acronym       String
+    contactEmail  String
     description   String               @default("")
     category      OrganizationCategory
     image         String?
     imageId       String?
-    cbl           String?
-    cblId         String?
     isArchived    Boolean              @default(false)
     members       User[]
     reports       Report[]
@@ -43,8 +51,62 @@ model Organization {
     createdAt     DateTime             @default(now())
     updatedAt     DateTime             @updatedAt
 
+    // Extras
+    signatoryInfo         OrgSignatoryInfo?
+    curriculumVitaes      CurriculumVitae[]
+    generatedARs          GeneratedAR[]
+    financialStatements   FinancialStatement[]
+    monthlyFSs            MonthlyFS[]
+    inflowCollectionFS    InflowCollectionFS[]
+    inflowCollectionRowFS InflowCollectionRowFS[]
+    inflowIgpFS           InflowIgpFS[]
+    inflowIgpRowFS        InflowIgpRowFS[]
+    outflowFS             OutflowFS[]
+    outflowRowFS          OutflowRowFS[]
+
+    // TODO: To remove
+    preamble String  @default("")
+    mission  String  @default("")
+    vision   String  @default("")
+    goals    String  @default("")
+    cbl      String?
+    cblId    String?
+
     @@unique([id, name])
     @@unique([id, name, isArchived])
+}
+
+model OrgSignatoryInfo {
+    id                     String   @id @default(cuid())
+    president              String   @default("")
+    vicePresident          String   @default("")
+    treasurer              String   @default("")
+    auditor                String   @default("")
+    generalSecretary       String   @default("")
+    assistantSecretary     String   @default("")
+    finance                String   @default("")
+    recruitmentCoordinator String   @default("")
+    trainingDirector       String   @default("")
+    adviser1               String   @default("")
+    adviser2               String   @default("")
+    deptChairperson        String   @default("")
+    createdAt              DateTime @default(now())
+    updatedAt              DateTime @updatedAt
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String       @unique
+}
+
+model CurriculumVitae {
+    id        String   @id @default(cuid())
+    name      String
+    position  String
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
 }
 
 model Announcement {
@@ -65,6 +127,195 @@ model Announcement {
     notifications      Notification[]
     createdAt          DateTime            @default(now())
     updatedAt          DateTime            @updatedAt
+}
+
+model ReportSemester {
+    id                  String               @id @default(cuid())
+    yearStart           String
+    yearEnd             String
+    term                SemesterTerm
+    dueDateAR           DateTime?
+    dueDateFS           DateTime?
+    financialStatements FinancialStatement[]
+    monthlyFSs          MonthlyFS[]
+    createdAt           DateTime             @default(now())
+    updatedAt           DateTime             @updatedAt
+    archivedAt          String               @unique @default("")
+
+    @@unique([id, archivedAt])
+}
+
+model GeneratedAR {
+    id           String              @id @default(cuid())
+    templateType GeneratedARTemplate
+    content      String
+    createdAt    DateTime            @default(now())
+    updatedAt    DateTime            @updatedAt
+    archivedAt   String              @default("")
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+}
+
+model FinancialStatement {
+    id         String          @id @default(cuid())
+    actualCash Decimal         @default(0) @db.Money
+    compiled   String?
+    compiledId String?
+    status     SemReportStatus @default(DRAFT)
+    monthly    MonthlyFS[]
+    createdAt  DateTime        @default(now())
+    updatedAt  DateTime        @updatedAt
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    @@unique([reportSemesterId, organizationId])
+}
+
+model MonthlyFS {
+    id                    String                  @id @default(cuid())
+    month                 Int
+    year                  String
+    inflowCollections     InflowCollectionFS[]
+    inflowCollectionsRows InflowCollectionRowFS[]
+    inflowIGPs            InflowIgpFS[]
+    inflowIgpRows         InflowIgpRowFS[]
+    outflows              OutflowFS[]
+    outflowRows           OutflowRowFS[]
+    createdAt             DateTime                @default(now())
+    updatedAt             DateTime                @updatedAt
+
+    financialStatement   FinancialStatement @relation(fields: [financialStatementId], references: [id])
+    financialStatementId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    @@unique([month, year, financialStatementId])
+}
+
+model InflowCollectionFS {
+    id          String                  @id @default(cuid())
+    date        DateTime
+    description String                  @default("")
+    rows        InflowCollectionRowFS[]
+    createdAt   DateTime                @default(now())
+    updatedAt   DateTime                @updatedAt
+
+    monthly   MonthlyFS @relation(fields: [monthlyId], references: [id], onDelete: Cascade)
+    monthlyId String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+}
+
+model InflowCollectionRowFS {
+    id        String   @id @default(cuid())
+    date      DateTime
+    name      String
+    ORNumber  String
+    amount    Decimal  @db.Money
+    receipt   String?
+    receiptId String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    monthly   MonthlyFS @relation(fields: [monthlyId], references: [id])
+    monthlyId String
+
+    inflowCollection   InflowCollectionFS @relation(fields: [inflowCollectionId], references: [id], onDelete: Cascade)
+    inflowCollectionId String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+}
+
+model InflowIgpFS {
+    id          String           @id @default(cuid())
+    date        DateTime
+    description String           @default("")
+    rows        InflowIgpRowFS[]
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+
+    monthly   MonthlyFS @relation(fields: [monthlyId], references: [id], onDelete: Cascade)
+    monthlyId String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+}
+
+model InflowIgpRowFS {
+    id          String   @id @default(cuid())
+    date        DateTime
+    quantity    Int
+    particulars String
+    ORNumber    String
+    unit        String
+    price       Decimal  @db.Money
+    receipt     String?
+    receiptId   String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    monthly   MonthlyFS @relation(fields: [monthlyId], references: [id])
+    monthlyId String
+
+    inflowIGP   InflowIgpFS @relation(fields: [inflowIGPId], references: [id], onDelete: Cascade)
+    inflowIGPId String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+}
+
+model OutflowFS {
+    id          String            @id @default(cuid())
+    category    OutflowFSCategory
+    date        DateTime
+    description String            @default("")
+    rows        OutflowRowFS[]
+    createdAt   DateTime          @default(now())
+    updatedAt   DateTime          @updatedAt
+
+    monthly   MonthlyFS @relation(fields: [monthlyId], references: [id], onDelete: Cascade)
+    monthlyId String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+}
+
+model OutflowRowFS {
+    id          String   @id @default(cuid())
+    date        DateTime
+    quantity    Int
+    particulars String
+    unit        String
+    price       Decimal  @db.Money
+    receipt     String?
+    receiptId   String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    monthly   MonthlyFS @relation(fields: [monthlyId], references: [id])
+    monthlyId String
+
+    outflow   OutflowFS @relation(fields: [outflowId], references: [id], onDelete: Cascade)
+    outflowId String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
 }
 
 model Report {
@@ -235,6 +486,9 @@ model User {
     organizationName       String?
     organizationIsArchived Boolean?
 
+    // Extras
+    generatedARs GeneratedAR[]
+
     @@unique([id, name])
 }
 
@@ -255,6 +509,47 @@ enum OrganizationCategory {
     STUDENT_GOVERNING_BODY
     ACADEMIC_ORGANIZATION
     NON_ACADEMIC_ORGANIZATION
+}
+
+enum SemesterTerm {
+    FIRST
+    SECOND
+    SUMMER
+}
+
+enum SemReportStatus {
+    DRAFT
+    TURNED_IN
+    FOR_REVISION
+    COMPLETED
+}
+
+enum GeneratedARTemplate {
+    CONSTITUTION_AND_BY_LAWS
+    ACCEPTANCE_LETTER_OF_ADVISERS
+    ORGANIZATIONAL_CHART
+    CURRICULUM_VITAE_OF_OFFICERS
+    CALENDAR_OF_ACTIVITIES
+    ACTIVITY_PROPOSAL
+    PROJECT_PROPOSAL
+    RESOLUTION
+    OTHER_LETTER
+    SUMMARY_OF_CONDUCTED_EVENTS
+    COMMUNITY_EXTENSION_SERVICES
+    MINUTES_OF_THE_MEETING
+    FEEDBACK_FORM
+}
+
+enum OutflowFSCategory {
+    FOOD_EXPENSE
+    SUPPLIES_EXPENSE
+    TRANSPORTATION_EXPENSE
+    RENT_EXPENSE
+    REPRESENTATION_EXPENSE
+    MEDICAL_EXPENSE
+    COMMUNICATION_EXPENSE
+    MISCELLANEOUS_EXPENSE
+    TOKEN_EXPENSE
 }
 
 enum ReportCategory {
