@@ -273,6 +273,7 @@ model ARTemplate {
 
 model FinancialStatement {
     id         String          @id @default(cuid())
+    actualCash Decimal         @default(0) @db.Money
     compiled   String?
     compiledId String?
     status     SemReportStatus @default(DRAFT)
