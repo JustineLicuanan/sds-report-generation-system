@@ -5,12 +5,12 @@ import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebarMenu from '~/components/admin-side-bar-menu';
+import { PositionSelect } from '~/components/position-select';
 import { Button, buttonVariants } from '~/components/ui/button';
 import {
   Form,
@@ -22,20 +22,10 @@ import {
 } from '~/components/ui/form';
 import { Input } from '~/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select';
 import { Separator } from '~/components/ui/separator';
 import { Textarea } from '~/components/ui/textarea';
 import { useToast } from '~/components/ui/use-toast';
 import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
-import { UserPosition } from '~/enums/user-position';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -60,12 +50,12 @@ export default function CreateOrganizationPage() {
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const [isOther, setIsOther] = useState(false);
-
   const createOrganizationForm = useForm<CreateOrganizationInputs>({
     resolver: zodResolver(orgSchemas.create),
     defaultValues: {
       name: '',
+      acronym: '',
+      contactEmail: '',
       description: '',
       category: OrganizationCategory.STUDENT_GOVERNING_BODY,
       members: [{ email: '', name: '', isActive: true }],
@@ -82,6 +72,20 @@ export default function CreateOrganizationPage() {
       toast({ variant: 'c-primary', description: '✔️ Organization has been created.' });
       await utils.admin.org.invalidate();
       await router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${id}`);
+    },
+    onError: (error, variables) => {
+      if (error.data?.code === 'CONFLICT') {
+        const idx = variables.members.findIndex(({ email }) => error.message === email);
+        createOrganizationForm.setError(`members.${idx}.email`, {
+          message: 'Email is already taken',
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: '❌ Internal Server Error',
+          description: 'Creation of organization failed.',
+        });
+      }
     },
   });
 
@@ -112,7 +116,13 @@ export default function CreateOrganizationPage() {
             <Form {...createOrganizationForm}>
               <form
                 className="container flex max-w-screen-lg flex-col justify-center gap-4 px-4 py-6 md:px-8"
-                onSubmit={createOrganizationForm.handleSubmit(onSubmitCreateOrganization)}
+                onSubmit={createOrganizationForm.handleSubmit(onSubmitCreateOrganization, (err) => {
+                  toast({
+                    variant: 'destructive',
+                    title: '❌ Creation of Organization Failed',
+                    description: `${err.members?.root?.message}`,
+                  });
+                })}
               >
                 <header className="flex items-center gap-4 md:gap-2">
                   <Users className="h-8 w-8" />
@@ -170,13 +180,53 @@ export default function CreateOrganizationPage() {
 
                 <FormField
                   control={createOrganizationForm.control}
+                  name="acronym"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Acronym (e.g.: BITS)"
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <div className="h-4">
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createOrganizationForm.control}
+                  name="contactEmail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Contact Email"
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <div className="h-4">
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createOrganizationForm.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Textarea
                           rows={6}
-                          placeholder="Description"
+                          placeholder="Description (Optional)"
                           className="resize-none"
                           disabled={createOrganization.isLoading || createOrganization.isSuccess}
                           {...field}
@@ -225,55 +275,33 @@ export default function CreateOrganizationPage() {
 
                 {membersFieldArray.fields.map((field, idx) => (
                   <div key={field.id}>
-                    <div className="flex flex-wrap items-center gap-2 md:flex-nowrap">
-                      <Input
-                        type="email"
-                        placeholder="e.g.: juan.delacruz@cvsu.edu.ph"
-                        className="flex-auto md:flex-1"
-                        disabled={createOrganization.isLoading || createOrganization.isSuccess}
-                        {...createOrganizationForm.register(`members.${idx}.email`)}
-                      />
+                    <div className="flex flex-wrap gap-2 md:flex-nowrap">
+                      <div className="flex w-full flex-col justify-center gap-1 md:flex-1">
+                        <Input
+                          type="email"
+                          placeholder="e.g.: juan.delacruz@cvsu.edu.ph"
+                          className="flex-auto md:flex-1"
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                          {...createOrganizationForm.register(`members.${idx}.email`)}
+                        />
 
-                      <Select
-                        onValueChange={(value) => {
-                          if (value === 'other') {
-                            setIsOther(() => true);
-                            createOrganizationForm.setValue(`members.${idx}.name`, '');
-                            return;
-                          }
+                        <p className="h-4 text-sm font-medium text-destructive">
+                          {createOrganizationForm.formState.errors.members?.[idx]?.email?.message}
+                        </p>
+                      </div>
 
-                          setIsOther(() => false);
-                          createOrganizationForm.setValue(`members.${idx}.name`, value);
-                        }}
-                        disabled={createOrganization.isLoading || createOrganization.isSuccess}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select a position" />
-                        </SelectTrigger>
+                      <div className="flex flex-col justify-center gap-1">
+                        <PositionSelect
+                          setValue={(value) => {
+                            createOrganizationForm.setValue(`members.${idx}.name`, value);
+                          }}
+                          disabled={createOrganization.isLoading || createOrganization.isSuccess}
+                        />
 
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Positions</SelectLabel>
-
-                            {Object.values(UserPosition).map((position) => (
-                              <SelectItem key={position} value={position}>
-                                {position}
-                              </SelectItem>
-                            ))}
-
-                            <SelectItem value="other">Other</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-
-                      <Input
-                        placeholder="e.g.: President"
-                        className="w-32"
-                        disabled={
-                          !isOther || createOrganization.isLoading || createOrganization.isSuccess
-                        }
-                        {...createOrganizationForm.register(`members.${idx}.name`)}
-                      />
+                        <p className="h-4 text-sm font-medium text-destructive">
+                          {createOrganizationForm.formState.errors.members?.[idx]?.name?.message}
+                        </p>
+                      </div>
 
                       <Button
                         type="button"
@@ -289,11 +317,6 @@ export default function CreateOrganizationPage() {
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-
-                    <p className="h-4 text-sm font-medium text-destructive">
-                      {createOrganizationForm.formState.errors.members?.[idx]?.email?.message ??
-                        createOrganizationForm.formState.errors.members?.[idx]?.name?.message}
-                    </p>
                   </div>
                 ))}
 
