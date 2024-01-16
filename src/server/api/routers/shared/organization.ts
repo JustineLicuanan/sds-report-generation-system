@@ -9,6 +9,7 @@ export const organizationRouter = createTRPCRouter({
       return ctx.db.organization.findUnique({
         where: { id: ctx.session.user.organizationId },
         include: {
+          ...(input?.include ?? {}),
           members: input?.includeMembers,
           reports: input?.includeReports,
           comments: input?.includeComments,
@@ -22,7 +23,7 @@ export const organizationRouter = createTRPCRouter({
     }
   }),
 
-  uploadCbl: protectedProcedure.input(organizationSchemas.uploadCbl).mutation(({ ctx, input }) => {
+  update: protectedProcedure.input(organizationSchemas.update).mutation(({ ctx, input }) => {
     try {
       return ctx.db.organization.update({
         where: { id: ctx.session.user.organizationId },

@@ -1,8 +1,10 @@
 import { announcementRouter } from '~/server/api/routers/shared/announcement';
 import { commentRouter } from '~/server/api/routers/shared/comment';
 import { financialStatementRouter } from '~/server/api/routers/shared/financial-statement';
+import { generatedARRouter } from '~/server/api/routers/shared/generated-ar';
 import { logRouter } from '~/server/api/routers/shared/log';
 import { notificationRouter } from '~/server/api/routers/shared/notification';
+import { orgSignatoryInfoRouter } from '~/server/api/routers/shared/org-signatory-info';
 import { organizationRouter } from '~/server/api/routers/shared/organization';
 import { reportRouter } from '~/server/api/routers/shared/report';
 import { reportSemesterRouter } from '~/server/api/routers/shared/report-semester';
@@ -12,11 +14,13 @@ import { createTRPCRouter } from '~/server/api/trpc';
 
 export const sharedRouter = createTRPCRouter({
   organization: organizationRouter,
+  orgSignatoryInfo: orgSignatoryInfoRouter,
   session: sessionRouter,
   announcement: announcementRouter,
   reportSemester: reportSemesterRouter,
   report: reportRouter,
   reportSignatory: reportSignatoryRouter,
+  generatedAR: generatedARRouter,
   FS: financialStatementRouter,
   comment: commentRouter,
   notification: notificationRouter,
