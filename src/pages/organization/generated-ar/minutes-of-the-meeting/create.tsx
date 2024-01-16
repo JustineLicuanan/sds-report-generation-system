@@ -26,14 +26,14 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-type CreateARGeneratedInputs = z.infer<typeof schemas.shared.generatedAR.create>;
+type CreateGeneratedARInputs = z.infer<typeof schemas.shared.generatedAR.create>;
 
 export default function MinutesOfTheMeetingPage() {
   const router = useRouter();
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const createARGeneratedForm = useForm<CreateARGeneratedInputs>({
+  const createGeneratedARForm = useForm<CreateGeneratedARInputs>({
     resolver: zodResolver(schemas.shared.generatedAR.create),
     // Use defaultValues if the values are NOT from the database
     defaultValues: {
@@ -49,20 +49,20 @@ export default function MinutesOfTheMeetingPage() {
 
   const attendeesFieldArray = useFieldArray({
     name: 'content.attendees',
-    control: createARGeneratedForm.control,
+    control: createGeneratedARForm.control,
   });
 
   const agendaFieldArray = useFieldArray({
     name: 'content.agenda',
-    control: createARGeneratedForm.control,
+    control: createGeneratedARForm.control,
   });
 
   const commencementFieldArray = useFieldArray({
     name: 'content.commencement',
-    control: createARGeneratedForm.control,
+    control: createGeneratedARForm.control,
   });
 
-  const createARGenerated = api.shared.generatedAR.create.useMutation({
+  const createGeneratedAR = api.shared.generatedAR.create.useMutation({
     onSuccess: async ({ id, template }) => {
       toast({ variant: 'c-primary', description: '✔️ An AR page has been generated.' });
       await utils.shared.generatedAR.invalidate();
@@ -75,11 +75,11 @@ export default function MinutesOfTheMeetingPage() {
     },
   });
 
-  const onSubmitCreateARGenerated: SubmitHandler<CreateARGeneratedInputs> = (values) => {
-    if (createARGenerated.isLoading) {
+  const onSubmitCreateGeneratedAR: SubmitHandler<CreateGeneratedARInputs> = (values) => {
+    if (createGeneratedAR.isLoading) {
       return;
     }
-    createARGenerated.mutate(values);
+    createGeneratedAR.mutate(values);
   };
   return (
     <>
@@ -97,7 +97,7 @@ export default function MinutesOfTheMeetingPage() {
         <form
           id="main-content"
           className="mx-4 my-4  w-full"
-          onSubmit={createARGeneratedForm.handleSubmit(onSubmitCreateARGenerated, (err) => {
+          onSubmit={createGeneratedARForm.handleSubmit(onSubmitCreateGeneratedAR, (err) => {
             console.error(err);
           })}
         >
@@ -109,7 +109,7 @@ export default function MinutesOfTheMeetingPage() {
                 type="date"
                 id="date"
                 className="rounded-sm border border-input bg-transparent px-1"
-                {...createARGeneratedForm.register(`content.date`)}
+                {...createGeneratedARForm.register(`content.date`)}
               />
             </div>
             <div className="flex items-center gap-4">
@@ -118,7 +118,7 @@ export default function MinutesOfTheMeetingPage() {
                 type="text"
                 id="location"
                 className="rounded-sm border border-input bg-transparent px-1"
-                {...createARGeneratedForm.register(`content.location`)}
+                {...createGeneratedARForm.register(`content.location`)}
               />
             </div>
             <div className="flex items-center gap-4">
@@ -127,8 +127,28 @@ export default function MinutesOfTheMeetingPage() {
                 type="time"
                 id="time-started"
                 className="rounded-sm border border-input bg-transparent px-1"
-                {...createARGeneratedForm.register(`content.timeStarted`)}
+                {...createGeneratedARForm.register(`content.timeStarted`)}
               />
+            </div>
+            <div className="flex items-center gap-4">
+              <div>
+                <label htmlFor="presider-name">Presider Name: </label>
+                <input
+                  type="text"
+                  id="presider-name"
+                  className="rounded-sm border border-input bg-transparent px-1"
+                  {...createGeneratedARForm.register(`content.presiderName`)}
+                />
+              </div>
+              <div>
+                <label htmlFor="presider-position">Presider Position: </label>
+                <input
+                  type="text"
+                  id="presider-position"
+                  className="rounded-sm border border-input bg-transparent px-1"
+                  {...createGeneratedARForm.register(`content.presiderPosition`)}
+                />
+              </div>
             </div>
             <div className="mt-4 font-bold">ATTENDEES</div>
             {attendeesFieldArray.fields.map((field, idx) => (
@@ -138,14 +158,14 @@ export default function MinutesOfTheMeetingPage() {
                   id="name"
                   placeholder="Name"
                   className="w-1/2 rounded-sm border border-input bg-transparent px-1"
-                  {...createARGeneratedForm.register(`content.attendees.${idx}.name`)}
+                  {...createGeneratedARForm.register(`content.attendees.${idx}.name`)}
                 />
                 <input
                   type="text"
                   id="position"
                   placeholder="Position"
                   className="w-1/2 rounded-sm border border-input bg-transparent px-1"
-                  {...createARGeneratedForm.register(`content.attendees.${idx}.position`)}
+                  {...createGeneratedARForm.register(`content.attendees.${idx}.position`)}
                 />
               </div>
             ))}
@@ -181,7 +201,7 @@ export default function MinutesOfTheMeetingPage() {
                   cols={30}
                   rows={2}
                   className="w-full rounded-sm border border-input bg-transparent px-1"
-                  {...createARGeneratedForm.register(`content.agenda.${idx}.agendaContent`)}
+                  {...createGeneratedARForm.register(`content.agenda.${idx}.agendaContent`)}
                 ></textarea>
               </div>
             ))}
@@ -216,7 +236,7 @@ export default function MinutesOfTheMeetingPage() {
                   cols={30}
                   rows={2}
                   className="w-full rounded-sm border border-input bg-transparent px-1"
-                  {...createARGeneratedForm.register(
+                  {...createGeneratedARForm.register(
                     `content.commencement.${idx}.commencementContent`
                   )}
                 ></textarea>{' '}
@@ -252,7 +272,7 @@ export default function MinutesOfTheMeetingPage() {
                 type="time"
                 id="adjourned-date"
                 className="rounded-sm border border-input bg-transparent px-1"
-                {...createARGeneratedForm.register(`content.timeAdjourned`)}
+                {...createGeneratedARForm.register(`content.timeAdjourned`)}
               />
             </div>
           </div>

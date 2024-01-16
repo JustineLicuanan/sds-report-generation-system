@@ -2,6 +2,7 @@ import { type OutputData } from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GeneratedARTemplate } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -186,12 +187,24 @@ export default function CalendarOfActivitiesPage() {
             </div>
             <Image
               src={logo.SDS_LOGO}
-              alt="Bagong Pilipinas"
+              alt="SDS Logo"
               height={100}
               width={100}
               className="h-24 w-24 "
             />
-            <div className="h-24 w-24 rounded-full border"></div>
+            {orgSignatoryInfo?.organization.image ? (
+              <div className="h-24 w-24">
+                <CldImage
+                  width="96"
+                  height="96"
+                  src={orgSignatoryInfo?.organization.imageId ?? ''}
+                  alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
+                  className="rounded-full"
+                />
+              </div>
+            ) : (
+              <div className="h-24 w-24 rounded-full border"></div>
+            )}
           </div>
           <div className="w-full rounded border p-2 print:border-none">
             {/* `holder` prop must be a unique ID for each EditorBlock instance */}

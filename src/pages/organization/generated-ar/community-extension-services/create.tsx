@@ -4,14 +4,12 @@ import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { buttonVariants } from '~/components/ui/button';
 import { useToast } from '~/components/ui/use-toast';
-import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import { ResourceType, UploadButton } from '~/components/upload-button';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -30,14 +28,14 @@ export const getServerSideProps = (async (ctx) => {
   return authRedirect;
 }) satisfies GetServerSideProps;
 
-type CreateARGeneratedInputs = z.infer<typeof schemas.shared.generatedAR.create>;
+type CreateGeneratedARInputs = z.infer<typeof schemas.shared.generatedAR.create>;
 
 export default function CommunityExtensionServicesPage() {
   const router = useRouter();
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const createARGeneratedForm = useForm<CreateARGeneratedInputs>({
+  const createGeneratedARForm = useForm<CreateGeneratedARInputs>({
     resolver: zodResolver(schemas.shared.generatedAR.create),
     // Use defaultValues if the values are NOT from the database
     defaultValues: {
@@ -45,7 +43,14 @@ export default function CommunityExtensionServicesPage() {
       // This 'content' is JSON, you can structure it however you like
       content: {
         documents: [
-          { documentPhoto: '', activity: '', location: '', date: '', shortDescription: '' },
+          {
+            documentPhoto: '',
+            documentPhotoId: '',
+            activity: '',
+            location: '',
+            date: '',
+            shortDescription: '',
+          },
         ],
       },
     },
@@ -53,10 +58,10 @@ export default function CommunityExtensionServicesPage() {
 
   const documentsFieldArray = useFieldArray({
     name: 'content.documents',
-    control: createARGeneratedForm.control,
+    control: createGeneratedARForm.control,
   });
 
-  const createARGenerated = api.shared.generatedAR.create.useMutation({
+  const createGeneratedAR = api.shared.generatedAR.create.useMutation({
     onSuccess: async ({ id, template }) => {
       toast({ variant: 'c-primary', description: '✔️ An AR page has been generated.' });
       await utils.shared.generatedAR.invalidate();
@@ -69,19 +74,13 @@ export default function CommunityExtensionServicesPage() {
     },
   });
 
-  const onSubmitCreateARGenerated: SubmitHandler<CreateARGeneratedInputs> = (values) => {
-    if (createARGenerated.isLoading) {
+  const onSubmitCreateGeneratedAR: SubmitHandler<CreateGeneratedARInputs> = (values) => {
+    if (createGeneratedAR.isLoading) {
       return;
     }
-    createARGenerated.mutate(values);
+    createGeneratedAR.mutate(values);
   };
 
-  const [fileName, setFileName] = useState('');
-  const onSuccessUpload: OnSuccessUpload = (result) => {
-    createARGeneratedForm.setValue('content.documentPhoto', result.info?.secure_url);
-    createARGeneratedForm.setValue('content.documentPhoto', result.info?.public_id);
-    setFileName(result.info?.original_filename ?? '');
-  };
   return (
     <>
       <Head>
@@ -98,37 +97,47 @@ export default function CommunityExtensionServicesPage() {
         <form
           id="main-content"
           className="mx-4 my-4  w-full"
-          onSubmit={createARGeneratedForm.handleSubmit(onSubmitCreateARGenerated, (err) => {
+          onSubmit={createGeneratedARForm.handleSubmit(onSubmitCreateGeneratedAR, (err) => {
             console.error(err);
           })}
         >
           <div className="text-2xl font-bold">Generate Community Extension Services</div>
           {documentsFieldArray.fields.map((field, idx) => (
             <div key={field.id} className="my-4 flex flex-col justify-end gap-2">
-              <div className="flex items-center gap-2">
-                <label htmlFor="document-photo">Document Photo:</label>
-                <UploadButton
-                  className={buttonVariants({ variant: 'c-secondary' })}
-                  folder="document-photos"
-                  resourceType={ResourceType.IMAGE}
-                  onSuccess={onSuccessUpload}
-                >
-                  Upload
-                </UploadButton>
-                <div className="">{fileName}</div>
-              </div>
-              {createARGeneratedForm.watch('content.documentPhoto') && (
-                <div>
-                  <div>Document Photo Preview:</div>
-                  <CldImage
-                    width="96"
-                    height="96"
-                    src={createARGeneratedForm.watch('content.documentPhoto')!}
-                    alt="Document Photo Image"
-                    className="h-52 w-52 border border-input"
-                  />
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-4">
+                  <label htmlFor="doc-photo">Document Photo:</label>
+                  <UploadButton
+                    className="rounded-sm border border-input bg-yellow px-1"
+                    folder="community-extension-services"
+                    resourceType={ResourceType.IMAGE}
+                    onSuccess={(result: any) => {
+                      createGeneratedARForm.setValue(
+                        `content.documents.${idx}.documentPhoto`,
+                        result.info?.secure_url
+                      );
+                      createGeneratedARForm.setValue(
+                        `content.documents.${idx}.documentPhotoId`,
+                        result.info?.public_id
+                      );
+                    }}
+                  >
+                    Upload
+                  </UploadButton>
                 </div>
-              )}
+                {createGeneratedARForm.watch(`content.documents.${idx}.documentPhotoId`) && (
+                  <div>
+                    <div>Photo Preview:</div>
+                    <CldImage
+                      width="96"
+                      height="96"
+                      src={createGeneratedARForm.watch(`content.documents.${idx}.documentPhotoId`)}
+                      alt="Organization Logo"
+                      className="rounded-sm border-2 border-input"
+                    />
+                  </div>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 <label htmlFor="activity">Activity:</label>
                 <input
@@ -136,7 +145,7 @@ export default function CommunityExtensionServicesPage() {
                   id="activity"
                   placeholder=""
                   className="rounded-sm border border-input bg-transparent px-1"
-                  {...createARGeneratedForm.register(`content.documents.${idx}.activity`)}
+                  {...createGeneratedARForm.register(`content.documents.${idx}.activity`)}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -146,7 +155,7 @@ export default function CommunityExtensionServicesPage() {
                   id="location"
                   placeholder=""
                   className="rounded-sm border border-input bg-transparent px-1"
-                  {...createARGeneratedForm.register(`content.documents.${idx}.location`)}
+                  {...createGeneratedARForm.register(`content.documents.${idx}.location`)}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -156,7 +165,7 @@ export default function CommunityExtensionServicesPage() {
                   id="date"
                   placeholder=""
                   className="rounded-sm border border-input bg-transparent px-1"
-                  {...createARGeneratedForm.register(`content.documents.${idx}.date`)}
+                  {...createGeneratedARForm.register(`content.documents.${idx}.date`)}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -167,7 +176,7 @@ export default function CommunityExtensionServicesPage() {
                   cols={30}
                   rows={3}
                   className="rounded-sm border border-input px-1"
-                  {...createARGeneratedForm.register(`content.documents.${idx}.shortDescription`)}
+                  {...createGeneratedARForm.register(`content.documents.${idx}.shortDescription`)}
                 ></textarea>
               </div>
             </div>

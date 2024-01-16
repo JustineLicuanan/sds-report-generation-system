@@ -217,7 +217,7 @@ export default function ResolutionPage() {
                 router.push(
                   `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
                     generatedAR?.template ?? ''
-                  )}/${generatedAR?.id}${paths.EDIT}`
+                  )}/${generatedAR?.id}${paths.PRINT}`
                 )
               }
               className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"

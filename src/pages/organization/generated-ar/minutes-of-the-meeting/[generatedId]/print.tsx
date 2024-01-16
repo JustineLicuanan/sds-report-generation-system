@@ -1,4 +1,6 @@
+import { Printer } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -20,14 +22,19 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function MinutesOfTheMeeting() {
   const router = useRouter();
-  const { ARGeneratedId } = router.query;
+  const generatedId = router.query.generatedId;
+
+  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
+    include: { organization: true },
+  });
+  const orgSignatoryInfo = getOrgSignatoryInfo.data;
 
   const getARGenerated = api.shared.generatedAR.get.useQuery({
-    where: { id: ARGeneratedId as string },
+    where: { id: generatedId as string },
   });
-  const GeneratedAR = getARGenerated.data?.[0];
-  const contentString = GeneratedAR?.content;
-  const contentObject = contentString ? JSON.parse(contentString) : null;
+  const generatedAR = getARGenerated.data?.[0];
+  const content = generatedAR?.content && JSON.parse(generatedAR.content);
+
   return (
     <>
       <Head>
@@ -54,8 +61,8 @@ export default function MinutesOfTheMeeting() {
             <div className="font-bold">CAVITE STATE UNIVERSITY</div>
             <div className="font-bold">Imus Campus</div>
             <div className="font-bold">Student Development Services</div>
-            <div className="font-bold">ORG NAME</div>
-            <div className="">org gmail account</div>
+            <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>
+            <div className="">{orgSignatoryInfo?.organization.contactEmail}</div>
           </div>
           <Image
             src={logo.SDS_LOGO}
@@ -64,21 +71,33 @@ export default function MinutesOfTheMeeting() {
             width={100}
             className="h-24 w-24 "
           />
-          <div className="h-24 w-24 rounded-full border"></div>
+          {orgSignatoryInfo?.organization.image ? (
+            <div className="h-24 w-24">
+              <CldImage
+                width="96"
+                height="96"
+                src={orgSignatoryInfo?.organization.imageId ?? ''}
+                alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="h-24 w-24 rounded-full border"></div>
+          )}
         </div>
         <div className="text-center font-bold">MINUTES OF THE MEETING</div>
         <div className="flex flex-col gap-4">
           <div>
             <span className="font-bold">DATE AND LOCATION: </span>
-            {contentObject?.[0]?.date} - {contentObject?.[0]?.location}
+            {content?.date} - {content?.location}
           </div>
           <div>
             <span className="font-bold">TIME STARTED: </span>
-            [time]
+            {content?.time}
           </div>
           <div>
-            <span className="font-bold">PRESIDENT: </span>
-            [name] - [position]
+            <span className="font-bold">PRESIDER: </span>
+            {content?.presiderName} - {content?.presiderPosition}
           </div>
           <div>
             <div className="font-bold">ATTENDEES</div>
@@ -90,7 +109,7 @@ export default function MinutesOfTheMeeting() {
                 </tr>
               </thead>
               <tbody>
-                {contentObject?.attendees.map((attendees, idx) => (
+                {content?.attendees.map((attendees: any, idx: any) => (
                   <tr key={idx}>
                     <td>• {attendees.name}</td>
                     <td>{attendees.position}</td>
@@ -102,7 +121,7 @@ export default function MinutesOfTheMeeting() {
         </div>
         <div>
           <div className="font-bold">AGENDA</div>
-          {contentObject?.agenda.map((agenda, idx) => (
+          {content?.agenda.map((agenda: any, idx: any) => (
             <div className="ms-4">
               <div>{agenda.agendaContent ? `• ${agenda.agendaContent}` : 'No agendas'}</div>
             </div>
@@ -111,7 +130,7 @@ export default function MinutesOfTheMeeting() {
         <hr />
         <div className="flex flex-col gap-4">
           <div className="font-bold">COMMENCEMENT:</div>
-          {contentObject?.commencement.map((commencement, idx) => (
+          {content?.commencement.map((commencement: any, idx: any) => (
             <div key={idx} className="ms-4 flex flex-col gap-4">
               <div>
                 {commencement.commencementContent
@@ -122,28 +141,43 @@ export default function MinutesOfTheMeeting() {
           ))}
         </div>
         <div>
-          <span className="font-bold">TIME ADJOURNED: </span> [time]{' '}
+          <span className="font-bold">TIME ADJOURNED: </span> {content?.timeAdjourned}{' '}
         </div>
         <div>Prepared by:</div>
         <div className="flex flex-col">
-          <div className="font-bold">[NAME]</div>
-          <div className="">[ORG] Secretary</div>
+          <div className="font-bold">
+            {orgSignatoryInfo?.secretary === '' ? '[NAME]' : orgSignatoryInfo?.secretary}
+          </div>
+          <div className="">{orgSignatoryInfo?.organization.acronym} Secretary</div>
         </div>
         <div>Noted by:</div>
         <div className="flex flex-col">
-          <div className="font-bold">[NAME]</div>
-          <div className="">[ORG] President</div>
+          <div className="font-bold">
+            {orgSignatoryInfo?.president === '' ? '[NAME]' : orgSignatoryInfo?.president}
+          </div>
+          <div className="">{orgSignatoryInfo?.organization.acronym} President</div>
         </div>
         <div className="flex gap-20">
           <div className="flex flex-col">
-            <div className="font-bold">[NAME]</div>
-            <div className="">[ORG] Adviser</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.adviser1 === '' ? '[NAME]' : orgSignatoryInfo?.adviser1}
+            </div>
+            <div className="">{orgSignatoryInfo?.organization.acronym} Adviser</div>
           </div>
           <div className="flex flex-col">
-            <div className="font-bold">[NAME]</div>
-            <div className="">[ORG] Adviser</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.adviser2 === '' ? '[NAME]' : orgSignatoryInfo?.adviser2}
+            </div>
+            <div className="">{orgSignatoryInfo?.organization.acronym} Adviser</div>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className="fixed bottom-8 right-8 rounded-full bg-yellow p-4 text-6xl active:scale-95 print:hidden"
+        >
+          <Printer />
+        </button>
       </div>
     </>
   );

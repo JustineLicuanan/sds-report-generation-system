@@ -1,0 +1,196 @@
+<div id="main-content" className="mx-4 my-4  w-full  gap-8">
+          <div className="mb-4 text-center text-4xl font-bold">
+            {getMonthName(monthly?.month as number)} {monthly?.year}
+          </div>
+          <div className="grid grid-cols-2 grid-rows-4 gap-4">
+            {/* INFLOWS */}
+            <form
+              className="col-span-1 row-span-2 flex justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]"
+              onSubmit={createFSInflowForm.handleSubmit(onSubmitCreateFSInflow, (err) => {
+                console.error(err);
+              })}
+            >
+              <div className="flex gap-2">
+                <label htmlFor="inflows" className="text-lg font-bold">
+                  Inflows:
+                </label>
+                <select
+                  id="inflows"
+                  className="rounded-sm border p-1"
+                  {...createFSInflowForm.register('category')}
+                >
+                  {Object.values(FSInflowCategory).map((category) => (
+                    <option value={category}>{category}</option>
+                  ))}
+                </select>
+
+                <label htmlFor="date-inflows"></label>
+                <input
+                  type="date"
+                  id="date-inflows"
+                  className="rounded-sm border border-input bg-transparent px-1"
+                  {...createFSInflowForm.register('date')}
+                />
+              </div>
+              <button
+                type="submit"
+                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+              >
+                Add
+              </button>
+            </form>
+
+            {/* NET */}
+            <div className="col-span-1 row-span-4 flex flex-col justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+              <select name="" id="inflows" className="self-end rounded-sm border p-2">
+                <option value="collection">Collection</option>
+                <option value="igp">IGP</option>
+              </select>
+              <div>Net (Gross/Loss): </div>
+              <div className="text-center text-4xl font-bold">[Value]</div>
+            </div>
+
+            {/* OUTFLOWS */}
+            <form
+              className="col-span-1 row-span-2 flex justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]"
+              onSubmit={createFSOutflowForm.handleSubmit(onSubmitCreateFSOutflow, (err) => {
+                console.error(err);
+              })}
+            >
+              <div className="flex gap-2">
+                <label htmlFor="inflows" className="text-lg font-bold">
+                  Outflows:
+                </label>
+                <select name="" id="inflows" className="rounded-sm border p-1 capitalize">
+                  {Object.values(FSOutflowCategory).map((category) => (
+                    <option value={category}>{category.replace(/_/g, ' ').toLowerCase()}</option>
+                  ))}
+                </select>
+                <label htmlFor="date-outflows"></label>
+                <input
+                  type="date"
+                  id="date-outflows"
+                  className="rounded-sm border border-input bg-transparent px-1"
+                  {...createFSOutflowForm.register('date')}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+              >
+                Add
+              </button>
+            </form>
+          </div>
+          {/* TABLE */}
+          <div className="mt-4 flex min-h-[40vh] w-full flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+            <div className="flex justify-end">
+              <input
+                name="search"
+                id="search-item"
+                placeholder="Search"
+                className="h-7 rounded-l-sm border-[1px] border-green px-2 py-2 outline-none"
+              />
+              <label
+                htmlFor="search-item"
+                className="flex h-7 w-11 items-center  rounded-r-sm border-[1px] border-l-0 border-green  px-2"
+              >
+                <Image
+                  width={100}
+                  height={100}
+                  src="/search_icon.svg"
+                  className="md:h-full "
+                  alt="Search Icon"
+                />
+              </label>
+            </div>
+            <table className="w-full min-w-max border-collapse  border border-black text-center">
+              <thead>
+                <tr>
+                  <th className=" border-r-0 border-black bg-green p-1 text-lg font-bold tracking-tight text-white ">
+                    Type
+                  </th>
+                  <th className=" border-r-0 border-black bg-green p-1 text-lg font-bold tracking-tight text-white ">
+                    Category
+                  </th>
+
+                  <th className=" border-r-0 border-black bg-green p-1 text-lg font-bold tracking-tight text-white ">
+                    Date
+                  </th>
+                  <th className=" border-r-0 border-black bg-green p-1 text-lg font-bold tracking-tight text-white ">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {FSInflow?.map((FSInflow) => (
+                  <tr className="even:bg-[#808080]/20">
+                    <td className="border border-x-0 border-black py-2 text-base">Inflow</td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {FSInflow.category}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {FSInflow.date.toISOString().split('T')[0]}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      <div className="flex justify-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            router.push({
+                              pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/${monthlyID}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${FSInflow.id}${paths.ADD_INFLOW}`,
+                              query: { monthlyID: monthlyID, FSInflowID: FSInflow.id },
+                            })
+                          }
+                          className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-sm border border-red bg-red px-3 text-white active:scale-95"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {FSOutflow?.map((FSOutflow) => (
+                  <tr className="even:bg-[#808080]/20">
+                    <td className="border border-x-0 border-black py-2 text-base">Outflow</td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {FSOutflow.category}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {FSOutflow.date.toISOString().split('T')[0]}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      <div className="flex justify-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            router.push({
+                              pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/${monthlyID}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${FSOutflow.id}${paths.ADD_INFLOW}`,
+                              query: { monthlyID: monthlyID, FSOutflowID: FSOutflow.id },
+                            })
+                          }
+                          className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-sm border border-red bg-red px-3 text-white active:scale-95"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>

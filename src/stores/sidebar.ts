@@ -1,5 +1,6 @@
 import {
   CalendarCheck2,
+  File,
   FileSpreadsheet,
   FileText,
   Fingerprint,
@@ -44,6 +45,7 @@ export const useSidebarStore = create<SidebarState>((set) => ({
       href: `${paths.ORGANIZATION}${paths.APPOINTMENTS}`,
     },
     { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MY_ORGANIZATION}` },
+    { Icon: File, name: 'My Reports', href: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}` },
     {
       Icon: FileText,
       name: 'Accomplishment Report',
@@ -52,7 +54,7 @@ export const useSidebarStore = create<SidebarState>((set) => ({
     {
       Icon: FileSpreadsheet,
       name: 'Financial Statement',
-      href: `${paths.ORGANIZATION}${paths.FINANCIAL_REPORT}`,
+      href: `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}`,
     },
     { Icon: Megaphone, name: 'Announcements', href: `${paths.ORGANIZATION}${paths.ANNOUNCEMENTS}` },
   ],

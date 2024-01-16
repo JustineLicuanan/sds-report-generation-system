@@ -1,5 +1,6 @@
 import { type OutputData } from '@editorjs/editorjs';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -103,9 +104,13 @@ export default function GeneratedCalendarOfActivitiesPage() {
     ],
     version: '2.28.2',
   });
+  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
+    include: { organization: true },
+  });
+  const orgSignatoryInfo = getOrgSignatoryInfo.data;
+
   const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
-  const repSignatory = getReportSignatoryQuery?.data ?? [];
-  const signatories = parseSignatoryObject(repSignatory);
+  const signatories = parseSignatoryObject(getReportSignatoryQuery?.data ?? []);
 
   const router = useRouter();
   return (
@@ -140,12 +145,24 @@ export default function GeneratedCalendarOfActivitiesPage() {
             </div>
             <Image
               src={logo.SDS_LOGO}
-              alt="Bagong Pilipinas"
+              alt="SDS Logo"
               height={100}
               width={100}
               className="h-24 w-24 "
             />
-            <div className="h-24 w-24 rounded-full border"></div>
+            {orgSignatoryInfo?.organization.image ? (
+              <div className="h-24 w-24">
+                <CldImage
+                  width="96"
+                  height="96"
+                  src={orgSignatoryInfo?.organization.imageId ?? ''}
+                  alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
+                  className="rounded-full"
+                />
+              </div>
+            ) : (
+              <div className="h-24 w-24 rounded-full border"></div>
+            )}
           </div>
           <div className="w-full rounded border p-2 print:border-none">
             {/* `holder` prop must be a unique ID for each EditorBlock instance */}

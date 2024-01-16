@@ -8,7 +8,6 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { buttonVariants } from '~/components/ui/button';
 import { useToast } from '~/components/ui/use-toast';
 import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
 import { meta, paths } from '~/meta';
@@ -54,7 +53,14 @@ export default function CommunityExtensionServicesPage() {
         ? JSON.parse(generatedAR.content)
         : {
             documents: [
-              { documentPhoto: '', activity: '', location: '', date: '', shortDescription: '' },
+              {
+                documentPhoto: '',
+                documentPhotoId: '',
+                activity: '',
+                location: '',
+                date: '',
+                shortDescription: '',
+              },
             ],
           },
     },
@@ -121,30 +127,40 @@ export default function CommunityExtensionServicesPage() {
           <div className="text-2xl font-bold">Generate Community Extension Services</div>
           {documentsFieldArray.fields.map((field, idx) => (
             <div key={field.id} className="my-4 flex flex-col justify-end gap-2">
-              <div className="flex items-center gap-2">
-                <label htmlFor="document-photo">Document Photo:</label>
-                <UploadButton
-                  className={buttonVariants({ variant: 'c-secondary' })}
-                  folder="document-photos"
-                  resourceType={ResourceType.IMAGE}
-                  onSuccess={onSuccessUpload}
-                >
-                  Upload
-                </UploadButton>
-                <div className="">{fileName}</div>
-              </div>
-              {updateARGeneratedForm.watch('content.documentPhoto') && (
-                <div>
-                  <div>Document Photo Preview:</div>
-                  <CldImage
-                    width="96"
-                    height="96"
-                    src={updateARGeneratedForm.watch('content.documentPhoto')!}
-                    alt="Document Photo Image"
-                    className="h-52 w-52 border border-input"
-                  />
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-4">
+                  <label htmlFor="doc-photo">Document Photo:</label>
+                  <UploadButton
+                    className="rounded-sm border border-input bg-yellow px-1"
+                    folder="community-extension-services"
+                    resourceType={ResourceType.IMAGE}
+                    onSuccess={(result: any) => {
+                      updateARGeneratedForm.setValue(
+                        `content.documents.${idx}.documentPhoto`,
+                        result.info?.secure_url
+                      );
+                      updateARGeneratedForm.setValue(
+                        `content.documents.${idx}.documentPhotoId`,
+                        result.info?.public_id
+                      );
+                    }}
+                  >
+                    Upload
+                  </UploadButton>
                 </div>
-              )}
+                {updateARGeneratedForm.watch(`content.documents.${idx}.documentPhotoId`) && (
+                  <div>
+                    <div>Photo Preview:</div>
+                    <CldImage
+                      width="96"
+                      height="96"
+                      src={updateARGeneratedForm.watch(`content.documents.${idx}.documentPhotoId`)}
+                      alt="Organization Logo"
+                      className="rounded-sm border-2 border-input"
+                    />
+                  </div>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 <label htmlFor="activity">Activity:</label>
                 <input
@@ -251,7 +267,7 @@ export default function CommunityExtensionServicesPage() {
                 router.push(
                   `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
                     generatedAR?.template ?? ''
-                  )}/${generatedAR?.id}${paths.EDIT}`
+                  )}/${generatedAR?.id}${paths.PRINT}`
                 )
               }
               className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"

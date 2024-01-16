@@ -176,8 +176,8 @@ export default function InvitationLetterPage() {
             <div className="font-bold">CAVITE STATE UNIVERSITY</div>
             <div className="font-bold">Imus Campus</div>
             <div className="font-bold">Student Development Services</div>
-            <div className="font-bold">ORG NAME</div>
-            <div className="">org gmail account</div>
+            <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>
+            <div className="">{orgSignatoryInfo?.organization.contactEmail}</div>
           </div>
           <Image
             src={logo.SDS_LOGO}

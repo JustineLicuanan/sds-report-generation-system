@@ -2,7 +2,7 @@ export const meta = {
   NAME: 'Office of Student Development Services',
   SHORT_NAME: 'SDS',
   LOGO: '/sds_icon.png',
-  DESCRIPTION: 'Report-File Scheduling & Management System',
+  DESCRIPTION: 'AR & FS Generator',
   SEPARATOR: '|',
 } as const;
 
@@ -32,10 +32,31 @@ export const paths = {
   AUTH_LOGS: '/auth/logs',
   MY_ORGANIZATION: '/my-organization',
   POSITIONS: '/positions',
-
+  SEMESTER: '/semester',
+  
   GENERATED_AR: '/generated-ar',
-  FINANCIAL_REPORT: '/financial-report',
+  FINANCIAL_STATEMENT: '/financial-statement',
+
+  MODIFY_FINANCIAL_STATEMENT: '/modify',
+  INFLOWS: '/inflows',
+  ADD_INFLOW: '/add-inflow',
+  OUTFLOWS: '/outflows',
+  ADD_OUTFLOW: '/add-outflow',
+  SEM_CASH_FLOW: '/semester-cash-flow',
+  SEM_SIGNATORIES: '/semester-signatories',
+  MONTH_LABEL: '/month-label',
+  MONTH_SIGNATORIES: '/month-signatories',
+  MONTH_NOTES: '/month-notes',
+  MONTH_CASH_FLOW: '/month-cash-flow',
+  RECEIPTS: '/receipts',
+  EXPENSE_SUMMARY: '/expense-summary',
+  FORMS: '/forms',
+  LIQUIDATION: '/liquidation',
+  COLLECTION_ROW: '/collection-row',
+  SAVE: '/save',
+  ADD_NEW_MONTH: '/add-month',
 
   CREATE: '/create',
   EDIT: '/edit',
+  PRINT: '/print',
 } as const;

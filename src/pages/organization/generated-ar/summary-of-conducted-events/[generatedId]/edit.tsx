@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
@@ -7,6 +8,7 @@ import { z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { useToast } from '~/components/ui/use-toast';
+import { ResourceType, UploadButton } from '~/components/upload-button';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -49,7 +51,14 @@ export default function SummaryOfConductedEventsPage() {
         ? JSON.parse(generatedAR.content)
         : {
             documents: [
-              { documentPhoto: '', activity: '', location: '', date: '', shortDescription: '' },
+              {
+                documentPhoto: '',
+                documentPhotoId: '',
+                activity: '',
+                location: '',
+                date: '',
+                shortDescription: '',
+              },
             ],
           },
     },
@@ -109,15 +118,39 @@ export default function SummaryOfConductedEventsPage() {
           <div className="text-2xl font-bold">Generate Summary of Conducted Events</div>
           {documentsFieldArray.fields.map((field, idx) => (
             <div key={field.id} className="my-4 flex flex-col justify-end gap-2">
-              <div className="flex items-center gap-2">
-                <label htmlFor="doc-photo">Document Photo:</label>
-                <input
-                  type="file"
-                  id="doc-photo"
-                  placeholder=""
-                  className="rounded-sm border border-input bg-transparent px-1"
-                  {...updateARGeneratedForm.register(`content.documents.${idx}.documentPhoto`)}
-                />
+              <div className="flex flex-col gap-2">
+                <div>
+                  <label htmlFor="doc-photo">Document Photo:</label>
+                  <UploadButton
+                    className="rounded-sm border border-input bg-yellow px-1"
+                    folder="conducted-events"
+                    resourceType={ResourceType.IMAGE}
+                    onSuccess={(result: any) => {
+                      updateARGeneratedForm.setValue(
+                        `content.documents.${idx}.documentPhoto`,
+                        result.info?.secure_url
+                      );
+                      updateARGeneratedForm.setValue(
+                        `content.documents.${idx}.documentPhotoId`,
+                        result.info?.public_id
+                      );
+                    }}
+                  >
+                    Upload
+                  </UploadButton>
+                </div>
+                {updateARGeneratedForm.watch(`content.documents.${idx}.documentPhotoId`) && (
+                  <div>
+                    <div>Photo Preview:</div>
+                    <CldImage
+                      width="96"
+                      height="96"
+                      src={updateARGeneratedForm.watch(`content.documents.${idx}.documentPhotoId`)}
+                      alt="Organization Logo"
+                      className="rounded-sm border-2 border-input"
+                    />
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <label htmlFor="activity">Activity:</label>
@@ -226,7 +259,7 @@ export default function SummaryOfConductedEventsPage() {
                 router.push(
                   `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
                     generatedAR?.template ?? ''
-                  )}/${generatedAR?.id}${paths.EDIT}`
+                  )}/${generatedAR?.id}${paths.PRINT}`
                 )
               }
               className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"

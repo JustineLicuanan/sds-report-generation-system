@@ -28,10 +28,15 @@ export default function AccomplishmentReportTemplatePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  const files = Object.values(GeneratedARTemplate).map((template, idx) => ({
-    filePath: `/${enumToSlug(template)}`,
-    title: template.replace(/_/g, ' '),
-  }));
+  const files = Object.values(GeneratedARTemplate)
+    .filter(
+      (template) =>
+        !['CALENDAR_OF_ACTIVITIES', 'INVITATION_LETTER', 'REQUEST_LETTER'].includes(template)
+    )
+    .map((template, idx) => ({
+      filePath: `/${enumToSlug(template)}`,
+      title: template.replace(/_/g, ' '),
+    }));
 
   const [templateName, setTemplateName] = useState('');
 
@@ -63,34 +68,49 @@ export default function AccomplishmentReportTemplatePage() {
           <div className="flex flex-col gap-2">
             <div className="text-4xl font-bold">Generate Accomplishment Report</div>
           </div>
-          <div className="my-2 mt-8 flex  items-center gap-4">
-            <select
-              className='className="border-sm relative flex items-center justify-between  gap-4 border border-input bg-transparent px-4 py-2'
-              onChange={(e) => setTemplateName(e.target.value)}
-              value={templateName}
-            >
-              <option value="" className="">
-                Select an AR File
-              </option>
-              {files.map((file, index) => (
-                <option key={index} value={file.title} className="">
-                  {file.title === 'cbl' ? 'Constitutional and By-Laws' : file.title}
+          <div className="my-2 mt-8 flex  items-center justify-around gap-4">
+            <div className="flex  items-center gap-4">
+              <select
+                className='className="border-sm relative flex items-center justify-between  gap-4 border border-input bg-transparent px-4 py-2'
+                onChange={(e) => setTemplateName(e.target.value)}
+                value={templateName}
+              >
+                <option value="" className="">
+                  Select an AR File
                 </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              onClick={() =>
-                router.push(
-                  `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
-                    templateName.replace(/ /g, '_')
-                  )}${paths.CREATE}`
-                )
-              }
-              className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-            >
-              Generate
-            </button>
+                {files.map((file, index) => (
+                  <option key={index} value={file.title} className="">
+                    {file.title === 'cbl' ? 'Constitutional and By-Laws' : file.title}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(
+                    `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
+                      templateName.replace(/ /g, '_')
+                    )}${paths.CREATE}`
+                  )
+                }
+                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+              >
+                Generate
+              </button>
+            </div>
+
+            <div className="flex  items-center gap-4">
+              <div className="">Signatory Information:</div>
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.POSITIONS}`)
+                }
+                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+              >
+                Setup
+              </button>
+            </div>
           </div>
           <div className="mt-8">
             {visibleGeneratedAR?.map((generated, index) => (
@@ -129,17 +149,23 @@ export default function AccomplishmentReportTemplatePage() {
             ))}
           </div>
           <div className="my-4 flex justify-center gap-2">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={`${
-                  currentPage === index + 1 ? 'bg-yellow' : ''
-                } border border-input px-2 py-1`}
-              >
-                {index + 1}
-              </button>
-            ))}
+            {visibleGeneratedAR?.length === 0 ? (
+              <div className="text-2xl">There are no currently generated file.</div>
+            ) : visibleGeneratedAR?.length >= 8 ? (
+              Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`${
+                    currentPage === index + 1 ? 'bg-yellow' : ''
+                  } border border-input px-2 py-1`}
+                >
+                  {index + 1}
+                </button>
+              ))
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </main>

@@ -1,4 +1,6 @@
+import { Printer } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
+import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { meta } from '~/meta';
@@ -23,15 +25,19 @@ export default function CBL() {
   const repSignatory = getReportSignatoryQuery?.data ?? [];
   const signatories = parseSignatoryObject(repSignatory);
 
+  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
+    include: { organization: true },
+  });
+  const orgSignatoryInfo = getOrgSignatoryInfo.data;
+
   const router = useRouter();
-  const { ARGeneratedId } = router.query;
+  const generatedId = router.query.generatedId;
 
   const getARGenerated = api.shared.generatedAR.get.useQuery({
-    where: { id: ARGeneratedId as string },
+    where: { id: generatedId as string },
   });
-  const GeneratedAR = getARGenerated.data?.[0];
-  const contentString = GeneratedAR?.content;
-  const contentObject = contentString ? JSON.parse(contentString) : null;
+  const generatedAR = getARGenerated.data?.[0];
+  const content = generatedAR?.content && JSON.parse(generatedAR.content);
 
   return (
     <>
@@ -40,8 +46,20 @@ export default function CBL() {
       </Head>
       <div className="mx-auto my-0 flex max-w-[210mm] flex-col items-center justify-center ">
         <div className="mb-16 flex h-[100vh] flex-col items-center justify-center gap-8 text-center">
-          <div className="h-80 w-80 rounded-full border-2 bg-green">Org Logo</div>
-          <div className="text-6xl">[ORG NAME]</div>
+          {orgSignatoryInfo?.organization.image ? (
+            <div className="h-24 w-24">
+              <CldImage
+                width="96"
+                height="96"
+                src={orgSignatoryInfo?.organization.imageId ?? ''}
+                alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
+                className="h-80 w-80 rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="h-80 w-80 rounded-full border-2 bg-green"></div>
+          )}
+          <div className="text-6xl">{orgSignatoryInfo?.organization.name}</div>
           <div className="text-6xl">CONSTITUTION AND BY-LAWS</div>
         </div>
 
@@ -72,7 +90,7 @@ export default function CBL() {
           </div>
         </div>
         <div className="mb-16 flex h-[100vh] flex-col items-center  gap-8 text-justify">
-          {contentObject?.articles.map((article, idx) => (
+          {content?.articles.map((article: any, idx: any) => (
             <div key={idx}>
               <div className="text-center font-bold">Article {article.articleNumber}</div>
               <div className="text-center">{article.description}</div>
@@ -82,42 +100,72 @@ export default function CBL() {
         <div className="">Signed at Cavite State University-Imus Campus on the day of [Date]</div>
         <div className="mt-4 flex flex-col items-center gap-8">
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.president === '' ? '[NAME]' : orgSignatoryInfo?.president}
+            </div>
             <div>President</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.vicePresident === '' ? '[NAME]' : orgSignatoryInfo?.vicePresident}
+            </div>
             <div>Vice President</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
-            <div>General Security</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.generalSecretary === ''
+                ? '[NAME]'
+                : orgSignatoryInfo?.generalSecretary}
+            </div>
+            <div>General Secretary</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.treasurer === '' ? '[NAME]' : orgSignatoryInfo?.treasurer}
+            </div>
             <div>Treasurer</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.auditor === '' ? '[NAME]' : orgSignatoryInfo?.auditor}
+            </div>
             <div>Auditor</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.recruitmentCoordinator === ''
+                ? '[NAME]'
+                : orgSignatoryInfo?.recruitmentCoordinator}
+            </div>
             <div>Recruitment Coordinator</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="font-bold">[NAME]</div>
-            <div>Training Coordinator</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.trainingDirector === ''
+                ? '[NAME]'
+                : orgSignatoryInfo?.trainingDirector}
+            </div>
+            <div>Training Director</div>
           </div>
           <div>Noted By:</div>
           <div className="flex items-center gap-28">
             <div className="flex flex-col items-center">
-              <div className="font-bold">[NAME]</div>
-              <div>[Org Name] Adviser</div>
+              <div className="font-bold">
+                {orgSignatoryInfo?.adviser1 === '' ? '[NAME]' : orgSignatoryInfo?.adviser1}
+              </div>
+              <div>
+                {orgSignatoryInfo?.organization.acronym}
+                Adviser
+              </div>
             </div>
             <div className="flex flex-col items-center">
-              <div className="font-bold">[NAME]</div>
-              <div>[Org Name] Adviser</div>
+              <div className="font-bold">
+                {orgSignatoryInfo?.adviser2 === '' ? '[ORG NAME]' : orgSignatoryInfo?.adviser2}
+              </div>
+              <div>
+                {orgSignatoryInfo?.organization.acronym}
+                Adviser
+              </div>
             </div>
           </div>
           <div>Recommending Approval:</div>
@@ -137,6 +185,13 @@ export default function CBL() {
             <div>OSAS Head</div>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className="fixed bottom-8 right-8 rounded-full bg-yellow p-4 text-6xl active:scale-95 print:hidden"
+        >
+          <Printer />
+        </button>
       </div>
     </>
   );

@@ -146,6 +146,26 @@ export default function MinutesOfTheMeetingPage() {
                 {...updateARGeneratedForm.register(`content.timeStarted`)}
               />
             </div>
+            <div className="flex items-center gap-4">
+              <div>
+                <label htmlFor="presider-name">Presider Name: </label>
+                <input
+                  type="text"
+                  id="presider-name"
+                  className="rounded-sm border border-input bg-transparent px-1"
+                  {...updateARGeneratedForm.register(`content.presiderName`)}
+                />
+              </div>
+              <div>
+                <label htmlFor="presider-position">Presider Position: </label>
+                <input
+                  type="text"
+                  id="presider-position"
+                  className="rounded-sm border border-input bg-transparent px-1"
+                  {...updateARGeneratedForm.register(`content.presiderPosition`)}
+                />
+              </div>
+            </div>
             <div className="mt-4 font-bold">ATTENDEES</div>
             {attendeesFieldArray.fields.map((field, idx) => (
               <div key={field.id} className="my-1 flex gap-2">
@@ -310,7 +330,7 @@ export default function MinutesOfTheMeetingPage() {
                 router.push(
                   `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
                     generatedAR?.template ?? ''
-                  )}/${generatedAR?.id}${paths.EDIT}`
+                  )}/${generatedAR?.id}${paths.PRINT}`
                 )
               }
               className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
