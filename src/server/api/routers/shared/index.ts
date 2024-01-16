@@ -3,6 +3,7 @@ import { commentRouter } from '~/server/api/routers/shared/comment';
 import { financialStatementRouter } from '~/server/api/routers/shared/financial-statement';
 import { generatedARRouter } from '~/server/api/routers/shared/generated-ar';
 import { logRouter } from '~/server/api/routers/shared/log';
+import { monthlyFSRouter } from '~/server/api/routers/shared/monthly-fs';
 import { notificationRouter } from '~/server/api/routers/shared/notification';
 import { orgSignatoryInfoRouter } from '~/server/api/routers/shared/org-signatory-info';
 import { organizationRouter } from '~/server/api/routers/shared/organization';
@@ -22,6 +23,7 @@ export const sharedRouter = createTRPCRouter({
   reportSignatory: reportSignatoryRouter,
   generatedAR: generatedARRouter,
   FS: financialStatementRouter,
+  monthlyFS: monthlyFSRouter,
   comment: commentRouter,
   notification: notificationRouter,
   log: logRouter,
