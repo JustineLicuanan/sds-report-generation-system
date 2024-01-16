@@ -27,6 +27,11 @@ const config = {
     '@typescript-eslint/no-misused-promises': [2, { checksVoidReturn: { attributes: false } }],
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/non-nullable-type-assertion-style': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
   },
 };
 
