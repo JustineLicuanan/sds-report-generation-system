@@ -95,29 +95,25 @@ export default function AdminDashboardPage() {
                             )}
 
                             <div className="mx-5">
-                              <div className="mb-1 px-1 text-center font-medium">
-                                Accomplishment Report <br />
-                                <span
-                                  className={`text-2xl font-semibold ${
-                                    item._count.reports.hasSchedule >= 5
-                                      ? 'text-green'
-                                      : item._count.reports.hasSchedule >= 1
-                                      ? 'text-yellow'
-                                      : 'text-red'
-                                  }`}
-                                >
-                                  {item._count.reports.hasSchedule * 20}%
+                              <div className="border-b-2 border-b-black px-1 text-center text-lg font-medium">
+                                Pending Appointment <br />
+                                <span className="text-2xl font-semibold text-yellow">
+                                  {item._count.reports.hasSchedule}
                                 </span>
                               </div>
-                              <div className="border-t-2 border-b-black px-1 text-center font-medium">
-                                Financial Statement <br />
-                                <span
-                                  className={`text-2xl font-semibold ${
-                                    item._count.reports._all ? 'text-green' : 'text-yellow'
-                                  }`}
-                                >
-                                  {item._count.reports._all ? 'Done' : 'Pending'}
-                                </span>
+                              <div className="flex  text-center ">
+                                <div className="border-r-2 border-r-black  px-1 text-lg font-medium">
+                                  Approved <br />
+                                  <span className="text-2xl font-semibold text-yellow">
+                                    {item._count.reports.status.APPROVED}
+                                  </span>
+                                </div>
+                                <div className="px-1 text-center text-lg font-medium">
+                                  Total Reports <br />
+                                  <span className="text-2xl font-semibold text-yellow">
+                                    {item._count.reports._all}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
