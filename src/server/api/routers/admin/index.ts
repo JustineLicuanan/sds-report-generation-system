@@ -10,6 +10,8 @@ import { monthlyFSRouter } from '~/server/api/routers/admin/monthly-fs';
 import { notificationRouter } from '~/server/api/routers/admin/notification';
 import { orgRouter } from '~/server/api/routers/admin/org';
 import { orgSignatoryInfoRouter } from '~/server/api/routers/admin/org-signatory-info';
+import { outflowFSRouter } from '~/server/api/routers/admin/outflow-fs';
+import { outflowRowFSRouter } from '~/server/api/routers/admin/outflow-row-fs';
 import { reportRouter } from '~/server/api/routers/admin/report';
 import { reportSemesterRouter } from '~/server/api/routers/admin/report-semester';
 import { reportSignatoryRouter } from '~/server/api/routers/admin/report-signatory';
@@ -33,6 +35,8 @@ export const adminRouter = createTRPCRouter({
   inflowCollectionRowFS: inflowCollectionRowFSRouter,
   inflowIgpFS: inflowIgpFSRouter,
   inflowIgpRowFS: inflowIgpRowFSRouter,
+  outflowFS: outflowFSRouter,
+  outflowRowFS: outflowRowFSRouter,
   comment: commentRouter,
   notification: notificationRouter,
   log: logRouter,

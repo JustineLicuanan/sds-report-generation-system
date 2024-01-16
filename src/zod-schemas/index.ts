@@ -6,6 +6,8 @@ import { inflowIgpFSSchemas } from '~/zod-schemas/inflow-igp-fs';
 import { inflowIgpRowFSSchemas } from '~/zod-schemas/inflow-igp-row-fs';
 import { MonthlyFSSchemas } from '~/zod-schemas/monthly-fs';
 import { orgSignatoryInfoSchemas } from '~/zod-schemas/org-signatory-info';
+import { outflowFSSchemas } from '~/zod-schemas/outflow-fs';
+import { outflowRowFSSchemas } from '~/zod-schemas/outflow-row-fs';
 import { reportSemesterSchemas } from '~/zod-schemas/report-semester';
 import { reportSignatorySchemas } from '~/zod-schemas/report-signatory';
 
@@ -20,6 +22,8 @@ export const schemas = {
     inflowCollectionRowFS: inflowCollectionRowFSSchemas.admin,
     inflowIgpFS: inflowIgpFSSchemas.admin,
     inflowIgpRowFS: inflowIgpRowFSSchemas.admin,
+    outflowFS: outflowFSSchemas.admin,
+    outflowRowFS: outflowRowFSSchemas.admin,
   },
 
   shared: {
@@ -32,5 +36,7 @@ export const schemas = {
     inflowCollectionRowFS: inflowCollectionRowFSSchemas.shared,
     inflowIgpFS: inflowIgpFSSchemas.shared,
     inflowIgpRowFS: inflowIgpRowFSSchemas.shared,
+    outflowFS: outflowFSSchemas.shared,
+    outflowRowFS: outflowRowFSSchemas.shared,
   },
 };

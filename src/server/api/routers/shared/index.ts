@@ -11,6 +11,8 @@ import { monthlyFSRouter } from '~/server/api/routers/shared/monthly-fs';
 import { notificationRouter } from '~/server/api/routers/shared/notification';
 import { orgSignatoryInfoRouter } from '~/server/api/routers/shared/org-signatory-info';
 import { organizationRouter } from '~/server/api/routers/shared/organization';
+import { outflowFSRouter } from '~/server/api/routers/shared/outflow-fs';
+import { outflowRowFSRouter } from '~/server/api/routers/shared/outflow-row-fs';
 import { reportRouter } from '~/server/api/routers/shared/report';
 import { reportSemesterRouter } from '~/server/api/routers/shared/report-semester';
 import { reportSignatoryRouter } from '~/server/api/routers/shared/report-signatory';
@@ -32,6 +34,8 @@ export const sharedRouter = createTRPCRouter({
   inflowCollectionRowFS: inflowCollectionRowFSRouter,
   inflowIgpFS: inflowIgpFSRouter,
   inflowIgpRowFS: inflowIgpRowFSRouter,
+  outflowFS: outflowFSRouter,
+  outflowRowFS: outflowRowFSRouter,
   comment: commentRouter,
   notification: notificationRouter,
   log: logRouter,
