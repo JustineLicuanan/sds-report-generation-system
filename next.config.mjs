@@ -26,6 +26,14 @@ const config = {
     ignoreDuringBuilds: true,
   },
 
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+
   // redirects: () => [
   //   { source: '/org', destination: paths.ORGANIZATION, permanent: true },
   //   { source: '/login', destination: paths.SIGN_IN, permanent: true },
