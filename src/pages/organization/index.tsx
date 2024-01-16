@@ -51,7 +51,7 @@ export default function OrganizationPage() {
         {/* SIDE BAR*/}
         <OrganizationSideBarMenu />
 
-        <div id="main-content" className="mx-5 w-full md:mx-10 md:w-8/12">
+        <div id="main-content" className="mx-5 w-full">
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div className="mx-4 flex justify-between ">
             <div className="flex items-center gap-4">
@@ -64,7 +64,7 @@ export default function OrganizationPage() {
                   className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28"
                 />
               ) : (
-                <div className='className="my-4 lg:w-28" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28'></div>
+                <div className='className="my-4 me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28'></div>
               )}
               <div className="">
                 <div className="ms-4 text-2xl font-bold lg:text-3xl">
