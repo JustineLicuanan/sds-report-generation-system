@@ -3,6 +3,7 @@ import { commentRouter } from '~/server/api/routers/shared/comment';
 import { financialStatementRouter } from '~/server/api/routers/shared/financial-statement';
 import { generatedARRouter } from '~/server/api/routers/shared/generated-ar';
 import { inflowCollectionFSRouter } from '~/server/api/routers/shared/inflow-collection-fs';
+import { inflowCollectionRowFSRouter } from '~/server/api/routers/shared/inflow-collection-row-fs';
 import { logRouter } from '~/server/api/routers/shared/log';
 import { monthlyFSRouter } from '~/server/api/routers/shared/monthly-fs';
 import { notificationRouter } from '~/server/api/routers/shared/notification';
@@ -26,6 +27,7 @@ export const sharedRouter = createTRPCRouter({
   FS: financialStatementRouter,
   monthlyFS: monthlyFSRouter,
   inflowCollectionFS: inflowCollectionFSRouter,
+  inflowCollectionRowFS: inflowCollectionRowFSRouter,
   comment: commentRouter,
   notification: notificationRouter,
   log: logRouter,

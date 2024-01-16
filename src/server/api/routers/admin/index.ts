@@ -2,6 +2,7 @@ import { announcementRouter } from '~/server/api/routers/admin/announcement';
 import { commentRouter } from '~/server/api/routers/admin/comment';
 import { financialStatementRouter } from '~/server/api/routers/admin/financial-statement';
 import { inflowCollectionFSRouter } from '~/server/api/routers/admin/inflow-collection-fs';
+import { inflowCollectionRowFSRouter } from '~/server/api/routers/admin/inflow-collection-row-fs';
 import { logRouter } from '~/server/api/routers/admin/log';
 import { monthlyFSRouter } from '~/server/api/routers/admin/monthly-fs';
 import { notificationRouter } from '~/server/api/routers/admin/notification';
@@ -27,6 +28,7 @@ export const adminRouter = createTRPCRouter({
   FS: financialStatementRouter,
   monthlyFS: monthlyFSRouter,
   inflowCollectionFS: inflowCollectionFSRouter,
+  inflowCollectionRowFS: inflowCollectionRowFSRouter,
   comment: commentRouter,
   notification: notificationRouter,
   log: logRouter,
