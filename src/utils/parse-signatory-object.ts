@@ -1,4 +1,4 @@
-import { ReportSignatory } from '@prisma/client';
+import { type ReportSignatory } from '@prisma/client';
 
 export function parseSignatoryObject(signatories: ReportSignatory[]) {
   return signatories.reduce(

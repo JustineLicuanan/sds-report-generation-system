@@ -8,8 +8,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 import { useToast } from '~/components/ui/use-toast';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -38,7 +38,7 @@ export default function ExcuseLetterPage() {
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const [content, setContent] = useState<OutputData>({
+  const [content] = useState<OutputData>({
     time: 1705037343671,
     blocks: [
       {

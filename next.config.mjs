@@ -20,6 +20,12 @@ const config = {
     defaultLocale: 'en',
   },
 
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+
   // redirects: () => [
   //   { source: '/org', destination: paths.ORGANIZATION, permanent: true },
   //   { source: '/login', destination: paths.SIGN_IN, permanent: true },

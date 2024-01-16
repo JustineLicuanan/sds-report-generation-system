@@ -1,4 +1,4 @@
-import { FileCog, Layers, Megaphone, Scale, Users } from 'lucide-react';
+import { FileCog, Layers, Megaphone, Users } from 'lucide-react';
 import Link from 'next/link';
 import { Fragment } from 'react';
 
@@ -27,7 +27,11 @@ export function AccountDropdown({ isOrganization, children }: Props) {
         // ],
         // [{ Icon: LifeBuoy, name: 'Support', href: '#' }],
         [
-          { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MY_ORGANIZATION}` },
+          {
+            Icon: Users,
+            name: 'My Organization',
+            href: `${paths.ORGANIZATION}${paths.MY_ORGANIZATION}`,
+          },
           { Icon: Layers, name: 'My Reports', href: `${paths.ORGANIZATION}` },
         ],
       ]

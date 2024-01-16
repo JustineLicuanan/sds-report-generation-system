@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { useToast } from '~/components/ui/use-toast';
@@ -58,7 +58,7 @@ export default function ResolutionPage() {
   });
 
   const updateARGenerated = api.shared.generatedAR.update.useMutation({
-    onSuccess: async ({ id }) => {
+    onSuccess: async () => {
       toast({ variant: 'c-primary', description: '✔️ An AR page has been updated.' });
       await utils.shared.generatedAR.invalidate();
     },

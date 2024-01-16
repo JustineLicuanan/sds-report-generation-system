@@ -21,7 +21,7 @@ export default function OrganizationAvatar({ organization }: { organization: Org
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                router.push(
+                void router.push(
                   `${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}${paths.ORGANIZATION_EDIT}`
                 );
               }}

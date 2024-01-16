@@ -7,15 +7,14 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 import { useToast } from '~/components/ui/use-toast';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { enumToSlug } from '~/utils/enum-to-slug';
-import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 import { schemas } from '~/zod-schemas';
 
 export const getServerSideProps = (async (ctx) => {
@@ -38,7 +37,7 @@ export default function ActivityProposalMessagePage() {
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const [content, setContent] = useState<OutputData>({
+  const [content] = useState<OutputData>({
     time: 1705030194807,
     blocks: [
       {
@@ -122,8 +121,8 @@ export default function ActivityProposalMessagePage() {
   });
   const orgSignatoryInfo = getOrgSignatoryInfo.data;
 
-  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
-  const signatories = parseSignatoryObject(getReportSignatoryQuery?.data ?? []);
+  // const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
+  // const signatories = parseSignatoryObject(getReportSignatoryQuery?.data ?? []);
 
   const createARGeneratedForm = useForm<CreateARGeneratedInputs>({
     resolver: zodResolver(schemas.shared.generatedAR.create),

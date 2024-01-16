@@ -1,6 +1,4 @@
 import { type OutputData } from '@editorjs/editorjs';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { GeneratedARTemplate } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import dynamic from 'next/dynamic';
@@ -8,14 +6,12 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { type z } from 'zod';
 import { useToast } from '~/components/ui/use-toast';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
-import { enumToSlug } from '~/utils/enum-to-slug';
 import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 import { schemas } from '~/zod-schemas';
 
@@ -126,35 +122,35 @@ export default function CalendarOfActivitiesPage() {
   const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
   const signatories = parseSignatoryObject(getReportSignatoryQuery?.data ?? []);
 
-  const createARGeneratedForm = useForm<CreateARGeneratedInputs>({
-    resolver: zodResolver(schemas.shared.generatedAR.create),
-    // I use 'values' here because in the future(?), the Editor.js template (content) might come from database
-    values: {
-      template: GeneratedARTemplate.CALENDAR_OF_ACTIVITIES,
-      // This 'content' is JSON, you can structure it however you like
-      content: { letter1stSem: content1stSem, letter2ndSem: content2ndSem },
-    },
-  });
+  // const createARGeneratedForm = useForm<CreateARGeneratedInputs>({
+  //   resolver: zodResolver(schemas.shared.generatedAR.create),
+  //   // I use 'values' here because in the future(?), the Editor.js template (content) might come from database
+  //   values: {
+  //     template: GeneratedARTemplate.CALENDAR_OF_ACTIVITIES,
+  //     // This 'content' is JSON, you can structure it however you like
+  //     content: { letter1stSem: content1stSem, letter2ndSem: content2ndSem },
+  //   },
+  // });
 
-  const createARGenerated = api.shared.generatedAR.create.useMutation({
-    onSuccess: async ({ id, template }) => {
-      toast({ variant: 'c-primary', description: '✔️ An AR page has been generated.' });
-      await utils.shared.generatedAR.invalidate();
-      await router.push(
-        `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(template)}/${id}${paths.EDIT}`
-      );
-    },
-    onError: () => {
-      toast({ variant: 'destructive', description: '❌ Internal Server Error' });
-    },
-  });
+  // const createARGenerated = api.shared.generatedAR.create.useMutation({
+  //   onSuccess: async ({ id, template }) => {
+  //     toast({ variant: 'c-primary', description: '✔️ An AR page has been generated.' });
+  //     await utils.shared.generatedAR.invalidate();
+  //     await router.push(
+  //       `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(template)}/${id}${paths.EDIT}`
+  //     );
+  //   },
+  //   onError: () => {
+  //     toast({ variant: 'destructive', description: '❌ Internal Server Error' });
+  //   },
+  // });
 
-  const onSubmitCreateARGenerated: SubmitHandler<CreateARGeneratedInputs> = (values) => {
-    if (createARGenerated.isLoading) {
-      return;
-    }
-    createARGenerated.mutate(values);
-  };
+  // const onSubmitCreateARGenerated: SubmitHandler<CreateARGeneratedInputs> = (values) => {
+  //   if (createARGenerated.isLoading) {
+  //     return;
+  //   }
+  //   createARGenerated.mutate(values);
+  // };
   return (
     <>
       <Head>

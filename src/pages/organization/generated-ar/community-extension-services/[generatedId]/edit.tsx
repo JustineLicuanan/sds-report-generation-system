@@ -3,13 +3,12 @@ import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { useToast } from '~/components/ui/use-toast';
-import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import { ResourceType, UploadButton } from '~/components/upload-button';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -72,7 +71,7 @@ export default function CommunityExtensionServicesPage() {
   });
 
   const updateARGenerated = api.shared.generatedAR.update.useMutation({
-    onSuccess: async ({ id }) => {
+    onSuccess: async () => {
       toast({ variant: 'c-primary', description: '✔️ An AR page has been updated.' });
       await utils.shared.generatedAR.invalidate();
     },
@@ -98,12 +97,12 @@ export default function CommunityExtensionServicesPage() {
     updateARGenerated.mutate(values);
   };
 
-  const [fileName, setFileName] = useState('');
-  const onSuccessUpload: OnSuccessUpload = (result) => {
-    updateARGeneratedForm.setValue('content.documentPhoto', result.info?.secure_url);
-    updateARGeneratedForm.setValue('content.documentPhoto', result.info?.public_id);
-    setFileName(result.info?.original_filename ?? '');
-  };
+  // const [setFileName] = useState('');
+  // const onSuccessUpload: OnSuccessUpload = (result) => {
+  //   updateARGeneratedForm.setValue('content.documentPhoto', result.info?.secure_url);
+  //   updateARGeneratedForm.setValue('content.documentPhoto', result.info?.public_id);
+  //   setFileName(result.info?.original_filename ?? '');
+  // };
   return (
     <>
       <Head>

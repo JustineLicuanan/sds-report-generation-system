@@ -1,4 +1,3 @@
-import { type OutputData } from '@editorjs/editorjs';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import dynamic from 'next/dynamic';
@@ -25,84 +24,84 @@ export const getServerSideProps = (async (ctx) => {
 const EditorBlock = dynamic(() => import('~/components/editor'), { ssr: false });
 
 export default function InvitationLetterPage() {
-  const [content, setContent] = useState<OutputData>({
-    time: 1705030194807,
-    blocks: [
-      {
-        id: 'tb3D1JU1ue',
-        type: 'paragraph',
-        data: {
-          text: '[Date]',
-          alignment: 'left',
-        },
-      },
-      {
-        id: 'tlhRFE3WKG',
-        type: 'paragraph',
-        data: {
-          text: '<b>[NAME]</b>',
-          alignment: 'left',
-        },
-      },
-      {
-        id: 'OTDJR5Bv9H',
-        type: 'paragraph',
-        data: {
-          text: '[Position]',
-          alignment: 'left',
-        },
-      },
-      {
-        id: 'lD_NNJ4aUu',
-        type: 'paragraph',
-        data: {
-          text: '[Location]',
-          alignment: 'left',
-        },
-      },
-      {
-        id: 'sbUL7Qd0nF',
-        type: 'paragraph',
-        data: {
-          text: '',
-          alignment: 'left',
-        },
-      },
-      {
-        id: 'dSBvLr0V69',
-        type: 'paragraph',
-        data: {
-          text: 'Dear [Name],<br>',
-          alignment: 'left',
-        },
-      },
-      {
-        id: '2CmCsAP1SV',
-        type: 'paragraph',
-        data: {
-          text: 'Greetings of Peace!',
-          alignment: 'left',
-        },
-      },
-      {
-        id: 'VljqMMPM3v',
-        type: 'paragraph',
-        data: {
-          text: '',
-          alignment: 'left',
-        },
-      },
-      {
-        id: 'qwwZRx08GD',
-        type: 'paragraph',
-        data: {
-          text: '[Your Message]',
-          alignment: 'left',
-        },
-      },
-    ],
-    version: '2.28.2',
-  });
+  // const [content, setContent] = useState<OutputData>({
+  //   time: 1705030194807,
+  //   blocks: [
+  //     {
+  //       id: 'tb3D1JU1ue',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: '[Date]',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //     {
+  //       id: 'tlhRFE3WKG',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: '<b>[NAME]</b>',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //     {
+  //       id: 'OTDJR5Bv9H',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: '[Position]',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //     {
+  //       id: 'lD_NNJ4aUu',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: '[Location]',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //     {
+  //       id: 'sbUL7Qd0nF',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: '',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //     {
+  //       id: 'dSBvLr0V69',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: 'Dear [Name],<br>',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //     {
+  //       id: '2CmCsAP1SV',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: 'Greetings of Peace!',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //     {
+  //       id: 'VljqMMPM3v',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: '',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //     {
+  //       id: 'qwwZRx08GD',
+  //       type: 'paragraph',
+  //       data: {
+  //         text: '[Your Message]',
+  //         alignment: 'left',
+  //       },
+  //     },
+  //   ],
+  //   version: '2.28.2',
+  // });
 
   const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
     include: { organization: true },

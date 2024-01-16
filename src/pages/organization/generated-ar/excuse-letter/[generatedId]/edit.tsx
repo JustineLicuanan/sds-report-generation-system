@@ -1,4 +1,5 @@
-import EditorJS, { type OutputData } from '@editorjs/editorjs';
+import type EditorJS from '@editorjs/editorjs';
+import { type OutputData } from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
@@ -7,8 +8,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 import { useToast } from '~/components/ui/use-toast';
 import { logo, meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -36,7 +37,7 @@ export default function ExcuseLetterPage() {
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const [content, setContent] = useState<OutputData>({
+  const [content] = useState<OutputData>({
     time: 1705037343671,
     blocks: [
       {
@@ -131,7 +132,7 @@ export default function ExcuseLetterPage() {
   useEffect(() => {
     if (!hasRendered && !!editorInstance?.blocks?.render && !!generatedAR) {
       // If you have more than one editorInstance, then run the render for it too
-      editorInstance.blocks
+      void editorInstance.blocks
         .render(JSON.parse(generatedAR.content).letter)
         .then(() => setHasRendered(() => true));
     }
@@ -158,7 +159,7 @@ export default function ExcuseLetterPage() {
   });
 
   const updateARGenerated = api.shared.generatedAR.update.useMutation({
-    onSuccess: async ({ id }) => {
+    onSuccess: async () => {
       toast({ variant: 'c-primary', description: '✔️ Excuse Letter has been updated.' });
       await utils.shared.generatedAR.invalidate();
     },

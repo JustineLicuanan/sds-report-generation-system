@@ -1,4 +1,5 @@
-import EditorJS, { OutputData } from '@editorjs/editorjs';
+import type EditorJS from '@editorjs/editorjs';
+import { type OutputData } from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GeneratedARTemplate } from '@prisma/client';
 import { type GetServerSideProps } from 'next';

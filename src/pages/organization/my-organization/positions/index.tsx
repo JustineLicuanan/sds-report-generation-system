@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { useToast } from '~/components/ui/use-toast';
@@ -55,7 +55,7 @@ export default function SetupPositionsPage() {
 
   const updateOrgSignatoryInfo = api.shared.orgSignatoryInfo.update.useMutation({
     // This is the callback function after successful backend execution
-    onSuccess: async ({ id }) => {
+    onSuccess: async () => {
       toast({ variant: 'c-primary', description: '✔️ Signatory Information has been updated.' });
       await utils.shared.orgSignatoryInfo.invalidate();
       await router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}`);

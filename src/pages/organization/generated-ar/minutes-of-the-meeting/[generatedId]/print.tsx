@@ -122,7 +122,7 @@ export default function MinutesOfTheMeeting() {
         <div>
           <div className="font-bold">AGENDA</div>
           {content?.agenda.map((agenda: any, idx: any) => (
-            <div className="ms-4">
+            <div key={idx} className="ms-4">
               <div>{agenda.agendaContent ? `• ${agenda.agendaContent}` : 'No agendas'}</div>
             </div>
           ))}
@@ -146,7 +146,9 @@ export default function MinutesOfTheMeeting() {
         <div>Prepared by:</div>
         <div className="flex flex-col">
           <div className="font-bold">
-            {orgSignatoryInfo?.secretary === '' ? '[NAME]' : orgSignatoryInfo?.secretary}
+            {orgSignatoryInfo?.generalSecretary === ''
+              ? '[NAME]'
+              : orgSignatoryInfo?.generalSecretary}
           </div>
           <div className="">{orgSignatoryInfo?.organization.acronym} Secretary</div>
         </div>

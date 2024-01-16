@@ -33,7 +33,7 @@ export default function AccomplishmentReportTemplatePage() {
       (template) =>
         !['CALENDAR_OF_ACTIVITIES', 'INVITATION_LETTER', 'REQUEST_LETTER'].includes(template)
     )
-    .map((template, idx) => ({
+    .map((template) => ({
       filePath: `/${enumToSlug(template)}`,
       title: template.replace(/_/g, ' '),
     }));

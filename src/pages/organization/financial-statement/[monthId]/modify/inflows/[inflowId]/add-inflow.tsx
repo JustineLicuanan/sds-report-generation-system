@@ -35,10 +35,10 @@ export default function AddInflowFinancialStatementPage() {
   });
   const monthly = getMonthNameQuery?.data?.[0];
 
-  const getFSInflowQuery = api.shared.inflowCollectionFS.get.useQuery({
-    where: { id: inflowId as string },
-  });
-  const FSInflow = getFSInflowQuery?.data;
+  // const getFSInflowQuery = api.shared.inflowCollectionFS.get.useQuery({
+  //   where: { id: inflowId as string },
+  // });
+  // const FSInflow = getFSInflowQuery?.data;
 
   const getFSInflowRow = api.shared.inflowCollectionRowFS.get.useQuery({
     where: { inflowCollectionId: inflowId as string },
@@ -115,7 +115,9 @@ export default function AddInflowFinancialStatementPage() {
                 type="button"
                 onClick={() =>
                   router.push(
-                    `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${inflowId}${paths.COLLECTION_ROW}${paths.CREATE}`
+                    `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId as string}${
+                      paths.MODIFY_FINANCIAL_STATEMENT
+                    }${paths.INFLOWS}/${inflowId}${paths.COLLECTION_ROW}${paths.CREATE}`
                   )
                 }
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
@@ -144,7 +146,7 @@ export default function AddInflowFinancialStatementPage() {
               </thead>
               <tbody>
                 {FSInflowRow?.map((inflowRow) => (
-                  <tr className="even:bg-[#808080]/20">
+                  <tr key={inflowRow.id} className="even:bg-[#808080]/20">
                     <td className="border border-x-0 border-black py-2 text-base">
                       {inflowRow.date.toISOString().split('T')[0]}
                     </td>
@@ -176,7 +178,11 @@ export default function AddInflowFinancialStatementPage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${inflowId}${paths.COLLECTION_ROW}/${inflowRow.id}${paths.EDIT}`
+                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${
+                                monthId as string
+                              }${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${inflowId}${
+                                paths.COLLECTION_ROW
+                              }/${inflowRow.id}${paths.EDIT}`
                             )
                           }
                           className="rounded-sm border border-gray bg-gray p-1 active:scale-95"

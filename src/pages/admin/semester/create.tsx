@@ -88,7 +88,7 @@ export default function CreateSemPage() {
           <div className="mt-4 flex flex-col gap-4">
             <div className="font-bold">Position</div>
             {repSignatory?.map((position) => (
-              <div className="flex gap-4">
+              <div key={position.position} className="flex gap-4">
                 <label htmlFor="position">{position.position}</label>
                 <input
                   type="text"

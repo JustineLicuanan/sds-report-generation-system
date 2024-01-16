@@ -5,8 +5,8 @@ import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { type z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { useToast } from '~/components/ui/use-toast';
@@ -37,8 +37,8 @@ export default function ModifyFinancialStatementPage() {
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const getReportSemQuery = api.shared.reportSemester.get.useQuery();
-  const reportSem = getReportSemQuery?.data;
+  // const getReportSemQuery = api.shared.reportSemester.get.useQuery();
+  // const reportSem = getReportSemQuery?.data;
 
   const getFSInflowQuery = api.shared.inflowCollectionFS.get.useQuery({
     where: { monthlyId: monthId as string },
@@ -70,7 +70,9 @@ export default function ModifyFinancialStatementPage() {
       toast({ variant: 'c-primary', description: '✔️ FS Inflow created successfully.' });
       await utils.shared.orgSignatoryInfo.invalidate();
       await router.push(
-        `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${id}${paths.ADD_INFLOW}`
+        `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId as string}${
+          paths.MODIFY_FINANCIAL_STATEMENT
+        }${paths.INFLOWS}/${id}${paths.ADD_INFLOW}`
       );
     },
     // This is the callback function after failed backend execution. This is mostly used for 'unique' data conflict errors like unique email, etc.
@@ -98,7 +100,9 @@ export default function ModifyFinancialStatementPage() {
       toast({ variant: 'c-primary', description: '✔️ FS Outflow created successfully.' });
       await utils.shared.monthlyFS.invalidate();
       await router.push(
-        `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${id}${paths.ADD_OUTFLOW}`
+        `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId as string}${
+          paths.MODIFY_FINANCIAL_STATEMENT
+        }${paths.OUTFLOWS}/${id}${paths.ADD_OUTFLOW}`
       );
     },
     // This is the callback function after failed backend execution. This is mostly used for 'unique' data conflict errors like unique email, etc.
@@ -254,7 +258,9 @@ export default function ModifyFinancialStatementPage() {
                 {...createFSOutflowForm.register('category')}
               >
                 {Object.values(OutflowFSCategory).map((category) => (
-                  <option value={category}>{category.replace(/_/g, ' ').toLowerCase()}</option>
+                  <option key={category} value={category}>
+                    {category.replace(/_/g, ' ').toLowerCase()}
+                  </option>
                 ))}
               </select>
 
@@ -314,7 +320,7 @@ export default function ModifyFinancialStatementPage() {
               </thead>
               <tbody>
                 {FSInflow?.map((FSInflow) => (
-                  <tr className="even:bg-[#808080]/20">
+                  <tr key={FSInflow.id} className="even:bg-[#808080]/20">
                     <td className="border border-x-0 border-black py-2 text-base">Inflow</td>
                     <td className="border border-x-0 border-black py-2 text-base">Collection</td>
                     <td className="border border-x-0 border-black py-2 text-base">
@@ -326,7 +332,11 @@ export default function ModifyFinancialStatementPage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${FSInflow.id}${paths.ADD_INFLOW}`
+                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${
+                                monthId as string
+                              }${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${FSInflow.id}${
+                                paths.ADD_INFLOW
+                              }`
                             )
                           }
                           className="rounded-sm border border-yellow bg-yellow p-1 active:scale-95"
@@ -345,7 +355,7 @@ export default function ModifyFinancialStatementPage() {
                   </tr>
                 ))}
                 {FSOutflow?.map((outflow) => (
-                  <tr className="even:bg-[#808080]/20">
+                  <tr key={outflow.id} className="even:bg-[#808080]/20">
                     <td className="border border-x-0 border-black py-2 text-base">Outflow</td>
                     <td className="border border-x-0 border-black py-2 text-base">
                       {outflow.category}
@@ -359,7 +369,11 @@ export default function ModifyFinancialStatementPage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${outflow.id}${paths.ADD_OUTFLOW}`
+                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${
+                                monthId as string
+                              }${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${outflow.id}${
+                                paths.ADD_OUTFLOW
+                              }`
                             )
                           }
                           className="rounded-sm border border-yellow bg-yellow p-1 active:scale-95"
