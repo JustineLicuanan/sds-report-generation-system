@@ -1,5 +1,6 @@
 import { financialStatementSchemas } from '~/zod-schemas/financial-statement';
 import { generatedARSchemas } from '~/zod-schemas/generated-ar';
+import { inflowCollectionFSSchemas } from '~/zod-schemas/inflow-collection-fs';
 import { MonthlyFSSchemas } from '~/zod-schemas/monthly-fs';
 import { orgSignatoryInfoSchemas } from '~/zod-schemas/org-signatory-info';
 import { reportSemesterSchemas } from '~/zod-schemas/report-semester';
@@ -12,6 +13,7 @@ export const schemas = {
     reportSemester: reportSemesterSchemas.admin,
     FS: financialStatementSchemas.admin,
     monthlyFS: MonthlyFSSchemas.admin,
+    inflowCollectionFS: inflowCollectionFSSchemas.admin,
   },
 
   shared: {
@@ -20,5 +22,6 @@ export const schemas = {
     generatedAR: generatedARSchemas.shared,
     FS: financialStatementSchemas.shared,
     monthlyFS: MonthlyFSSchemas.shared,
+    inflowCollectionFS: inflowCollectionFSSchemas.shared,
   },
 };
