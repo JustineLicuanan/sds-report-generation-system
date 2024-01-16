@@ -9,6 +9,7 @@ import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { getMonthName } from '~/utils/get-month-name';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -23,21 +24,29 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function AddOutflowFinancialStatementPage() {
   const router = useRouter();
-  const { monthlyID, FSOutflowID } = router.query;
+  const { monthId, id: outflowId } = router.query;
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const getFSOutflow = api.shared.FSOutflow.get.useQuery({ where: { id: FSOutflowID as string } });
-  const FSOutflow = getFSOutflow?.data?.[0];
+  const getMonthly = api.shared.monthlyFS.get.useQuery({ where: { id: monthId as string } });
+  const monthly = getMonthly.data?.[0];
+
+  const getFSOutflow = api.shared.outflowFS.get.useQuery({ where: { id: outflowId as string } });
+  const FSOutflow = getFSOutflow.data?.[0];
+
+  const getOutflowRow = api.shared.outflowRowFS.get.useQuery({
+    where: { outflowId: FSOutflow?.id },
+  });
+  const outflowRowFS = getOutflowRow.data;
 
   const getReportSemQuery = api.shared.reportSemester.get.useQuery();
   const reportSem = getReportSemQuery?.data;
 
-  const deleteFSOutflowRow = api.shared.FSOutflowRow.delete.useMutation({
+  const deleteFSOutflowRow = api.shared.outflowRowFS.delete.useMutation({
     // This is the callback function after successful backend execution
     onSuccess: async () => {
       toast({ variant: 'c-primary', description: '✔️ FS Outflow Row has been deleted' });
-      await utils.shared.orgSignatoryInfo.invalidate();
+      await utils.shared.outflowRowFS.invalidate();
     },
     // This is the callback function after failed backend execution. This is mostly used for 'unique' data conflict errors like unique email, etc.
     onError: () => {
@@ -73,8 +82,17 @@ export default function AddOutflowFinancialStatementPage() {
         {/* SIDE BAR*/}
         <OrganizationSideBarMenu />
         <div id="main-content" className="mx-4 my-4  w-full  gap-8">
-          <div className="mb-4 text-4xl font-bold">Outflow: [ S-001 ] ([Category])</div>
-          <div className="text-medium text-lg">[SEMESTER] - [MONTH]</div>
+          <div className="mb-4 text-4xl font-bold">
+            Outflow: (
+            <span className="capitalize">
+              {FSOutflow?.category.replace(/_/g, ' ').toLowerCase()}
+            </span>
+            )
+          </div>
+          <div className="text-medium text-lg capitalize">
+            {reportSem?.term.toLowerCase()} Semester -{' '}
+            {monthly?.month && getMonthName(monthly.month)}
+          </div>
           <div className="grid grid-cols-2 grid-rows-4 gap-4">
             {/* NET */}
             <div className="col-span-2 row-span-4 flex flex-col justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
@@ -106,10 +124,9 @@ export default function AddOutflowFinancialStatementPage() {
               <button
                 type="button"
                 onClick={() =>
-                  router.push({
-                    pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/${monthlyID}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${FSOutflowID}/${FSOutflow?.category}${paths.CREATE}`,
-                    query: { monthlyID: monthlyID, FSOutflowID: FSOutflowID },
-                  })
+                  router.push(
+                    `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${outflowId}${paths.COLLECTION_ROW}${paths.CREATE}`
+                  )
                 }
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
@@ -136,32 +153,47 @@ export default function AddOutflowFinancialStatementPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="even:bg-[#808080]/20">
-                  <td className="border border-x-0 border-black py-2 text-base">12/26/2023</td>
-                  <td className="border border-x-0 border-black py-2 text-base">3</td>
-                  <td className="border border-x-0 border-black py-2 text-base">Chicken</td>
-                  <td className="border border-x-0 border-black py-2 text-base">PCS</td>
-                  <td className="border border-x-0 border-black py-2 text-base">100</td>
-                  <td className="border border-x-0 border-black py-2 text-base">300</td>
-                  <td className="border border-x-0 border-black py-2 text-base">
-                    <button
-                      type="button"
-                      className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                    >
-                      Upload
-                    </button>
-                  </td>
-                  <td className="border border-x-0 border-black py-2 text-base">
-                    <div className="flex justify-center gap-2">
+                {outflowRowFS?.map((outflowRow) => (
+                  <tr className="even:bg-[#808080]/20">
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {outflowRow.date.toISOString().split('T')[0]}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {outflowRow.quantity}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {outflowRow.particulars}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {outflowRow.unit}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {outflowRow.price.toString()}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      {Number(outflowRow.price) * outflowRow.quantity}
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
                       <button
                         type="button"
-                        className="rounded-sm border border-red bg-red px-3 text-white active:scale-95"
+                        className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                       >
-                        Delete
+                        Upload
                       </button>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                    <td className="border border-x-0 border-black py-2 text-base">
+                      <div className="flex justify-center gap-2">
+                        <button
+                          type="button"
+                          className="rounded-sm border border-red bg-red px-3 text-white active:scale-95"
+                          onClick={() => deleteFSOutflowRow.mutate({ id: outflowRow.id })}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

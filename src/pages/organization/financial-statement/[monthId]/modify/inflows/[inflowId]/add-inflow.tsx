@@ -35,10 +35,14 @@ export default function AddInflowFinancialStatementPage() {
   });
   const monthly = getMonthNameQuery?.data?.[0];
 
-  const getFSInflowQuery = api.shared.inflowCollectionFS.get.useQuery();
+  const getFSInflowQuery = api.shared.inflowCollectionFS.get.useQuery({
+    where: { id: inflowId as string },
+  });
   const FSInflow = getFSInflowQuery?.data;
 
-  const getFSInflowRow = api.shared.inflowCollectionRowFS.get.useQuery();
+  const getFSInflowRow = api.shared.inflowCollectionRowFS.get.useQuery({
+    where: { inflowCollectionId: inflowId as string },
+  });
   const FSInflowRow = getFSInflowRow.data;
 
   const getReportSemQuery = api.shared.reportSemester.get.useQuery();
@@ -51,7 +55,7 @@ export default function AddInflowFinancialStatementPage() {
     // This is the callback function after successful backend execution
     onSuccess: async () => {
       toast({ variant: 'c-primary', description: '✔️ FS Inflow Row has been deleted' });
-      await utils.shared.orgSignatoryInfo.invalidate();
+      await utils.shared.inflowCollectionRowFS.invalidate();
     },
     // This is the callback function after failed backend execution. This is mostly used for 'unique' data conflict errors like unique email, etc.
     onError: () => {

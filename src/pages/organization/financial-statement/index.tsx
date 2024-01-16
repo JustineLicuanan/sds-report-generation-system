@@ -1,13 +1,20 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
+import { useToast } from '~/components/ui/use-toast';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { getMonthName } from '~/utils/get-month-name';
+import { schemas } from '~/zod-schemas';
+
+type UpdateFSInputs = z.infer<typeof schemas.shared.FS.update>;
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -22,6 +29,9 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function FinancialStatementPage() {
   const router = useRouter();
+  const utils = api.useContext();
+  const { toast } = useToast();
+
   const getReportSem = api.shared.reportSemester.get.useQuery();
   const reportSem = getReportSem.data;
 
@@ -30,6 +40,19 @@ export default function FinancialStatementPage() {
 
   const getFSMonthQuery = api.shared.monthlyFS.get.useQuery();
   const FSMonth = getFSMonthQuery?.data;
+
+  const updateFSForm = useForm<UpdateFSInputs>({
+    resolver: zodResolver(schemas.shared.FS.update),
+    // These values are for the initial data of input fields, mostly used for 'edit/update' forms like this one
+    values: { actualCash: FS?.actualCash.toString() },
+  });
+
+  const updateFS = api.shared.FS.update.useMutation({
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ FS updated successfully.' });
+      await utils.shared.FS.invalidate();
+    },
+  });
 
   return (
     <>
@@ -88,20 +111,34 @@ export default function FinancialStatementPage() {
             <div className="col-span-2 row-span-1 flex flex-col items-center justify-center  gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="text-lg font-bold">Actual Cash</div>
               <div className="text-center font-medium">Input the Actual Cash in this semester.</div>
-              <div className="flex gap-4">
+              <form
+                className="flex gap-4"
+                onSubmit={updateFSForm.handleSubmit(
+                  (values) => {
+                    if (updateFS.isLoading) return;
+
+                    updateFS.mutate(values);
+                  },
+                  (err) => console.error(err)
+                )}
+              >
+
                 <input
-                  type="text"
-                  name=""
+                  type="number"
                   id="actual-cash"
                   className="rounded-sm border border-input"
+                  {...updateFSForm.register('actualCash')}
                 />
                 <button
-                  type="button"
+                  type="submit"
                   className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                 >
                   Set
                 </button>
-              </div>
+              </form>
+              <p className="h-4 text-sm font-medium text-destructive">
+                {updateFSForm.formState.errors.actualCash?.message}
+              </p>
             </div>
           </div>
           <div className="mt-4 min-h-[40vh] rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">

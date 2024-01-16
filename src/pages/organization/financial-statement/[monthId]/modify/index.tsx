@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { OutflowFSCategory } from '@prisma/client';
 import { Pencil, Trash2 } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
@@ -28,7 +29,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 type CreateInflowCollectionFSInputs = z.infer<typeof schemas.shared.inflowCollectionFS.create>;
-// type CreateFSOutflowInputs = z.infer<typeof schemas.shared.FSOutflow.create>;
+type CreateFSOutflowInputs = z.infer<typeof schemas.shared.outflowFS.create>;
 
 export default function ModifyFinancialStatementPage() {
   const router = useRouter();
@@ -39,8 +40,15 @@ export default function ModifyFinancialStatementPage() {
   const getReportSemQuery = api.shared.reportSemester.get.useQuery();
   const reportSem = getReportSemQuery?.data;
 
-  const getFSInflowQuery = api.shared.inflowCollectionFS.get.useQuery();
+  const getFSInflowQuery = api.shared.inflowCollectionFS.get.useQuery({
+    where: { monthlyId: monthId as string },
+  });
   const FSInflow = getFSInflowQuery?.data;
+
+  const getFSOutflowQuery = api.shared.outflowFS.get.useQuery({
+    where: { monthlyId: monthId as string },
+  });
+  const FSOutflow = getFSOutflowQuery?.data;
 
   const getMonthNameQuery = api.shared.monthlyFS.get.useQuery({
     where: { id: monthId as string },
@@ -75,6 +83,34 @@ export default function ModifyFinancialStatementPage() {
     },
   });
 
+  const createFSOutflowForm = useForm<CreateFSOutflowInputs>({
+    resolver: zodResolver(schemas.shared.outflowFS.create),
+    // These values are for the initial data of input fields, mostly used for 'edit/update' forms like this one
+    defaultValues: {
+      date: new Date().toISOString().split('T')[0] ?? '',
+      monthlyId: monthId as string,
+    },
+  });
+
+  const createFSOutflow = api.shared.outflowFS.create.useMutation({
+    // This is the callback function after successful backend execution
+    onSuccess: async ({ id }) => {
+      toast({ variant: 'c-primary', description: '✔️ FS Outflow created successfully.' });
+      await utils.shared.monthlyFS.invalidate();
+      await router.push(
+        `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${id}${paths.ADD_OUTFLOW}`
+      );
+    },
+    // This is the callback function after failed backend execution. This is mostly used for 'unique' data conflict errors like unique email, etc.
+    onError: () => {
+      toast({
+        variant: 'destructive',
+        title: '❌ Internal Server Error',
+        description: 'Creating of FS Outflow failed.',
+      });
+    },
+  });
+
   // This is the function that will run after clicking submit. Of course, it will NOT run if there are input validation errors like 'required', etc.
   const onSubmitCreateFSInflow: SubmitHandler<CreateInflowCollectionFSInputs> = (values) => {
     if (createFSInflow.isLoading) {
@@ -82,6 +118,22 @@ export default function ModifyFinancialStatementPage() {
     }
     createFSInflow.mutate(values);
   };
+
+  const deleteInflowCollection = api.shared.inflowCollectionFS.delete.useMutation({
+    // This is the callback function after successful backend execution
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ FS Inflow deleted successfully.' });
+      await utils.shared.inflowCollectionFS.invalidate();
+    },
+  });
+
+  const deleteOutflow = api.shared.outflowFS.delete.useMutation({
+    // This is the callback function after successful backend execution
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ FS Outflow deleted successfully.' });
+      await utils.shared.outflowFS.invalidate();
+    },
+  });
 
   // const createFSOutflowForm = useForm<CreateFSOutflowInputs>({
   //   resolver: zodResolver(schemas.shared.FSOutflow.create),
@@ -149,6 +201,20 @@ export default function ModifyFinancialStatementPage() {
               <div className="flex items-center gap-2">
                 <div className="text-lg font-bold">Inflow</div>
               </div>
+
+              <select
+                className="w-full max-w-[12rem] rounded-sm border border-input capitalize"
+                disabled
+              >
+                <option value="COLLECTION">Collection</option>
+              </select>
+
+              <input
+                type="date"
+                className="rounded-sm border border-input"
+                {...createFSInflowForm.register('date')}
+              />
+
               <button
                 type="submit"
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
@@ -168,10 +234,35 @@ export default function ModifyFinancialStatementPage() {
             </div>
 
             {/* OUTFLOWS */}
-            <div className="col-span-1 row-span-2 flex justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+            <form
+              className="col-span-1 row-span-2 flex justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]"
+              onSubmit={createFSOutflowForm.handleSubmit(
+                (values) => {
+                  if (createFSOutflow.isLoading) return;
+
+                  createFSOutflow.mutate(values);
+                },
+                (err) => console.error(err)
+              )}
+            >
               <div className="flex items-center gap-2">
                 <div className="text-lg font-bold">Outflow</div>
               </div>
+
+              <select
+                className="rounded-sm border border-input capitalize"
+                {...createFSOutflowForm.register('category')}
+              >
+                {Object.values(OutflowFSCategory).map((category) => (
+                  <option value={category}>{category.replace(/_/g, ' ').toLowerCase()}</option>
+                ))}
+              </select>
+
+              <input
+                type="date"
+                className="rounded-sm border border-input"
+                {...createFSOutflowForm.register('date')}
+              />
 
               <button
                 type="submit"
@@ -179,7 +270,7 @@ export default function ModifyFinancialStatementPage() {
               >
                 Add
               </button>
-            </div>
+            </form>
           </div>
           {/* TABLE */}
           <div className="mt-4 flex min-h-[40vh] w-full flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
@@ -245,6 +336,7 @@ export default function ModifyFinancialStatementPage() {
                         <button
                           type="button"
                           className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
+                          onClick={() => deleteInflowCollection.mutate({ id: FSInflow.id })}
                         >
                           <Trash2 />
                         </button>
@@ -252,39 +344,39 @@ export default function ModifyFinancialStatementPage() {
                     </td>
                   </tr>
                 ))}
-                {/* {FSOutflow?.map((FSOutflow) => (
+                {FSOutflow?.map((outflow) => (
                   <tr className="even:bg-[#808080]/20">
                     <td className="border border-x-0 border-black py-2 text-base">Outflow</td>
                     <td className="border border-x-0 border-black py-2 text-base">
-                      {FSOutflow.category}
+                      {outflow.category}
                     </td>
                     <td className="border border-x-0 border-black py-2 text-base">
-                      {FSOutflow.date.toISOString().split('T')[0]}
+                      {outflow.date.toISOString().split('T')[0]}
                     </td>
                     <td className="border border-x-0 border-black py-2 text-base">
                       <div className="flex justify-center gap-2">
                         <button
                           type="button"
                           onClick={() =>
-                            router.push({
-                              pathname: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.FINANCIAL_STATEMENT}/${monthlyID}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${FSOutflow.id}${paths.ADD_INFLOW}`,
-                              query: { monthlyID: monthlyID, FSOutflowID: FSOutflow.id },
-                            })
+                            router.push(
+                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthId}${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${outflow.id}${paths.ADD_OUTFLOW}`
+                            )
                           }
-                          className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                          className="rounded-sm border border-yellow bg-yellow p-1 active:scale-95"
                         >
-                          Edit
+                          <Pencil />
                         </button>
                         <button
                           type="button"
-                          className="rounded-sm border border-red bg-red px-3 text-white active:scale-95"
+                          className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
+                          onClick={() => deleteOutflow.mutate({ id: outflow.id })}
                         >
-                          Delete
+                          <Trash2 />
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))} */}
+                ))}
               </tbody>
             </table>
           </div>
