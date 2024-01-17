@@ -80,7 +80,7 @@ export default function AdminPage() {
                 <div className="text-center text-4xl font-bold text-yellow underline">
                   {
                     getOrgQuery.data?.filter(
-                      (item) => item.category === OrganizationCategory.ACADEMIC_ORGANIZATION
+                      (item) => item.category === OrganizationCategory.NON_ACADEMIC_ORGANIZATION
                     ).length
                   }
                 </div>
