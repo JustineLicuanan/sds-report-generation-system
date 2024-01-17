@@ -140,9 +140,9 @@ export default function OrganizationPage() {
             </div>
             <button
               type="button"
-              onClick={() =>
-                router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.MEMBER_INFO}`)
-              }
+              // onClick={() =>
+              //   router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.MEMBER_INFO}`)
+              // }
               className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
             >
               Add
