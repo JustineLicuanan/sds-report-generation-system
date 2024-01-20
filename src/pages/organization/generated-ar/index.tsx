@@ -71,7 +71,7 @@ export default function AccomplishmentReportTemplatePage() {
           <div className="my-2 mt-8 flex  items-center justify-around gap-4">
             <div className="flex  items-center gap-4">
               <select
-                className='className="border-sm relative flex items-center justify-between  gap-4 border border-input bg-transparent px-4 py-2'
+                className='border-sm relative flex items-center justify-between  gap-4 border border-input bg-transparent px-4 py-2'
                 onChange={(e) => setTemplateName(e.target.value)}
                 value={templateName}
               >

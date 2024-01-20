@@ -1,9 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { OutflowFSCategory } from '@prisma/client';
 import { Pencil, Trash2 } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
@@ -194,112 +192,27 @@ export default function ModifyFinancialStatementPage() {
           <div className="mb-4 text-center text-4xl font-bold">
             {getMonthName(monthly?.month as number)} {monthly?.year}
           </div>
-          <div className="grid grid-cols-2 grid-rows-4 gap-4">
-            {/* INFLOWS */}
-            <form
-              className="col-span-1 row-span-2 flex justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]"
-              onSubmit={createFSInflowForm.handleSubmit(onSubmitCreateFSInflow, (err) => {
-                console.error(err);
-              })}
-            >
-              <div className="flex items-center gap-2">
-                <div className="text-lg font-bold">Inflow</div>
-              </div>
-
+          <div className="mx-auto my-0 flex max-w-screen-lg justify-end gap-5 rounded-sm px-4 py-2">
+            <div className="flex  items-center gap-4">
               <select
-                className="w-full max-w-[12rem] rounded-sm border border-input capitalize"
-                disabled
+                name=""
+                id="generate-fs-row"
+                className="border-sm relative flex items-center justify-between  gap-4 border border-input bg-transparent px-4 py-2"
               >
-                <option value="COLLECTION">Collection</option>
+                <option value="inflow-collection">Inflow - Collection</option>
+                <option value="inflow-igp">Inflow - IGP</option>
+                <option value="outflow">Outflow</option>
               </select>
-
-              <input
-                type="date"
-                className="rounded-sm border border-input"
-                {...createFSInflowForm.register('date')}
-              />
-
               <button
-                type="submit"
+                type="button"
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
-                Add
+                Generate
               </button>
-            </form>
-
-            {/* NET */}
-            <div className="col-span-1 row-span-4 flex flex-col justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-              <select name="" id="inflows" className="self-end rounded-sm border p-2">
-                <option value="collection">Collection</option>
-                <option value="igp">IGP</option>
-              </select>
-              <div>Net (Gross/Loss): </div>
-              <div className="text-center text-4xl font-bold">[Value]</div>
             </div>
-
-            {/* OUTFLOWS */}
-            <form
-              className="col-span-1 row-span-2 flex justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]"
-              onSubmit={createFSOutflowForm.handleSubmit(
-                (values) => {
-                  if (createFSOutflow.isLoading) return;
-
-                  createFSOutflow.mutate(values);
-                },
-                (err) => console.error(err)
-              )}
-            >
-              <div className="flex items-center gap-2">
-                <div className="text-lg font-bold">Outflow</div>
-              </div>
-
-              <select
-                className="rounded-sm border border-input capitalize"
-                {...createFSOutflowForm.register('category')}
-              >
-                {Object.values(OutflowFSCategory).map((category) => (
-                  <option key={category} value={category}>
-                    {category.replace(/_/g, ' ').toLowerCase()}
-                  </option>
-                ))}
-              </select>
-
-              <input
-                type="date"
-                className="rounded-sm border border-input"
-                {...createFSOutflowForm.register('date')}
-              />
-
-              <button
-                type="submit"
-                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-              >
-                Add
-              </button>
-            </form>
           </div>
           {/* TABLE */}
-          <div className="mt-4 flex min-h-[40vh] w-full flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="flex justify-end">
-              <input
-                name="search"
-                id="search-item"
-                placeholder="Search"
-                className="h-7 rounded-l-sm border-[1px] border-green px-2 py-2 outline-none"
-              />
-              <label
-                htmlFor="search-item"
-                className="flex h-7 w-11 items-center  rounded-r-sm border-[1px] border-l-0 border-green  px-2"
-              >
-                <Image
-                  width={100}
-                  height={100}
-                  src="/search_icon.svg"
-                  className="md:h-full "
-                  alt="Search Icon"
-                />
-              </label>
-            </div>
+          <div className="mx-auto mt-4 flex min-h-[50vh] max-w-screen-lg flex-col gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <table className="w-full min-w-max border-collapse  border border-black text-center">
               <thead>
                 <tr>
