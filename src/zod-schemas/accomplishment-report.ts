@@ -1,4 +1,4 @@
-import { SemReportStatus } from '@prisma/client';
+import { ARUploadContentType, SemReportStatus } from '@prisma/client';
 import { z } from 'zod';
 
 import { OrderBy } from '~/zod-schemas/utils';
@@ -61,6 +61,14 @@ const sharedSchemas = {
         .optional(),
     })
     .optional(),
+
+  update: z.object({
+    order: z
+      .nativeEnum(ARUploadContentType)
+      .array()
+      .transform((arg) => JSON.stringify(arg))
+      .optional(),
+  }),
 
   turnIn: z.object({ compiled: z.string().url('File is required'), compiledId: z.string() }),
 };

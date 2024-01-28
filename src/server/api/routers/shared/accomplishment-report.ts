@@ -1,4 +1,4 @@
-import { SemReportStatus } from '@prisma/client';
+import { ARUploadContentType, SemReportStatus } from '@prisma/client';
 
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 import { schemas } from '~/zod-schemas';
@@ -31,6 +31,7 @@ export const accomplishmentReportRouter = createTRPCRouter({
         },
         update: {},
         create: {
+          order: JSON.stringify(Object.values(ARUploadContentType)),
           reportSemesterId: reportSemester.id,
           archivedAt: reportSemester.archivedAt,
           organizationId: ctx.session.user.organizationId!,
@@ -38,6 +39,20 @@ export const accomplishmentReportRouter = createTRPCRouter({
         include: { ...(input?.include ?? {}) },
       });
     }),
+
+  update: protectedProcedure.input(schemas.shared.AR.update).mutation(({ ctx, input }) => {
+    return ctx.db.accomplishmentReport.updateMany({
+      where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
+      data: input,
+    });
+  }),
+
+  restoreDefaultOrder: protectedProcedure.mutation(({ ctx }) => {
+    return ctx.db.accomplishmentReport.updateMany({
+      where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
+      data: { order: JSON.stringify(Object.values(ARUploadContentType)) },
+    });
+  }),
 
   turnIn: protectedProcedure.input(schemas.shared.AR.turnIn).mutation(({ ctx, input }) => {
     return ctx.db.accomplishmentReport.updateMany({
