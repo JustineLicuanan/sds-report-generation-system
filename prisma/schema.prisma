@@ -192,7 +192,7 @@ model ARUpload {
     id            String              @id @default(cuid())
     contentType   ARUploadContentType
     contentNumber Int                 @default(1)
-    description   String              @default("")
+    title         String              @default("")
     file          String
     fileId        String
     createdAt     DateTime            @default(now())

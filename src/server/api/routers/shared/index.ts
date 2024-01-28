@@ -1,5 +1,6 @@
 import { accomplishmentReportRouter } from '~/server/api/routers/shared/accomplishment-report';
 import { announcementRouter } from '~/server/api/routers/shared/announcement';
+import { ARUploadRouter } from '~/server/api/routers/shared/ar-upload';
 import { commentRouter } from '~/server/api/routers/shared/comment';
 import { financialStatementRouter } from '~/server/api/routers/shared/financial-statement';
 import { generatedARRouter } from '~/server/api/routers/shared/generated-ar';
@@ -29,6 +30,7 @@ export const sharedRouter = createTRPCRouter({
   report: reportRouter,
   reportSignatory: reportSignatoryRouter,
   AR: accomplishmentReportRouter,
+  ARUpload: ARUploadRouter,
   generatedAR: generatedARRouter,
   FS: financialStatementRouter,
   monthlyFS: monthlyFSRouter,

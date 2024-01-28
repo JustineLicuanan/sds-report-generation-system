@@ -1,7 +1,10 @@
 import { ARUploadContentType } from '@prisma/client';
 import { z } from 'zod';
 
-import { OrderBy } from '~/zod-schemas/utils';
+export enum MoveDirection {
+  UP = 'UP',
+  DOWN = 'DOWN',
+}
 
 const adminSchemas = {
   get: z
@@ -25,7 +28,6 @@ const adminSchemas = {
           user: z.literal(true).optional(),
         })
         .optional(),
-      orderBy: z.object({ createdAt: z.nativeEnum(OrderBy).optional() }).optional(),
     })
     .optional(),
 };
@@ -48,35 +50,25 @@ const sharedSchemas = {
           reportSemester: z.literal(true).optional(),
         })
         .optional(),
-      orderBy: z.object({ createdAt: z.nativeEnum(OrderBy).optional() }).optional(),
     })
     .optional(),
 
   create: z.object({
     contentType: z.nativeEnum(ARUploadContentType),
-    contentNumber: z
-      .string()
-      .min(1, 'Content Number is required')
-      .transform((arg) => parseInt(arg))
-      .or(z.number())
-      .optional(),
-    description: z.string().trim().optional(),
+    contentNumber: z.coerce.number().int().min(1).max(150).optional(),
+    title: z.string().trim().optional(),
     file: z.string().url('File is required'),
     fileId: z.string(),
   }),
 
   update: z.object({
     id: z.string().cuid(),
-    contentNumber: z
-      .string()
-      .min(1, 'Content Number is required')
-      .transform((arg) => parseInt(arg))
-      .or(z.number())
-      .optional(),
-    description: z.string().trim().optional(),
+    title: z.string().trim().optional(),
     file: z.string().url('File is required').optional(),
     fileId: z.string().optional(),
   }),
+
+  move: z.object({ id: z.string().cuid(), direction: z.nativeEnum(MoveDirection) }),
 
   delete: z.object({ id: z.string().cuid() }),
 };
