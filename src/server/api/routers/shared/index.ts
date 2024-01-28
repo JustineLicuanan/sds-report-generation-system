@@ -1,3 +1,4 @@
+import { accomplishmentReportRouter } from '~/server/api/routers/shared/accomplishment-report';
 import { announcementRouter } from '~/server/api/routers/shared/announcement';
 import { commentRouter } from '~/server/api/routers/shared/comment';
 import { financialStatementRouter } from '~/server/api/routers/shared/financial-statement';
@@ -27,6 +28,7 @@ export const sharedRouter = createTRPCRouter({
   reportSemester: reportSemesterRouter,
   report: reportRouter,
   reportSignatory: reportSignatoryRouter,
+  AR: accomplishmentReportRouter,
   generatedAR: generatedARRouter,
   FS: financialStatementRouter,
   monthlyFS: monthlyFSRouter,

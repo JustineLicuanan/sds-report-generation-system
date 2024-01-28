@@ -6,6 +6,8 @@ export const organizationSchemas = {
       include: z
         .object({
           curriculumVitaes: z.literal(true).optional(),
+          accomplishmentReports: z.literal(true).optional(),
+          ARUploads: z.literal(true).optional(),
           generatedARs: z.literal(true).optional(),
           financialStatements: z.literal(true).optional(),
           monthlyFSs: z.literal(true).optional(),

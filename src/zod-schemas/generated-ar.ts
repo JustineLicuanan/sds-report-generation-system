@@ -8,11 +8,19 @@ import { OrderBy } from '~/zod-schemas/utils';
 const sharedSchemas = {
   get: z
     .object({
-      archived: z.literal(true).optional(),
+      current: z.literal(true).optional(),
       where: z
         .object({
           id: z.string().cuid().optional(),
           template: z.nativeEnum(GeneratedARTemplate).optional(),
+          accomplishmentReportId: z.string().cuid().optional(),
+          reportSemesterId: z.string().cuid().optional(),
+        })
+        .optional(),
+      include: z
+        .object({
+          accomplishmentReport: z.literal(true).optional(),
+          reportSemester: z.literal(true).optional(),
         })
         .optional(),
       orderBy: z.object({ createdAt: z.nativeEnum(OrderBy).optional() }).optional(),

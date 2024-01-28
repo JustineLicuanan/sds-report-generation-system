@@ -69,6 +69,8 @@ model Organization {
     // Extras
     signatoryInfo         OrgSignatoryInfo?
     curriculumVitaes      CurriculumVitae[]
+    accomplishmentReports AccomplishmentReport[]
+    ARUploads             ARUpload[]
     generatedARs          GeneratedAR[]
     financialStatements   FinancialStatement[]
     monthlyFSs            MonthlyFS[]
@@ -147,28 +149,83 @@ model Announcement {
 
 /// @@Gen.model(hide: true)
 model ReportSemester {
-    id                  String               @id @default(cuid())
-    yearStart           String
-    yearEnd             String
-    term                SemesterTerm
-    dueDateAR           DateTime?
-    dueDateFS           DateTime?
-    financialStatements FinancialStatement[]
-    monthlyFSs          MonthlyFS[]
-    createdAt           DateTime             @default(now())
-    updatedAt           DateTime             @updatedAt
-    archivedAt          String               @unique @default("")
+    id                    String                 @id @default(cuid())
+    yearStart             String
+    yearEnd               String
+    term                  SemesterTerm
+    dueDateAR             DateTime?
+    dueDateFS             DateTime?
+    accomplishmentReports AccomplishmentReport[]
+    ARUploads             ARUpload[]
+    generatedARs          GeneratedAR[]
+    financialStatements   FinancialStatement[]
+    monthlyFSs            MonthlyFS[]
+    createdAt             DateTime               @default(now())
+    updatedAt             DateTime               @updatedAt
+    archivedAt            String                 @unique @default("")
 
     @@unique([id, archivedAt])
 }
 
+model AccomplishmentReport {
+    id         String          @id @default(cuid())
+    compiled   String?
+    compiledId String?
+    status     SemReportStatus @default(DRAFT)
+    uploads    ARUpload[]
+    generated  GeneratedAR[]
+    createdAt  DateTime        @default(now())
+    updatedAt  DateTime        @updatedAt
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    @@unique([reportSemesterId, organizationId])
+}
+
+model ARUpload {
+    id            String              @id @default(cuid())
+    contentType   ARUploadContentType
+    contentNumber Int                 @default(1)
+    description   String              @default("")
+    file          String
+    fileId        String
+    createdAt     DateTime            @default(now())
+    updatedAt     DateTime            @updatedAt
+
+    accomplishmentReport   AccomplishmentReport @relation(fields: [accomplishmentReportId], references: [id])
+    accomplishmentReportId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
+
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    organizationId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    @@unique([contentType, contentNumber, accomplishmentReportId])
+}
+
 model GeneratedAR {
-    id         String              @id @default(cuid())
-    template   GeneratedARTemplate // contentType before
-    content    String
-    createdAt  DateTime            @default(now())
-    updatedAt  DateTime            @updatedAt
-    archivedAt String              @default("")
+    id        String              @id @default(cuid())
+    template  GeneratedARTemplate // contentType before
+    content   String
+    createdAt DateTime            @default(now())
+    updatedAt DateTime            @updatedAt
+
+    accomplishmentReport   AccomplishmentReport @relation(fields: [accomplishmentReportId], references: [id])
+    accomplishmentReportId String
+
+    reportSemester   ReportSemester @relation(fields: [reportSemesterId, archivedAt], references: [id, archivedAt])
+    reportSemesterId String
+    archivedAt       String
 
     organization   Organization @relation(fields: [organizationId], references: [id])
     organizationId String
@@ -513,6 +570,7 @@ model User {
     organizationIsArchived Boolean?
 
     // Extras
+    ARUploads    ARUpload[]
     generatedARs GeneratedAR[]
 
     @@unique([id, name])
@@ -549,6 +607,26 @@ enum SemReportStatus {
     TURNED_IN
     FOR_REVISION
     COMPLETED
+}
+
+enum ARUploadContentType {
+    ACCEPTANCE_LETTER_OF_ADVISERS
+    CALENDAR_OF_ACTIVITIES
+    APPROVED_ACTIVITY_PROPOSAL
+    APPROVED_PROJECT_PROPOSAL
+    APPROVED_RESOLUTION
+    APPROVED_OTHER_LETTER
+    SUMMARY_OF_CONDUCTED_EVENTS
+    COMMUNITY_EXTENSION_SERVICES
+    MINUTES_OF_THE_MEETING
+    CERTIFICATES
+    FEEDBACK_FORM
+
+    // For completion & archive
+    PREAMBLE_MISSION_VISION_AND_GOAL
+    CONSTITUTION_AND_BY_LAWS
+    ORGANIZATIONAL_CHART
+    CURRICULUM_VITAE_OF_OFFICERS
 }
 
 enum GeneratedARTemplate {

@@ -17,7 +17,8 @@ const adminSchemas = {
         .optional(),
       include: z
         .object({
-          monthly: z.literal(true).optional(),
+          uploads: z.literal(true).optional(),
+          generated: z.literal(true).optional(),
           reportSemester: z.literal(true).optional(),
           organization: z.literal(true).optional(),
         })
@@ -40,7 +41,8 @@ const sharedSchemas = {
         .optional(),
       include: z
         .object({
-          monthly: z.literal(true).optional(),
+          uploads: z.literal(true).optional(),
+          generated: z.literal(true).optional(),
           reportSemester: z.literal(true).optional(),
         })
         .optional(),
@@ -52,26 +54,18 @@ const sharedSchemas = {
     .object({
       include: z
         .object({
-          monthly: z.literal(true).optional(),
+          uploads: z.literal(true).optional(),
+          generated: z.literal(true).optional(),
           reportSemester: z.literal(true).optional(),
         })
         .optional(),
     })
     .optional(),
 
-  update: z.object({
-    actualCash: z
-      .string()
-      .min(1, 'Amount is required')
-      .transform((arg) => parseFloat(arg).toFixed(2))
-      .or(z.number())
-      .optional(),
-  }),
-
   turnIn: z.object({ compiled: z.string().url('File is required'), compiledId: z.string() }),
 };
 
-export const financialStatementSchemas = {
+export const accomplishmentReportSchemas = {
   admin: adminSchemas,
   shared: sharedSchemas,
 };

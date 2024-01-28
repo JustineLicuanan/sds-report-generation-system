@@ -1,3 +1,4 @@
+import { accomplishmentReportRouter } from '~/server/api/routers/admin/accomplishment-report';
 import { announcementRouter } from '~/server/api/routers/admin/announcement';
 import { commentRouter } from '~/server/api/routers/admin/comment';
 import { financialStatementRouter } from '~/server/api/routers/admin/financial-statement';
@@ -29,6 +30,7 @@ export const adminRouter = createTRPCRouter({
   reportSemester: reportSemesterRouter,
   report: reportRouter,
   reportSignatory: reportSignatoryRouter,
+  AR: accomplishmentReportRouter,
   FS: financialStatementRouter,
   monthlyFS: monthlyFSRouter,
   inflowCollectionFS: inflowCollectionFSRouter,
