@@ -10,6 +10,9 @@ export const organizationRouter = createTRPCRouter({
         where: { id: ctx.session.user.organizationId },
         include: {
           ...(input?.include ?? {}),
+          ...(input?.include?.ARUploads
+            ? { ARUploads: { orderBy: { contentNumber: 'asc' } } }
+            : {}),
           members: input?.includeMembers,
           reports: input?.includeReports,
           comments: input?.includeComments,

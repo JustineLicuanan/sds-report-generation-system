@@ -7,7 +7,10 @@ export const reportSemesterRouter = createTRPCRouter({
   get: adminProcedure.input(schemas.admin.reportSemester.get).query(({ ctx, input }) => {
     return ctx.db.reportSemester.findMany({
       where: { ...(input?.where ?? {}), archivedAt: input?.current && '' },
-      include: { ...(input?.include ?? {}) },
+      include: {
+        ...(input?.include ?? {}),
+        ...(input?.include?.ARUploads ? { ARUploads: { orderBy: { contentNumber: 'asc' } } } : {}),
+      },
       orderBy: input?.orderBy,
     });
   }),

@@ -5,7 +5,10 @@ export const accomplishmentReportRouter = createTRPCRouter({
   get: adminProcedure.input(schemas.admin.AR.get).query(({ ctx, input }) => {
     return ctx.db.accomplishmentReport.findMany({
       where: { ...(input?.where ?? {}), archivedAt: input?.current && '' },
-      include: { ...(input?.include ?? {}) },
+      include: {
+        ...(input?.include ?? {}),
+        ...(input?.include?.uploads ? { uploads: { orderBy: { contentNumber: 'asc' } } } : {}),
+      },
       orderBy: input?.orderBy,
     });
   }),

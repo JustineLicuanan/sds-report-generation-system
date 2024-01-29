@@ -47,6 +47,9 @@ export const orgRouter = createTRPCRouter({
         where: { id: input?.id, category: input?.category, isArchived: input?.isArchived ?? false },
         include: {
           ...(input?.include ?? {}),
+          ...(input?.include?.ARUploads
+            ? { ARUploads: { orderBy: { contentNumber: 'asc' } } }
+            : {}),
           members: input?.includeMembers,
           reports: input?.includeReports,
           comments: input?.includeComments,
