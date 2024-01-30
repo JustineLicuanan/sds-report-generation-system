@@ -80,7 +80,7 @@ export default function AccomplishmentReportTemplatePage() {
           <div className="flex flex-col gap-2">
             <div className="text-4xl font-bold">Generate Accomplishment Report</div>
           </div>
-          <div className="border-sm mx-auto my-0 mt-8 flex flex max-w-screen-lg items-center justify-between p-4 shadow-[0_1px_4px_0px_rgba(0,0,0,0.50)]">
+          <div className="border-sm mx-auto my-0 mt-8 flex max-w-screen-lg items-center justify-between p-4 shadow-[0_1px_4px_0px_rgba(0,0,0,0.50)]">
             <div className="font-bold">Generate your compiled AR</div>
             <div className="flex gap-4">
               <button type="button" className="rounded-sm bg-yellow p-1 active:scale-95">

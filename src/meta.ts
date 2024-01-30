@@ -40,7 +40,7 @@ export const paths = {
   MODIFY_FINANCIAL_STATEMENT: '/modify',
   INFLOWS: '/inflows',
   ADD_INFLOW: '/add-inflow',
-  OUTFLOWS: '/outflows',
+  OUTFLOW: '/outflow',
   ADD_OUTFLOW: '/add-outflow',
   MONTHLY: '/monthly',
   SEM_CASH_FLOW: '/semester-cash-flow',
@@ -53,7 +53,8 @@ export const paths = {
   EXPENSE_SUMMARY: '/expense-summary',
   FORMS: '/forms',
   LIQUIDATION: '/liquidation',
-  COLLECTION_ROW: '/collection-row',
+  INFLOW_COLLECTION: '/inflow-collection',
+  INFLOW_IGP: '/inflow-igp',
   SAVE: '/save',
   ADD_NEW_MONTH: '/add-month',
 
