@@ -1,4 +1,9 @@
+import { OutflowFSCategory } from '@prisma/client';
 import { z } from 'zod';
+
+import { inflowCollectionRowFSSchemas } from '~/zod-schemas/inflow-collection-row-fs';
+import { inflowIgpRowFSSchemas } from '~/zod-schemas/inflow-igp-row-fs';
+import { outflowRowFSSchemas } from '~/zod-schemas/outflow-row-fs';
 
 import { OrderBy } from '~/zod-schemas/utils';
 
@@ -15,6 +20,16 @@ export enum Month {
   OCTOBER = '10',
   NOVEMBER = '11',
   DECEMBER = '12',
+}
+
+export enum FlowType {
+  INFLOW = 'INFLOW',
+  OUTFLOW = 'OUTFLOW',
+}
+
+export enum InflowCategory {
+  COLLECTION = 'COLLECTION',
+  IGP = 'IGP',
 }
 
 const adminSchemas = {
@@ -73,6 +88,35 @@ const sharedSchemas = {
   create: z.object({
     month: z.nativeEnum(Month).transform(Number).or(z.number()),
     year: z.string().trim().min(1, 'Year is required'),
+  }),
+
+  importFlows: z.object({
+    monthlyId: z.string().cuid(),
+    inflowCollections: inflowCollectionRowFSSchemas.shared.create
+      .omit({
+        receipt: true,
+        receiptId: true,
+        monthlyId: true,
+        inflowCollectionId: true,
+      })
+      .array(),
+    inflowIGPs: inflowIgpRowFSSchemas.shared.create
+      .omit({
+        receipt: true,
+        receiptId: true,
+        monthlyId: true,
+        inflowIGPId: true,
+      })
+      .array(),
+    outflows: outflowRowFSSchemas.shared.create
+      .omit({
+        receipt: true,
+        receiptId: true,
+        monthlyId: true,
+        outflowId: true,
+      })
+      .extend({ category: z.nativeEnum(OutflowFSCategory) })
+      .array(),
   }),
 
   update: z.object({

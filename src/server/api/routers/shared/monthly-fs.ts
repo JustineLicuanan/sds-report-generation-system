@@ -1,3 +1,4 @@
+import { OutflowFSCategory } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
@@ -50,6 +51,89 @@ export const monthlyFSRouter = createTRPCRouter({
           message: `${getMonthName(input.month)} ${input.year} already exist`,
         });
       }
+    }),
+
+  importFlows: protectedProcedure
+    .input(schemas.shared.monthlyFS.importFlows)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.$transaction(async (tx) => {
+        if (input.inflowCollections.length > 0) {
+          await tx.inflowCollectionFS.create({
+            data: {
+              date: new Date().toISOString(),
+              rows: {
+                createMany: {
+                  data: input.inflowCollections.map((collection) => ({
+                    ...collection,
+                    monthlyId: input.monthlyId,
+                    organizationId: ctx.session.user.organizationId!,
+                  })),
+                },
+              },
+              monthlyId: input.monthlyId,
+              organizationId: ctx.session.user.organizationId!,
+            },
+          });
+        }
+
+        if (input.inflowIGPs.length > 0) {
+          await tx.inflowIgpFS.create({
+            data: {
+              date: new Date().toISOString(),
+              rows: {
+                createMany: {
+                  data: input.inflowIGPs.map((IGP) => ({
+                    ...IGP,
+                    monthlyId: input.monthlyId,
+                    organizationId: ctx.session.user.organizationId!,
+                  })),
+                },
+              },
+              monthlyId: input.monthlyId,
+              organizationId: ctx.session.user.organizationId!,
+            },
+          });
+        }
+
+        if (input.outflows.length > 0) {
+          const categories = [] as OutflowFSCategory[];
+          const outflowRows = input.outflows.reduce(
+            (acc, { category, ...outflowRow }) => {
+              if (!categories.includes(category)) categories.push(category);
+              if (!acc[category]) acc[category] = [];
+
+              acc[category]?.push({
+                ...outflowRow,
+                monthlyId: input.monthlyId,
+                organizationId: ctx.session.user.organizationId!,
+              });
+
+              return acc;
+            },
+            {} as Partial<
+              Record<
+                OutflowFSCategory,
+                Omit<
+                  Parameters<typeof tx.outflowRowFS.create>[0]['data'],
+                  'outflow' | 'outflowId'
+                >[]
+              >
+            >
+          );
+
+          for (const category of categories) {
+            await tx.outflowFS.create({
+              data: {
+                category,
+                date: new Date().toISOString(),
+                rows: { createMany: { data: outflowRows[category] as any } },
+                monthlyId: input.monthlyId,
+                organizationId: ctx.session.user.organizationId!,
+              },
+            });
+          }
+        }
+      });
     }),
 
   update: protectedProcedure
