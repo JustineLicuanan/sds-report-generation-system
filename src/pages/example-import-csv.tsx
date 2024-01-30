@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { CSVUploadButton, ImportFlowsInputs } from '~/components/csv-upload-button';
+import { CSVImportButton, ImportFlowsInputs } from '~/components/csv-import-button';
 import { useToast } from '~/components/ui/use-toast';
 import { api } from '~/utils/api';
 
@@ -34,7 +34,7 @@ export default function ExampleImportCSV() {
 
   return (
     <>
-      <CSVUploadButton className="m-4 p-4" setFlowImportData={setFlowImportData} />
+      <CSVImportButton className="m-4 p-4" setFlowImportData={setFlowImportData} />
 
       <button
         className="rounded bg-c-primary px-4 py-2 text-c-primary-foreground hover:bg-c-primary/90"

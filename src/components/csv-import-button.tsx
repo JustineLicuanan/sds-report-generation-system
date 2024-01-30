@@ -13,7 +13,7 @@ type Props = {
   className?: string;
 };
 
-export function CSVUploadButton({ setFlowImportData, className }: Props) {
+export function CSVImportButton({ setFlowImportData, className }: Props) {
   const reader = useRef<FileReader>();
   const { readString } = usePapaParse();
 
