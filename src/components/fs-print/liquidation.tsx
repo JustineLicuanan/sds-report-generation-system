@@ -1,28 +1,11 @@
-import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { logo, meta } from '~/meta';
-import { getServerAuthSession } from '~/server/auth';
-import { authRedirects } from '~/utils/auth-redirects';
-
-export const getServerSideProps = (async (ctx) => {
-  const authSession = await getServerAuthSession(ctx);
-  const authRedirect = authRedirects.organization(authSession);
-
-  // if(!authRedirect.props) {
-  //   return authRedirect;
-  // }
-
-  return authRedirect;
-}) satisfies GetServerSideProps;
 
 export default function Liquidation() {
   return (
     <>
-      <Head>
-        <title>{`Liquidation ${meta.SEPARATOR} ${meta.NAME}`}</title>
-      </Head>
-      <div className="mx-auto my-0 flex w-[700px] flex-col items-center gap-4 p-4 leading-5">
+      <div className="mx-auto my-0 min-h-[100vh] mb-16 flex w-[700px] flex-col items-center gap-4 p-4 leading-5">
         <div className="flex gap-2">
           <Image
             src={logo.PHILIPPINE_LOGO}

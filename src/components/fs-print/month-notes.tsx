@@ -1,27 +1,10 @@
-import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { meta } from '~/meta';
-import { getServerAuthSession } from '~/server/auth';
-import { authRedirects } from '~/utils/auth-redirects';
 
-export const getServerSideProps = (async (ctx) => {
-  const authSession = await getServerAuthSession(ctx);
-  const authRedirect = authRedirects.organization(authSession);
-
-  // if(!authRedirect.props) {
-  //   return authRedirect;
-  // }
-
-  return authRedirect;
-}) satisfies GetServerSideProps;
-
-export default function MonthLabel() {
+export default function MonthNotes() {
   return (
     <>
-      <Head>
-        <title>{`Month Notes ${meta.SEPARATOR} ${meta.NAME}`}</title>
-      </Head>
-      <div className="mx-auto my-0 flex w-[700px] flex-col items-center gap-4 p-4 leading-5">
+      <div className="mx-auto my-0 flex min-h-[100vh] mb-16 w-[700px] flex-col items-center gap-4 p-4 leading-5">
         <div className="flex flex-col items-center">
           <div>[Org Name]</div>
           <div>Notes to Financial Statement</div>

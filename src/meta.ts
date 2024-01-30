@@ -33,7 +33,7 @@ export const paths = {
   MY_ORGANIZATION: '/my-organization',
   POSITIONS: '/positions',
   SEMESTER: '/semester',
-  
+
   GENERATED_AR: '/generated-ar',
   FINANCIAL_STATEMENT: '/financial-statement',
 
@@ -42,6 +42,7 @@ export const paths = {
   ADD_INFLOW: '/add-inflow',
   OUTFLOWS: '/outflows',
   ADD_OUTFLOW: '/add-outflow',
+  MONTHLY: '/monthly',
   SEM_CASH_FLOW: '/semester-cash-flow',
   SEM_SIGNATORIES: '/semester-signatories',
   MONTH_LABEL: '/month-label',

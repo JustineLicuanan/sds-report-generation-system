@@ -1,30 +1,21 @@
-import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { meta } from '~/meta';
-import { getServerAuthSession } from '~/server/auth';
-import { authRedirects } from '~/utils/auth-redirects';
+import { api } from '~/utils/api';
 
-export const getServerSideProps = (async (ctx) => {
-  const authSession = await getServerAuthSession(ctx);
-  const authRedirect = authRedirects.organization(authSession);
+export default function MonthCashFlow() {
+  const getFSInflowRowsQuery = api.shared.inflowCollectionRowFS.get.useQuery();
+  const FSInflowRows = getFSInflowRowsQuery?.data;
 
-  // if(!authRedirect.props) {
-  //   return authRedirect;
-  // }
+  let runningBalance = 20000;
+  // const [currentBalance, setCurrentBalance] = useState(runningBalance);
 
-  return authRedirect;
-}) satisfies GetServerSideProps;
-
-export default function SemCashFlow() {
   return (
     <>
-      <Head>
-        <title>{`Semester Cash Flow ${meta.SEPARATOR} ${meta.NAME}`}</title>
-      </Head>
-      <div className="mx-auto my-0 flex flex-col items-center p-4">
+      <div className="min-h-[100vh] mb-16 mx-auto my-0 flex flex-col items-center p-4">
         <div className="flex flex-col items-center">
           <div>[Org Name]</div>
-          <div>1st Semester Cash Flow</div>
+          <div>MONTHLY CASH FLOW</div>
+          <div>For the month of [DATE]</div>
         </div>
         <div className="mt-4">
           <table className="">
@@ -44,10 +35,10 @@ export default function SemCashFlow() {
                 <td className=" p-1">8/31/2023</td>
                 <td className=" p-1">Actual Cash Count</td>
                 <td className=" p-1"></td>
-                <td className=" p-1">20000</td>
+                <td className=" p-1">{runningBalance}</td>
                 <td className=" p-1"></td>
                 <td className=" p-1"></td>
-                <td className=" p-1">20,000.00</td>
+                <td className=" p-1">{runningBalance}</td>
               </tr>
 
               <tr className="">
@@ -55,15 +46,23 @@ export default function SemCashFlow() {
                   Inflows
                 </td>
               </tr>
-              <tr>
-                <td className=" p-1"></td>
-                <td className=" p-1">Collection</td>
-                <td className=" p-1">S-001</td>
-                <td className=" p-1"></td>
-                <td className=" p-1">50.00</td>
-                <td className=" p-1"></td>
-                <td className=" p-1">20,050.00</td>
-              </tr>
+              {FSInflowRows?.map((inflowRow, index) => {
+                // Assuming inflow.amount is a number
+                runningBalance += Number(inflowRow.amount);
+
+                return (
+                  <tr key={inflowRow.id}>
+                    <td className=" p-1"></td>
+                    <td className=" p-1">Collection</td>
+                    <td className=" p-1">S-00{index + 1}</td>
+                    <td className=" p-1"></td>
+                    <td className=" p-1">{inflowRow.amount?.toString()}</td>
+                    <td className=" p-1"></td>
+                    <td className=" p-1">{runningBalance}</td>
+                  </tr>
+                );
+              })}
+
               <tr>
                 <td className=" p-1"></td>
                 <td className=" p-1">IGP</td>
@@ -116,13 +115,15 @@ export default function SemCashFlow() {
                 <td className=" p-1">20,090.00</td>
               </tr>
               <tr className="font-bold">
-                <td colSpan={3} className="border p-1">
+                <td colSpan={3} className="border-y p-1">
                   TOTAL - MONTH OF SEPTEMBER
                 </td>
-                <td className="border p-1">20,000.00</td>
-                <td className="border p-1">100.00</td>
-                <td className="border p-1">(10.00)</td>
-                <td className="border p-1">20,090.00</td>
+                <td className="border-y p-1">20,000.00</td>
+                <td className="border-y p-1">100.00</td>
+                <td className="border-y p-1">(10.00)</td>
+                <td className="border-y p-1" style={{ borderBottom: 'double' }}>
+                  {runningBalance}
+                </td>
               </tr>
             </tbody>
           </table>

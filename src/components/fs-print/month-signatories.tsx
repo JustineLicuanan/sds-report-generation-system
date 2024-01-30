@@ -1,23 +1,7 @@
-import { type GetServerSideProps } from 'next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { meta } from '~/meta';
-import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
-import { authRedirects } from '~/utils/auth-redirects';
 import { getMonthName } from '~/utils/get-month-name';
 import { parseSignatoryObject } from '~/utils/parse-signatory-object';
-
-export const getServerSideProps = (async (ctx) => {
-  const authSession = await getServerAuthSession(ctx);
-  const authRedirect = authRedirects.organization(authSession);
-
-  // if(!authRedirect.props) {
-  //   return authRedirect;
-  // }
-
-  return authRedirect;
-}) satisfies GetServerSideProps;
 
 export default function MonthSignatories() {
   const router = useRouter();
@@ -40,10 +24,7 @@ export default function MonthSignatories() {
   const signatories = parseSignatoryObject(repSignatory);
   return (
     <>
-      <Head>
-        <title>{`Month Signatories ${meta.SEPARATOR} ${meta.NAME}`}</title>
-      </Head>
-      <div className="mx-auto my-0 flex flex-col items-center p-4">
+      <div className="mx-auto my-0 mb-16 flex min-h-[100vh] flex-col items-center p-4">
         <div className="font-bold">
           Financial Statement ({getMonthName(monthlyFS?.month as number)} {reportSem?.yearStart} -{' '}
           {reportSem?.yearEnd})
