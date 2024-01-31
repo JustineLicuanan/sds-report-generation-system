@@ -1,0 +1,24 @@
+import { OutflowFS, OutflowFSCategory } from '@prisma/client';
+import { inferRouterOutputs } from '@trpc/server';
+
+import { AppRouter } from '~/server/api/root';
+
+const outflowFSCategoryArrayRecord = (Object.keys(OutflowFSCategory) as OutflowFSCategory[]).reduce(
+  (acc, key) => {
+    acc[key] = [];
+    return acc;
+  },
+  {} as Record<OutflowFSCategory, OutflowFS[]>
+);
+
+export function sortOutflowFS(
+  outflows:
+    | OutflowFS[]
+    | inferRouterOutputs<AppRouter>['shared']['outflowFS']['get']
+    | inferRouterOutputs<AppRouter>['admin']['outflowFS']['get']
+) {
+  return outflows.reduce((acc, outflow) => {
+    acc[outflow.category]?.push(outflow);
+    return acc;
+  }, outflowFSCategoryArrayRecord);
+}
