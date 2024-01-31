@@ -29,7 +29,7 @@ export default function AccomplishmentReportTemplatePage() {
   // const itemsPerPage = 8;
 
   // const files = Object.values(GeneratedARTemplate)
-  //   .filter(
+  //   .filter( 
   //     (template) =>
   //       !['CALENDAR_OF_ACTIVITIES', 'INVITATION_LETTER', 'REQUEST_LETTER'].includes(template)
   //   )
@@ -106,7 +106,7 @@ export default function AccomplishmentReportTemplatePage() {
                   <div className="flex gap-4">
                     <button
                       type="button"
-                      className="rounded-sm bg-red p-1 text-white active:scale-95"
+                      className="rounded-sm bg-red p-1 text-white opacity-50 active:scale-95"
                     >
                       <X />
                     </button>
@@ -115,7 +115,7 @@ export default function AccomplishmentReportTemplatePage() {
                     </button>
                     <button
                       type="button"
-                      className="rounded-sm bg-green p-1 text-white active:scale-95"
+                      className="rounded-sm bg-green p-1 text-white opacity-50 active:scale-95"
                     >
                       <Eye />
                     </button>
@@ -136,7 +136,7 @@ export default function AccomplishmentReportTemplatePage() {
                       >
                         <button
                           type="button"
-                          className="rounded-sm bg-red p-1 text-white active:scale-95"
+                          className="rounded-sm bg-red p-1 text-white opacity-50 active:scale-95"
                         >
                           <X />
                         </button>
@@ -146,7 +146,7 @@ export default function AccomplishmentReportTemplatePage() {
                       </button>
                       <button
                         type="button"
-                        className="rounded-sm bg-green p-1 text-white active:scale-95"
+                        className="rounded-sm bg-green p-1 text-white opacity-50 active:scale-95"
                         onClick={() => setIsActive(!isActive)}
                       >
                         <Eye />

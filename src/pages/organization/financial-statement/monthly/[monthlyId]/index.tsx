@@ -15,6 +15,7 @@ import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { getMonthName } from '~/utils/get-month-name';
+import { sortOutflowFS } from '~/utils/sort-outflow-fs';
 import { schemas } from '~/zod-schemas';
 
 export const getServerSideProps = (async (ctx) => {
@@ -41,7 +42,7 @@ export default function ModifyFinancialStatementPage() {
   // const getReportSemQuery = api.shared.reportSemester.get.useQuery();
   // const reportSem = getReportSemQuery?.data;
   const [selectedFS, setSelectedFS] = useState('inflow-collection');
-  const [selectedOutflowFS, setSelectedOutflowFS] = useState('inflow-collection');
+  const [selectedOutflowFS, setSelectedOutflowFS] = useState('FOOD_EXPENSE' as OutflowFSCategory);
 
   const getMonthNameQuery = api.shared.monthlyFS.get.useQuery({
     where: { id: monthlyId as string },
@@ -62,6 +63,7 @@ export default function ModifyFinancialStatementPage() {
     where: { monthlyId: monthlyId as string },
   });
   const outflowFS = getOutflowFSQuery?.data;
+  const sortedOutflowFs = Object.entries(sortOutflowFS(outflowFS ?? []));
 
   const createInflowCollectionFSForm = useForm<CreateInflowCollectionFSInputs>({
     resolver: zodResolver(schemas.shared.inflowCollectionFS.create),
@@ -178,6 +180,14 @@ export default function ModifyFinancialStatementPage() {
     },
   });
 
+  const deleteInflowIgp = api.shared.inflowIgpFS.delete.useMutation({
+    // This is the callback function after successful backend execution
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ FS Inflow deleted successfully.' });
+      await utils.shared.inflowIgpFS.invalidate();
+    },
+  });
+
   const deleteOutflow = api.shared.outflowFS.delete.useMutation({
     // This is the callback function after successful backend execution
     onSuccess: async () => {
@@ -242,6 +252,7 @@ export default function ModifyFinancialStatementPage() {
             {getMonthName(monthly?.month as number)} {monthly?.year}
           </div>
           <div className="mx-auto my-0 flex max-w-screen-lg justify-end gap-5 rounded-sm px-4 py-2">
+            {/* <CSVImportButton/>  */}
             <form
               className="flex  items-center gap-4"
               onSubmit={
@@ -275,14 +286,16 @@ export default function ModifyFinancialStatementPage() {
                   name=""
                   id="generate-fs-row"
                   className="border-sm relative flex items-center justify-between  gap-4 border  border-input bg-transparent px-4 py-2 capitalize"
-                  onChange={(e) => setSelectedOutflowFS(e.target.value)}
+                  onChange={(e) => setSelectedOutflowFS(e.target.value as OutflowFSCategory)}
                   value={selectedOutflowFS}
                 >
-                  {Object.values(OutflowFSCategory).map((outflowCategory, index) => (
-                    <option key={index} value={outflowCategory} className="capitalize">
-                      {outflowCategory.toLowerCase().replace(/_/, ' ')}
-                    </option>
-                  ))}
+                  {outflowFS &&
+                    Object.values(OutflowFSCategory)
+                    .map((outflowCategory, index) => (
+                      <option key={index} value={outflowCategory} className="capitalize">
+                        {outflowCategory.toLowerCase().replace(/_/g, ' ')}
+                      </option>
+                    ))}
                 </select>
               )}
 
@@ -328,7 +341,9 @@ export default function ModifyFinancialStatementPage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.MONTHLY}/${monthlyId}${paths.INFLOW_COLLECTION}/${collectionFS.id}`
+                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.MONTHLY}/${
+                                monthlyId as string
+                              }${paths.INFLOW_COLLECTION}/${collectionFS.id}`
                             )
                           }
                           className="rounded-sm border border-yellow bg-yellow p-1 active:scale-95"
@@ -359,11 +374,9 @@ export default function ModifyFinancialStatementPage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${
+                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.MONTHLY}/${
                                 monthlyId as string
-                              }${paths.MODIFY_FINANCIAL_STATEMENT}${paths.INFLOWS}/${IgpFS.id}${
-                                paths.ADD_INFLOW
-                              }`
+                              }${paths.INFLOW_IGP}/${IgpFS.id}`
                             )
                           }
                           className="rounded-sm border border-yellow bg-yellow p-1 active:scale-95"
@@ -373,7 +386,7 @@ export default function ModifyFinancialStatementPage() {
                         <button
                           type="button"
                           className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
-                          onClick={() => deleteInflowCollection.mutate({ id: IgpFS.id })}
+                          onClick={() => deleteInflowIgp.mutate({ id: IgpFS.id })}
                         >
                           <Trash2 />
                         </button>
@@ -384,8 +397,8 @@ export default function ModifyFinancialStatementPage() {
                 {outflowFS?.map((outflow) => (
                   <tr key={outflow.id} className="even:bg-[#808080]/20">
                     <td className="border border-x-0 border-black py-2 text-base">Outflow</td>
-                    <td className="border border-x-0 border-black py-2 text-base">
-                      {outflow.category}
+                    <td className="border border-x-0 border-black py-2 text-base capitalize">
+                      {outflow.category.toLowerCase().replace(/_/, ' ')}
                     </td>
                     <td className="border border-x-0 border-black py-2 text-base">
                       {outflow.date.toISOString().split('T')[0]}
@@ -396,11 +409,9 @@ export default function ModifyFinancialStatementPage() {
                           type="button"
                           onClick={() =>
                             router.push(
-                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${
+                              `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.MONTHLY}/${
                                 monthlyId as string
-                              }${paths.MODIFY_FINANCIAL_STATEMENT}${paths.OUTFLOWS}/${outflow.id}${
-                                paths.ADD_OUTFLOW
-                              }`
+                              }${paths.OUTFLOW}/${outflow.id}`
                             )
                           }
                           className="rounded-sm border border-yellow bg-yellow p-1 active:scale-95"

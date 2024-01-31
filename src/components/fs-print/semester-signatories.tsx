@@ -1,32 +1,27 @@
-import { useRouter } from 'next/router';
+import { MonthlyFS, ReportSemester } from '@prisma/client';
+import { inferRouterOutputs } from '@trpc/server';
+import { AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
-import { getMonthName } from '~/utils/get-month-name';
 import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
-export default function SemSignatories() {
-  const router = useRouter();
-  const monthId = router.query.monthId;
-  const getMonthlyFSQuery = api.shared.monthlyFS.get.useQuery({
-    where: { id: monthId as string },
-  });
-  const monthlyFS = getMonthlyFSQuery?.data?.[0];
-
-  const getReportSemQuery = api.shared.reportSemester.get.useQuery();
-  const reportSem = getReportSemQuery?.data;
-
-  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
-    include: { organization: true },
-  });
-  const orgSignatoryInfo = getOrgSignatoryInfo.data;
-
+export default function SemSignatories({
+  monthlyFS,
+  reportSem,
+  orgSignatoryInfo,
+}: {
+  monthlyFS: MonthlyFS;
+  reportSem: ReportSemester;
+  orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
+}) {
   const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
   const repSignatory = getReportSignatoryQuery?.data ?? [];
   const signatories = parseSignatoryObject(repSignatory);
+
   return (
     <>
       <div className="mx-auto my-0 mb-16 flex min-h-[100vh] flex-col items-center p-4">
-        <div className="font-bold">
-          Financial Statement ({getMonthName(monthlyFS?.month as number)} {reportSem?.yearStart} -{' '}
+        <div className="font-bold capitalize">
+          Financial Statement ({reportSem?.term.toLowerCase()} Semester | {reportSem?.yearStart} -{' '}
           {reportSem?.yearEnd})
         </div>
         <div className="mt-4 flex flex-col items-center gap-4">

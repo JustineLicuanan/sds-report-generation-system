@@ -1,24 +1,19 @@
-import { useRouter } from 'next/router';
+import { MonthlyFS, ReportSemester } from '@prisma/client';
+import { inferRouterOutputs } from '@trpc/server';
+import { AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
 import { getMonthName } from '~/utils/get-month-name';
 import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
-export default function MonthSignatories() {
-  const router = useRouter();
-  const monthId = router.query.monthId;
-  const getMonthlyFSQuery = api.shared.monthlyFS.get.useQuery({
-    where: { id: monthId as string },
-  });
-  const monthlyFS = getMonthlyFSQuery?.data?.[0];
-
-  const getReportSemQuery = api.shared.reportSemester.get.useQuery();
-  const reportSem = getReportSemQuery?.data;
-
-  const getOrgSignatoryInfo = api.shared.orgSignatoryInfo.get.useQuery({
-    include: { organization: true },
-  });
-  const orgSignatoryInfo = getOrgSignatoryInfo.data;
-
+export default function MonthSignatories({
+  monthlyFS,
+  reportSem,
+  orgSignatoryInfo,
+}: {
+  monthlyFS: MonthlyFS;
+  reportSem: ReportSemester;
+  orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
+}) {
   const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
   const repSignatory = getReportSignatoryQuery?.data ?? [];
   const signatories = parseSignatoryObject(repSignatory);

@@ -1,14 +1,26 @@
-import Head from 'next/head';
-import { meta } from '~/meta';
+import { FinancialStatement, MonthlyFS } from '@prisma/client';
+import { inferRouterOutputs } from '@trpc/server';
+import { AppRouter } from '~/server/api/root';
+import { getMonthName } from '~/utils/get-month-name';
 
-export default function MonthNotes() {
+export default function MonthNotes({
+  monthlyFS,
+  orgSignatoryInfo,
+  FS,
+}: {
+  monthlyFS: MonthlyFS;
+  orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
+  FS: FinancialStatement;
+}) {
   return (
-    <>
-      <div className="mx-auto my-0 flex min-h-[100vh] mb-16 w-[700px] flex-col items-center gap-4 p-4 leading-5">
+    <>  
+      <div className="mx-auto my-0 mb-16 flex min-h-[100vh] w-[700px] flex-col items-center gap-4 p-4 leading-5">
         <div className="flex flex-col items-center">
-          <div>[Org Name]</div>
+          <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>
           <div>Notes to Financial Statement</div>
-          <div>[DATE]</div>
+          <div>
+            {getMonthName(monthlyFS?.month as number)} {monthlyFS?.year}
+          </div>
         </div>
         <table className="w-full">
           <tbody>

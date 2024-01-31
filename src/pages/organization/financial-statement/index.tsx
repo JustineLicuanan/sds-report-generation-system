@@ -187,7 +187,7 @@ export default function FinancialStatementPage() {
                   >
                     Compile Financial Statement
                   </button>
-                </div>
+                </div>  
               </div>
             ))}
           </div>
