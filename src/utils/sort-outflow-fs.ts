@@ -18,7 +18,7 @@ export function sortOutflowFS(
     | inferRouterOutputs<AppRouter>['admin']['outflowFS']['get']
 ) {
   return outflows.reduce((acc, outflow) => {
-    acc[outflow.category]?.push(outflow);
+    acc[outflow.category].push(outflow);
     return acc;
   }, outflowFSCategoryArrayRecord);
 }
