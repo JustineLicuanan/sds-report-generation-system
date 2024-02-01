@@ -10,8 +10,8 @@ export type AdminGetActivityProposalsInputs = z.infer<typeof schemas.admin.activ
 const SDS_SCHEDULER_URL = 'https://cvsuimus-sdsscheduler.org';
 const SDS_SCHEDULER_API = `${SDS_SCHEDULER_URL}/api`;
 
-export function getSDSSchedulerDocument(title: string) {
-  return `${SDS_SCHEDULER_URL}/Uploads/Documents/${title}.pdf`;
+export function getSDSSchedulerDocument(details: string) {
+  return `${SDS_SCHEDULER_URL}/Uploads/Documents/${details}`;
 }
 
 export const externalAPI = {

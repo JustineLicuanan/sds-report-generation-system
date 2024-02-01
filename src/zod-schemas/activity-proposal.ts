@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export type ActivityProposal = { Proposal_ID: number; Event_Title: string };
+export type ActivityProposal = { Proposal_ID: number; Event_Title: string; Details: string };
 
 const adminSchemas = {
   get: z.object({ acronym: z.string().trim().optional() }).optional(),
