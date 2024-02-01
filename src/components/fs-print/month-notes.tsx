@@ -24,12 +24,9 @@ export default function MonthNotes({
   });
   const inflowIgpRowFS = getInflowIgpRowFSQuery?.data;
 
-  const getOutflowRowFSQuery = api.shared.outflowRowFS.get.useQuery(
-    {
-      where: { monthlyId: monthly.id as string },
-    },
-    { refetchOnWindowFocus: false }
-  );
+  const getOutflowRowFSQuery = api.shared.outflowRowFS.get.useQuery({
+    where: { monthlyId: monthly.id as string },
+  });
 
   const outflowRowFS = getOutflowRowFSQuery?.data;
   const sortedOutflowRowFS = sortOutflowRowFS(outflowRowFS ?? []);
