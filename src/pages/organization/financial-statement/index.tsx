@@ -70,7 +70,7 @@ export default function FinancialStatementPage() {
           <div className="mb-4 text-center text-4xl font-bold">Financial Statement</div>
 
           <div className="grid grid-cols-4 grid-rows-2 gap-4">
-            <div className="col-span-2 row-span-2 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+            <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="text-lg font-bold">Submit a Financial Statement</div>
               <div className="text-center font-medium">
                 Submit a concise financial statement that provides a brief overview of the
@@ -91,7 +91,7 @@ export default function FinancialStatementPage() {
                 </button>
               </div>
             </div>
-
+            
             <div className="col-span-2 row-span-1 flex flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="text-center text-lg font-bold">Organization and School Positions</div>
               <div className="flex flex-col items-center gap-2">
@@ -104,6 +104,24 @@ export default function FinancialStatementPage() {
                   className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                 >
                   Go to my organization
+                </button>
+              </div>
+            </div>
+
+            <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+              <div className="text-lg font-bold">Compile Financial Statement</div>
+              <div className="text-center font-medium">
+                Compile Financial Statement for this semester
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    router.push(`${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.PRINT}`)
+                  }
+                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Compile
                 </button>
               </div>
             </div>
@@ -140,7 +158,7 @@ export default function FinancialStatementPage() {
               </p>
             </div>
           </div>
-          <div className="mt-4 min-h-[40vh] rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+          <div className="mx-auto mt-4 min-h-[40vh] rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="mb-4 text-center text-2xl font-bold">
               {reportSem?.term} SEMESTER {reportSem?.yearStart} - {reportSem?.yearEnd}
             </div>
@@ -158,9 +176,9 @@ export default function FinancialStatementPage() {
             {FSMonth?.map((month) => (
               <div
                 key={month.id}
-                className="border-sm  my-2 flex items-center justify-between gap-2 border border-input"
+                className="border-sm my-2 flex items-center justify-between gap-2 border border-input"
               >
-                <div className="flex w-1/2 items-center justify-between gap-2  p-2">
+                <div className="flex w-full items-center justify-between gap-2  p-2">
                   <div className="text-lg font-bold">Month of {getMonthName(month.month)}</div>
                   <button
                     type="button"
@@ -174,20 +192,6 @@ export default function FinancialStatementPage() {
                     Modify
                   </button>
                 </div>
-                <div className="flex w-1/2 items-center justify-between gap-2 p-2">
-                  <div className="text-lg font-bold">Generate:</div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.MONTHLY}/${month.id}${paths.PRINT}`
-                      )
-                    }
-                    className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                  >
-                    Compile Financial Statement
-                  </button>
-                </div>  
               </div>
             ))}
           </div>

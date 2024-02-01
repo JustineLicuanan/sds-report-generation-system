@@ -1,15 +1,13 @@
-import { MonthlyFS, ReportSemester } from '@prisma/client';
+import { ReportSemester } from '@prisma/client';
 import { inferRouterOutputs } from '@trpc/server';
 import { AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
 import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
 export default function SemSignatories({
-  monthlyFS,
   reportSem,
   orgSignatoryInfo,
 }: {
-  monthlyFS: MonthlyFS;
   reportSem: ReportSemester;
   orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
 }) {
