@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { CustomDialog } from '~/components/custom-dialog';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { authRedirects } from '~/utils/auth-redirects';
 import { enumToSlug } from '~/utils/enum-to-slug';
@@ -25,34 +25,6 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function AccomplishmentReportTemplatePage() {
   const router = useRouter();
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 8;
-
-  // const files = Object.values(GeneratedARTemplate)
-  //   .filter( 
-  //     (template) =>
-  //       !['CALENDAR_OF_ACTIVITIES', 'INVITATION_LETTER', 'REQUEST_LETTER'].includes(template)
-  //   )
-  //   .map((template) => ({
-  //     filePath: `/${enumToSlug(template)}`,
-  //     title: template.replace(/_/g, ' '),
-  //   }));
-
-  // const [templateName, setTemplateName] = useState('');
-
-  // const getGeneratedARQuery = api.shared.generatedAR.get.useQuery({
-  //   orderBy: { createdAt: OrderBy.DESC },
-  // });
-  // const generatedAR = getGeneratedARQuery?.data;
-
-  // const totalPages = Math.ceil(files.length / itemsPerPage);
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const visibleGeneratedAR = generatedAR?.slice(startIndex, startIndex + itemsPerPage);
-
-  // const handlePageChange = (newPage: number) => {
-  //   setCurrentPage(newPage);
-  // };
-
   const [isActive, setIsActive] = useState(false);
 
   const files = Object.values(GeneratedARTemplate)
@@ -83,7 +55,13 @@ export default function AccomplishmentReportTemplatePage() {
           <div className="border-sm mx-auto my-0 mt-8 flex max-w-screen-lg items-center justify-between p-4 shadow-[0_1px_4px_0px_rgba(0,0,0,0.50)]">
             <div className="font-bold">Generate your compiled AR</div>
             <div className="flex gap-4">
-              <button type="button" className="rounded-sm bg-yellow p-1 active:scale-95">
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(`${paths.ORGANIZATION}${paths.GENERATED_AR}${paths.PRINT}`)
+                }
+                className="rounded-sm bg-yellow p-1 active:scale-95"
+              >
                 Compile
               </button>
               <button type="button" className="rounded-sm bg-yellow p-1 active:scale-95">

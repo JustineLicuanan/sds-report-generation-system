@@ -27,51 +27,57 @@ export default function MonthSignatories({
         <div className="mt-4 flex flex-col items-center gap-4">
           <div>Prepared By:</div>
           <div className="flex flex-col items-center">
-            <div>{orgSignatoryInfo?.treasurer === '' ? '[NAME]' : orgSignatoryInfo?.treasurer}</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.treasurer === '' ? '[NAME]' : orgSignatoryInfo?.treasurer}
+            </div>
             <div>{orgSignatoryInfo?.organization.acronym} Treasurer</div>
           </div>
           <div>Audited By:</div>
           <div className="flex flex-col items-center">
-            <div>{orgSignatoryInfo?.auditor === '' ? '[NAME]' : orgSignatoryInfo?.auditor}</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.auditor === '' ? '[NAME]' : orgSignatoryInfo?.auditor}
+            </div>
             <div>{orgSignatoryInfo?.organization.acronym} Auditor</div>
           </div>
           <div>Checked By:</div>
           <div className="flex flex-col items-center">
-            <div>{orgSignatoryInfo?.president === '' ? '[NAME]' : orgSignatoryInfo?.president}</div>
+            <div className="font-bold">
+              {orgSignatoryInfo?.president === '' ? '[NAME]' : orgSignatoryInfo?.president}
+            </div>
             <div>{orgSignatoryInfo?.organization.acronym} President</div>
           </div>
           <div>Noted By:</div>
           <div className="flex justify-between gap-32">
             <div className="flex flex-col items-center gap-4">
               <div className="flex flex-col items-center">
-                <div>
+                <div className="font-bold">
                   {orgSignatoryInfo?.adviser1 === '' ? '[NAME]' : orgSignatoryInfo?.adviser1}
                 </div>
                 <div>{orgSignatoryInfo?.organization.acronym} Adviser</div>
               </div>
               <div>Verified and Checked by:</div>
               <div className="mt-4 flex flex-col items-center">
-                <div>{signatories['CSG Treasurer']}</div>
+                <div className="font-bold">{signatories['CSG Treasurer']}</div>
                 <div>CSG Treasurer</div>
               </div>
             </div>
             <div className="flex flex-col items-center gap-4">
               <div className="flex flex-col items-center">
-                <div>
+                <div className="font-bold">
                   {orgSignatoryInfo?.adviser2 === '' ? '[NAME]' : orgSignatoryInfo?.adviser2}
                 </div>
                 <div>{orgSignatoryInfo?.organization.acronym} Adviser</div>
               </div>
               <div>Audited by:</div>
               <div className="mt-4 flex flex-col items-center">
-                <div>{signatories['CSG Auditor']}</div>
+                <div className="font-bold">{signatories['CSG Auditor']}</div>
                 <div>CSG Auditor</div>
               </div>
             </div>
           </div>
           <div>Recommending Approval:</div>
           <div className="mt-4 flex flex-col items-center">
-            <div>{signatories['CSG President']}</div>
+            <div className="font-bold">{signatories['CSG President']}</div>
             <div>CSG President</div>
           </div>
         </div>

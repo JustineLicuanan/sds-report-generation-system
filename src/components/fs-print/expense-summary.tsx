@@ -1,5 +1,6 @@
 import { FinancialStatement, MonthlyFS } from '@prisma/client';
 import { inferRouterOutputs } from '@trpc/server';
+import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
 import { logo } from '~/meta';
 import { AppRouter } from '~/server/api/root';
@@ -46,7 +47,19 @@ export default function ExpenseSummary({
             width={100}
             className="h-24 w-24 "
           />
-          <div className="h-24 w-24 rounded-full border"></div>
+          {orgSignatoryInfo?.organization.image ? (
+            <div className="h-24 w-24">
+              <CldImage
+                width="96"
+                height="96"
+                src={orgSignatoryInfo?.organization.imageId ?? ''}
+                alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="h-24 w-24 rounded-full border"></div>
+          )}
         </div>
         <div>
           <div className="flex flex-col items-center">

@@ -1,11 +1,11 @@
-import Head from 'next/head';
+import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
-import { logo, meta } from '~/meta';
+import { logo } from '~/meta';
 
 export default function Liquidation() {
   return (
     <>
-      <div className="mx-auto my-0 min-h-[100vh] mb-16 flex w-[700px] flex-col items-center gap-4 p-4 leading-5">
+      <div className="mx-auto my-0 mb-16 flex min-h-[100vh] w-[700px] flex-col items-center gap-4 p-4 leading-5">
         <div className="flex gap-2">
           <Image
             src={logo.PHILIPPINE_LOGO}
@@ -36,7 +36,19 @@ export default function Liquidation() {
             width={100}
             className="h-24 w-24 "
           />
-          <div className="h-24 w-24 rounded-full border"></div>
+          {/* {orgSignatoryInfo?.organization.image ? (
+            <div className="h-24 w-24">
+              <CldImage 
+                width="96"
+                height="96"
+                src={orgSignatoryInfo?.organization.imageId ?? ''}
+                alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="h-24 w-24 rounded-full border"></div>
+          )} */}
         </div>
 
         <div>

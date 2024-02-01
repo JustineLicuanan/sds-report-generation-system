@@ -80,7 +80,7 @@ export default function MonthCashFlow({
                 );
               })}
               {inflowIgpRowFS?.map((IgpRow, index) => (
-                <tr key={index}>
+                <tr key={IgpRow.id}>
                   <td className=" p-1"></td>
                   <td className=" p-1">IGP</td>
                   <td className=" p-1">S-002</td>

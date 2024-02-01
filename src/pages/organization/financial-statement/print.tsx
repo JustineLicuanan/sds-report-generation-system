@@ -3,6 +3,7 @@ import { inferRouterOutputs } from '@trpc/server';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { Fragment } from 'react';
 import ExpenseSummary from '~/components/fs-print/expense-summary';
 import FrontPageFS from '~/components/fs-print/front-page';
 import Liquidation from '~/components/fs-print/liquidation';
@@ -70,7 +71,7 @@ export default function CompiledFS() {
       />
       {monthlyFS?.map((monthly) => {
         return (
-          <>
+          <Fragment key={monthly.id}>
             <MonthLabel monthly={monthly as MonthlyFS} />
             <ExpenseSummary
               monthly={monthly as MonthlyFS}
@@ -101,7 +102,7 @@ export default function CompiledFS() {
               }
             />
             <Liquidation />
-          </>
+          </Fragment>
         );
       })}
     </>

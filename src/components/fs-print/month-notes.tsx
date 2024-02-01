@@ -24,13 +24,18 @@ export default function MonthNotes({
   });
   const inflowIgpRowFS = getInflowIgpRowFSQuery?.data;
 
-  const getOutflowRowFSQuery = api.shared.outflowRowFS.get.useQuery({
-    where: { monthlyId: monthly.id as string },
-  });
+  const getOutflowRowFSQuery = api.shared.outflowRowFS.get.useQuery(
+    {
+      where: { monthlyId: monthly.id as string },
+    },
+    { refetchOnWindowFocus: false }
+  );
 
   const outflowRowFS = getOutflowRowFSQuery?.data;
   const sortedOutflowRowFS = sortOutflowRowFS(outflowRowFS ?? []);
 
+  console.log(sortedOutflowRowFS.map((outflow) => outflow[1].map((row) => row)));
+  console.log(sortedOutflowRowFS);
   return (
     <>
       <div className="mx-auto my-0 mb-16 flex min-h-[100vh] w-[700px] flex-col items-center gap-4 p-4 leading-5">
@@ -86,11 +91,15 @@ export default function MonthNotes({
                 Outflows
               </td>
             </tr>
-            {sortedOutflowRowFS.map((outflowRow) => (
-              <tr className="">
-                <td className="w-[85%] border border-r-0 ps-16">Food Expense (Schedule 1)</td>
+            {sortedOutflowRowFS.map((outflowRow, outflowRowIdx) => (
+              <tr key={outflowRowIdx} className="">
+                <td className="w-[85%] border border-r-0 ps-16 capitalize">
+                  {outflowRow[0].toLowerCase().replace(/_/g, ' ')} (Schedule {outflowRowIdx + 1})
+                </td>
                 <td className="w-[2%] border-y pe-1 text-end">P</td>
-                <td className="w-[13%] border text-end ">2.00</td>
+                <td className="w-[13%] border text-end ">
+                  {outflowRow[1].reduce((acc, row) => acc + Number(row.price) * row.quantity, 0)}
+                </td>
               </tr>
             ))}
 
@@ -120,7 +129,7 @@ export default function MonthNotes({
             </thead>
             <tbody>
               {inflowCollectionRowFS?.map((collectionRow, index) => (
-                <tr key={index} className="text-center">
+                <tr key={collectionRow.id} className="text-center">
                   <td className=" border">{collectionRow.date.toISOString().split('T')[0]}</td>
                   <td className=" border">{collectionRow.name}</td>
                   <td className=" border">{collectionRow.ORNumber}</td>
@@ -166,7 +175,7 @@ export default function MonthNotes({
             </thead>
             <tbody>
               {inflowIgpRowFS?.map((IgpRow, index) => (
-                <tr className="text-center">
+                <tr key={IgpRow.id} className="text-center">
                   <td className=" border">{IgpRow.date.toISOString().split('T')[0]}</td>
                   <td className=" border">{IgpRow.quantity}</td>
                   <td className=" border">{IgpRow.particulars}</td>
@@ -200,177 +209,58 @@ export default function MonthNotes({
         {/* Note 2 */}
         <div className="w-full text-left font-bold">Note 2: Expenses</div>
         <>
-          <div className="w-full ps-8 text-left font-bold">Schedule 1: Food</div>
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className=" border">DATE</th>
-                <th className=" border">QUANTITY</th>
-                <th className=" border">PARTICULARS</th>
-                <th className=" border">UNIT</th>
-                <th className=" border">PRICE</th>
-                <th className=" border">AMOUNT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="text-center">
-                <td className=" border">9/21/2023</td>
-                <td className=" border">1</td>
-                <td className=" border">2 PC CHICKENJOY</td>
-                <td className=" border">PC/S</td>
-                <td className=" border">250</td>
-                <td className=" border">
-                  <div className="flex justify-between px-1">
-                    <div>P</div>
-                    <div>1</div>
-                  </div>
-                </td>
-              </tr>
-              <tr className="text-center">
-                <td className=" border">9/21/2023</td>
-                <td className=" border">1</td>
-                <td className=" border">SPAGHETTI</td>
-                <td className=" border">PC/S</td>
-                <td className=" border">100</td>
-                <td className=" border">
-                  <div className="flex justify-end px-1">
-                    <div>1</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={5} className="border text-end font-bold">
-                  TOTAL
-                </td>
-                <td className="border text-end font-bold" style={{ borderBottom: 'double' }}>
-                  <div className="flex justify-between  px-1">
-                    <div>P</div>
-                    <div>2.00</div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div className="w-full ps-8 text-left font-bold">Schedule 2: Supplies</div>
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className=" border">DATE</th>
-                <th className=" border">QUANTITY</th>
-                <th className=" border">PARTICULARS</th>
-                <th className=" border">UNIT</th>
-                <th className=" border">PRICE</th>
-                <th className=" border">AMOUNT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="text-center">
-                <td className=" border">9/21/2023</td>
-                <td className=" border">1</td>
-                <td className=" border">A4 BONDPAPER</td>
-                <td className=" border">PC/S</td>
-                <td className=" border">3</td>
-                <td className=" border">
-                  <div className="flex justify-between px-1">
-                    <div>P</div>
-                    <div>3</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={5} className="border text-end font-bold">
-                  TOTAL
-                </td>
-                <td className="border text-end font-bold" style={{ borderBottom: 'double' }}>
-                  <div className="flex justify-between  px-1">
-                    <div>P</div>
-                    <div>3.00</div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div className="w-full ps-8 text-left font-bold">Schedule 3: Transportation</div>
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className=" border">DATE</th>
-                <th className=" border">QUANTITY</th>
-                <th className=" border">PARTICULARS</th>
-                <th className=" border">UNIT</th>
-                <th className=" border">PRICE</th>
-                <th className=" border">AMOUNT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="text-center">
-                <td className=" border">9/21/2023</td>
-                <td className=" border">1</td>
-                <td className=" border">LALAMOVE</td>
-                <td className=" border">PC/S</td>
-                <td className=" border">4</td>
-                <td className=" border">
-                  <div className="flex justify-between px-1">
-                    <div>P</div>
-                    <div>4</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={5} className="border text-end font-bold">
-                  TOTAL
-                </td>
-                <td className="border text-end font-bold" style={{ borderBottom: 'double' }}>
-                  <div className="flex justify-between  px-1">
-                    <div>P</div>
-                    <div>4.00</div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div className="w-full ps-8 text-left font-bold">Schedule 4 : Representation </div>
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className=" border">DATE</th>
-                <th className=" border">QUANTITY</th>
-                <th className=" border">PARTICULARS</th>
-                <th className=" border">UNIT</th>
-                <th className=" border">PRICE</th>
-                <th className=" border">AMOUNT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="text-center">
-                <td className=" border">9/21/2023</td>
-                <td className=" border">1</td>
-                <td className=" border">PRINTS</td>
-                <td className=" border">PC/S</td>
-                <td className=" border">1</td>
-                <td className=" border">
-                  <div className="flex justify-between px-1">
-                    <div>P</div>
-                    <div>1</div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={5} className="border text-end font-bold">
-                  TOTAL
-                </td>
-                <td className="border text-end font-bold" style={{ borderBottom: 'double' }}>
-                  <div className="flex justify-between  px-1">
-                    <div>P</div>
-                    <div>1.00</div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          {sortedOutflowRowFS.map((outflowRow, index) => (
+            <div className="w-full" key={outflowRow[0]}>
+              <div className="w-full ps-8 text-left font-bold capitalize">
+                Schedule {index + 1}: {outflowRow[0].toLowerCase().replace(/_/g, ' ')}
+              </div>
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className=" border">DATE</th>
+                    <th className=" border">QUANTITY</th>
+                    <th className=" border">PARTICULARS</th>
+                    <th className=" border">UNIT</th>
+                    <th className=" border">PRICE</th>
+                    <th className=" border">AMOUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {outflowRow[1].map((row, index) => (
+                    <tr key={row.id} className="text-center">
+                      <td className=" border">{row.date.toISOString().split('T')[0]}</td>
+                      <td className=" border">{row.quantity}</td>
+                      <td className=" border">{row.particulars}</td>
+                      <td className=" border">{row.unit}</td>
+                      <td className=" border">{Number(row.price)}</td>
+                      <td className=" border">
+                        <div className="flex justify-between px-1">
+                          <div>P</div>
+                          <div>{Number(row.price) * row.quantity}</div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td colSpan={5} className="border text-end font-bold">
+                      TOTAL
+                    </td>
+                    <td className="border text-end font-bold" style={{ borderBottom: 'double' }}>
+                      <div className="flex justify-between  px-1">
+                        <div>P</div>
+                        <div>
+                          {outflowRow[1].reduce(
+                            (acc, row) => acc + Number(row.price) * row.quantity,
+                            0
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ))}
         </>
       </div>
     </>

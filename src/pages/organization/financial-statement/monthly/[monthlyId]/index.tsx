@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
+import { CSVImportButton, ImportFlowsInputs } from '~/components/csv-import-button';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { useToast } from '~/components/ui/use-toast';
@@ -125,36 +126,6 @@ export default function ModifyFinancialStatementPage() {
     },
   });
 
-  // const createOutflowFSForm = useForm<CreateOutflowFSInputs>({
-  //   resolver: zodResolver(schemas.shared.outflowFS.create),
-  //   // These values are for the initial data of input fields, mostly used for 'edit/update' forms like this one
-  //   defaultValues: {
-  //     date: new Date().toISOString().split('T')[0] ?? '',
-  //     monthlyId: monthlyId as string,
-  //   },
-  // });
-
-  // const createOutflowFS = api.shared.outflowFS.create.useMutation({
-  //   // This is the callback function after successful backend execution
-  //   onSuccess: async ({ id }) => {
-  //     toast({ variant: 'c-primary', description: '✔️ FS Outflow created successfully.' });
-  //     await utils.shared.monthlyFS.invalidate();
-  //     await router.push(
-  //       `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}/${monthlyId as string}${
-  //         paths.MODIFY_FINANCIAL_STATEMENT
-  //       }${paths.OUTFLOWS}/${id}${paths.ADD_OUTFLOW}`
-  //     );
-  //   },
-  //   // This is the callback function after failed backend execution. This is mostly used for 'unique' data conflict errors like unique email, etc.
-  //   onError: () => {
-  //     toast({
-  //       variant: 'destructive',
-  //       title: '❌ Internal Server Error',
-  //       description: 'Creating of FS Outflow failed.',
-  //     });
-  //   },
-  // });
-
   // This is the function that will run after clicking submit. Of course, it will NOT run if there are input validation errors like 'required', etc.
   const onSubmitCreateInflowCollectionFS: SubmitHandler<CreateInflowCollectionFSInputs> = (
     values
@@ -235,6 +206,30 @@ export default function ModifyFinancialStatementPage() {
     createOutflowFS.mutate(values);
   };
 
+  const [flowImportData, setFlowImportData] = useState<ImportFlowsInputs>(() => ({
+    monthlyId: monthlyId as string, // Use the router.query.monthlyId as string here
+    inflowCollections: [],
+    inflowIGPs: [],
+    outflows: [],
+  }));
+
+  const importFlows = api.shared.monthlyFS.importFlows.useMutation({
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ Month Notes has been imported.' });
+      await utils.shared.monthlyFS.invalidate();
+      await utils.shared.inflowCollectionFS.invalidate();
+      await utils.shared.inflowIgpFS.invalidate();
+      await utils.shared.outflowFS.invalidate();
+    },
+    onError: () => {
+      toast({
+        variant: 'destructive',
+        title: '❌ Internal Server Error',
+        description: 'Importing of month notes failed.',
+      });
+    },
+  });
+
   return (
     <>
       <Head>
@@ -252,7 +247,13 @@ export default function ModifyFinancialStatementPage() {
             {getMonthName(monthly?.month as number)} {monthly?.year}
           </div>
           <div className="mx-auto my-0 flex max-w-screen-lg justify-end gap-5 rounded-sm px-4 py-2">
-            {/* <CSVImportButton/>  */}
+            <CSVImportButton className="m-4 p-4" setFlowImportData={setFlowImportData} />
+            <button
+              className="rounded bg-c-primary px-4 py-2 text-c-primary-foreground hover:bg-c-primary/90"
+              onClick={() => importFlows.mutate(flowImportData)}
+            >
+              Import
+            </button>
             <form
               className="flex  items-center gap-4"
               onSubmit={
@@ -290,8 +291,7 @@ export default function ModifyFinancialStatementPage() {
                   value={selectedOutflowFS}
                 >
                   {outflowFS &&
-                    Object.values(OutflowFSCategory)
-                    .map((outflowCategory, index) => (
+                    Object.values(OutflowFSCategory).map((outflowCategory, index) => (
                       <option key={index} value={outflowCategory} className="capitalize">
                         {outflowCategory.toLowerCase().replace(/_/g, ' ')}
                       </option>
