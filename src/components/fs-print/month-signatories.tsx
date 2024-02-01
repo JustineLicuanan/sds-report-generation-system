@@ -6,11 +6,11 @@ import { getMonthName } from '~/utils/get-month-name';
 import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 
 export default function MonthSignatories({
-  monthlyFS,
+  monthly,
   reportSem,
   orgSignatoryInfo,
 }: {
-  monthlyFS: MonthlyFS;
+  monthly: MonthlyFS;
   reportSem: ReportSemester;
   orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
 }) {
@@ -21,7 +21,7 @@ export default function MonthSignatories({
     <>
       <div className="mx-auto my-0 mb-16 flex min-h-[100vh] flex-col items-center p-4">
         <div className="font-bold">
-          Financial Statement ({getMonthName(monthlyFS?.month as number)} {reportSem?.yearStart} -{' '}
+          Financial Statement ({getMonthName(monthly?.month as number)} {reportSem?.yearStart} -{' '}
           {reportSem?.yearEnd})
         </div>
         <div className="mt-4 flex flex-col items-center gap-4">

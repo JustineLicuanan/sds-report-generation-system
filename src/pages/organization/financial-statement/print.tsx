@@ -43,10 +43,8 @@ export default function CompiledFS() {
   const orgSignatoryInfo = getOrgSignatoryInfo.data;
 
   // Month
-  const getMonthlyFSQuery = api.shared.monthlyFS.get.useQuery({
-    where: { id: monthlyId as string },
-  });
-  const monthlyFS = getMonthlyFSQuery?.data?.[0];
+  const getMonthlyFSQuery = api.shared.monthlyFS.get.useQuery();
+  const monthlyFS = getMonthlyFSQuery?.data;
 
   // FS
   const getFSQuery = api.shared.FS.getOrCreate.useQuery();
@@ -65,30 +63,47 @@ export default function CompiledFS() {
       />
       <SemCashFlow />
       <SemSignatories
-        monthlyFS={monthlyFS as MonthlyFS}
         reportSem={reportSem as ReportSemester}
         orgSignatoryInfo={
           orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
         }
       />
-      <MonthLabel monthlyFS={monthlyFS as MonthlyFS} />
-      <ExpenseSummary />
-      <MonthCashFlow />
-      <MonthNotes
-        monthlyFS={monthlyFS as MonthlyFS}
-        orgSignatoryInfo={
-          orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
-        }
-        FS={FS as FinancialStatement}
-      />
-      <MonthSignatories
-        monthlyFS={monthlyFS as MonthlyFS}
-        reportSem={reportSem as ReportSemester}
-        orgSignatoryInfo={
-          orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
-        }
-      />
-      <Liquidation />
+      {monthlyFS?.map((monthly) => {
+        return (
+          <>
+            <MonthLabel monthly={monthly as MonthlyFS} />
+            <ExpenseSummary
+              monthly={monthly as MonthlyFS}
+              orgSignatoryInfo={
+                orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
+              }
+              FS={FS as FinancialStatement}
+            />
+            <MonthCashFlow
+              monthly={monthly as MonthlyFS}
+              orgSignatoryInfo={
+                orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
+              }
+              FS={FS as FinancialStatement}
+            />
+            <MonthNotes
+              monthly={monthly as MonthlyFS}
+              orgSignatoryInfo={
+                orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
+              }
+              FS={FS as FinancialStatement}
+            />
+            <MonthSignatories
+              monthly={monthly as MonthlyFS}
+              reportSem={reportSem as ReportSemester}
+              orgSignatoryInfo={
+                orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
+              }
+            />
+            <Liquidation />
+          </>
+        );
+      })}
     </>
   );
 }

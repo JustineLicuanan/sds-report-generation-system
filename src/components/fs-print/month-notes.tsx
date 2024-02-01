@@ -1,25 +1,44 @@
 import { FinancialStatement, MonthlyFS } from '@prisma/client';
 import { inferRouterOutputs } from '@trpc/server';
 import { AppRouter } from '~/server/api/root';
+import { api } from '~/utils/api';
 import { getMonthName } from '~/utils/get-month-name';
+import { sortOutflowRowFS } from '~/utils/sort-outflow-fs';
 
 export default function MonthNotes({
-  monthlyFS,
+  monthly,
   orgSignatoryInfo,
   FS,
 }: {
-  monthlyFS: MonthlyFS;
+  monthly: MonthlyFS;
   orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
   FS: FinancialStatement;
 }) {
+  const getInflowCollectionRowFSQuery = api.shared.inflowCollectionRowFS.get.useQuery({
+    where: { monthlyId: monthly.id as string },
+  });
+  const inflowCollectionRowFS = getInflowCollectionRowFSQuery?.data;
+
+  const getInflowIgpRowFSQuery = api.shared.inflowIgpRowFS.get.useQuery({
+    where: { monthlyId: monthly.id as string },
+  });
+  const inflowIgpRowFS = getInflowIgpRowFSQuery?.data;
+
+  const getOutflowRowFSQuery = api.shared.outflowRowFS.get.useQuery({
+    where: { monthlyId: monthly.id as string },
+  });
+
+  const outflowRowFS = getOutflowRowFSQuery?.data;
+  const sortedOutflowRowFS = sortOutflowRowFS(outflowRowFS ?? []);
+
   return (
-    <>  
+    <>
       <div className="mx-auto my-0 mb-16 flex min-h-[100vh] w-[700px] flex-col items-center gap-4 p-4 leading-5">
         <div className="flex flex-col items-center">
           <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>
           <div>Notes to Financial Statement</div>
           <div>
-            {getMonthName(monthlyFS?.month as number)} {monthlyFS?.year}
+            {getMonthName(monthly?.month as number)} {monthly?.year}
           </div>
         </div>
         <table className="w-full">
@@ -67,29 +86,14 @@ export default function MonthNotes({
                 Outflows
               </td>
             </tr>
-            <tr className="">
-              <td className="w-[85%] border border-r-0 ps-16">Food Expense (Schedule 1)</td>
-              <td className="w-[2%] border-y pe-1 text-end">P</td>
-              <td className="w-[13%] border text-end ">2.00</td>
-            </tr>
-            <tr>
-              <td colSpan={2} className="w-[90%] border ps-16">
-                Supplies Expense (Schedule 2)
-              </td>
-              <td className="w-[13%] border text-end">3.00</td>
-            </tr>
-            <tr>
-              <td colSpan={2} className="w-[90%] border ps-16">
-                Representation Expense (Schedule 3)
-              </td>
-              <td className="w-[13%] border text-end">4.00</td>
-            </tr>
-            <tr>
-              <td colSpan={2} className="w-[90%] border ps-16">
-                Transportation Expense (Schedule 4)
-              </td>
-              <td className="w-[13%] border text-end">1.00</td>
-            </tr>
+            {sortedOutflowRowFS.map((outflowRow) => (
+              <tr className="">
+                <td className="w-[85%] border border-r-0 ps-16">Food Expense (Schedule 1)</td>
+                <td className="w-[2%] border-y pe-1 text-end">P</td>
+                <td className="w-[13%] border text-end ">2.00</td>
+              </tr>
+            ))}
+
             <tr>
               <td className="w-[85%] border border-r-0 font-bold">Total Outflows</td>
               <td className="w-[2%] border-y pe-1 text-end font-bold">P</td>
@@ -115,37 +119,19 @@ export default function MonthNotes({
               </tr>
             </thead>
             <tbody>
-              <tr className="text-center">
-                <td className=" border">9/21/2023</td>
-                <td className=" border">Juan DelaCruz</td>
-                <td className=" border">0001</td>
-                <td className=" border">
-                  <div className="flex justify-between px-1">
-                    <div>P</div>
-                    <div>5.00</div>
-                  </div>
-                </td>
-              </tr>
-              <tr className="text-center">
-                <td className=" border">9/25/2023</td>
-                <td className=" border">Juan DelaCruz</td>
-                <td className=" border">0002</td>
-                <td className=" border">
-                  <div className="flex justify-end px-1">
-                    <div>5.00</div>
-                  </div>
-                </td>
-              </tr>
-              <tr className="text-center">
-                <td className=" border">9/30/2023</td>
-                <td className=" border">Juan DelaCruz</td>
-                <td className=" border">0003</td>
-                <td className=" border">
-                  <div className="flex justify-end px-1">
-                    <div>40.00</div>
-                  </div>
-                </td>
-              </tr>
+              {inflowCollectionRowFS?.map((collectionRow, index) => (
+                <tr key={index} className="text-center">
+                  <td className=" border">{collectionRow.date.toISOString().split('T')[0]}</td>
+                  <td className=" border">{collectionRow.name}</td>
+                  <td className=" border">{collectionRow.ORNumber}</td>
+                  <td className=" border">
+                    <div className="flex justify-between px-1">
+                      <div>P</div>
+                      <div>{Number(collectionRow.amount)}</div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
               <tr>
                 <td colSpan={3} className="border text-end font-bold">
                   TOTAL
@@ -168,7 +154,7 @@ export default function MonthNotes({
 
           <table className="w-full">
             <thead>
-              <tr>
+              <tr key="index">
                 <th className=" border">DATE</th>
                 <th className=" border">QUANTITY</th>
                 <th className=" border">PARTICULARS</th>
@@ -179,20 +165,23 @@ export default function MonthNotes({
               </tr>
             </thead>
             <tbody>
-              <tr className="text-center">
-                <td className=" border">9/21/2023</td>
-                <td className=" border">1</td>
-                <td className=" border">Juan DelaCruz</td>
-                <td className=" border">0011</td>
-                <td className=" border">PC/S</td>
-                <td className=" border">250</td>
-                <td className=" border">
-                  <div className="flex justify-between px-1">
-                    <div>P</div>
-                    <div>250</div>
-                  </div>
-                </td>
-              </tr>
+              {inflowIgpRowFS?.map((IgpRow, index) => (
+                <tr className="text-center">
+                  <td className=" border">{IgpRow.date.toISOString().split('T')[0]}</td>
+                  <td className=" border">{IgpRow.quantity}</td>
+                  <td className=" border">{IgpRow.particulars}</td>
+                  <td className=" border">{IgpRow.ORNumber}</td>
+                  <td className=" border">{IgpRow.unit}</td>
+                  <td className=" border">{Number(IgpRow.price)}</td>
+                  <td className=" border">
+                    <div className="flex justify-between px-1">
+                      <div>P</div>
+                      <div>{Number(IgpRow.price) * IgpRow.quantity}</div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+
               <tr>
                 <td colSpan={6} className="border text-end font-bold">
                   TOTAL

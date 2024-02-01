@@ -1,11 +1,21 @@
-import Head from 'next/head';
+import { FinancialStatement, MonthlyFS } from '@prisma/client';
+import { inferRouterOutputs } from '@trpc/server';
 import Image from 'next/image';
-import { logo, meta } from '~/meta';
+import { logo } from '~/meta';
+import { AppRouter } from '~/server/api/root';
 
-export default function ExpenseSummary() {
+export default function ExpenseSummary({
+  monthly,
+  orgSignatoryInfo,
+  FS,
+}: {
+  monthly: MonthlyFS;
+  orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
+  FS: FinancialStatement;
+}) {
   return (
     <>
-      <div className="mx-auto min-h-[100vh] mb-16 my-0 flex w-[700px] flex-col items-center gap-4 p-4 leading-5">
+      <div className="mx-auto my-0 mb-16 flex min-h-[100vh] w-[700px] flex-col items-center gap-4 p-4 leading-5">
         <div className="flex gap-2">
           <Image
             src={logo.PHILIPPINE_LOGO}
@@ -26,8 +36,8 @@ export default function ExpenseSummary() {
             <div className="font-bold">CAVITE STATE UNIVERSITY</div>
             <div className="font-bold">Imus Campus</div>
             <div className="font-bold">Student Development Services</div>
-            <div className="font-bold">ORG NAME</div>
-            <div className="">org gmail account</div>
+            <div className="text-center font-bold">{orgSignatoryInfo?.organization.name}</div>
+            <div className="">{orgSignatoryInfo?.organization.contactEmail}</div>
           </div>
           <Image
             src={logo.SDS_LOGO}

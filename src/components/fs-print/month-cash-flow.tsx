@@ -1,21 +1,38 @@
-import Head from 'next/head';
-import { meta } from '~/meta';
+import { FinancialStatement, MonthlyFS } from '@prisma/client';
+import { inferRouterOutputs } from '@trpc/server';
+import { AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
+import { getMonthName } from '~/utils/get-month-name';
 
-export default function MonthCashFlow() {
-  const getFSInflowRowsQuery = api.shared.inflowCollectionRowFS.get.useQuery();
-  const FSInflowRows = getFSInflowRowsQuery?.data;
+export default function MonthCashFlow({
+  monthly,
+  orgSignatoryInfo,
+  FS,
+}: {
+  monthly: MonthlyFS;
+  orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
+  FS: FinancialStatement;
+}) {
+  const getInflowCollectionRowFSQuery = api.shared.inflowCollectionRowFS.get.useQuery({
+    where: { monthlyId: monthly.id as string },
+  });
+  const inflowCollectionRowFS = getInflowCollectionRowFSQuery?.data;
+
+  const getInflowIgpRowFSQuery = api.shared.inflowIgpRowFS.get.useQuery({
+    where: { monthlyId: monthly.id as string },
+  });
+  const inflowIgpRowFS = getInflowIgpRowFSQuery?.data;
 
   let runningBalance = 20000;
   // const [currentBalance, setCurrentBalance] = useState(runningBalance);
 
   return (
     <>
-      <div className="min-h-[100vh] mb-16 mx-auto my-0 flex flex-col items-center p-4">
+      <div className="mx-auto my-0 mb-16 flex min-h-[100vh] flex-col items-center p-4">
         <div className="flex flex-col items-center">
-          <div>[Org Name]</div>
+          <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>
           <div>MONTHLY CASH FLOW</div>
-          <div>For the month of [DATE]</div>
+          <div>For the month of {getMonthName(monthly?.month as number)}</div>
         </div>
         <div className="mt-4">
           <table className="">
@@ -46,32 +63,33 @@ export default function MonthCashFlow() {
                   Inflows
                 </td>
               </tr>
-              {FSInflowRows?.map((inflowRow, index) => {
+              {inflowCollectionRowFS?.map((collectionRow, index) => {
                 // Assuming inflow.amount is a number
-                runningBalance += Number(inflowRow.amount);
+                runningBalance += Number(collectionRow.amount);
 
                 return (
-                  <tr key={inflowRow.id}>
+                  <tr key={collectionRow.id}>
                     <td className=" p-1"></td>
                     <td className=" p-1">Collection</td>
-                    <td className=" p-1">S-00{index + 1}</td>
+                    <td className=" p-1">S-001</td>
                     <td className=" p-1"></td>
-                    <td className=" p-1">{inflowRow.amount?.toString()}</td>
+                    <td className=" p-1">{Number(collectionRow.amount)}</td>
                     <td className=" p-1"></td>
                     <td className=" p-1">{runningBalance}</td>
                   </tr>
                 );
               })}
-
-              <tr>
-                <td className=" p-1"></td>
-                <td className=" p-1">IGP</td>
-                <td className=" p-1">S-002</td>
-                <td className=" p-1"></td>
-                <td className=" p-1">50.00</td>
-                <td className=" p-1"></td>
-                <td className=" p-1">20,100.00</td>
-              </tr>
+              {inflowIgpRowFS?.map((IgpRow, index) => (
+                <tr key={index}>
+                  <td className=" p-1"></td>
+                  <td className=" p-1">IGP</td>
+                  <td className=" p-1">S-002</td>
+                  <td className=" p-1"></td>
+                  <td className=" p-1">50.00</td>
+                  <td className=" p-1"></td>
+                  <td className=" p-1">20,100.00</td>
+                </tr>
+              ))}
 
               <tr className="">
                 <td colSpan={7} className=" p-1 font-bold">
