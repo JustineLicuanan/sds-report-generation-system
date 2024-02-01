@@ -614,6 +614,7 @@ enum SemReportStatus {
 }
 
 enum ARUploadContentType {
+    FRONT_PAGE
     PREAMBLE_MISSION_VISION_AND_GOAL
     CONSTITUTION_AND_BY_LAWS
     ACCEPTANCE_LETTER_OF_ADVISERS
@@ -638,6 +639,7 @@ enum ARUploadContentType {
 }
 
 enum GeneratedARTemplate {
+    FRONT_PAGE
     ACTIVITY_PROPOSAL
     ACTIVITY_PROPOSAL_MESSAGE
     CALENDAR_OF_ACTIVITIES
