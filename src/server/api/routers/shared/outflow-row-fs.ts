@@ -15,9 +15,14 @@ export const outflowRowFSRouter = createTRPCRouter({
 
   create: protectedProcedure
     .input(schemas.shared.outflowRowFS.create)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const { category } = await ctx.db.outflowFS.findUniqueOrThrow({
+        select: { category: true },
+        where: { id: input.outflowId },
+      });
+
       return ctx.db.outflowRowFS.create({
-        data: { ...input, organizationId: ctx.session.user.organizationId! },
+        data: { ...input, category, organizationId: ctx.session.user.organizationId! },
       });
     }),
 

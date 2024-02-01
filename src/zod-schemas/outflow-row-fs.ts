@@ -1,3 +1,4 @@
+import { OutflowFSCategory } from '@prisma/client';
 import { z } from 'zod';
 
 import { OrderBy } from '~/zod-schemas/utils';
@@ -10,6 +11,7 @@ const adminSchemas = {
           id: z.string().cuid().optional(),
           monthlyId: z.string().cuid().optional(),
           outflowId: z.string().cuid().optional(),
+          category: z.nativeEnum(OutflowFSCategory).optional(),
           organizationId: z.string().cuid().optional(),
         })
         .optional(),
@@ -33,6 +35,7 @@ const sharedSchemas = {
           id: z.string().cuid().optional(),
           monthlyId: z.string().cuid().optional(),
           outflowId: z.string().cuid().optional(),
+          category: z.nativeEnum(OutflowFSCategory).optional(),
         })
         .optional(),
       include: z

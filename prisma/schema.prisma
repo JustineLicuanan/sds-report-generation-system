@@ -370,6 +370,8 @@ model OutflowFS {
 
     organization   Organization @relation(fields: [organizationId], references: [id])
     organizationId String
+
+    @@unique([id, category])
 }
 
 model OutflowRowFS {
@@ -387,8 +389,9 @@ model OutflowRowFS {
     monthly   MonthlyFS @relation(fields: [monthlyId], references: [id])
     monthlyId String
 
-    outflow   OutflowFS @relation(fields: [outflowId], references: [id], onDelete: Cascade)
+    outflow   OutflowFS         @relation(fields: [outflowId, category], references: [id, category], onDelete: Cascade)
     outflowId String
+    category  OutflowFSCategory
 
     organization   Organization @relation(fields: [organizationId], references: [id])
     organizationId String
