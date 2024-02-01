@@ -29,11 +29,16 @@ export function sortOutflowRowFS(
     | inferRouterOutputs<AppRouter>['shared']['outflowRowFS']['get']
     | inferRouterOutputs<AppRouter>['admin']['outflowRowFS']['get']
 ) {
-  return rows.reduce(
+  const sortedRows = rows.reduce(
     (acc, row) => {
       acc[row.category].push(row);
       return acc;
     },
     outflowFSCategoryArrayRecord as unknown as Record<OutflowFSCategory, OutflowRowFS[]>
   );
+
+  return Object.entries(sortedRows).filter((row) => row[1].length > 0) as [
+    OutflowFSCategory,
+    OutflowRowFS[],
+  ][];
 }
