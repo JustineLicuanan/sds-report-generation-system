@@ -1,4 +1,5 @@
 import { accomplishmentReportSchemas } from '~/zod-schemas/accomplishment-report';
+import { activityProposalSchemas } from '~/zod-schemas/activity-proposal';
 import { ARUploadSchemas } from '~/zod-schemas/ar-upload';
 import { financialStatementSchemas } from '~/zod-schemas/financial-statement';
 import { generatedARSchemas } from '~/zod-schemas/generated-ar';
@@ -20,6 +21,7 @@ export const schemas = {
     reportSemester: reportSemesterSchemas.admin,
     AR: accomplishmentReportSchemas.admin,
     ARUpload: ARUploadSchemas.admin,
+    activityProposal: activityProposalSchemas.admin,
     FS: financialStatementSchemas.admin,
     monthlyFS: MonthlyFSSchemas.admin,
     inflowCollectionFS: inflowCollectionFSSchemas.admin,
