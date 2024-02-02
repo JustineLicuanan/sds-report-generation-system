@@ -14,13 +14,13 @@ export default function FrontPageFS({
     <>
       <div className="mx-auto my-0 mb-16 flex min-h-[100vh] w-[700px] flex-col items-center justify-center gap-4 p-4 leading-5">
         {orgSignatoryInfo?.organization.image ? (
-          <div className="h-80 w-80">
+          <div className="">
             <CldImage
               width="96"
               height="96"
               src={orgSignatoryInfo?.organization.imageId ?? ''}
               alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
-              className="rounded-full"
+              className="h-80 w-80 rounded-full"
             />
           </div>
         ) : (

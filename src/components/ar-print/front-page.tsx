@@ -16,8 +16,8 @@ export default function FrontPageAR() {
         {orgSignatoryInfo?.organization.image ? (
           <div className="h-80 w-80">
             <CldImage
-              width="96"
-              height="96"
+              width="320"
+              height="320"
               src={orgSignatoryInfo?.organization.imageId ?? ''}
               alt={`${orgSignatoryInfo?.organization.acronym} Logo`}
               className="rounded-full"

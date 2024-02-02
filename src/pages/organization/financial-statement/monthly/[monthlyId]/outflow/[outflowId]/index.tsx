@@ -109,33 +109,9 @@ export default function OutflowFinancialStatementPage() {
           <div className="text-medium text-lg capitalize">
             {reportSem?.term.toLowerCase()} Semester - {getMonthName(monthly?.month as number)}
           </div>
-          <div className="grid grid-cols-2 grid-rows-4 gap-4">
-            {/* NET */}
-            <div className="col-span-2 row-span-4 flex flex-col justify-between gap-2 rounded-sm p-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-              <label htmlFor="short-desc">Short Description:</label>
-              <textarea
-                name="short-desc"
-                id="short-desc"
-                cols={10}
-                rows={3}
-                className={`${disable ? 'bg-gray opacity-50' : ''} rounded-sm border p-1`}
-                disabled={disable}
-              ></textarea>
-              <button
-                type="button"
-                onClick={() => setDisable(true)}
-                className={`${
-                  disable ? 'opacity-50' : ''
-                } self-end rounded-sm border border-yellow bg-yellow px-3 active:scale-95`}
-                disabled={disable}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
 
           {/* TABLE */}
-          <div className="mt-4 flex min-h-[40vh] w-full flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+          <div className="mt-4 flex min-h-[60vh] w-full flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <form
               className="flex justify-end gap-2"
               onSubmit={createOutflowRowFSForm.handleSubmit(onSubmitCreateOutflowIgpFS, (error) =>

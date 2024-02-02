@@ -11,6 +11,7 @@ import MonthCashFlow from '~/components/fs-print/month-cash-flow';
 import MonthLabel from '~/components/fs-print/month-label';
 import MonthNotes from '~/components/fs-print/month-notes';
 import MonthSignatories from '~/components/fs-print/month-signatories';
+import Receipt from '~/components/fs-print/receipt';
 import SemCashFlow from '~/components/fs-print/semester-cash-flow';
 import SemSignatories from '~/components/fs-print/semester-signatories';
 import { meta } from '~/meta';
@@ -32,7 +33,6 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function CompiledFS() {
   const router = useRouter();
-  const monthlyId = router.query.monthlyId;
 
   // Signatories
   const getReportSem = api.shared.reportSemester.get.useQuery();
@@ -62,7 +62,12 @@ export default function CompiledFS() {
           orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
         }
       />
-      <SemCashFlow />
+      <SemCashFlow
+        reportSem={reportSem as ReportSemester}
+        orgSignatoryInfo={
+          orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
+        }
+      />
       <SemSignatories
         reportSem={reportSem as ReportSemester}
         orgSignatoryInfo={
@@ -101,7 +106,20 @@ export default function CompiledFS() {
                 orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
               }
             />
-            <Liquidation />
+            <Receipt
+              monthly={monthly as MonthlyFS}
+              orgSignatoryInfo={
+                orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
+              }
+              FS={FS as FinancialStatement}
+            />
+            <Liquidation
+              orgSignatoryInfo={
+                orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
+              }
+              monthly={monthly as MonthlyFS}
+              FS={FS as FinancialStatement}
+            />
           </Fragment>
         );
       })}

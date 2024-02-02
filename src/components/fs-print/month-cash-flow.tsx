@@ -3,6 +3,7 @@ import { inferRouterOutputs } from '@trpc/server';
 import { AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
 import { getMonthName } from '~/utils/get-month-name';
+import { sortOutflowRowFS } from '~/utils/sort-outflow-fs';
 
 export default function MonthCashFlow({
   monthly,
@@ -23,9 +24,24 @@ export default function MonthCashFlow({
   });
   const inflowIgpRowFS = getInflowIgpRowFSQuery?.data;
 
-  let runningBalance = 20000;
-  // const [currentBalance, setCurrentBalance] = useState(runningBalance);
+  const getOutflowRowFSQuery = api.shared.outflowRowFS.get.useQuery({
+    where: { monthlyId: monthly.id as string },
+  });
 
+  const outflowRowFS = getOutflowRowFSQuery?.data;
+  const sortedOutflowRowFS = sortOutflowRowFS(outflowRowFS ?? []);
+
+  let collectionTotal =
+    inflowCollectionRowFS?.reduce((acc, row) => acc + Number(row.amount), 0) ?? 0;
+  let IgpTotal =
+    inflowIgpRowFS?.reduce((acc, row) => acc + Number(row.price) * row.quantity, 0) ?? 0;
+  let outflowTotal = sortedOutflowRowFS.reduce(
+    (acc, outflowRow) =>
+      acc + outflowRow[1].reduce((acc, row) => acc + Number(row.price) * row.quantity, 0),
+    0
+  );
+
+  let runningBalance = Number(FS.actualCash) + collectionTotal + IgpTotal;
   return (
     <>
       <div className="mx-auto my-0 mb-16 flex min-h-[100vh] flex-col items-center p-4">
@@ -52,95 +68,85 @@ export default function MonthCashFlow({
                 <td className=" p-1">8/31/2023</td>
                 <td className=" p-1">Actual Cash Count</td>
                 <td className=" p-1"></td>
-                <td className=" p-1">{runningBalance}</td>
+                <td className=" p-1">{Number(FS.actualCash)}</td>
                 <td className=" p-1"></td>
                 <td className=" p-1"></td>
-                <td className=" p-1">{runningBalance}</td>
+                <td className=" p-1">{Number(FS.actualCash)}</td>
               </tr>
-
               <tr className="">
                 <td colSpan={7} className=" p-1 font-bold">
                   Inflows
                 </td>
               </tr>
-              {inflowCollectionRowFS?.map((collectionRow, index) => {
-                // Assuming inflow.amount is a number
-                runningBalance += Number(collectionRow.amount);
-
-                return (
-                  <tr key={collectionRow.id}>
-                    <td className=" p-1"></td>
-                    <td className=" p-1">Collection</td>
-                    <td className=" p-1">S-001</td>
-                    <td className=" p-1"></td>
-                    <td className=" p-1">{Number(collectionRow.amount)}</td>
-                    <td className=" p-1"></td>
-                    <td className=" p-1">{runningBalance}</td>
-                  </tr>
-                );
-              })}
-              {inflowIgpRowFS?.map((IgpRow, index) => (
-                <tr key={IgpRow.id}>
-                  <td className=" p-1"></td>
-                  <td className=" p-1">IGP</td>
-                  <td className=" p-1">S-002</td>
-                  <td className=" p-1"></td>
-                  <td className=" p-1">50.00</td>
-                  <td className=" p-1"></td>
-                  <td className=" p-1">20,100.00</td>
-                </tr>
-              ))}
-
+              <tr>
+                <td className=" p-1"></td>
+                <td className=" p-1">Collection</td>
+                <td className=" p-1">S-001</td>
+                <td className=" p-1"></td>
+                <td className=" p-1">{collectionTotal}</td>
+                <td className=" p-1"></td>
+                <td className=" p-1">{Number(FS.actualCash) + (collectionTotal ?? 0)}</td>
+              </tr>
+              <tr>
+                <td className=" p-1"></td>
+                <td className=" p-1">IGP</td>
+                <td className=" p-1">S-002</td>
+                <td className=" p-1"></td>
+                <td className=" p-1">{IgpTotal}</td>
+                <td className=" p-1"></td>
+                <td className=" p-1">{runningBalance}</td>
+              </tr>
               <tr className="">
                 <td colSpan={7} className=" p-1 font-bold">
                   Outflows
                 </td>
               </tr>
-              <tr>
-                <td className=" p-1"></td>
-                <td className=" p-1">Food Expense</td>
-                <td className=" p-1">S-001</td>
-                <td className=" p-1"></td>
-                <td className=" p-1"></td>
-                <td className=" p-1">2.00</td>
-                <td className=" p-1">20,098.00</td>
-              </tr>
-              <tr>
-                <td className=" p-1"></td>
-                <td className=" p-1">Supplies Expense</td>
-                <td className=" p-1">S-002</td>
-                <td className=" p-1"></td>
-                <td className=" p-1"></td>
-                <td className=" p-1">3.00</td>
-                <td className=" p-1">20,095.00</td>
-              </tr>
-              <tr>
-                <td className=" p-1"></td>
-                <td className=" p-1">Transportation Expense</td>
-                <td className=" p-1">S-003</td>
-                <td className=" p-1"></td>
-                <td className=" p-1"></td>
-                <td className=" p-1">4.00</td>
-                <td className=" p-1">20,091.00</td>
-              </tr>
-              <tr>
-                <td className=" p-1"></td>
-                <td className=" p-1">Representation Expense</td>
-                <td className=" p-1">S-004</td>
-                <td className=" p-1"></td>
-                <td className=" p-1"></td>
-                <td className=" p-1">1.00</td>
-                <td className=" p-1">20,090.00</td>
-              </tr>
+              {sortedOutflowRowFS.map((outflowRow, outflowRowIdxCF) => (
+                <tr key={outflowRowIdxCF}>
+                  <td className=" p-1"></td>
+                  <td className=" p-1 capitalize">
+                    {outflowRow[0].toLowerCase().replace(/_/g, ' ')}
+                  </td>
+                  <td className=" p-1">S-00{outflowRowIdxCF + 1}</td>
+                  <td className=" p-1"></td>
+                  <td className=" p-1"></td>
+                  <td className=" p-1">
+                    {outflowRow[1].reduce((acc, row) => acc + Number(row.price) * row.quantity, 0)}
+                  </td>
+                  <td className=" p-1">
+                    {
+                      (runningBalance -= outflowRow[1].reduce(
+                        (acc, row) => acc + Number(row.price) * row.quantity,
+                        0
+                      ))
+                    }
+                  </td>
+                </tr>
+              ))}
+
               <tr className="font-bold">
                 <td colSpan={3} className="border-y p-1">
-                  TOTAL - MONTH OF SEPTEMBER
+                  TOTAL - MONTH OF {getMonthName(monthly?.month as number).toUpperCase()}
                 </td>
-                <td className="border-y p-1">20,000.00</td>
-                <td className="border-y p-1">100.00</td>
-                <td className="border-y p-1">(10.00)</td>
+                <td className="border-y p-1">{Number(FS?.actualCash)}</td>
+                <td className="border-y p-1">{collectionTotal + IgpTotal}</td>
+                <td className="border-y p-1">({outflowTotal})</td>
                 <td className="border-y p-1" style={{ borderBottom: 'double' }}>
-                  {runningBalance}
+                  {Number(FS?.actualCash) -
+                    sortedOutflowRowFS.reduce(
+                      (acc, outflowRow) =>
+                        acc +
+                        outflowRow[1].reduce(
+                          (acc, row) => acc + Number(row.price) * row.quantity,
+                          0
+                        ),
+                      0
+                    ) +
+                    (collectionTotal ?? 0) +
+                    (inflowIgpRowFS?.reduce(
+                      (acc, row) => acc + Number(row.price) * row.quantity,
+                      0
+                    ) ?? 0)}
                 </td>
               </tr>
             </tbody>

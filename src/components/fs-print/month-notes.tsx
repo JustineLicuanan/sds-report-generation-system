@@ -31,11 +31,14 @@ export default function MonthNotes({
   const outflowRowFS = getOutflowRowFSQuery?.data;
   const sortedOutflowRowFS = sortOutflowRowFS(outflowRowFS ?? []);
 
-  console.log(sortedOutflowRowFS.map((outflow) => outflow[1].map((row) => row)));
-  console.log(sortedOutflowRowFS);
+  const viewportHeight = window.innerHeight;
+
+
   return (
     <>
-      <div className="mx-auto my-0 mb-16 flex min-h-[100vh] w-[700px] flex-col items-center gap-4 p-4 leading-5">
+      <div
+        className={`mx-auto my-0 mb-32 flex min-h-[200vh] w-[700px] flex-col items-center gap-4 p-4 leading-5`}
+      >
         <div className="flex flex-col items-center">
           <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>
           <div>Notes to Financial Statement</div>
@@ -58,19 +61,27 @@ export default function MonthNotes({
             <tr className="">
               <td className="w-[85%] border border-r-0 ps-16">Collection (Schedule 1)</td>
               <td className="w-[2%] border-y pe-1 text-end">P</td>
-              <td className="w-[13%] border text-end ">50.00</td>
+              <td className="w-[13%] border text-end ">
+                {inflowCollectionRowFS?.reduce((acc, row) => acc + Number(row.amount), 0)}
+              </td>
             </tr>
             <tr>
               <td colSpan={2} className="w-[90%] border ps-16">
                 IGP (Schedule 2)
               </td>
-              <td className="w-[13%] border text-end">50.00</td>
+              <td className="w-[13%] border text-end">
+                {inflowIgpRowFS?.reduce((acc, row) => acc + Number(row.price) * row.quantity, 0)}
+              </td>
             </tr>
             <tr>
               <td className="w-[85%] border border-r-0 font-bold">Total Inflows</td>
               <td className="w-[2%] border-y pe-1 text-end font-bold">P</td>
               <td className="w-[13%] border text-end font-bold" style={{ borderBottom: 'double' }}>
-                100.00
+                {(inflowCollectionRowFS?.reduce((acc, row) => acc + Number(row.amount), 0) || 0) +
+                  (inflowIgpRowFS?.reduce(
+                    (acc, row) => acc + Number(row.price) * row.quantity,
+                    0
+                  ) || 0)}
               </td>
             </tr>
           </tbody>
@@ -93,7 +104,7 @@ export default function MonthNotes({
                 <td className="w-[85%] border border-r-0 ps-16 capitalize">
                   {outflowRow[0].toLowerCase().replace(/_/g, ' ')} (Schedule {outflowRowIdx + 1})
                 </td>
-                <td className="w-[2%] border-y pe-1 text-end">P</td>
+                <td className="w-[2%] border-y pe-1 text-end">{outflowRowIdx === 0 ? 'P' : ''}</td>
                 <td className="w-[13%] border text-end ">
                   {outflowRow[1].reduce((acc, row) => acc + Number(row.price) * row.quantity, 0)}
                 </td>
@@ -104,7 +115,12 @@ export default function MonthNotes({
               <td className="w-[85%] border border-r-0 font-bold">Total Outflows</td>
               <td className="w-[2%] border-y pe-1 text-end font-bold">P</td>
               <td className="w-[13%] border text-end font-bold" style={{ borderBottom: 'double' }}>
-                10.00
+                {sortedOutflowRowFS.reduce(
+                  (acc, outflowRow) =>
+                    acc +
+                    outflowRow[1].reduce((acc, row) => acc + Number(row.price) * row.quantity, 0),
+                  0
+                )}
               </td>
             </tr>
           </tbody>
@@ -125,14 +141,14 @@ export default function MonthNotes({
               </tr>
             </thead>
             <tbody>
-              {inflowCollectionRowFS?.map((collectionRow, index) => (
+              {inflowCollectionRowFS?.map((collectionRow, collectionRowIdx) => (
                 <tr key={collectionRow.id} className="text-center">
                   <td className=" border">{collectionRow.date.toISOString().split('T')[0]}</td>
                   <td className=" border">{collectionRow.name}</td>
                   <td className=" border">{collectionRow.ORNumber}</td>
                   <td className=" border">
                     <div className="flex justify-between px-1">
-                      <div>P</div>
+                      <div>{collectionRowIdx === 0 ? 'P' : ''}</div>
                       <div>{Number(collectionRow.amount)}</div>
                     </div>
                   </td>
@@ -149,7 +165,9 @@ export default function MonthNotes({
                 >
                   <div className="flex justify-between  px-1">
                     <div>P</div>
-                    <div>50.00</div>
+                    <div>
+                      {inflowCollectionRowFS?.reduce((acc, row) => acc + Number(row.amount), 0)}
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -171,7 +189,7 @@ export default function MonthNotes({
               </tr>
             </thead>
             <tbody>
-              {inflowIgpRowFS?.map((IgpRow, index) => (
+              {inflowIgpRowFS?.map((IgpRow, IgpRowIdx) => (
                 <tr key={IgpRow.id} className="text-center">
                   <td className=" border">{IgpRow.date.toISOString().split('T')[0]}</td>
                   <td className=" border">{IgpRow.quantity}</td>
@@ -181,7 +199,7 @@ export default function MonthNotes({
                   <td className=" border">{Number(IgpRow.price)}</td>
                   <td className=" border">
                     <div className="flex justify-between px-1">
-                      <div>P</div>
+                      <div>{IgpRowIdx === 0 ? 'P' : ' '}</div>
                       <div>{Number(IgpRow.price) * IgpRow.quantity}</div>
                     </div>
                   </td>
@@ -195,7 +213,12 @@ export default function MonthNotes({
                 <td className="border text-end font-bold" style={{ borderBottom: 'double' }}>
                   <div className="flex justify-between  px-1">
                     <div>P</div>
-                    <div>250.00</div>
+                    <div>
+                      {inflowIgpRowFS?.reduce(
+                        (acc, row) => acc + Number(row.price) * row.quantity,
+                        0
+                      )}
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -207,7 +230,7 @@ export default function MonthNotes({
         <div className="w-full text-left font-bold">Note 2: Expenses</div>
         <>
           {sortedOutflowRowFS.map((outflowRow, index) => (
-            <div className="w-full" key={outflowRow[0]}>
+            <div className="flex w-full flex-col gap-4" key={outflowRow[0]}>
               <div className="w-full ps-8 text-left font-bold capitalize">
                 Schedule {index + 1}: {outflowRow[0].toLowerCase().replace(/_/g, ' ')}
               </div>
@@ -223,7 +246,7 @@ export default function MonthNotes({
                   </tr>
                 </thead>
                 <tbody>
-                  {outflowRow[1].map((row, index) => (
+                  {outflowRow[1].map((row, outflowRowIdx) => (
                     <tr key={row.id} className="text-center">
                       <td className=" border">{row.date.toISOString().split('T')[0]}</td>
                       <td className=" border">{row.quantity}</td>
@@ -232,7 +255,7 @@ export default function MonthNotes({
                       <td className=" border">{Number(row.price)}</td>
                       <td className=" border">
                         <div className="flex justify-between px-1">
-                          <div>P</div>
+                          <div>{outflowRowIdx === 0 ? 'P' : ' '}</div>
                           <div>{Number(row.price) * row.quantity}</div>
                         </div>
                       </td>

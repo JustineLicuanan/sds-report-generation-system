@@ -1,16 +1,16 @@
 import { GeneratedARTemplate } from '@prisma/client';
-import { ChevronDown, ChevronUp, Eye, X } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { CustomDialog } from '~/components/custom-dialog';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
+import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { enumToSlug } from '~/utils/enum-to-slug';
+import { OrderBy } from '~/zod-schemas/utils';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -25,17 +25,33 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function AccomplishmentReportTemplatePage() {
   const router = useRouter();
-  const [isActive, setIsActive] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   const files = Object.values(GeneratedARTemplate)
     .filter(
-      (template) => !['EXCUSE_LETTER', 'INVITATION_LETTER', 'REQUEST_LETTER'].includes(template)
+      (template) =>
+        !['CALENDAR_OF_ACTIVITIES', 'INVITATION_LETTER', 'REQUEST_LETTER'].includes(template)
     )
     .map((template) => ({
       filePath: `/${enumToSlug(template)}`,
       title: template.replace(/_/g, ' '),
     }));
 
+  const [templateName, setTemplateName] = useState('');
+
+  const getGeneratedARQuery = api.shared.generatedAR.get.useQuery({
+    orderBy: { createdAt: OrderBy.DESC },
+  });
+  const generatedAR = getGeneratedARQuery?.data;
+
+  const totalPages = Math.ceil(files.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const visibleGeneratedAR = generatedAR?.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
   return (
     <>
       <Head>
@@ -52,126 +68,104 @@ export default function AccomplishmentReportTemplatePage() {
           <div className="flex flex-col gap-2">
             <div className="text-4xl font-bold">Generate Accomplishment Report</div>
           </div>
-          <div className="border-sm mx-auto my-0 mt-8 flex max-w-screen-lg items-center justify-between p-4 shadow-[0_1px_4px_0px_rgba(0,0,0,0.50)]">
-            <div className="font-bold">Generate your compiled AR</div>
-            <div className="flex gap-4">
+          <div className="my-2 mt-8 flex  items-center justify-around gap-4">
+            <div className="flex  items-center gap-4">
+              <select
+                className='className="border-sm relative flex items-center justify-between  gap-4 border border-input bg-transparent px-4 py-2'
+                onChange={(e) => setTemplateName(e.target.value)}
+                value={templateName}
+              >
+                <option value="" className="">
+                  Select an AR File
+                </option>
+                {files.map((file, index) => (
+                  <option key={index} value={file.title} className="">
+                    {file.title === 'cbl' ? 'Constitutional and By-Laws' : file.title}
+                  </option>
+                ))}
+              </select>
               <button
                 type="button"
                 onClick={() =>
-                  router.push(`${paths.ORGANIZATION}${paths.GENERATED_AR}${paths.PRINT}`)
+                  router.push(
+                    `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
+                      templateName.replace(/ /g, '_')
+                    )}${paths.CREATE}`
+                  )
                 }
-                className="rounded-sm bg-yellow p-1 active:scale-95"
+                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
-                Compile
+                Generate
               </button>
-              <button type="button" className="rounded-sm bg-yellow p-1 active:scale-95">
-                Download
+            </div>
+
+            <div className="flex  items-center gap-4">
+              <div className="">Signatory Information:</div>
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.POSITIONS}`)
+                }
+                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+              >
+                Setup
               </button>
             </div>
           </div>
-
-          <div className="mx-auto my-0 mt-8 max-w-screen-lg">
-            {files
-              .filter(
-                (file) => !(file.title === 'ACTIVITY PROPOSAL' || file.title === 'RESOLUTION')
-              )
-              .map((file, index) => (
-                <div
-                  key={index}
-                  className="relative my-1 flex items-center justify-between rounded-sm px-8 py-2 shadow-[0_1px_4px_0px_rgba(0,0,0,0.50)]"
+          <div className="mt-8">
+            {visibleGeneratedAR?.map((generated, index) => (
+              <div
+                key={index}
+                className="border-sm relative my-2 flex items-center justify-between gap-4 border border-input px-4 py-2"
+              >
+                <div className="w-1/2 text-center">
+                  <div className="text-2xl font-bold capitalize">
+                    {generated.template === 'CBL'
+                      ? 'Constitutional and By-Laws'
+                      : generated.template.replace(/_/g, ' ').toLowerCase()}
+                  </div>
+                  <div className="font-medium">
+                    Generated on {generated.createdAt.toISOString().split('T')[0]}
+                  </div>
+                </div>
+                <div className="flex w-1/2 flex-col gap-2">
+                  <div className="flex justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        void router.push(
+                          `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
+                            generated.template
+                          )}/${generated.id}${paths.EDIT}`
+                        );
+                      }}
+                      className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                    >
+                      View
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="my-4 flex justify-center gap-2">
+            {visibleGeneratedAR?.length === 0 ? (
+              <div className="text-2xl">There are no currently generated file.</div>
+            ) : visibleGeneratedAR?.length >= 8 ? (
+              Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`${
+                    currentPage === index + 1 ? 'bg-yellow' : ''
+                  } border border-input px-2 py-1`}
                 >
-                  <div className="text-lg font-bold">{file.title}</div>
-                  <div className="flex gap-4">
-                    <button
-                      type="button"
-                      className="rounded-sm bg-red p-1 text-white opacity-50 active:scale-95"
-                    >
-                      <X />
-                    </button>
-                    <button type="button" className="rounded-sm bg-yellow p-1 active:scale-95">
-                      Upload
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-sm bg-green p-1 text-white opacity-50 active:scale-95"
-                    >
-                      <Eye />
-                    </button>
-                  </div>
-                  <div className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red"></div>
-                </div>
-              ))}
-            {files
-              .filter((file) => file.title === 'ACTIVITY PROPOSAL' || file.title === 'RESOLUTION')
-              .map((file, index) => (
-                <div className="relative my-1 ">
-                  <div className="flex items-center justify-between rounded-sm px-8 py-2 shadow-[0_1px_4px_0px_rgba(0,0,0,0.50)]">
-                    <div className="text-lg font-bold">{file.title}</div>
-                    <div className="flex gap-4">
-                      <CustomDialog
-                        description="Are you sure you want to delete?"
-                        handleContinue={() => setIsActive(!isActive)}
-                      >
-                        <button
-                          type="button"
-                          className="rounded-sm bg-red p-1 text-white opacity-50 active:scale-95"
-                        >
-                          <X />
-                        </button>
-                      </CustomDialog>
-                      <button type="button" className="rounded-sm bg-yellow p-1 active:scale-95">
-                        Upload
-                      </button>
-                      <button
-                        type="button"
-                        className="rounded-sm bg-green p-1 text-white opacity-50 active:scale-95"
-                        onClick={() => setIsActive(!isActive)}
-                      >
-                        <Eye />
-                      </button>
-                    </div>
-                  </div>
-                  {isActive && (
-                    <div className="flex flex-col gap-2 px-4 py-2 shadow-[0_4px_10px_0px_rgba(0,0,0,0.20)]">
-                      <div className="flex items-center justify-between gap-4 rounded-sm border border-input px-2 py-1">
-                        <div className="font-bold">Resolution Title</div>
-                        <div className="flex flex-col gap-2">
-                          <button
-                            type="button"
-                            className="flex h-4 w-8 items-center justify-center rounded-sm bg-gray active:scale-95"
-                          >
-                            <ChevronUp />
-                          </button>
-                          <button
-                            type="button"
-                            className="flex h-4 w-8 items-center justify-center rounded-sm bg-gray active:scale-95"
-                          >
-                            <ChevronDown />
-                          </button>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between gap-4 rounded-sm border border-input px-2 py-1">
-                        <div className="font-bold">Resolution Title</div>
-                        <div className="flex flex-col gap-2">
-                          <button
-                            type="button"
-                            className="flex h-4 w-8 items-center justify-center rounded-sm bg-gray active:scale-95"
-                          >
-                            <ChevronUp />
-                          </button>
-                          <button
-                            type="button"
-                            className="flex h-4 w-8 items-center justify-center rounded-sm bg-gray active:scale-95"
-                          >
-                            <ChevronDown />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <div className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red"></div>
-                </div>
-              ))}
+                  {index + 1}
+                </button>
+              ))
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </main>
