@@ -1,9 +1,11 @@
 import { ARUploadContentType, SemReportStatus } from '@prisma/client';
-import { Ban, Check, Download, Eye, FileText, FileUp, Layers, Trash2 } from 'lucide-react';
+import { Ban, Check, Download, Eye, FileText, FileUp, Layers, Loader2, Trash2 } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { ARMultipleUploads } from '~/components/ar-multiple-uploads';
 import { ARSingleUpload } from '~/components/ar-single-upload';
 import { CustomDialog } from '~/components/custom-dialog';
@@ -14,6 +16,7 @@ import { Separator } from '~/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/components/ui/tooltip';
 import { useToast } from '~/components/ui/use-toast';
 import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import { useReportCompiler } from '~/hooks/use-report-compiler';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -48,6 +51,9 @@ export default function AccomplishmentReport() {
   const getUploads = api.shared.ARUpload.get.useQuery({ current: true });
   const uploads = getUploads.data;
   const sortedUploads = parseARUploads(uploads ?? []);
+
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { compileAR } = useReportCompiler();
 
   const statusTextColor =
     AR?.status === SemReportStatus.DRAFT || AR?.status === SemReportStatus.TURNED_IN
@@ -109,6 +115,23 @@ export default function AccomplishmentReport() {
     },
   });
 
+  async function handleGenerate() {
+    try {
+      setIsGenerating(() => true);
+      const result = await compileAR(uploads ?? []);
+
+      updateAR.mutate({ compiled: result?.secure_url, compiledId: result?.public_id });
+      setIsGenerating(() => false);
+    } catch (err) {
+      setIsGenerating(() => false);
+      toast({
+        variant: 'destructive',
+        title: '❌ Internal Server Error',
+        description: 'Report generation failed.',
+      });
+    }
+  }
+
   return (
     <>
       <Head>
@@ -152,31 +175,36 @@ export default function AccomplishmentReport() {
               <div className="flex items-center justify-end gap-2">
                 <TooltipProvider delayDuration={0} disableHoverableContent>
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <CustomDialog
-                        handleContinue={() => alert('AR has been generated.')}
-                        emoji="🚨"
-                        description={
-                          <>
-                            The report generation may{' '}
-                            <span className="text-destructive">TAKE A LONG TIME</span> depending on
-                            the report size. Do you want to proceed?
-                          </>
-                        }
-                      >
+                    <CustomDialog
+                      handleContinue={handleGenerate}
+                      emoji="🚨"
+                      description={
+                        <>
+                          The report generation may{' '}
+                          <span className="text-destructive">TAKE A LONG TIME</span> depending on
+                          the report size. Do you want to proceed?
+                        </>
+                      }
+                    >
+                      <TooltipTrigger asChild>
                         <Button
                           variant="c-secondary"
                           size="icon"
                           disabled={
                             AR?.status === SemReportStatus.TURNED_IN ||
                             AR?.status === SemReportStatus.COMPLETED ||
-                            (uploads?.length ?? 0) < 1
+                            (uploads?.length ?? 0) < 1 ||
+                            isGenerating
                           }
                         >
-                          <Layers className="h-4 w-4" />
+                          {isGenerating ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Layers className="h-4 w-4" />
+                          )}
                         </Button>
-                      </CustomDialog>
-                    </TooltipTrigger>
+                      </TooltipTrigger>
+                    </CustomDialog>
 
                     <TooltipContent side="top">
                       <p>Generate</p>
@@ -184,27 +212,27 @@ export default function AccomplishmentReport() {
                   </Tooltip>
 
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <UploadButton
-                        className={buttonVariants({ variant: 'c-secondary', size: 'icon' })}
-                        folder="accomplishment-reports"
-                        resourceType={ResourceType.PDF}
-                        onSuccess={
-                          ((result) => {
-                            updateAR.mutate({
-                              compiled: result.info?.secure_url,
-                              compiledId: result.info?.public_id,
-                            });
-                          }) satisfies OnSuccessUpload
-                        }
-                        disabled={
-                          AR?.status === SemReportStatus.TURNED_IN ||
-                          AR?.status === SemReportStatus.COMPLETED
-                        }
-                      >
+                    <UploadButton
+                      className={buttonVariants({ variant: 'c-secondary', size: 'icon' })}
+                      folder="accomplishment-reports"
+                      resourceType={ResourceType.PDF}
+                      onSuccess={
+                        ((result) => {
+                          updateAR.mutate({
+                            compiled: result.info?.secure_url,
+                            compiledId: result.info?.public_id,
+                          });
+                        }) satisfies OnSuccessUpload
+                      }
+                      disabled={
+                        AR?.status === SemReportStatus.TURNED_IN ||
+                        AR?.status === SemReportStatus.COMPLETED
+                      }
+                    >
+                      <TooltipTrigger asChild>
                         <FileUp className="h-4 w-4" />
-                      </UploadButton>
-                    </TooltipTrigger>
+                      </TooltipTrigger>
+                    </UploadButton>
 
                     <TooltipContent side="top">
                       <p>Upload</p>
@@ -267,9 +295,20 @@ export default function AccomplishmentReport() {
 
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="outline" size="icon" disabled={!AR?.compiled}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                      {AR?.compiled ? (
+                        <Link
+                          href={AR.compiled}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={buttonVariants({ variant: 'outline', size: 'icon' })}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Link>
+                      ) : (
+                        <Button variant="outline" size="icon" disabled>
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      )}
                     </TooltipTrigger>
 
                     <TooltipContent side="top">
