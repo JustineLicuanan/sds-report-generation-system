@@ -187,7 +187,7 @@ export default function AccomplishmentReport() {
                     <TooltipTrigger asChild>
                       <UploadButton
                         className={buttonVariants({ variant: 'c-secondary', size: 'icon' })}
-                        folder="compiled-ar"
+                        folder="accomplishment-reports"
                         resourceType={ResourceType.PDF}
                         onSuccess={
                           ((result) => {

@@ -131,7 +131,7 @@ export default function FinancialStatementPage() {
 
                 <UploadButton
                   className={cn(buttonVariants({ variant: 'c-secondary', size: 'sm' }), 'h-auto')}
-                  folder="compiled-fs"
+                  folder="financial-statements"
                   resourceType={ResourceType.PDF}
                   onSuccess={
                     ((result) => {
