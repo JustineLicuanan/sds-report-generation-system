@@ -4,6 +4,7 @@ import { CalendarCheck2, CalendarDays } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import AdminNavBar from '~/components/admin-navigation-bar';
@@ -222,19 +223,31 @@ export default function AdminDashboardPage() {
                 <CalendarCheck2 />
               </div>
               <div className="my-1 h-[23vh] overflow-auto ">
-                {report
-                  .filter((report) => report.due !== null)
-                  .map((report, index) => (
-                    <div
-                      key={index}
-                      className="border-sm my-2 flex flex-col items-center gap-2 border border-input p-2"
-                    >
-                      <div className="font-medium">
-                        {report.createdBy.organizationName} - {report.createdBy.name}
+                {report.length ? (
+                  report
+                    .filter((report) => report.due !== null)
+                    .map((report, index) => (
+                      <div
+                        key={index}
+                        className="border-sm my-2 flex flex-col items-center gap-2 border border-input p-2"
+                      >
+                        <div className="font-medium">
+                          {report.createdBy.organizationName} - {report.createdBy.name}
+                        </div>
+                        <div className="text-xl font-bold">{report.due?.toLocaleString()}</div>
                       </div>
-                      <div className="text-xl font-bold">{report.due?.toLocaleString()}</div>
-                    </div>
-                  ))}
+                    ))
+                ) : (
+                  <div className="flex flex-col items-center ">
+                    <div className="text-lg font-medium">No appointments</div>
+                    <Image
+                      src="/no_appointment_icon.svg"
+                      alt="No Appointment"
+                      width={140}
+                      height={100}
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex justify-end  pt-2 text-xs">

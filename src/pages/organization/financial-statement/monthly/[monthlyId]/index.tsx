@@ -246,14 +246,16 @@ export default function ModifyFinancialStatementPage() {
           <div className="mb-4 text-center text-4xl font-bold">
             {getMonthName(monthly?.month as number)} {monthly?.year}
           </div>
-          <div className="mx-auto my-0 flex max-w-screen-lg justify-end gap-5 rounded-sm px-4 py-2">
-            <CSVImportButton className="m-4 p-4" setFlowImportData={setFlowImportData} />
-            <button
-              className="rounded bg-c-primary px-4 py-2 text-c-primary-foreground hover:bg-c-primary/90"
-              onClick={() => importFlows.mutate(flowImportData)}
-            >
-              Import
-            </button>
+          <div className="mx-auto my-0 flex max-w-screen-lg justify-between gap-5 rounded-sm px-4 py-2">
+            <div className="flex items-center gap-4">
+              <CSVImportButton className="item-center flex" setFlowImportData={setFlowImportData} />
+              <button
+                className="rounded-sm bg-yellow px-4 py-1  active:scale-95"
+                onClick={() => importFlows.mutate(flowImportData)}
+              >
+                Import
+              </button>
+            </div>
             <form
               className="flex  items-center gap-4"
               onSubmit={
@@ -301,7 +303,7 @@ export default function ModifyFinancialStatementPage() {
 
               <button
                 type="submit"
-                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                className="rounded-sm border border-yellow bg-yellow px-4 py-1 active:scale-95"
               >
                 Generate
               </button>

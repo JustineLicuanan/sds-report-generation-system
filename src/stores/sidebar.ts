@@ -29,6 +29,17 @@ export const useSidebarStore = create<SidebarState>((set) => ({
     { Icon: LayoutDashboard, name: 'Dashboard', href: paths.ADMIN },
     { Icon: CalendarCheck2, name: 'Appointments', href: `${paths.ADMIN}${paths.APPOINTMENTS}` },
     { Icon: Users, name: 'Organizations', href: `${paths.ADMIN}${paths.ORGANIZATIONS}` },
+
+    {
+      Icon: FileText,
+      name: 'Accomplishment Report',
+      href: `${paths.ADMIN}${paths.ACCOMPLISHMENT_REPORT}`,
+    },
+    {
+      Icon: FileSpreadsheet,
+      name: 'Financial Statement',
+      href: `${paths.ADMIN}${paths.FINANCIAL_STATEMENT}`,
+    },
     { Icon: Megaphone, name: 'Announcements', href: `${paths.ADMIN}${paths.ANNOUNCEMENTS}` },
     {
       Icon: History,

@@ -1,5 +1,6 @@
 import { FinancialStatement, MonthlyFS, ReportSemester } from '@prisma/client';
 import { inferRouterOutputs } from '@trpc/server';
+import { Printer } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -123,6 +124,13 @@ export default function CompiledFS() {
           </Fragment>
         );
       })}
+      <button
+        type="button"
+        onClick={() => window.print()}
+        className="fixed bottom-8 right-8 rounded-full bg-yellow p-4 text-6xl active:scale-95 print:hidden"
+      >
+        <Printer />
+      </button>
     </>
   );
 }
