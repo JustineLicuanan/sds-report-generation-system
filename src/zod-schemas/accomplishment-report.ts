@@ -68,9 +68,9 @@ const sharedSchemas = {
       .array()
       .transform((arg) => JSON.stringify(arg))
       .optional(),
+    compiled: z.string().url('File is required').nullable().optional(),
+    compiledId: z.string().nullable().optional(),
   }),
-
-  turnIn: z.object({ compiled: z.string().url('File is required'), compiledId: z.string() }),
 };
 
 export const accomplishmentReportSchemas = {

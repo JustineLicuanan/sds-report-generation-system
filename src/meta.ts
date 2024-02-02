@@ -34,7 +34,9 @@ export const paths = {
   POSITIONS: '/positions',
   SEMESTER: '/semester',
 
+  ACCOMPLISHMENT_REPORT: '/accomplishment-report',
   GENERATED_AR: '/generated-ar',
+
   FINANCIAL_STATEMENT: '/financial-statement',
 
   MODIFY_FINANCIAL_STATEMENT: '/modify',

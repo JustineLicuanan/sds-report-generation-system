@@ -57,10 +57,10 @@ export const accomplishmentReportRouter = createTRPCRouter({
     });
   }),
 
-  turnIn: protectedProcedure.input(schemas.shared.AR.turnIn).mutation(({ ctx, input }) => {
+  turnIn: protectedProcedure.mutation(({ ctx }) => {
     return ctx.db.accomplishmentReport.updateMany({
       where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
-      data: { ...input, status: SemReportStatus.TURNED_IN },
+      data: { status: SemReportStatus.TURNED_IN },
     });
   }),
 

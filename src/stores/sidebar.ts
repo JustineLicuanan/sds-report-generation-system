@@ -1,4 +1,5 @@
 import {
+  BookDashed,
   CalendarCheck2,
   File,
   FileSpreadsheet,
@@ -47,9 +48,14 @@ export const useSidebarStore = create<SidebarState>((set) => ({
     { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MY_ORGANIZATION}` },
     { Icon: File, name: 'My Reports', href: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}` },
     {
+      Icon: BookDashed,
+      name: 'AR Templates',
+      href: `${paths.ORGANIZATION}${paths.GENERATED_AR}`,
+    },
+    {
       Icon: FileText,
       name: 'Accomplishment Report',
-      href: `${paths.ORGANIZATION}${paths.GENERATED_AR}`,
+      href: `${paths.ORGANIZATION}${paths.ACCOMPLISHMENT_REPORT}`,
     },
     {
       Icon: FileSpreadsheet,

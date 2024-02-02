@@ -15,7 +15,7 @@ type Props = {
   children: React.ReactNode;
   emoji?: string;
   title?: string;
-  description: string;
+  description: React.ReactNode;
 };
 
 export function CustomDialog({
