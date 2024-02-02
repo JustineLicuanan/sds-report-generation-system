@@ -181,8 +181,8 @@ export default function AccomplishmentReport() {
                       description={
                         <>
                           The report generation may{' '}
-                          <span className="text-destructive">TAKE A LONG TIME</span> depending on
-                          the report size. Do you want to proceed?
+                          <span className="font-semibold text-destructive">TAKE A LONG TIME</span>{' '}
+                          depending on the report size. Do you want to proceed?
                         </>
                       }
                     >
