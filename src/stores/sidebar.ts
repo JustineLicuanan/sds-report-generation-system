@@ -49,7 +49,7 @@ export const useSidebarStore = create<SidebarState>((set) => ({
     {
       Icon: FileText,
       name: 'Accomplishment Report',
-      href: `${paths.ORGANIZATION}/${paths.GENERATED_AR}`,
+      href: `${paths.ORGANIZATION}${paths.GENERATED_AR}`,
     },
     {
       Icon: FileSpreadsheet,

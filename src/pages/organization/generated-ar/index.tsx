@@ -151,7 +151,7 @@ export default function AccomplishmentReportTemplatePage() {
           <div className="my-4 flex justify-center gap-2">
             {visibleGeneratedAR?.length === 0 ? (
               <div className="text-2xl">There are no currently generated file.</div>
-            ) : visibleGeneratedAR?.length >= 8 ? (
+            ) : (visibleGeneratedAR?.length ?? 0) >= 8 ? (
               Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index + 1}
