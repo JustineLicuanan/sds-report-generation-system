@@ -1,12 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { SemReportStatus } from '@prisma/client';
+import { Trash2 } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { CustomDialog } from '~/components/custom-dialog';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
+import { Button, buttonVariants } from '~/components/ui/button';
 import { useToast } from '~/components/ui/use-toast';
+import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
+import { cn } from '~/lib/utils';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -41,6 +48,15 @@ export default function FinancialStatementPage() {
   const getFSMonthQuery = api.shared.monthlyFS.get.useQuery();
   const FSMonth = getFSMonthQuery?.data;
 
+  const statusTextColor =
+    FS?.status === SemReportStatus.DRAFT || FS?.status === SemReportStatus.TURNED_IN
+      ? 'text-c-secondary'
+      : FS?.status === SemReportStatus.COMPLETED
+      ? 'text-c-primary'
+      : FS?.status === SemReportStatus.FOR_REVISION
+      ? 'text-destructive'
+      : '';
+
   const updateFSForm = useForm<UpdateFSInputs>({
     resolver: zodResolver(schemas.shared.FS.update),
     // These values are for the initial data of input fields, mostly used for 'edit/update' forms like this one
@@ -50,6 +66,20 @@ export default function FinancialStatementPage() {
   const updateFS = api.shared.FS.update.useMutation({
     onSuccess: async () => {
       toast({ variant: 'c-primary', description: '✔️ FS updated successfully.' });
+      await utils.shared.FS.invalidate();
+    },
+  });
+
+  const turnInFS = api.shared.FS.turnIn.useMutation({
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ FS has been turned in.' });
+      await utils.shared.FS.invalidate();
+    },
+  });
+
+  const cancelFS = api.shared.FS.cancel.useMutation({
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ FS has been cancelled.' });
       await utils.shared.FS.invalidate();
     },
   });
@@ -67,7 +97,10 @@ export default function FinancialStatementPage() {
         {/* SIDE BAR*/}
         <OrganizationSideBarMenu />
         <div id="main-content" className="mx-4 my-4  w-full  gap-8">
-          <div className="mb-4 text-center text-4xl font-bold">Financial Statement</div>
+          <div className="mb-4 text-center text-4xl font-bold">
+            Financial Statement &ndash;{' '}
+            <span className={statusTextColor}>{FS?.status.replace(/_/g, ' ')}</span>
+          </div>
 
           <div className="grid grid-cols-4 grid-rows-2 gap-4">
             <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
@@ -77,21 +110,69 @@ export default function FinancialStatementPage() {
                 organization&apos;s financial status and transactions.
               </div>
               <div className="flex gap-2">
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                <CustomDialog
+                  handleContinue={() => updateFS.mutate({ compiled: null, compiledId: null })}
+                  emoji="🚨"
+                  description="This action cannot be undone. This will permanently delete your generated financial statement from our servers."
                 >
-                  Done
-                </button>
-                <button
-                  type="button"
-                  className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="h-auto"
+                    disabled={
+                      FS?.status === SemReportStatus.TURNED_IN ||
+                      FS?.status === SemReportStatus.COMPLETED ||
+                      !FS?.compiled
+                    }
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </CustomDialog>
+
+                <UploadButton
+                  className={cn(buttonVariants({ variant: 'c-secondary', size: 'sm' }), 'h-auto')}
+                  folder="compiled-fs"
+                  resourceType={ResourceType.PDF}
+                  onSuccess={
+                    ((result) => {
+                      updateFS.mutate({
+                        compiled: result.info?.secure_url,
+                        compiledId: result.info?.public_id,
+                      });
+                    }) satisfies OnSuccessUpload
+                  }
+                  disabled={
+                    FS?.status === SemReportStatus.TURNED_IN ||
+                    FS?.status === SemReportStatus.COMPLETED
+                  }
                 >
                   Upload
-                </button>
+                </UploadButton>
+
+                {FS?.status !== SemReportStatus.TURNED_IN ? (
+                  <Button
+                    type="button"
+                    variant="c-primary"
+                    size="sm"
+                    className="h-auto"
+                    onClick={() => turnInFS.mutate()}
+                    disabled={!FS?.compiled || FS?.status === SemReportStatus.COMPLETED}
+                  >
+                    Turn in
+                  </Button>
+                ) : (
+                  <CustomDialog
+                    handleContinue={() => cancelFS.mutate()}
+                    description="This action will cancel your financial statement submission."
+                  >
+                    <Button type="button" variant="destructive" size="sm" className="h-auto">
+                      Cancel
+                    </Button>
+                  </CustomDialog>
+                )}
               </div>
             </div>
-            
+
             <div className="col-span-2 row-span-1 flex flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="text-center text-lg font-bold">Organization and School Positions</div>
               <div className="flex flex-col items-center gap-2">
@@ -109,20 +190,19 @@ export default function FinancialStatementPage() {
             </div>
 
             <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-              <div className="text-lg font-bold">Compile Financial Statement</div>
+              <div className="text-lg font-bold">Generate Financial Statement</div>
               <div className="text-center font-medium">
-                Compile Financial Statement for this semester
+                Generate Financial Statement for this semester
               </div>
               <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() =>
-                    router.push(`${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.PRINT}`)
-                  }
+                <Link
+                  href={`${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.PRINT}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                 >
-                  Compile
-                </button>
+                  Generate
+                </Link>
               </div>
             </div>
 

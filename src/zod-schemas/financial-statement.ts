@@ -66,9 +66,9 @@ const sharedSchemas = {
       .transform((arg) => parseFloat(arg).toFixed(2))
       .or(z.number())
       .optional(),
+    compiled: z.string().url('File is required').nullable().optional(),
+    compiledId: z.string().nullable().optional(),
   }),
-
-  turnIn: z.object({ compiled: z.string().url('File is required'), compiledId: z.string() }),
 };
 
 export const financialStatementSchemas = {

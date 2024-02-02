@@ -46,10 +46,10 @@ export const financialStatementRouter = createTRPCRouter({
     });
   }),
 
-  turnIn: protectedProcedure.input(schemas.shared.FS.turnIn).mutation(({ ctx, input }) => {
+  turnIn: protectedProcedure.mutation(({ ctx }) => {
     return ctx.db.financialStatement.updateMany({
       where: { archivedAt: '', organizationId: ctx.session.user.organizationId },
-      data: { ...input, status: SemReportStatus.TURNED_IN },
+      data: { status: SemReportStatus.TURNED_IN },
     });
   }),
 
