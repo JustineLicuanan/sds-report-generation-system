@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebar from '~/components/admin-side-bar-menu';
+import { Separator } from '~/components/ui/separator';
 import { useToast } from '~/components/ui/use-toast';
 import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
@@ -127,10 +128,13 @@ export default function AdminFinancialStatementPage() {
               ))
             ) : (
               <div className="w-full text-center text-2xl font-bold">
-                There are no currently <span className="font-bold text-green">turned in</span>
+                There are currently no <span className="font-bold text-green">turned in</span>{' '}
+                financial statements.
               </div>
             )}
           </div>
+
+          <Separator className="my-4" />
 
           <div className="mt-8 ">
             {completedFSs?.map((FS, FSIdx) => (

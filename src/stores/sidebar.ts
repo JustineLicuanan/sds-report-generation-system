@@ -4,7 +4,6 @@ import {
   File,
   FileSpreadsheet,
   FileText,
-  Fingerprint,
   History,
   LayoutDashboard,
   Megaphone,
@@ -41,12 +40,12 @@ export const useSidebarStore = create<SidebarState>((set) => ({
       href: `${paths.ADMIN}${paths.FINANCIAL_STATEMENT}`,
     },
     { Icon: Megaphone, name: 'Announcements', href: `${paths.ADMIN}${paths.ANNOUNCEMENTS}` },
-    {
-      Icon: History,
-      name: 'Report Logs',
-      href: `${paths.ADMIN}${paths.ORGANIZATION_REPORTS}${paths.LOGS}`,
-    },
-    { Icon: Fingerprint, name: 'Authentication Logs', href: `${paths.ADMIN}${paths.AUTH_LOGS}` },
+    // {
+    //   Icon: History,
+    //   name: 'Report Logs',
+    //   href: `${paths.ADMIN}${paths.ORGANIZATION_REPORTS}${paths.LOGS}`,
+    // },
+    { Icon: History, name: 'Authentication Logs', href: `${paths.ADMIN}${paths.AUTH_LOGS}` },
   ],
 
   organizationSidebarLinks: [
