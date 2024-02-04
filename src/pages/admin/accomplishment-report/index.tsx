@@ -59,10 +59,81 @@ export default function AdminAccomplishmentReportPage() {
         <AdminSidebar />
         <div id="main-content" className="mx-4 my-4  w-full  gap-8">
           <div className="flex flex-col gap-2">
-            <div className="text-4xl font-bold">Financial Statement</div>
+            <div className="text-4xl font-bold">Accomplishment Reports</div>
           </div>
           <div className="mt-8">
-            {ARs?.map((AR, ARIdx) => (
+            {(turnedInARs ?? []).length > 0 ? (
+              turnedInARs?.map((AR, ARIdx) => (
+                <div
+                  key={ARIdx}
+                  className="flex w-full justify-between rounded-sm border border-input px-4 py-4"
+                >
+                  <div className="text-xl font-bold">{AR?.organization.name}</div>
+                  <div className="item-center flex gap-8">
+                    <div className="item-center flex gap-16">
+                      <div className={`${statusTextColor} text-lg font-bold`}>
+                        {AR.status.replace(/_/g, ' ')}
+                      </div>
+                      <div className="item-center flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateARStatus.mutate({
+                              id: AR.id,
+                              status: SemReportStatus.FOR_REVISION,
+                            });
+                            toast({
+                              variant: 'c-primary',
+                              description: '✔️ Status has been updated.',
+                            });
+                          }}
+                          className="rounded-sm bg-red p-1 text-white active:scale-95"
+                        >
+                          <FileX2 />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            updateARStatus.mutate({ id: AR.id, status: SemReportStatus.COMPLETED });
+                            toast({
+                              variant: 'c-primary',
+                              description: '✔️ Status has been updated.',
+                            });
+                          }}
+                          className="rounded-sm bg-green p-1 text-white active:scale-95"
+                        >
+                          <FileCheck2 />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => window.open(`${AR.compiled}`, '_blank')}
+                        className="rounded-sm bg-yellow p-1 active:scale-95"
+                      >
+                        <Eye />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => window.open(`${AR.compiled}`, '_blank')}
+                        className="rounded-sm bg-gray p-1 active:scale-95"
+                      >
+                        <Download />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="w-full text-center text-2xl font-bold">
+                There are no currently <span className="font-bold text-green">turned in</span>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-8 ">
+            {completedARs?.map((AR, ARIdx) => (
               <div
                 key={ARIdx}
                 className="flex w-full justify-between rounded-sm border border-input px-4 py-4"
@@ -72,37 +143,6 @@ export default function AdminAccomplishmentReportPage() {
                   <div className="item-center flex gap-16">
                     <div className={`${statusTextColor} text-lg font-bold`}>
                       {AR.status.replace(/_/g, ' ')}
-                    </div>
-                    <div className="item-center flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          updateARStatus.mutate({
-                            id: AR.id,
-                            status: SemReportStatus.FOR_REVISION,
-                          });
-                          toast({
-                            variant: 'c-primary',
-                            description: '✔️ Status has been updated.',
-                          });
-                        }}
-                        className="rounded-sm bg-red p-1 text-white active:scale-95"
-                      >
-                        <FileX2 />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          updateARStatus.mutate({ id: AR.id, status: SemReportStatus.COMPLETED });
-                          toast({
-                            variant: 'c-primary',
-                            description: '✔️ Status has been updated.',
-                          });
-                        }}
-                        className="rounded-sm bg-green p-1 text-white active:scale-95"
-                      >
-                        <FileCheck2 />
-                      </button>
                     </div>
                   </div>
                   <div className="flex gap-2">
