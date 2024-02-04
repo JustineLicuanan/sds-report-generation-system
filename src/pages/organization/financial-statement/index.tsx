@@ -87,6 +87,13 @@ export default function FinancialStatementPage() {
     },
   });
 
+  // const deleteMonthlyFS = api.shared.monthlyFS.delete.useMutation({
+  //   onSuccess: async () => {
+  //     toast({ variant: 'c-primary', description: '✔️ Month deleted successfully.' });
+  //     await utils.shared.monthlyFS.invalidate();
+  //   },
+  // });
+
   return (
     <>
       <Head>
@@ -292,19 +299,34 @@ export default function FinancialStatementPage() {
                 key={month.id}
                 className="border-sm my-2 flex items-center justify-between gap-2 border border-input"
               >
-                <div className="flex w-full items-center justify-between gap-2  p-2">
+                <div className="flex w-full items-center justify-between gap-2 p-2">
                   <div className="text-lg font-bold">Month of {getMonthName(month.month)}</div>
-                  <button
-                    type="button"
-                    className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-                    onClick={() =>
-                      router.push(
-                        `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.MONTHLY}/${month.id}`
-                      )
-                    }
-                  >
-                    Modify
-                  </button>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                      onClick={() => {
+                        router.push(
+                          `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.MONTHLY}/${month.id}`
+                        );
+                      }}
+                    >
+                      Modify
+                    </button>
+
+                    {/* <CustomDialog
+                      handleContinue={() => deleteMonthlyFS.mutate({ id: month.id })}
+                      description="This action cannot be undone. This will permanently delete the monthly statement from our servers."
+                    >
+                      <button
+                        type="button"
+                        className="rounded-sm border border-destructive bg-destructive px-3 text-destructive-foreground active:scale-95"
+                      >
+                        Delete
+                      </button>
+                    </CustomDialog> */}
+                  </div>
                 </div>
               </div>
             ))}

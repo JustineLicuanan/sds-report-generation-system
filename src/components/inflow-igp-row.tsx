@@ -3,6 +3,7 @@ import { InflowIgpRowFS } from '@prisma/client';
 import { Check, Eye, Save, Trash2, X } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { CustomDialog } from '~/components/custom-dialog';
 import PreviewImage from '~/components/preview-image';
 import { useToast } from '~/components/ui/use-toast';
 import { OnSuccessUpload, ResourceType, UploadButton } from '~/components/upload-button';
@@ -163,13 +164,18 @@ export default function InflowIgpRow({ inflowIgpRow }: { inflowIgpRow: InflowIgp
           </div>
         </div>
         <div className="flex w-[10%] justify-center gap-2 border">
-          <button
-            type="button"
-            onClick={() => deleteInflowIgpRowFS.mutate({ id: inflowIgpRow.id })}
-            className="my-1 rounded-sm border border-red bg-red p-1 text-white active:scale-95"
+          <CustomDialog
+            handleContinue={() => deleteInflowIgpRowFS.mutate({ id: inflowIgpRow.id })}
+            description="This action cannot be undone. This will permanently delete the row from our servers."
           >
-            <Trash2 />
-          </button>
+            <button
+              type="button"
+              className="my-1 rounded-sm border border-red bg-red p-1 text-white active:scale-95"
+            >
+              <Trash2 />
+            </button>
+          </CustomDialog>
+
           <button
             type="submit"
             className="my-1 rounded-sm border border-gray bg-gray p-1 active:scale-95"

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { type z } from 'zod';
 import { CSVImportButton, ImportFlowsInputs } from '~/components/csv-import-button';
+import { CustomDialog } from '~/components/custom-dialog';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import { useToast } from '~/components/ui/use-toast';
@@ -16,7 +17,6 @@ import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { getMonthName } from '~/utils/get-month-name';
-import { sortOutflowFS } from '~/utils/sort-outflow-fs';
 import { schemas } from '~/zod-schemas';
 
 export const getServerSideProps = (async (ctx) => {
@@ -64,7 +64,6 @@ export default function ModifyFinancialStatementPage() {
     where: { monthlyId: monthlyId as string },
   });
   const outflowFS = getOutflowFSQuery?.data;
-  const sortedOutflowFs = Object.entries(sortOutflowFS(outflowFS ?? []));
 
   const createInflowCollectionFSForm = useForm<CreateInflowCollectionFSInputs>({
     resolver: zodResolver(schemas.shared.inflowCollectionFS.create),
@@ -352,13 +351,20 @@ export default function ModifyFinancialStatementPage() {
                         >
                           <Pencil />
                         </button>
-                        <button
-                          type="button"
-                          className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
-                          onClick={() => deleteInflowCollection.mutate({ id: collectionFS.id })}
+
+                        <CustomDialog
+                          handleContinue={() => {
+                            deleteInflowCollection.mutate({ id: collectionFS.id });
+                          }}
+                          description="This action cannot be undone. This will permanently delete the inflow from our servers."
                         >
-                          <Trash2 />
-                        </button>
+                          <button
+                            type="button"
+                            className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
+                          >
+                            <Trash2 />
+                          </button>
+                        </CustomDialog>
                       </div>
                     </td>
                   </tr>
@@ -385,13 +391,18 @@ export default function ModifyFinancialStatementPage() {
                         >
                           <Pencil />
                         </button>
-                        <button
-                          type="button"
-                          className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
-                          onClick={() => deleteInflowIgp.mutate({ id: IgpFS.id })}
+
+                        <CustomDialog
+                          handleContinue={() => deleteInflowIgp.mutate({ id: IgpFS.id })}
+                          description="This action cannot be undone. This will permanently delete the inflow from our servers."
                         >
-                          <Trash2 />
-                        </button>
+                          <button
+                            type="button"
+                            className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
+                          >
+                            <Trash2 />
+                          </button>
+                        </CustomDialog>
                       </div>
                     </td>
                   </tr>
@@ -420,13 +431,18 @@ export default function ModifyFinancialStatementPage() {
                         >
                           <Pencil />
                         </button>
-                        <button
-                          type="button"
-                          className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
-                          onClick={() => deleteOutflow.mutate({ id: outflow.id })}
+
+                        <CustomDialog
+                          handleContinue={() => deleteOutflow.mutate({ id: outflow.id })}
+                          description="This action cannot be undone. This will permanently delete the outflow from our servers."
                         >
-                          <Trash2 />
-                        </button>
+                          <button
+                            type="button"
+                            className="rounded-sm border border-red bg-red p-1 text-white active:scale-95"
+                          >
+                            <Trash2 />
+                          </button>
+                        </CustomDialog>
                       </div>
                     </td>
                   </tr>

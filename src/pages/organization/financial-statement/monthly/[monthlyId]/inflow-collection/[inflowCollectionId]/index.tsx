@@ -15,6 +15,7 @@ import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { getMonthName } from '~/utils/get-month-name';
 import { schemas } from '~/zod-schemas';
+import { OrderBy } from '~/zod-schemas/utils';
 
 type CreateInflowCollectionRowFSInputs = z.infer<
   typeof schemas.shared.inflowCollectionRowFS.create
@@ -43,12 +44,11 @@ export default function AddInflowFinancialStatementPage() {
   });
   const monthly = getMonthNameQuery?.data?.[0];
 
-  const getInflowCollectionFSQuery = api.shared.inflowCollectionFS.get.useQuery({
-    where: { id: inflowCollectionId as string },
-    include: { rows: true },
+  const getInflowCollectionRowFS = api.shared.inflowCollectionRowFS.get.useQuery({
+    where: { inflowCollectionId: inflowCollectionId as string },
+    orderBy: { date: OrderBy.ASC },
   });
-  const inflowCollectionFS = getInflowCollectionFSQuery?.data?.[0];
-  const inflowCollectionRowFS = inflowCollectionFS?.rows;
+  const inflowCollectionRowFS = getInflowCollectionRowFS?.data;
 
   const getReportSemQuery = api.shared.reportSemester.get.useQuery();
   const reportSem = getReportSemQuery?.data;
@@ -125,12 +125,6 @@ export default function AddInflowFinancialStatementPage() {
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Add row
-              </button>
-              <button
-                type="button"
-                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-              >
-                Done
               </button>
             </form>
             <div>

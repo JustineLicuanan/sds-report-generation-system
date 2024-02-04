@@ -15,6 +15,7 @@ import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { getMonthName } from '~/utils/get-month-name';
 import { schemas } from '~/zod-schemas';
+import { OrderBy } from '~/zod-schemas/utils';
 
 type CreateOutflowRowFSInputs = z.infer<typeof schemas.shared.outflowRowFS.create>;
 
@@ -43,10 +44,14 @@ export default function OutflowFinancialStatementPage() {
 
   const getOutflowFSQuery = api.shared.outflowFS.get.useQuery({
     where: { id: outflowId as string },
-    include: { rows: true },
   });
   const outflowFS = getOutflowFSQuery?.data?.[0];
-  const outflowRowFS = outflowFS?.rows;
+
+  const getOutflowRowFSQuery = api.shared.outflowRowFS.get.useQuery({
+    where: { outflowId: outflowId as string },
+    orderBy: { date: OrderBy.ASC },
+  });
+  const outflowRowFS = getOutflowRowFSQuery?.data;
 
   const createOutflowRowFSForm = useForm<CreateOutflowRowFSInputs>({
     resolver: zodResolver(schemas.shared.outflowRowFS.create),
@@ -123,12 +128,6 @@ export default function OutflowFinancialStatementPage() {
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Add row
-              </button>
-              <button
-                type="button"
-                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-              >
-                Done
               </button>
             </form>
             <div>

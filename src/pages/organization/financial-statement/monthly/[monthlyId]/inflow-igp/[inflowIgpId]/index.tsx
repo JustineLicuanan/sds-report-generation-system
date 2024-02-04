@@ -15,6 +15,7 @@ import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { getMonthName } from '~/utils/get-month-name';
 import { schemas } from '~/zod-schemas';
+import { OrderBy } from '~/zod-schemas/utils';
 
 type CreateInflowIgpRowFSInputs = z.infer<typeof schemas.shared.inflowIgpRowFS.create>;
 
@@ -41,12 +42,11 @@ export default function AddInflowFinancialStatementPage() {
   });
   const monthly = getMonthNameQuery?.data?.[0];
 
-  const getInflowIgpFSQuery = api.shared.inflowIgpFS.get.useQuery({
-    where: { id: inflowIgpId as string },
-    include: { rows: true },
+  const getInflowIgpRowFSQuery = api.shared.inflowIgpRowFS.get.useQuery({
+    where: { inflowIGPId: inflowIgpId as string },
+    orderBy: { date: OrderBy.ASC },
   });
-  const inflowIgpFS = getInflowIgpFSQuery?.data?.[0];
-  const inflowIgpRowFS = inflowIgpFS?.rows;
+  const inflowIgpRowFS = getInflowIgpRowFSQuery?.data;
 
   const getReportSemQuery = api.shared.reportSemester.get.useQuery();
   const reportSem = getReportSemQuery?.data;
@@ -108,7 +108,7 @@ export default function AddInflowFinancialStatementPage() {
           <div className="text-medium text-lg capitalize">
             {reportSem?.term.toLowerCase()} Semester - {getMonthName(monthly?.month as number)}
           </div>
-          
+
           {/* TABLE */}
           <div className="mt-4 flex min-h-[60vh] w-full flex-col gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <form
@@ -122,12 +122,6 @@ export default function AddInflowFinancialStatementPage() {
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Add row
-              </button>
-              <button
-                type="button"
-                className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-              >
-                Done
               </button>
             </form>
             <div>
