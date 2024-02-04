@@ -22,11 +22,11 @@ export function CreateDropdown({ className, isOrganization, children }: Props) {
           name: 'New Report',
           href: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`,
         },
-        {
-          Icon: UserPlus,
-          name: 'Add Member',
-          href: `${paths.ORGANIZATION}${paths.MEMBERS}`,
-        },
+        // {
+        //   Icon: UserPlus,
+        //   name: 'Add Member',
+        //   href: `${paths.ORGANIZATION}${paths.MEMBERS}`,
+        // },
       ]
     : [
         // { Icon: CalendarPlus, name: 'New Appointment', href: `${paths.ADMIN}${paths.APPOINTMENTS}/create` },

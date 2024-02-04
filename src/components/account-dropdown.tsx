@@ -32,7 +32,7 @@ export function AccountDropdown({ isOrganization, children }: Props) {
             name: 'My Organization',
             href: `${paths.ORGANIZATION}${paths.MY_ORGANIZATION}`,
           },
-          { Icon: Layers, name: 'My Reports', href: `${paths.ORGANIZATION}` },
+          { Icon: Layers, name: 'Consulted Reports', href: `${paths.ORGANIZATION}${paths.REPORT}` },
         ],
       ]
     : [
