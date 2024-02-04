@@ -1,10 +1,13 @@
 import { GeneratedARTemplate } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { CustomDialog } from '~/components/custom-dialog';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
+import { useToast } from '~/components/ui/use-toast';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -25,6 +28,9 @@ export const getServerSideProps = (async (ctx) => {
 
 export default function AccomplishmentReportTemplatePage() {
   const router = useRouter();
+  const utils = api.useContext();
+  const { toast } = useToast();
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
@@ -45,6 +51,24 @@ export default function AccomplishmentReportTemplatePage() {
   });
   const generatedAR = getGeneratedARQuery?.data;
 
+  const deleteGeneratedAR = api.shared.generatedAR.delete.useMutation({
+    onSuccess: async () => {
+      toast({
+        variant: 'c-primary',
+        description: `✔️ Generated content has been deleted.`,
+      });
+      await utils.shared.generatedAR.invalidate();
+    },
+
+    onError: () => {
+      toast({
+        variant: 'destructive',
+        title: '❌ Internal Server Error',
+        description: `Deletion of generated content failed.`,
+      });
+    },
+  });
+
   const totalPages = Math.ceil(files.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const visibleGeneratedAR = generatedAR?.slice(startIndex, startIndex + itemsPerPage);
@@ -52,10 +76,11 @@ export default function AccomplishmentReportTemplatePage() {
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
+
   return (
     <>
       <Head>
-        <title>{`Accomplishment Report ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Report Templates ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -66,7 +91,7 @@ export default function AccomplishmentReportTemplatePage() {
         <OrganizationSideBarMenu />
         <div id="main-content" className="mx-4 my-4  w-full  gap-8">
           <div className="flex flex-col gap-2">
-            <div className="text-4xl font-bold">Generate Accomplishment Report</div>
+            <div className="text-4xl font-bold">Accomplishment Report Templates</div>
           </div>
           <div className="my-2 mt-8 flex  items-center justify-around gap-4">
             <div className="flex  items-center gap-4">
@@ -76,7 +101,7 @@ export default function AccomplishmentReportTemplatePage() {
                 value={templateName}
               >
                 <option value="" className="">
-                  Select an AR File
+                  Select a template
                 </option>
                 {files.map((file, index) => (
                   <option key={index} value={file.title} className="">
@@ -101,15 +126,12 @@ export default function AccomplishmentReportTemplatePage() {
 
             <div className="flex  items-center gap-4">
               <div className="">Signatory Information:</div>
-              <button
-                type="button"
-                onClick={() =>
-                  router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.POSITIONS}`)
-                }
+              <Link
+                href={`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}${paths.POSITIONS}`}
                 className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
               >
                 Setup
-              </button>
+              </Link>
             </div>
           </div>
           <div className="mt-8">
@@ -128,21 +150,29 @@ export default function AccomplishmentReportTemplatePage() {
                     Generated on {generated.createdAt.toISOString().split('T')[0]}
                   </div>
                 </div>
+
                 <div className="flex w-1/2 flex-col gap-2">
-                  <div className="flex justify-end gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        void router.push(
-                          `${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
-                            generated.template
-                          )}/${generated.id}${paths.EDIT}`
-                        );
-                      }}
+                  <div className="flex items-center justify-end gap-2">
+                    <Link
+                      href={`${paths.ORGANIZATION}${paths.GENERATED_AR}/${enumToSlug(
+                        generated.template
+                      )}/${generated.id}${paths.EDIT}`}
                       className="rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
                     >
                       View
-                    </button>
+                    </Link>
+
+                    <CustomDialog
+                      handleContinue={() => deleteGeneratedAR.mutate({ id: generated.id })}
+                      description="This action cannot be undone. This will permanently delete your generated content from our servers."
+                    >
+                      <button
+                        type="button"
+                        className="rounded-sm bg-destructive px-3 text-destructive-foreground active:scale-95"
+                      >
+                        Delete
+                      </button>
+                    </CustomDialog>
                   </div>
                 </div>
               </div>
@@ -150,7 +180,7 @@ export default function AccomplishmentReportTemplatePage() {
           </div>
           <div className="my-4 flex justify-center gap-2">
             {visibleGeneratedAR?.length === 0 ? (
-              <div className="text-2xl">There are no currently generated file.</div>
+              <div className="text-2xl">There are no templated reports.</div>
             ) : (visibleGeneratedAR?.length ?? 0) >= 8 ? (
               Array.from({ length: totalPages }, (_, index) => (
                 <button

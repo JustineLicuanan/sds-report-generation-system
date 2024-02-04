@@ -9,14 +9,6 @@ import NotificationAlert from '~/components/notification-alert';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import PdfViewer from '~/components/pdf-viewer';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select';
 import { useToast } from '~/components/ui/use-toast';
 import { ResourceType, UploadButton, type OnSuccessUpload } from '~/components/upload-button';
 import { meta, paths } from '~/meta';
@@ -42,17 +34,19 @@ export default function CreateReportPage() {
   const router = useRouter();
   const utils = api.useContext();
   const { toast } = useToast();
+
+  // const getAnnouncementQuery = api.shared.announcement.get.useQuery({
+  //   id: (router.query.announcementId ?? '') as string,
+  // });
+
+  const createReportForm = useForm<InputsReport>({ resolver: zodResolver(reportSchemas.create) });
+
   const createReportMutation = api.shared.report.create.useMutation({
     onSuccess: async ({ id }) => {
       toast({ variant: 'c-primary', description: '✔️ Created report successfully.' });
       await utils.shared.report.invalidate();
       await router.push(`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${id}`);
     },
-  });
-  const createReportForm = useForm<InputsReport>({ resolver: zodResolver(reportSchemas.create) });
-
-  const getAnnouncementQuery = api.shared.announcement.get.useQuery({
-    id: (router.query.announcementId ?? '') as string,
   });
 
   const onSubmitReport: SubmitHandler<InputsReport> = async (values) => {
@@ -63,7 +57,7 @@ export default function CreateReportPage() {
     createReportForm.setValue('file', result.info?.secure_url);
     createReportForm.setValue('fileId', result.info?.public_id);
   };
-  console.log(getAnnouncementQuery.data);
+
   return (
     <>
       <Head>
@@ -78,13 +72,13 @@ export default function CreateReportPage() {
 
         {/* MAIN CONTENT */}
 
-        <div className="mx-3 mt-4 w-full ">
+        <div className="mx-3 mt-4 w-full pb-24">
           <form
-            className="mx-auto my-0 flex min-h-[87vh] max-w-5xl flex-col rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9"
+            className="mx-auto my-0 flex min-h-[87vh] max-w-5xl flex-col rounded-sm p-4 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:p-8"
             onSubmit={createReportForm.handleSubmit(onSubmitReport, (error) => console.log(error))}
           >
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
-              Create New Report
+              Submit a Report
             </h1>
             <label htmlFor="subject" className="mt-3 text-xl font-bold">
               Subject
@@ -110,7 +104,8 @@ export default function CreateReportPage() {
                 </option>
               ))}
             </select>
-            <label htmlFor="category" className="mt-1 text-xl font-bold">
+
+            {/* <label htmlFor="category" className="mt-1 text-xl font-bold">
               Link to Announcement
             </label>
             {router.query.announcementId ? (
@@ -154,7 +149,7 @@ export default function CreateReportPage() {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-            )}
+            )} */}
 
             <label htmlFor="visibility" className="mt-1 text-xl font-bold">
               Visibility
@@ -203,12 +198,12 @@ export default function CreateReportPage() {
                 />
                 Appointment
               </label>
-              <div className="group relative">
+              <div className="group relative cursor-help">
                 <div className="h-5 w-5 rounded-full border bg-gray text-center text-sm font-bold">
                   ?
                 </div>
                 <div className="absolute left-0 hidden whitespace-nowrap rounded-md bg-gray px-2 py-1 text-sm font-medium group-hover:block">
-                  If this is report is need an appointment, enable this.
+                  If this report needs an appointment, enable this.
                 </div>
               </div>
             </div>
@@ -217,7 +212,7 @@ export default function CreateReportPage() {
                 type="submit"
                 className="mt-2 rounded-md bg-yellow px-4 py-1 text-lg font-medium"
               >
-                Send
+                Submit
               </button>
             </div>
           </form>

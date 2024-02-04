@@ -83,39 +83,38 @@ export function ARSingleUpload({ contentType, upload }: Props) {
       <div className="flex items-center gap-1">
         <TooltipProvider delayDuration={0} disableHoverableContent>
           <Tooltip>
-            <TooltipTrigger asChild>
-              <UploadButton
-                className={buttonVariants({ variant: 'c-secondary', size: 'icon' })}
-                folder="ar-uploads"
-                resourceType={ResourceType.PDF}
-                onSuccess={
-                  ((result) => {
-                    if (!upload) {
-                      createARUpload.mutate({
-                        contentType,
-                        contentNumber: 1,
-                        file: result.info?.secure_url ?? '',
-                        fileId: result.info?.public_id ?? '',
-                      });
-
-                      return;
-                    }
-
-                    updateARUpload.mutate({
-                      id: upload?.id ?? '',
-                      file: result.info?.secure_url,
-                      fileId: result.info?.public_id,
+            <UploadButton
+              className={buttonVariants({ variant: 'c-secondary', size: 'icon' })}
+              folder="ar-uploads"
+              resourceType={ResourceType.PDF}
+              onSuccess={
+                ((result) => {
+                  if (!upload) {
+                    createARUpload.mutate({
+                      contentType,
+                      contentNumber: 1,
+                      file: result.info?.secure_url ?? '',
+                      fileId: result.info?.public_id ?? '',
                     });
-                  }) satisfies OnSuccessUpload
-                }
-                disabled={
-                  AR?.status === SemReportStatus.TURNED_IN ||
-                  AR?.status === SemReportStatus.COMPLETED
-                }
-              >
+
+                    return;
+                  }
+
+                  updateARUpload.mutate({
+                    id: upload?.id ?? '',
+                    file: result.info?.secure_url,
+                    fileId: result.info?.public_id,
+                  });
+                }) satisfies OnSuccessUpload
+              }
+              disabled={
+                AR?.status === SemReportStatus.TURNED_IN || AR?.status === SemReportStatus.COMPLETED
+              }
+            >
+              <TooltipTrigger asChild>
                 <FileUp className="h-4 w-4" />
-              </UploadButton>
-            </TooltipTrigger>
+              </TooltipTrigger>
+            </UploadButton>
 
             <TooltipContent side="top">
               <p>Upload</p>
@@ -123,11 +122,11 @@ export function ARSingleUpload({ contentType, upload }: Props) {
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger asChild>
-              <CustomDialog
-                handleContinue={() => deleteARUpload.mutate({ id: upload?.id ?? '' })}
-                description="This action cannot be undone. This will permanently delete your upload from our servers."
-              >
+            <CustomDialog
+              handleContinue={() => deleteARUpload.mutate({ id: upload?.id ?? '' })}
+              description="This action cannot be undone. This will permanently delete your upload from our servers."
+            >
+              <TooltipTrigger asChild>
                 <Button
                   variant="destructive"
                   size="icon"
@@ -139,8 +138,8 @@ export function ARSingleUpload({ contentType, upload }: Props) {
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
-              </CustomDialog>
-            </TooltipTrigger>
+              </TooltipTrigger>
+            </CustomDialog>
 
             <TooltipContent side="top">
               <p>Remove</p>

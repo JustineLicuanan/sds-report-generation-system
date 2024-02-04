@@ -13,11 +13,11 @@ exports.userSeeder = async () => {
   });
 
   await db.user.upsert({
-    where: { email: 'pres@bits.com' },
+    where: { email: 'sec@bits.com' },
     update: {},
     create: {
-      name: 'President',
-      email: 'pres@bits.com',
+      name: 'Secretary',
+      email: 'sec@bits.com',
       isActive: true,
       organizationId: 'clrco4fh4000008lbec6k8vkb',
       organizationName: 'Builders of Innovative Technologist Society',
@@ -26,11 +26,11 @@ exports.userSeeder = async () => {
   });
 
   await db.user.upsert({
-    where: { email: 'sec@bits.com' },
+    where: { email: 'auditor@bits.com' },
     update: {},
     create: {
-      name: 'Secretary',
-      email: 'sec@bits.com',
+      name: 'Auditor',
+      email: 'auditor@bits.com',
       isActive: true,
       organizationId: 'clrco4fh4000008lbec6k8vkb',
       organizationName: 'Builders of Innovative Technologist Society',

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import TruncateWord from '~/components/truncate-word';
+import { Separator } from '~/components/ui/separator';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -56,10 +57,13 @@ export default function AnnouncementPage() {
         {/* MAIN CONTENT */}
 
         <div className="mx-3 my-4 w-full">
-          <div className="mx-auto my-0 min-h-[87vh] max-w-5xl rounded-3xl px-5 py-5 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:px-9">
+          <div className="mx-auto my-0 min-h-[87vh] max-w-5xl rounded-sm p-4 shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)] md:p-8">
             <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
               Announcements
             </h1>
+
+            <Separator className="my-2" />
+
             {/* LIST OF ANNOUNCEMENTS */}
             <div className="my-5 w-full">
               {getAnnouncementQuery?.data?.length ? (
@@ -96,7 +100,7 @@ export default function AnnouncementPage() {
                 ))
               ) : (
                 <div className="text-center text-2xl font-semibold">
-                  There is no new announcement.
+                  There are no announcements.
                 </div>
               )}
             </div>

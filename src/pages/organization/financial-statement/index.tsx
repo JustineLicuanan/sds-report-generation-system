@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SemReportStatus } from '@prisma/client';
-import { Trash2 } from 'lucide-react';
+import { Download, Eye, Trash2 } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -39,8 +39,11 @@ export default function FinancialStatementPage() {
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const getReportSem = api.shared.reportSemester.get.useQuery();
-  const reportSem = getReportSem.data;
+  const getOrganization = api.shared.organization.get.useQuery();
+  const organization = getOrganization.data;
+
+  const getSemester = api.shared.reportSemester.get.useQuery();
+  const semester = getSemester.data;
 
   const getFinancialStatementQuery = api.shared.FS.getOrCreate.useQuery();
   const FS = getFinancialStatementQuery?.data;
@@ -170,6 +173,37 @@ export default function FinancialStatementPage() {
                     </Button>
                   </CustomDialog>
                 )}
+
+                {FS?.compiled ? (
+                  <Link
+                    href={FS.compiled}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(buttonVariants({ variant: 'outline', size: 'icon' }), 'h-auto')}
+                  >
+                    <Eye className="h-4 w-4" />
+                  </Link>
+                ) : (
+                  <Button variant="outline" size="icon" className="h-auto" disabled>
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                )}
+
+                {FS?.compiled ? (
+                  <a
+                    href={FS.compiled}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(buttonVariants({ variant: 'outline', size: 'icon' }), 'h-auto')}
+                    download={`${organization?.acronym}_FS_${semester?.term}_${semester?.yearStart}-${semester?.yearEnd}`}
+                  >
+                    <Download className="h-4 w-4" />
+                  </a>
+                ) : (
+                  <Button variant="outline" size="icon" className="h-auto" disabled>
+                    <Download className="h-4 w-4" />
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -240,7 +274,7 @@ export default function FinancialStatementPage() {
           </div>
           <div className="mx-auto mt-4 min-h-[40vh] rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="mb-4 text-center text-2xl font-bold">
-              {reportSem?.term} SEMESTER {reportSem?.yearStart} - {reportSem?.yearEnd}
+              {semester?.term} SEMESTER {semester?.yearStart} - {semester?.yearEnd}
             </div>
             <button
               type="button"

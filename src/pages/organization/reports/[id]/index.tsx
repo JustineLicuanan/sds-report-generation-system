@@ -85,8 +85,8 @@ export default function UserOrgReportPage() {
         <OrganizationSideBarMenu />
 
         {/* MAIN CONTENT */}
-        <div className="mx-3 my-4 flex  w-full flex-col md:flex-row">
-          <div className="ms-1 min-h-[87vh] w-full rounded-t-3xl px-5 py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)]   md:ms-5 md:w-3/4 md:rounded-3xl md:px-9 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
+        <div className="mx-3 my-4 flex w-full flex-col md:flex-row">
+          <div className="ms-1 min-h-[87vh] w-full rounded-sm p-4 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:ms-5 md:w-3/4 md:p-8 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]">
             <div className="flex justify-between">
               <h1 className="text-xl font-bold uppercase tracking-tight md:text-2xl lg:text-3xl">
                 {reportData?.subject}
@@ -127,7 +127,7 @@ export default function UserOrgReportPage() {
 
           {/* COMMENTS */}
           <form
-            className="relative mb-10  ms-1 min-h-[87vh]  w-full rounded-b-3xl py-5 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3  md:w-1/4 md:rounded-3xl md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]"
+            className="relative mb-10 ms-1 min-h-[87vh] w-full rounded-sm py-4 shadow-[0_1px_10px_0px_rgba(0,0,0,0.25)] md:mb-0 md:ms-3 md:w-1/4 md:shadow-[0_4px_10px_0px_rgba(0,0,0,0.50)]"
             onSubmit={createCommentForm.handleSubmit(onSubmitComment, (error) =>
               console.log(error)
             )}

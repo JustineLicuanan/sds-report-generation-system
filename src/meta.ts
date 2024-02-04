@@ -2,7 +2,7 @@ export const meta = {
   NAME: 'Office of Student Development Services',
   SHORT_NAME: 'SDS',
   LOGO: '/sds_icon.png',
-  DESCRIPTION: 'AR & FS Generator',
+  DESCRIPTION: 'Accomplishment & Financial Report Generator',
   SEPARATOR: '|',
 } as const;
 

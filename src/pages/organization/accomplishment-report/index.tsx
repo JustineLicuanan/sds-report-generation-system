@@ -240,12 +240,12 @@ export default function AccomplishmentReport() {
                   </Tooltip>
 
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <CustomDialog
-                        handleContinue={() => updateAR.mutate({ compiled: null, compiledId: null })}
-                        emoji="🚨"
-                        description="This action cannot be undone. This will permanently delete your generated accomplishment report from our servers."
-                      >
+                    <CustomDialog
+                      handleContinue={() => updateAR.mutate({ compiled: null, compiledId: null })}
+                      emoji="🚨"
+                      description="This action cannot be undone. This will permanently delete your generated accomplishment report from our servers."
+                    >
+                      <TooltipTrigger asChild>
                         <Button
                           variant="destructive"
                           size="icon"
@@ -257,8 +257,8 @@ export default function AccomplishmentReport() {
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
-                      </CustomDialog>
-                    </TooltipTrigger>
+                      </TooltipTrigger>
+                    </CustomDialog>
 
                     <TooltipContent side="top">
                       <p>Delete</p>
@@ -400,9 +400,9 @@ export default function AccomplishmentReport() {
                   uploads={sortedUploads.APPROVED_OTHER_LETTERS ?? []}
                 />
 
-                <ARMultipleUploads
+                <ARSingleUpload
                   contentType={ARUploadContentType.SUMMARY_OF_CONDUCTED_EVENTS}
-                  uploads={sortedUploads.SUMMARY_OF_CONDUCTED_EVENTS ?? []}
+                  upload={sortedUploads.SUMMARY_OF_CONDUCTED_EVENTS?.[0]}
                 />
 
                 <ARMultipleUploads
@@ -420,9 +420,9 @@ export default function AccomplishmentReport() {
                   uploads={sortedUploads.CERTIFICATES ?? []}
                 />
 
-                <ARSingleUpload
+                <ARMultipleUploads
                   contentType={ARUploadContentType.FEEDBACK_FORM}
-                  upload={sortedUploads.FEEDBACK_FORM?.[0]}
+                  uploads={sortedUploads.FEEDBACK_FORM ?? []}
                 />
               </div>
             </section>

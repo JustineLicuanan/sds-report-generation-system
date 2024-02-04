@@ -4,9 +4,11 @@ import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
-import { meta } from '~/meta';
+import { cn } from '~/lib/utils';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -27,8 +29,8 @@ export default function OrganizationPage() {
   const getReportQuery = api.shared.report.get.useQuery();
   const report = getReportQuery.data ?? [];
 
-  const getOrgQuery = api.shared.organization.get.useQuery();
-  const org = getOrgQuery.data;
+  const getOrganization = api.shared.organization.get.useQuery();
+  const organization = getOrganization.data;
 
   const getAnnouncementQuery = api.shared.announcement.get.useQuery({
     includeAudience: true,
@@ -66,39 +68,53 @@ export default function OrganizationPage() {
 
         <div id="main-content" className="mx-4 my-4 grid w-full grid-cols-4 grid-rows-6  gap-8">
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-4xl font-semibold">Hi! {session?.user.name}</div>
+            <div className="text-4xl font-semibold">
+              {session?.user.name ? `Hi, ${organization?.acronym} ${session.user.name}!` : 'Hi!'}
+            </div>
           </div>
 
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Accomplishment Report Submission Date:</div>
             <div className="flex items-center gap-2 ">
-              <div className="text-2xl font-semibold text-yellow">
+              <div
+                className={cn(
+                  'text-2xl font-semibold',
+                  reportSemester?.dueDateFS
+                    ? reportSemester.dueDateFS > new Date()
+                      ? 'text-c-primary'
+                      : 'text-destructive'
+                    : 'text-c-secondary'
+                )}
+              >
                 {reportSemester?.dueDateAR?.toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric',
                 }) ?? 'N/A'}
               </div>
-              <button type="button" className="hover:text-yellow active:scale-95">
+              <Link
+                href={`${paths.ORGANIZATION}${paths.ACCOMPLISHMENT_REPORT}`}
+                className="hover:text-yellow active:scale-95"
+              >
                 <CalendarDays />
-              </button>
+              </Link>
             </div>
           </div>
 
           <div className="col-span-2 row-span-3 flex flex-col items-center justify-between rounded-sm px-4 py-4 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="flex flex-col items-center gap-4">
-              {org?.imageId ? (
+              {organization?.imageId ? (
                 <CldImage
                   width="100"
                   height="100"
-                  src={`/${org?.imageId}`}
+                  src={`/${organization?.imageId}`}
                   alt="Organization Logo"
                   className=" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-36 lg:w-36"
                 />
               ) : (
                 <div className='className=" me-1 h-20 w-20 rounded-full bg-green md:h-24 md:w-24 lg:h-28 lg:w-28'></div>
               )}
-              <div className="text-2xl font-bold">{org?.name}</div>
+              <div className="text-2xl font-bold">{organization?.name}</div>
             </div>
             <div className="flex flex-col items-center">
               <div className="text-lg font-bold">Current Semester:</div>
@@ -114,16 +130,28 @@ export default function OrganizationPage() {
           <div className="col-span-2 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Financial Statement Submission Date:</div>
             <div className="flex items-center gap-2 ">
-              <div className="text-2xl font-semibold text-yellow">
+              <div
+                className={cn(
+                  'text-2xl font-semibold',
+                  reportSemester?.dueDateFS
+                    ? reportSemester.dueDateFS > new Date()
+                      ? 'text-c-primary'
+                      : 'text-destructive'
+                    : 'text-c-secondary'
+                )}
+              >
                 {reportSemester?.dueDateFS?.toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric',
                 }) ?? 'N/A'}
               </div>
-              <button type="button" className="hover:text-yellow active:scale-95">
+              <Link
+                href={`${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}`}
+                className="hover:text-yellow active:scale-95"
+              >
                 <CalendarDays />
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -174,7 +202,7 @@ export default function OrganizationPage() {
             <div className=" rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
               <div className="flex items-center justify-center gap-2">
                 <h1 className="text-2xl font-bold group-hover:text-blue-500 group-hover:underline">
-                  Upcoming Appointment
+                  Upcoming Appointments
                 </h1>
                 <CalendarCheck2 />
               </div>

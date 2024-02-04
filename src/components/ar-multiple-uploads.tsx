@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ARUpload, ARUploadContentType, SemReportStatus } from '@prisma/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ARMultipleUploadsItem } from '~/components/ar-multiple-uploads-item';
@@ -22,6 +22,7 @@ export function ARMultipleUploads({ contentType, uploads }: Props) {
   const { toast } = useToast();
 
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => setIsOpen(() => window.location.hash.substring(1) === contentType), []);
 
   const getOrganization = api.shared.organization.get.useQuery();
   const organization = getOrganization.data;
@@ -91,7 +92,10 @@ export function ARMultipleUploads({ contentType, uploads }: Props) {
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-sm px-4 py-2 shadow-[0_1px_4px_0px_rgba(0,0,0,0.50)]">
+      <div
+        id={contentType}
+        className="flex flex-wrap items-center justify-between gap-2 rounded-sm px-4 py-2 shadow-[0_1px_4px_0px_rgba(0,0,0,0.50)]"
+      >
         <p className="font-semibold">
           {uploads.length > 0 ? '✔️' : '❌'} {contentType.replace(/_/g, ' ')}
         </p>
@@ -117,31 +121,38 @@ export function ARMultipleUploads({ contentType, uploads }: Props) {
             (err) => console.error(err)
           )}
         >
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2">
             <Input
               placeholder="Title"
-              {...addUploadForm.register('title')}
               disabled={
                 AR?.status === SemReportStatus.TURNED_IN || AR?.status === SemReportStatus.COMPLETED
               }
+              {...addUploadForm.register('title')}
             />
 
-            <UploadButton
-              className={buttonVariants({ variant: 'c-secondary' })}
-              folder="ar-uploads"
-              resourceType={ResourceType.PDF}
-              onSuccess={
-                ((result) => {
-                  addUploadForm.setValue('file', result.info?.secure_url ?? '');
-                  addUploadForm.setValue('fileId', result.info?.public_id ?? '');
-                }) satisfies OnSuccessUpload
-              }
-              disabled={
-                AR?.status === SemReportStatus.TURNED_IN || AR?.status === SemReportStatus.COMPLETED
-              }
-            >
-              {addUploadForm.watch('file') ? '✔️' : '❌'} Upload a File
-            </UploadButton>
+            <div className="flex flex-col justify-center gap-1">
+              <UploadButton
+                className={buttonVariants({ variant: 'c-secondary' })}
+                folder="ar-uploads"
+                resourceType={ResourceType.PDF}
+                onSuccess={
+                  ((result) => {
+                    addUploadForm.setValue('file', result.info?.secure_url ?? '');
+                    addUploadForm.setValue('fileId', result.info?.public_id ?? '');
+                  }) satisfies OnSuccessUpload
+                }
+                disabled={
+                  AR?.status === SemReportStatus.TURNED_IN ||
+                  AR?.status === SemReportStatus.COMPLETED
+                }
+              >
+                {addUploadForm.watch('file') ? '✔️' : '❌'} Upload a File
+              </UploadButton>
+
+              <p className="h-4 text-sm font-medium text-destructive">
+                {addUploadForm.formState.errors.file?.message && 'File is required'}
+              </p>
+            </div>
           </div>
 
           <Button

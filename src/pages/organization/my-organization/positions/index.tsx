@@ -340,7 +340,7 @@ export default function SetupPositionsPage() {
           <div className="flex justify-end gap-4">
             <button
               type="button"
-              onClick={() => router.push(`${paths.ORGANIZATION}${paths.MY_ORGANIZATION}`)}
+              onClick={() => router.back()}
               className="mt-4 rounded-sm border border-gray bg-gray px-3 active:scale-95"
             >
               Back

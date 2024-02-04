@@ -1,36 +1,34 @@
 import { LogAction, type Report } from '@prisma/client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { CustomDialog } from '~/components/custom-dialog';
+import { useToast } from '~/components/ui/use-toast';
 import { paths } from '~/meta';
+import { api } from '~/utils/api';
 
-export default function Report({ logs }: { logs: Report[] }) {
-  // const [activeReport, setActiveReport] = useState<number | null>(null);
-  // const [reportsState, setReportsState] = useState(reports);
-  // const toggleShowOption = (id: number) => {
-  //   if (activeReport === id) {
-  //     // Clicking the same button again, hide the div
-  //     setActiveReport(null);
-  //   } else {
-  //     // Clicking a new button, show the div and hide others
-  //     setActiveReport(id);
-  //   }
-  // };
-
+export default function Report({ logs: reports }: { logs: Report[] }) {
   const router = useRouter();
-  // const toggleHide = (isHidden: boolean, id: number) => {
-  //   const updatedReports = reportsState.map((report) => {
-  //     if (report.id === id) {
-  //       return {
-  //         ...report,
-  //         isHidden: !isHidden,
-  //       };
-  //     }
-  //     return report;
-  //   });
-  //   setReportsState(updatedReports);
-  // };
+  const utils = api.useContext();
+  const { toast } = useToast();
 
-  // const filteredData = reportsState.filter((item) => !item.isHidden);
+  const archiveReport = api.shared.report.archive.useMutation({
+    onSuccess: async () => {
+      toast({
+        variant: 'c-primary',
+        description: `✔️ Report has been archived.`,
+      });
+      await utils.shared.report.invalidate();
+    },
+
+    onError: () => {
+      toast({
+        variant: 'destructive',
+        title: '❌ Internal Server Error',
+        description: `Archival of report failed.`,
+      });
+    },
+  });
 
   return (
     <>
@@ -59,75 +57,75 @@ export default function Report({ logs }: { logs: Report[] }) {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => (
-              <tr key={log.id} className=" even:bg-[#808080]/20">
+            {reports.map((report) => (
+              <tr key={report.id} className=" even:bg-[#808080]/20">
                 <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                  <button
-                    onClick={() =>
-                      router.push(`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${log.id}`)
-                    }
+                  <Link
+                    href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${report.id}`}
                     className="justify-center p-1 text-lg underline underline-offset-2 hover:text-black/80"
                   >
-                    {log.subject}
-                  </button>
+                    {report.subject}
+                  </Link>
                 </td>
                 <td className="border border-x-0 border-black px-2 py-4 text-sm md:text-base">
-                  {log.category}
+                  {report.category}
                 </td>
                 <td className="border border-x-0 border-black  px-2 py-4 text-sm md:text-base">
-                  {log.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
+                  {report.createdAt.toLocaleString('en-US', { timeZone: 'Asia/Manila' })}
                 </td>
-                {(log.status === LogAction.REJECTED && (
+                {(report.status === LogAction.REJECTED && (
                   <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#FF0000]">
-                    {log.status}
+                    {report.status}
                   </td>
                 )) ||
-                  (log.status === LogAction.APPROVED && (
+                  (report.status === LogAction.APPROVED && (
                     <td className="border border-x-0 border-black px-2 py-4 font-semibold text-[#00FF00]">
-                      {log.status}
+                      {report.status}
                     </td>
                   )) ||
-                  (log.status === LogAction.PENDING && (
-                    <td className="border border-x-0 border-black px-2 py-4 ">{log.status}</td>
+                  (report.status === LogAction.PENDING && (
+                    <td className="border border-x-0 border-black px-2 py-4 ">{report.status}</td>
                   ))}
                 <td className="border border-x-0 border-black px-2 py-4">
                   <div className="flex items-center justify-center ">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (log.status === LogAction.PENDING) {
-                          alert('Update button clicked!');
-                        }
-                      }}
+                    <Link
+                      href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}/${report.id}`}
                       className={`${
-                        log.status !== LogAction.PENDING
+                        report.status !== LogAction.PENDING
                           ? 'cursor-not-allowed opacity-50'
                           : 'group/update'
                       } relative mx-2 flex flex-col items-center justify-center rounded-sm bg-gray p-2`}
                     >
                       <Image src="/update_icon.svg" width={20} height={20} alt="Update Icon" />
-                      <div className="absolute left-12 z-[4] hidden rounded-md bg-gray px-2 py-1 text-left text-sm font-medium group-hover/update:block lg:left-12   lg:text-base">
+                      <div className="text-bottom absolute bottom-12 z-[4] hidden rounded-md bg-gray px-2 py-1 text-sm font-medium group-hover/update:block lg:bottom-12   lg:text-base">
                         Update
                       </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (log.status === LogAction.PENDING) {
-                          alert('Delete button clicked!');
-                        }
+                    </Link>
+
+                    <CustomDialog
+                      handleContinue={() => {
+                        archiveReport.mutate({
+                          id: report.id,
+                          subject: report.subject,
+                          category: report.category,
+                        });
                       }}
-                      className={`${
-                        log.status !== LogAction.PENDING
-                          ? 'cursor-not-allowed opacity-50'
-                          : 'group/delete'
-                      }  relative mx-2 flex flex-col items-center justify-center rounded-sm bg-red p-2`}
+                      description="This action will archive your consulted report from our servers."
                     >
-                      <Image src="/delete_icon.svg" width={20} height={20} alt="Delete Icon" />
-                      <div className="absolute left-12 z-[4] hidden rounded-md bg-gray px-2 py-1 text-left text-sm font-medium group-hover/delete:block lg:left-12 lg:text-base">
-                        Delete
-                      </div>
-                    </button>
+                      <button
+                        type="button"
+                        className={`${
+                          report.status !== LogAction.PENDING
+                            ? 'cursor-not-allowed opacity-50'
+                            : 'group/delete'
+                        }  relative mx-2 flex flex-col items-center justify-center rounded-sm bg-red p-2`}
+                      >
+                        <Image src="/delete_icon.svg" width={20} height={20} alt="Delete Icon" />
+                        <div className="text-bottom absolute bottom-12 z-[4] hidden rounded-md bg-gray px-2 py-1 text-sm font-medium group-hover/delete:block lg:bottom-12 lg:text-base">
+                          Delete
+                        </div>
+                      </button>
+                    </CustomDialog>
                   </div>
                 </td>
               </tr>

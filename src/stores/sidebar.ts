@@ -1,6 +1,6 @@
 import {
-  BookDashed,
   CalendarCheck2,
+  ClipboardCheck,
   File,
   FileSpreadsheet,
   FileText,
@@ -51,16 +51,21 @@ export const useSidebarStore = create<SidebarState>((set) => ({
 
   organizationSidebarLinks: [
     { Icon: LayoutDashboard, name: 'Dashboard', href: paths.ORGANIZATION },
+    { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MY_ORGANIZATION}` },
     {
       Icon: CalendarCheck2,
       name: 'Appointments',
       href: `${paths.ORGANIZATION}${paths.APPOINTMENTS}`,
     },
-    { Icon: Users, name: 'My Organization', href: `${paths.ORGANIZATION}${paths.MY_ORGANIZATION}` },
-    { Icon: File, name: 'My Reports', href: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}` },
+    { Icon: Megaphone, name: 'Announcements', href: `${paths.ORGANIZATION}${paths.ANNOUNCEMENTS}` },
     {
-      Icon: BookDashed,
-      name: 'AR Templates',
+      Icon: ClipboardCheck,
+      name: 'Consulted Reports',
+      href: `${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}`,
+    },
+    {
+      Icon: File,
+      name: 'Report Templates',
       href: `${paths.ORGANIZATION}${paths.GENERATED_AR}`,
     },
     {
@@ -73,7 +78,6 @@ export const useSidebarStore = create<SidebarState>((set) => ({
       name: 'Financial Statement',
       href: `${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}`,
     },
-    { Icon: Megaphone, name: 'Announcements', href: `${paths.ORGANIZATION}${paths.ANNOUNCEMENTS}` },
   ],
 
   isSidebarExpanded: false,

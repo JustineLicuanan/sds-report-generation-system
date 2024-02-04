@@ -3,12 +3,12 @@ import { type GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import Report from '~/components/report';
+import { Button } from '~/components/ui/button';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -26,22 +26,26 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function OrganizationPage() {
-  const getReportQuery = api.shared.report.get.useQuery();
-  const reportList = getReportQuery.data ?? [];
+  const router = useRouter();
+  const { data: session } = useSession();
 
   const getOrgQuery = api.shared.organization.get.useQuery();
   const org = getOrgQuery.data;
+
+  const getSemester = api.shared.reportSemester.get.useQuery();
+  const semester = getSemester.data;
+
+  const getReportQuery = api.shared.report.get.useQuery();
+  const reportList = getReportQuery.data ?? [];
 
   reportList.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  const { data: session } = useSession();
-  const router = useRouter();
   return (
     <>
       <Head>
-        <title>{`Dashboard ${meta.SEPARATOR} ${meta.NAME}`}</title>
+        <title>{`Consulted Reports ${meta.SEPARATOR} ${meta.NAME}`}</title>
       </Head>
 
       {/* NAVIGATION BAR */}
@@ -76,38 +80,37 @@ export default function OrganizationPage() {
               </div>
             </div>
             <div className="flex items-end gap-2">
-              <button
-                onClick={() => router.push(`${paths.ORGANIZATION}${paths.CBL}`)}
-                type="button"
-                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
+              <Button
+                variant="c-secondary"
+                onClick={() => router.push(`${paths.ORGANIZATION}${paths.ACCOMPLISHMENT_REPORT}`)}
+                disabled={!semester}
               >
-                View CBL
-              </button>
-              <button
-                type="button"
-                onClick={() => router.push(`${paths.ORGANIZATION}${paths.MEMBERS}`)}
-                className="rounded-md bg-yellow px-4 py-1 text-lg font-medium"
+                View Accomplishment Report
+              </Button>
+
+              <Button
+                variant="c-secondary"
+                onClick={() => router.push(`${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}`)}
+                disabled={!semester}
               >
-                View Members
-              </button>
+                View Financial Statement
+              </Button>
             </div>
           </div>
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
-            <h1 className=" my-2 text-3xl font-bold tracking-tight">Report</h1>
+            <h1 className=" my-2 text-3xl font-bold tracking-tight">Consulted Reports</h1>
             {reportList.filter((report) => report.status === LogAction.PENDING).length > 0 ? (
               <Report logs={reportList.filter((report) => report.status === LogAction.PENDING)} />
             ) : (
-              <div className="flex items-center justify-center text-xl font-semibold">
-                There are no pending report
-                <Image width={25} height={25} src="/pending_icon.png" alt="Pending Icon" />,{' '}
+              <div className="text-center text-xl font-semibold">
+                No pending consulted report.{' '}
                 <Link
                   href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`}
                   className="text-xl text-blue-500 hover:underline"
                 >
-                  Create a new one
+                  Submit a new one here.
                 </Link>
-                .
               </div>
             )}
           </div>
@@ -116,10 +119,9 @@ export default function OrganizationPage() {
             (report) => report.status === LogAction.APPROVED || report.status === LogAction.REJECTED
           ).length > 0 ? (
             <Report
-              logs={reportList.filter(
-                (report) =>
-                  report.status === LogAction.APPROVED || report.status === LogAction.REJECTED
-              )}
+              logs={reportList.filter((report) => {
+                return report.status === LogAction.APPROVED || report.status === LogAction.REJECTED;
+              })}
             />
           ) : (
             <></>
