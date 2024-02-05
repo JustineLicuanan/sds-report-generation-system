@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ARUploadContentType, SemReportStatus } from '@prisma/client';
-import { BadgeAlert, BadgeCheck, Eye, FileUp, Plus } from 'lucide-react';
+import { AlertOctagon, BadgeAlert, BadgeCheck, Eye, FileUp, Plus } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
@@ -126,7 +126,7 @@ export default function OrganizationPage() {
             </Link>
           </div>
 
-          {semester && (
+          {semester ? (
             <>
               <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
                 <div className="text-2xl font-bold">PREAMBLE, MISSION, VISION, AND GOAL</div>
@@ -296,6 +296,13 @@ export default function OrganizationPage() {
                 </div>
               </div>
             </>
+          ) : (
+            <div className="col-span-4 row-span-4 flex flex-col items-center justify-center gap-2">
+              <AlertOctagon className="h-32 w-32 text-destructive" />
+              <h1 className="text-center text-3xl text-destructive">
+                There is no active semester for Accomplishment Report!
+              </h1>
+            </div>
           )}
         </div>
       </main>

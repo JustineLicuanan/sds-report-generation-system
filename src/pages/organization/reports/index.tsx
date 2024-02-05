@@ -3,6 +3,7 @@ import { type GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import OrgNavBar from '~/components/organization-navigation-bar';
@@ -103,14 +104,23 @@ export default function OrganizationPage() {
             {reportList.filter((report) => report.status === LogAction.PENDING).length > 0 ? (
               <Report logs={reportList.filter((report) => report.status === LogAction.PENDING)} />
             ) : (
-              <div className="text-center text-xl font-semibold">
-                No pending consulted report.{' '}
-                <Link
-                  href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`}
-                  className="text-xl text-blue-500 hover:underline"
-                >
-                  Submit a new one here.
-                </Link>
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-center text-xl font-semibold">
+                  No pending consulted report.{' '}
+                  <Link
+                    href={`${paths.ORGANIZATION}${paths.ORGANIZATION_REPORTS}${paths.REPORT_CREATE}`}
+                    className="text-xl text-blue-500 hover:underline"
+                  >
+                    Submit a new one here.
+                  </Link>
+                </div>
+                <Image
+                  src="/no_consulted_report.svg"
+                  alt="No AR Templates"
+                  height={100}
+                  width={100}
+                  className="h-48 w-48"
+                />
               </div>
             )}
           </div>

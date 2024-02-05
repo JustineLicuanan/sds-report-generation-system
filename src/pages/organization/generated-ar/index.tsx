@@ -1,6 +1,7 @@
 import { GeneratedARTemplate } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -180,7 +181,16 @@ export default function AccomplishmentReportTemplatePage() {
           </div>
           <div className="my-4 flex justify-center gap-2">
             {visibleGeneratedAR?.length === 0 ? (
-              <div className="text-2xl">There are no templated reports.</div>
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-2xl">There are no templated reports.</div>
+                <Image
+                  src="/no_ar_templates.svg"
+                  alt="No AR Templates"
+                  height={100}
+                  width={100}
+                  className="h-48 w-48"
+                />
+              </div>
             ) : (visibleGeneratedAR?.length ?? 0) >= 8 ? (
               Array.from({ length: totalPages }, (_, index) => (
                 <button

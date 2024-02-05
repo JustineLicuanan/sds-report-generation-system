@@ -1,5 +1,6 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import OrgNavBar from '~/components/organization-navigation-bar';
@@ -99,8 +100,17 @@ export default function AnnouncementPage() {
                   </button>
                 ))
               ) : (
-                <div className="text-center text-2xl font-semibold">
-                  There are no announcements.
+                <div className="flex flex-col items-center justify-center">
+                  <div className="text-center text-2xl font-semibold">
+                    There are no announcements.
+                  </div>
+                  <Image
+                    src="/empty_data_icon.svg"
+                    alt="No Announcements"
+                    height={100}
+                    width={100}
+                    className="h-48 w-48"
+                  />
                 </div>
               )}
             </div>
