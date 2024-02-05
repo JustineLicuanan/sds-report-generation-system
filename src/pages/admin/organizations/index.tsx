@@ -1,6 +1,7 @@
 import { OrganizationCategory } from '@prisma/client';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import AdminNavBar from '~/components/admin-navigation-bar';
@@ -122,14 +123,23 @@ export default function AdminPage() {
                 />{' '}
               </div>
             ) : (
-              <div className="mb-4 mt-8 text-center text-xl font-bold">
-                No organization on this category,{' '}
-                <Link
-                  href={`${paths.ADMIN}${paths.ORGANIZATIONS}${paths.ORGANIZATION_CREATE}`}
-                  className="text-blue-700 hover:text-blue-500 hover:underline"
-                >
-                  create one
-                </Link>
+              <div>
+                <div className="mb-4 mt-8 text-center text-xl font-bold">
+                  No organization on this category,{' '}
+                  <Link
+                    href={`${paths.ADMIN}${paths.ORGANIZATIONS}${paths.ORGANIZATION_CREATE}`}
+                    className="text-blue-700 hover:text-blue-500 hover:underline"
+                  >
+                    create one
+                  </Link>
+                </div>
+                <Image
+                  src="/no_organization.svg"
+                  alt="No Organization"
+                  height={100}
+                  width={100}
+                  className="h-48 w-48"
+                />
               </div>
             )}
           </div>

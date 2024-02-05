@@ -116,7 +116,7 @@ export default function OrganizationPage() {
                 </div>
                 <Image
                   src="/no_consulted_report.svg"
-                  alt="No AR Templates"
+                  alt="No Consulted Reports"
                   height={100}
                   width={100}
                   className="h-48 w-48"

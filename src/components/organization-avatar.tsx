@@ -1,7 +1,6 @@
 import { type Organization } from '@prisma/client';
 import { PenSquare } from 'lucide-react';
 import { CldImage } from 'next-cloudinary';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { paths } from '~/meta';
 
@@ -11,8 +10,8 @@ export default function OrganizationAvatar({ organization }: { organization: Org
   return (
     <>
       {organization.map((item) => (
-        <Link
-          href={`${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}`}
+        <button
+          onClick={() => router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${item.id}`)}
           key={item.id}
           className="rounded-sm border border-input p-4 hover:bg-gray/40"
         >
@@ -75,7 +74,7 @@ export default function OrganizationAvatar({ organization }: { organization: Org
             </div>
           </div>
           <div className="text-center font-bold">{item.name}</div>
-        </Link>
+        </button>
       ))}
     </>
   );
