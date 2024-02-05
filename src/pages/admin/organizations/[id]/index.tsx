@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
 import ReportList from '~/components/report-list';
-import { meta, paths } from '~/meta';
+import { meta } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -70,7 +70,7 @@ export default function ListOfReportPage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-end gap-2 ">
+            {/* <div className="flex items-end gap-2 ">
               <button
                 onClick={() =>
                   router.push(`${paths.ADMIN}${paths.ORGANIZATIONS}/${org?.id}${paths.CBL}`)
@@ -89,7 +89,7 @@ export default function ListOfReportPage() {
               >
                 View Members
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="my-2 h-2 rounded-md bg-green"> </div>
           <div>
