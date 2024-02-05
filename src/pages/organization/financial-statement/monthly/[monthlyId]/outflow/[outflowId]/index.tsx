@@ -134,7 +134,7 @@ export default function OutflowFinancialStatementPage() {
               <li>
                 <span className="mx-2 text-neutral-500">&gt;</span>
               </li>
-              <li className="text-neutral-500">
+              <li className="text-neutral-500 capitalize">
                 Outflow - {outflowFS?.category.toLowerCase().replace(/_/, ' ')}
               </li>
             </ol>
