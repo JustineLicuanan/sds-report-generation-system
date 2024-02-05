@@ -1,5 +1,6 @@
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useState } from 'react';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
@@ -63,42 +64,59 @@ export default function AnnouncementPage() {
             </h1>
             {/* LIST OF ANNOUNCEMENTS */}
             <div className="my-5 w-full">
-              {getAnnouncementQuery?.data?.map((data, index) => (
-                <button
-                  type="button"
-                  onClick={() => {
-                    return setShowAnnouncement(!showAnnouncement), setSelectedNotification(data.id);
-                  }}
-                  className="mb-4 w-full bg-gray px-3 py-2 hover:bg-yellow"
-                  key={index}
-                >
-                  <div className="flex justify-between py-2">
-                    <div>
-                      <h4 className="text-2xl font-semibold">{data.subject}</h4>
-                    </div>
-                    <div className="flex  text-xl">
-                      <h4 className="font-semibold">Date started:</h4>
-                      <div className="ms-1 text-xl font-medium">
-                        {data.due?.toLocaleString('en-US', { timeZone: 'Asia/Manila' }) ?? 'N/A'}
+              {(getAnnouncementQuery?.data ?? []).length > 0 ? (
+                getAnnouncementQuery?.data?.map((data, index) => (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      return (
+                        setShowAnnouncement(!showAnnouncement), setSelectedNotification(data.id)
+                      );
+                    }}
+                    className="mb-4 w-full bg-gray px-3 py-2 hover:bg-yellow"
+                    key={index}
+                  >
+                    <div className="flex justify-between py-2">
+                      <div>
+                        <h4 className="text-2xl font-semibold">{data.subject}</h4>
+                      </div>
+                      <div className="flex  text-xl">
+                        <h4 className="font-semibold">Date started:</h4>
+                        <div className="ms-1 text-xl font-medium">
+                          {data.due?.toLocaleString('en-US', { timeZone: 'Asia/Manila' }) ?? 'N/A'}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex py-2 text-xl">
-                    <h4 className="font-semibold">Description:</h4>
-                    <div className="ms-1 text-xl font-medium">{data.description}</div>
-                  </div>
-                  <div className="flex py-2 text-xl">
-                    <h4 className="font-semibold">Audience:</h4>
-                    <div className="ms-1  text-justify font-medium">
-                      <TruncateWord
-                        text={data.audience.map(({ name }) => name).join(', ') ?? ''}
-                        maxLength={70}
-                        fontSize="text-xl"
-                      />
+                    <div className="flex py-2 text-xl">
+                      <h4 className="font-semibold">Description:</h4>
+                      <div className="ms-1 text-xl font-medium">{data.description}</div>
                     </div>
+                    <div className="flex py-2 text-xl">
+                      <h4 className="font-semibold">Audience:</h4>
+                      <div className="ms-1  text-justify font-medium">
+                        <TruncateWord
+                          text={data.audience.map(({ name }) => name).join(', ') ?? ''}
+                          maxLength={70}
+                          fontSize="text-xl"
+                        />
+                      </div>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center">
+                  <div className="text-center text-2xl font-semibold">
+                    There are no announcements.
                   </div>
-                </button>
-              ))}
+                  <Image
+                    src="/empty_data_icon.svg"
+                    alt="No Announcements"
+                    height={100}
+                    width={100}
+                    className="h-48 w-48"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
