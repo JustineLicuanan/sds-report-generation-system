@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { ARMultipleUploads } from '~/components/ar-multiple-uploads';
 import { ARSingleUpload } from '~/components/ar-single-upload';
 import { CustomDialog } from '~/components/custom-dialog';
+import { ExternalActivityProposals } from '~/components/external-activity-proposals';
 import OrgNavbar from '~/components/organization-navigation-bar';
 import OrganizationSidebar from '~/components/organization-side-bar-menu';
 import { Button, buttonVariants } from '~/components/ui/button';
@@ -424,6 +425,8 @@ export default function AccomplishmentReport() {
                   contentType={ARUploadContentType.FEEDBACK_FORM}
                   uploads={sortedUploads.FEEDBACK_FORM ?? []}
                 />
+
+                <ExternalActivityProposals />
               </div>
             </section>
           </main>
