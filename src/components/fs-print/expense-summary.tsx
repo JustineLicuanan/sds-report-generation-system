@@ -1,4 +1,4 @@
-import { FinancialStatement, MonthlyFS } from '@prisma/client';
+import { MonthlyFS } from '@prisma/client';
 import { inferRouterOutputs } from '@trpc/server';
 import { CldImage } from 'next-cloudinary';
 import Image from 'next/image';
@@ -11,11 +11,11 @@ import { sortOutflowRowFS } from '~/utils/sort-outflow-fs';
 export default function ExpenseSummary({
   monthly,
   orgSignatoryInfo,
-  FS,
+  monthlyActualCash,
 }: {
   monthly: MonthlyFS;
   orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
-  FS: FinancialStatement;
+  monthlyActualCash: number;
 }) {
   const getInflowCollectionRowFSQuery = api.shared.inflowCollectionRowFS.get.useQuery({
     where: { monthlyId: monthly.id as string },
@@ -33,16 +33,17 @@ export default function ExpenseSummary({
   const outflowRowFS = getOutflowRowFSQuery?.data;
   const sortedOutflowRowFS = sortOutflowRowFS(outflowRowFS ?? []);
 
-  let collectionTotal =
+  const collectionTotal =
     inflowCollectionRowFS?.reduce((acc, row) => acc + Number(row.amount), 0) ?? 0;
-  let IgpTotal =
+  const IgpTotal =
     inflowIgpRowFS?.reduce((acc, row) => acc + Number(row.price) * row.quantity, 0) ?? 0;
-  let outflowTotal =
+  const outflowTotal =
     sortedOutflowRowFS.reduce(
       (acc, outflowRow) =>
         acc + outflowRow[1].reduce((acc, row) => acc + Number(row.price) * row.quantity, 0),
       0
     ) ?? 0;
+
   return (
     <>
       <div className="mx-auto my-0 mb-16 flex min-h-[100vh] w-[700px] flex-col items-center gap-4 p-4 leading-5">
@@ -196,7 +197,7 @@ export default function ExpenseSummary({
               <td colSpan={2} className="w-[90%] font-bold">
                 Add: Cash Balance Remaining as of {getMonthName(monthly?.month as number)}
               </td>
-              <td className="w-[13%] text-end ">{Number(FS?.actualCash)}</td>
+              <td className="w-[13%] text-end ">{monthlyActualCash}</td>
             </tr>
             <tr>
               <td className="w-[85%] font-bold">Cash</td>
@@ -205,7 +206,7 @@ export default function ExpenseSummary({
                 className="w-[13%]  border-y text-end font-bold"
                 style={{ borderBottom: 'double' }}
               >
-                {collectionTotal + IgpTotal - outflowTotal - Number(FS?.actualCash)}
+                {collectionTotal + IgpTotal - outflowTotal + monthlyActualCash}
               </td>
             </tr>
           </tbody>
@@ -229,7 +230,7 @@ export default function ExpenseSummary({
               <td className="w-[85%] ps-8">Cash</td>
               <td className="w-[2%] text-end">P</td>
               <td className="w-[13%] text-end ">
-                {collectionTotal + IgpTotal - outflowTotal - Number(FS?.actualCash)}
+                {collectionTotal + IgpTotal - outflowTotal + monthlyActualCash}
               </td>
             </tr>
             <tr>
@@ -245,7 +246,7 @@ export default function ExpenseSummary({
                 className="w-[13%] border-y text-end font-bold"
                 style={{ borderBottom: 'double' }}
               >
-                {collectionTotal + IgpTotal - outflowTotal - Number(FS?.actualCash)}
+                {collectionTotal + IgpTotal - outflowTotal + monthlyActualCash}
               </td>
             </tr>
             <tr>
@@ -256,7 +257,7 @@ export default function ExpenseSummary({
             <tr className="">
               <td className="w-[85%] ps-8">Fund</td>
               <td className="w-[2%] text-end">P</td>
-              <td className="w-[13%] text-end ">{Number(FS?.actualCash)}</td>
+              <td className="w-[13%] text-end ">{monthlyActualCash}</td>
             </tr>
             <tr>
               <td colSpan={2} className="w-[90%] ps-8">
@@ -271,7 +272,7 @@ export default function ExpenseSummary({
                 className="w-[13%] border-y text-end font-bold"
                 style={{ borderBottom: 'double' }}
               >
-                {collectionTotal + IgpTotal - outflowTotal - Number(FS?.actualCash)}
+                {collectionTotal + IgpTotal - outflowTotal + monthlyActualCash}
               </td>
             </tr>
           </tbody>

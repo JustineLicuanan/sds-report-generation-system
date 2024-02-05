@@ -190,6 +190,14 @@ export default function CreateSemPage() {
               </Button>
             </CustomDialog>
           )}
+
+          <Button
+            variant="c-secondary"
+            size="lg"
+            onClick={() => router.push(`${paths.ADMIN}${paths.SEMESTER}`)}
+          >
+            Semester Archives
+          </Button>
         </div>
       </main>
     </>

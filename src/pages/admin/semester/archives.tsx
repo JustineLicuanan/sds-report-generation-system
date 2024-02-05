@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import AdminNavbar from '~/components/admin-navigation-bar';
 import AdminSidebar from '~/components/admin-side-bar-menu';
 import { useToast } from '~/components/ui/use-toast';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -24,9 +24,11 @@ export default function AdminArchivedSemesterPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const getReportSemesterQuery = api.admin.reportSemester.get.useQuery();
+  const getReportSemesterQuery = api.admin.reportSemester.get.useQuery({
+    include: { accomplishmentReports: true },
+  });
   const reportSemester = getReportSemesterQuery?.data;
-  console.log(reportSemester?.map((sem, idx) => sem.generatedARs));
+  console.log(reportSemester);
   return (
     <>
       <Head>
@@ -52,6 +54,15 @@ export default function AdminArchivedSemesterPage() {
                 >
                   {reportSem.term.toLowerCase()} Semester (A.Y {reportSem.yearStart} -{' '}
                   {reportSem.yearEnd})
+                  <div className="item-center flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => router.push(`${paths.ADMIN}${paths.SEMESTER}/${reportSem.id}`)}
+                      className="rounded-sm bg-yellow px-2 py-1 active:scale-95"
+                    >
+                      View
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (

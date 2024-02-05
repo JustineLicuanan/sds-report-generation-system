@@ -67,7 +67,7 @@ export default function AdminFinancialStatementPage() {
               turnedInFSs?.map((FS, FSIdx) => (
                 <div
                   key={FSIdx}
-                  className="flex w-full justify-between rounded-sm border border-input px-4 py-4"
+                  className="my-2  flex w-full justify-between rounded-sm border border-input px-4 py-4"
                 >
                   <div className="text-xl font-bold">{FS?.organization.name}</div>
                   <div className="item-center flex gap-8">
@@ -140,7 +140,7 @@ export default function AdminFinancialStatementPage() {
             {completedFSs?.map((FS, FSIdx) => (
               <div
                 key={FSIdx}
-                className="flex w-full justify-between rounded-sm border border-input px-4 py-4"
+                className="my-2 flex  w-full justify-between rounded-sm border border-input px-4 py-4"
               >
                 <div className="text-xl font-bold">{FS?.organization.name}</div>
                 <div className="item-center flex gap-8">

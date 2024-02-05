@@ -67,7 +67,7 @@ export default function AdminAccomplishmentReportPage() {
               turnedInARs?.map((AR, ARIdx) => (
                 <div
                   key={ARIdx}
-                  className="flex w-full justify-between rounded-sm border border-input px-4 py-4"
+                  className="my-2 flex w-full justify-between rounded-sm border border-input px-4 py-4"
                 >
                   <div className="text-xl font-bold">{AR?.organization.name}</div>
                   <div className="item-center flex gap-8">
@@ -135,13 +135,12 @@ export default function AdminAccomplishmentReportPage() {
           </div>
 
           <Separator className="my-4" />
-          
 
           <div className="mt-8 ">
             {completedARs?.map((AR, ARIdx) => (
               <div
                 key={ARIdx}
-                className="flex w-full justify-between rounded-sm border border-input px-4 py-4"
+                className="my-2 flex w-full justify-between  rounded-sm border border-input px-4 py-4"
               >
                 <div className="text-xl font-bold">{AR?.organization.name}</div>
                 <div className="item-center flex gap-8">

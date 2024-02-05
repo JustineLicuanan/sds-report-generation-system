@@ -1,8 +1,6 @@
 import { FinancialStatement, MonthlyFS } from '@prisma/client';
 import { inferRouterOutputs } from '@trpc/server';
 import { CldImage } from 'next-cloudinary';
-import Head from 'next/head';
-import { meta } from '~/meta';
 import { AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
 import { sortOutflowRowFS } from '~/utils/sort-outflow-fs';
@@ -33,9 +31,6 @@ export default function Receipt({
 
   return (
     <>
-      <Head>
-        <title>{`Receipts ${meta.SEPARATOR} ${meta.NAME}`}</title>
-      </Head>
       <div className="mx-auto my-0 flex min-h-[500vh] flex-col items-center ">
         <div className="mb-16 flex min-h-[100vh] flex-col items-center justify-center text-6xl">
           RECEIPTS

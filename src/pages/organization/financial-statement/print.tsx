@@ -52,6 +52,44 @@ export default function CompiledFS() {
   const getFSQuery = api.shared.FS.getOrCreate.useQuery();
   const FS = getFSQuery?.data;
 
+  const getInflowCollectionRowFSQuery = api.shared.inflowCollectionRowFS.get.useQuery();
+  const inflowCollectionRowFS = getInflowCollectionRowFSQuery?.data;
+
+  const getInflowIgpRowFSQuery = api.shared.inflowIgpRowFS.get.useQuery();
+  const inflowIgpRowFS = getInflowIgpRowFSQuery?.data;
+
+  const getOutflowRowFSQuery = api.shared.outflowRowFS.get.useQuery();
+  const outflowRowFS = getOutflowRowFSQuery?.data;
+
+  const monthlyActualCash = (monthlyFS ?? []).reduce(
+    (acc, month, idx) => {
+      const collectionTotal = (inflowCollectionRowFS ?? []).reduce((accu, row) => {
+        if (row.monthlyId === month.id) {
+          accu += Number(row.amount);
+        }
+        return accu;
+      }, 0);
+
+      const IgpTotal = (inflowIgpRowFS ?? []).reduce((accu, row) => {
+        if (row.monthlyId === month.id) {
+          accu += Number(row.price) * row.quantity;
+        }
+        return accu;
+      }, 0);
+
+      const outflowTotal = (outflowRowFS ?? []).reduce((accu, row) => {
+        if (row.monthlyId === month.id) {
+          accu += Number(row.price) * row.quantity;
+        }
+        return accu;
+      }, 0);
+
+      acc.push((acc[idx] ?? 0) + collectionTotal + IgpTotal - outflowTotal);
+      return acc;
+    },
+    [Number(FS?.actualCash)] as number[]
+  );
+
   return (
     <>
       <Head>
@@ -75,7 +113,7 @@ export default function CompiledFS() {
           orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
         }
       />
-      {monthlyFS?.map((monthly) => {
+      {monthlyFS?.map((monthly, monthlyIndex) => {
         return (
           <Fragment key={monthly.id}>
             <MonthLabel monthly={monthly as MonthlyFS} />
@@ -84,7 +122,7 @@ export default function CompiledFS() {
               orgSignatoryInfo={
                 orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
               }
-              FS={FS as FinancialStatement}
+              monthlyActualCash={monthlyActualCash[monthlyIndex] ?? 0}
             />
             <MonthCashFlow
               monthly={monthly as MonthlyFS}
@@ -92,6 +130,7 @@ export default function CompiledFS() {
                 orgSignatoryInfo as inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get']
               }
               FS={FS as FinancialStatement}
+              monthlyActualCash={monthlyActualCash[monthlyIndex] ?? 0}
             />
             <MonthNotes
               monthly={monthly as MonthlyFS}
@@ -120,6 +159,7 @@ export default function CompiledFS() {
               }
               monthly={monthly as MonthlyFS}
               FS={FS as FinancialStatement}
+              monthlyActualCash={monthlyActualCash[monthlyIndex] ?? 0}
             />
           </Fragment>
         );

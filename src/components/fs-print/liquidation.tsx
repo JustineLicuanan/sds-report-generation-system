@@ -11,10 +11,12 @@ export default function Liquidation({
   monthly,
   orgSignatoryInfo,
   FS,
+  monthlyActualCash,
 }: {
   monthly: MonthlyFS;
   orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
   FS: FinancialStatement;
+  monthlyActualCash: number;
 }) {
   const getInflowIgpRowFSQuery = api.shared.inflowIgpRowFS.get.useQuery({
     where: { monthlyId: monthly.id as string },
@@ -86,7 +88,7 @@ export default function Liquidation({
             <tr className="">
               <td className="w-[85%]">Cash on hand</td>
               <td className="w-[2%] text-end">P</td>
-              <td className="w-[13%] text-end ">{Number(FS.actualCash)}</td>
+              <td className="w-[13%] text-end ">{monthlyActualCash}</td>
             </tr>
 
             <tr className="">
@@ -130,7 +132,7 @@ export default function Liquidation({
                 className="w-[13%] border-y text-end font-bold"
                 style={{ borderBottom: 'double' }}
               >
-                {Number(FS.actualCash) -
+                {monthlyActualCash -
                   sortedOutflowRowFS.reduce(
                     (acc, outflowRow) =>
                       acc +

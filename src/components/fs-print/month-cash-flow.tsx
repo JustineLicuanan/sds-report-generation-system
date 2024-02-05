@@ -9,10 +9,12 @@ export default function MonthCashFlow({
   monthly,
   orgSignatoryInfo,
   FS,
+  monthlyActualCash,
 }: {
   monthly: MonthlyFS;
   orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
   FS: FinancialStatement;
+  monthlyActualCash: number;
 }) {
   const getInflowCollectionRowFSQuery = api.shared.inflowCollectionRowFS.get.useQuery({
     where: { monthlyId: monthly.id as string },
@@ -41,7 +43,7 @@ export default function MonthCashFlow({
     0
   );
 
-  let runningBalance = Number(FS.actualCash) + collectionTotal + IgpTotal;
+  let runningBalance = monthlyActualCash + collectionTotal + IgpTotal;
   return (
     <>
       <div className="mx-auto my-0 mb-16 flex min-h-[100vh] flex-col items-center p-4">
@@ -68,10 +70,10 @@ export default function MonthCashFlow({
                 <td className=" p-1">8/31/2023</td>
                 <td className=" p-1">Actual Cash Count</td>
                 <td className=" p-1"></td>
-                <td className=" p-1">{Number(FS.actualCash)}</td>
+                <td className=" p-1">{monthlyActualCash}</td>
                 <td className=" p-1"></td>
                 <td className=" p-1"></td>
-                <td className=" p-1">{Number(FS.actualCash)}</td>
+                <td className=" p-1">{monthlyActualCash}</td>
               </tr>
               <tr className="">
                 <td colSpan={7} className=" p-1 font-bold">
@@ -85,7 +87,7 @@ export default function MonthCashFlow({
                 <td className=" p-1"></td>
                 <td className=" p-1">{collectionTotal}</td>
                 <td className=" p-1"></td>
-                <td className=" p-1">{Number(FS.actualCash) + (collectionTotal ?? 0)}</td>
+                <td className=" p-1">{monthlyActualCash + (collectionTotal ?? 0)}</td>
               </tr>
               <tr>
                 <td className=" p-1"></td>
@@ -128,11 +130,11 @@ export default function MonthCashFlow({
                 <td colSpan={3} className="border-y p-1">
                   TOTAL - MONTH OF {getMonthName(monthly?.month as number).toUpperCase()}
                 </td>
-                <td className="border-y p-1">{Number(FS?.actualCash)}</td>
+                <td className="border-y p-1">{monthlyActualCash}</td>
                 <td className="border-y p-1">{collectionTotal + IgpTotal}</td>
                 <td className="border-y p-1">({outflowTotal})</td>
                 <td className="border-y p-1" style={{ borderBottom: 'double' }}>
-                  {Number(FS?.actualCash) -
+                  {monthlyActualCash -
                     sortedOutflowRowFS.reduce(
                       (acc, outflowRow) =>
                         acc +
