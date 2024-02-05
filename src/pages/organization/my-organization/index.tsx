@@ -45,6 +45,9 @@ export default function OrganizationPage() {
   const getOrganization = api.shared.organization.get.useQuery();
   const organization = getOrganization.data;
 
+  const getSemester = api.shared.reportSemester.get.useQuery();
+  const semester = getSemester.data;
+
   const getAR = api.shared.AR.getOrCreate.useQuery();
   const AR = getAR.data;
 
@@ -123,175 +126,177 @@ export default function OrganizationPage() {
             </Link>
           </div>
 
-          <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-2xl font-bold">PREAMBLE, MISSION, VISION, AND GOAL</div>
-            <div className="text-center font-medium">
-              In the overview, present your preamble, articulate the mission statement of the
-              organization and describe the vision and goals
-            </div>
-
-            <SingleARUploadActions
-              contentType={ARUploadContentType.PREAMBLE_MISSION_VISION_AND_GOAL}
-              upload={sortedUploads.PREAMBLE_MISSION_VISION_AND_GOAL?.[0]}
-            />
-          </div>
-
-          <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-2xl font-bold">ORGANIZATIONAL CHART</div>
-            <div className="text-center font-medium">
-              llustrate the hierarchical structure of the organization
-            </div>
-
-            <SingleARUploadActions
-              contentType={ARUploadContentType.ORGANIZATIONAL_CHART}
-              upload={sortedUploads.ORGANIZATIONAL_CHART?.[0]}
-            />
-          </div>
-
-          <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-2xl font-bold">CONSTITUTIONAL BY LAWS</div>
-            <div className="text-center font-medium">
-              Provide or update the documented rules and regulations governing the organization
-            </div>
-
-            <SingleARUploadActions
-              contentType={ARUploadContentType.CONSTITUTION_AND_BY_LAWS}
-              upload={sortedUploads.CONSTITUTION_AND_BY_LAWS?.[0]}
-            />
-          </div>
-
-          <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-2xl font-bold">
-              {ARUploadContentType.CURRICULUM_VITAE_OF_OFFICERS.replace(/_/g, ' ')}
-            </div>
-            <div className="text-center font-medium">
-              Upload the curriculum vitae of officers effortlessly with our straightforward upload
-              form.
-            </div>
-
-            <form
-              className="flex gap-2"
-              onSubmit={addCVForm.handleSubmit(
-                (values) => {
-                  if (createARUpload.isLoading) return;
-
-                  createARUpload.mutate({
-                    ...values,
-                    contentNumber: (sortedUploads.CURRICULUM_VITAE_OF_OFFICERS ?? []).length + 1,
-                  });
-                },
-                (err) => console.error(err)
-              )}
-            >
-              <Input
-                placeholder="Title"
-                className="h-8"
-                disabled={
-                  AR?.status === SemReportStatus.TURNED_IN ||
-                  AR?.status === SemReportStatus.COMPLETED
-                }
-                {...addCVForm.register('title')}
-              />
-
-              <div className="flex flex-col justify-center gap-1">
-                <div className="flex items-center gap-2">
-                  <TooltipProvider delayDuration={0} disableHoverableContent>
-                    <Tooltip>
-                      <UploadButton
-                        className={cn(
-                          buttonVariants({ variant: 'c-secondary', size: 'icon' }),
-                          'h-8'
-                        )}
-                        folder="ar-uploads"
-                        resourceType={ResourceType.PDF}
-                        onSuccess={
-                          ((result) => {
-                            addCVForm.setValue('file', result.info?.secure_url ?? '');
-                            addCVForm.setValue('fileId', result.info?.public_id ?? '');
-                          }) satisfies OnSuccessUpload
-                        }
-                        disabled={
-                          AR?.status === SemReportStatus.TURNED_IN ||
-                          AR?.status === SemReportStatus.COMPLETED
-                        }
-                      >
-                        <TooltipTrigger asChild>
-                          <FileUp className="h-4 w-4" />
-                        </TooltipTrigger>
-                      </UploadButton>
-
-                      <TooltipContent side="top">
-                        <p>Upload</p>
-                      </TooltipContent>
-                    </Tooltip>
-
-                    <span>{addCVForm.watch('file') ? '✔️' : '❌'}</span>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          type="submit"
-                          variant="c-primary"
-                          size="icon"
-                          className="h-8"
-                          disabled={
-                            AR?.status === SemReportStatus.TURNED_IN ||
-                            AR?.status === SemReportStatus.COMPLETED
-                          }
-                        >
-                          <Plus className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-
-                      <TooltipContent side="top">
-                        <p>Add</p>
-                      </TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Link
-                          href={{
-                            pathname: `${paths.ORGANIZATION}${paths.ACCOMPLISHMENT_REPORT}`,
-                            hash: ARUploadContentType.CURRICULUM_VITAE_OF_OFFICERS,
-                          }}
-                          className={cn(
-                            buttonVariants({ variant: 'outline', size: 'icon' }),
-                            'h-8'
-                          )}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </TooltipTrigger>
-
-                      <TooltipContent side="top">
-                        <p>See All</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+          {semester && (
+            <>
+              <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+                <div className="text-2xl font-bold">PREAMBLE, MISSION, VISION, AND GOAL</div>
+                <div className="text-center font-medium">
+                  In the overview, present your preamble, articulate the mission statement of the
+                  organization and describe the vision and goals
                 </div>
 
-                <p className="h-4 text-sm font-medium text-destructive">
-                  {addCVForm.formState.errors.file?.message && 'File is required'}
-                </p>
+                <SingleARUploadActions
+                  contentType={ARUploadContentType.PREAMBLE_MISSION_VISION_AND_GOAL}
+                  upload={sortedUploads.PREAMBLE_MISSION_VISION_AND_GOAL?.[0]}
+                />
               </div>
-            </form>
+              <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+                <div className="text-2xl font-bold">ORGANIZATIONAL CHART</div>
+                <div className="text-center font-medium">
+                  llustrate the hierarchical structure of the organization
+                </div>
 
-            <div
-              className={cn(
-                'absolute right-2 top-2 h-8 w-8 rounded-full',
-                (sortedUploads.CURRICULUM_VITAE_OF_OFFICERS ?? []).length > 0
-                  ? 'bg-c-primary text-c-primary-foreground'
-                  : 'bg-destructive text-destructive-foreground'
-              )}
-            >
-              {(sortedUploads.CURRICULUM_VITAE_OF_OFFICERS ?? []).length > 0 ? (
-                <BadgeCheck className="h-8 w-8" />
-              ) : (
-                <BadgeAlert className="h-8 w-8" />
-              )}
-            </div>
-          </div>
+                <SingleARUploadActions
+                  contentType={ARUploadContentType.ORGANIZATIONAL_CHART}
+                  upload={sortedUploads.ORGANIZATIONAL_CHART?.[0]}
+                />
+              </div>
+              <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+                <div className="text-2xl font-bold">CONSTITUTIONAL BY LAWS</div>
+                <div className="text-center font-medium">
+                  Provide or update the documented rules and regulations governing the organization
+                </div>
+
+                <SingleARUploadActions
+                  contentType={ARUploadContentType.CONSTITUTION_AND_BY_LAWS}
+                  upload={sortedUploads.CONSTITUTION_AND_BY_LAWS?.[0]}
+                />
+              </div>
+              <div className="relative col-span-2 row-span-2 flex flex-col items-center justify-center gap-4 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
+                <div className="text-2xl font-bold">
+                  {ARUploadContentType.CURRICULUM_VITAE_OF_OFFICERS.replace(/_/g, ' ')}
+                </div>
+                <div className="text-center font-medium">
+                  Upload the curriculum vitae of officers effortlessly with our straightforward
+                  upload form.
+                </div>
+
+                <form
+                  className="flex gap-2"
+                  onSubmit={addCVForm.handleSubmit(
+                    (values) => {
+                      if (createARUpload.isLoading) return;
+
+                      createARUpload.mutate({
+                        ...values,
+                        contentNumber:
+                          (sortedUploads.CURRICULUM_VITAE_OF_OFFICERS ?? []).length + 1,
+                      });
+                    },
+                    (err) => console.error(err)
+                  )}
+                >
+                  <Input
+                    placeholder="Title"
+                    className="h-8"
+                    disabled={
+                      AR?.status === SemReportStatus.TURNED_IN ||
+                      AR?.status === SemReportStatus.COMPLETED
+                    }
+                    {...addCVForm.register('title')}
+                  />
+
+                  <div className="flex flex-col justify-center gap-1">
+                    <div className="flex items-center gap-2">
+                      <TooltipProvider delayDuration={0} disableHoverableContent>
+                        <Tooltip>
+                          <UploadButton
+                            className={cn(
+                              buttonVariants({ variant: 'c-secondary', size: 'icon' }),
+                              'h-8'
+                            )}
+                            folder="ar-uploads"
+                            resourceType={ResourceType.PDF}
+                            onSuccess={
+                              ((result) => {
+                                addCVForm.setValue('file', result.info?.secure_url ?? '');
+                                addCVForm.setValue('fileId', result.info?.public_id ?? '');
+                              }) satisfies OnSuccessUpload
+                            }
+                            disabled={
+                              AR?.status === SemReportStatus.TURNED_IN ||
+                              AR?.status === SemReportStatus.COMPLETED
+                            }
+                          >
+                            <TooltipTrigger asChild>
+                              <FileUp className="h-4 w-4" />
+                            </TooltipTrigger>
+                          </UploadButton>
+
+                          <TooltipContent side="top">
+                            <p>Upload</p>
+                          </TooltipContent>
+                        </Tooltip>
+
+                        <span>{addCVForm.watch('file') ? '✔️' : '❌'}</span>
+
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              type="submit"
+                              variant="c-primary"
+                              size="icon"
+                              className="h-8"
+                              disabled={
+                                AR?.status === SemReportStatus.TURNED_IN ||
+                                AR?.status === SemReportStatus.COMPLETED
+                              }
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+
+                          <TooltipContent side="top">
+                            <p>Add</p>
+                          </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Link
+                              href={{
+                                pathname: `${paths.ORGANIZATION}${paths.ACCOMPLISHMENT_REPORT}`,
+                                hash: ARUploadContentType.CURRICULUM_VITAE_OF_OFFICERS,
+                              }}
+                              className={cn(
+                                buttonVariants({ variant: 'outline', size: 'icon' }),
+                                'h-8'
+                              )}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Link>
+                          </TooltipTrigger>
+
+                          <TooltipContent side="top">
+                            <p>See All</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+
+                    <p className="h-4 text-sm font-medium text-destructive">
+                      {addCVForm.formState.errors.file?.message && 'File is required'}
+                    </p>
+                  </div>
+                </form>
+
+                <div
+                  className={cn(
+                    'absolute right-2 top-2 h-8 w-8 rounded-full',
+                    (sortedUploads.CURRICULUM_VITAE_OF_OFFICERS ?? []).length > 0
+                      ? 'bg-c-primary text-c-primary-foreground'
+                      : 'bg-destructive text-destructive-foreground'
+                  )}
+                >
+                  {(sortedUploads.CURRICULUM_VITAE_OF_OFFICERS ?? []).length > 0 ? (
+                    <BadgeCheck className="h-8 w-8" />
+                  ) : (
+                    <BadgeAlert className="h-8 w-8" />
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </main>
     </>
