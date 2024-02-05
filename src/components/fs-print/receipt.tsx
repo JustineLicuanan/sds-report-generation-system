@@ -3,6 +3,7 @@ import { inferRouterOutputs } from '@trpc/server';
 import { CldImage } from 'next-cloudinary';
 import { AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
+import { parseSignatoryObject } from '~/utils/parse-signatory-object';
 import { sortOutflowRowFS } from '~/utils/sort-outflow-fs';
 
 export default function Receipt({
@@ -28,6 +29,10 @@ export default function Receipt({
 
   const outflowRowFS = getOutflowRowFSQuery?.data;
   const sortedOutflowRowFS = sortOutflowRowFS(outflowRowFS ?? []);
+
+  const getReportSignatoryQuery = api.shared.reportSignatory.get.useQuery();
+  const repSignatory = getReportSignatoryQuery?.data ?? [];
+  const signatories = parseSignatoryObject(repSignatory);
 
   return (
     <>
@@ -63,22 +68,22 @@ export default function Receipt({
             <div className="flex flex-col items-center gap-4">
               <div>Verified and Checked by:</div>
               <div className="mt-4 flex flex-col items-center">
-                <div>[NAME]</div>
-                <div>[ORG] Treasurer</div>
+                <div>{orgSignatoryInfo?.treasurer === '' ? '[NAME]' : orgSignatoryInfo?.treasurer}</div>
+                <div>{orgSignatoryInfo?.organization.acronym} Treasurer</div>
               </div>
               <div className="mt-4 flex flex-col items-center font-bold">
-                <div>[NAME]</div>
+                <div>{signatories['CSG Treasurer']}</div>
                 <div>CSG Treasurer</div>
               </div>
             </div>
             <div className="flex flex-col items-center gap-4">
               <div>Audited by:</div>
               <div className="mt-4 flex flex-col items-center">
-                <div>[NAME]</div>
-                <div>[ORG] Auditor</div>
+                <div>{orgSignatoryInfo?.auditor === '' ? '[NAME]' : orgSignatoryInfo?.auditor}</div>
+                <div>{orgSignatoryInfo?.organization.acronym} Auditor</div>
               </div>
               <div className="mt-4 flex flex-col items-center font-bold">
-                <div>[NAME]</div>
+                <div>{signatories['CSG Auditor']}</div>
                 <div>CSG Auditor</div>
               </div>
             </div>
