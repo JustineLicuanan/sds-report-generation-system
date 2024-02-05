@@ -3,6 +3,7 @@ import { OutflowFSCategory } from '@prisma/client';
 import { Pencil, Trash2 } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -46,7 +47,7 @@ export default function ModifyFinancialStatementPage() {
   const [selectedOutflowFS, setSelectedOutflowFS] = useState('FOOD_EXPENSE' as OutflowFSCategory);
 
   const getMonthNameQuery = api.shared.monthlyFS.get.useQuery({
-    where: { id: monthlyId as string },
+    where: { id: monthlyId as string },current:true
   });
   const monthly = getMonthNameQuery?.data?.[0];
 
@@ -242,6 +243,25 @@ export default function ModifyFinancialStatementPage() {
         {/* SIDE BAR*/}
         <OrganizationSideBarMenu />
         <div id="main-content" className="mx-4 my-4  w-full  gap-8">
+          <div className="w-full rounded-md px-5 py-3 ">
+            <ol className="list-reset flex">
+              <li>
+                <Link
+                  href={`${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}`}
+                  className="hover:text-black/80"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <span className="mx-2 text-neutral-500">&gt;</span>
+              </li>
+              <li className="text-neutral-500">
+                {getMonthName(monthly?.month as number)} {monthly?.year}
+              </li>
+            </ol>
+          </div>
+
           <div className="mb-4 text-center text-4xl font-bold">
             {getMonthName(monthly?.month as number)} {monthly?.year}
           </div>
@@ -304,7 +324,7 @@ export default function ModifyFinancialStatementPage() {
                 type="submit"
                 className="rounded-sm border border-yellow bg-yellow px-4 py-1 active:scale-95"
               >
-                Generate
+                Create
               </button>
             </form>
           </div>

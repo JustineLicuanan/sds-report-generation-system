@@ -20,6 +20,7 @@ import { AppRouter } from '~/server/api/root';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
+import { OrderBy } from '~/zod-schemas/utils';
 
 export const getServerSideProps = (async (ctx) => {
   const authSession = await getServerAuthSession(ctx);
@@ -45,7 +46,9 @@ export default function CompiledFS() {
   const orgSignatoryInfo = getOrgSignatoryInfo.data;
 
   // Month
-  const getMonthlyFSQuery = api.shared.monthlyFS.get.useQuery();
+  const getMonthlyFSQuery = api.shared.monthlyFS.get.useQuery({
+    orderBy: { month: OrderBy.ASC }, current:true
+  });
   const monthlyFS = getMonthlyFSQuery?.data;
 
   // FS

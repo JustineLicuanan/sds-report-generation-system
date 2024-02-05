@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -9,7 +10,7 @@ import OrgNavBar from '~/components/organization-navigation-bar';
 import OrganizationSideBarMenu from '~/components/organization-side-bar-menu';
 import OutflowRow from '~/components/outflow-row';
 import { useToast } from '~/components/ui/use-toast';
-import { meta } from '~/meta';
+import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
@@ -39,6 +40,7 @@ export default function OutflowFinancialStatementPage() {
 
   const getMonthNameQuery = api.shared.monthlyFS.get.useQuery({
     where: { id: monthlyId as string },
+    current: true,
   });
   const monthly = getMonthNameQuery?.data?.[0];
 
@@ -108,6 +110,36 @@ export default function OutflowFinancialStatementPage() {
         {/* SIDE BAR*/}
         <OrganizationSideBarMenu />
         <div id="main-content" className="mx-4 my-4  w-full  gap-8">
+          <div className="w-full rounded-md px-5 py-3 ">
+            <ol className="list-reset flex">
+              <li>
+                <Link
+                  href={`${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}`}
+                  className="hover:text-black/80"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <span className="mx-2 text-neutral-500">&gt;</span>
+              </li>
+              <li className="hover:text-black/80">
+                <Link
+                  href={`${paths.ORGANIZATION}${paths.FINANCIAL_STATEMENT}${paths.MONTHLY}/${monthlyId}`}
+                  className="hover:text-black/80"
+                >
+                  {getMonthName(monthly?.month as number)} {monthly?.year}
+                </Link>
+              </li>
+              <li>
+                <span className="mx-2 text-neutral-500">&gt;</span>
+              </li>
+              <li className="text-neutral-500">
+                Outflow - {outflowFS?.category.toLowerCase().replace(/_/, ' ')}
+              </li>
+            </ol>
+          </div>
+
           <div className="mb-4 text-4xl font-bold capitalize">
             Outflow - {outflowFS?.category.toLowerCase().replace(/_/, ' ')}
           </div>

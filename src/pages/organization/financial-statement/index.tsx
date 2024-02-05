@@ -20,6 +20,7 @@ import { api } from '~/utils/api';
 import { authRedirects } from '~/utils/auth-redirects';
 import { getMonthName } from '~/utils/get-month-name';
 import { schemas } from '~/zod-schemas';
+import { OrderBy } from '~/zod-schemas/utils';
 
 type UpdateFSInputs = z.infer<typeof schemas.shared.FS.update>;
 
@@ -48,8 +49,12 @@ export default function FinancialStatementPage() {
   const getFinancialStatementQuery = api.shared.FS.getOrCreate.useQuery();
   const FS = getFinancialStatementQuery?.data;
 
-  const getFSMonthQuery = api.shared.monthlyFS.get.useQuery();
+  const getFSMonthQuery = api.shared.monthlyFS.get.useQuery({
+    orderBy: { month: OrderBy.ASC },
+    current: true,
+  });
   const FSMonth = getFSMonthQuery?.data;
+  console.log(FSMonth);
 
   const statusTextColor =
     FS?.status === SemReportStatus.DRAFT || FS?.status === SemReportStatus.TURNED_IN

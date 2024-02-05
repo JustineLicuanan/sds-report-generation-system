@@ -5,6 +5,7 @@ import SemCFMonth from '~/components/fs-print/sem-cf-month';
 import { AppRouter } from '~/server/api/root';
 import { api } from '~/utils/api';
 import { sortOutflowRowFS } from '~/utils/sort-outflow-fs';
+import { OrderBy } from '~/zod-schemas/utils';
 
 export default function SemCashFlow({
   reportSem,
@@ -14,7 +15,10 @@ export default function SemCashFlow({
   orgSignatoryInfo: inferRouterOutputs<AppRouter>['shared']['orgSignatoryInfo']['get'];
 }) {
   // Month
-  const getMonthlyFSQuery = api.shared.monthlyFS.get.useQuery();
+  const getMonthlyFSQuery = api.shared.monthlyFS.get.useQuery({
+    orderBy: { month: OrderBy.ASC },
+    current: true,
+  });
   const monthlyFS = getMonthlyFSQuery?.data;
   console.log(monthlyFS);
   // FS
