@@ -118,11 +118,11 @@ export default function OrganizationPage() {
             </div>
             <div className="flex flex-col items-center">
               <div className="text-lg font-bold">Current Semester:</div>
-              <div className="text-2xl font-semibold text-yellow">
-                <span className="capitalize">
-                  {reportSemester?.term.replace(/_/g, ' ').toLowerCase()}
-                </span>{' '}
-                Semester ({reportSemester?.yearStart}-{reportSemester?.yearEnd})
+              <div className="text-2xl font-semibold capitalize text-yellow">
+                {reportSemester
+                  ? `${reportSemester.term.replace(/_/g, ' ').toLowerCase()} Semester (
+                ${reportSemester.yearStart}-${reportSemester.yearEnd})`
+                  : 'N/A'}
               </div>
             </div>
           </div>

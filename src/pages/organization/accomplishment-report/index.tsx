@@ -1,5 +1,16 @@
 import { ARUploadContentType, SemReportStatus } from '@prisma/client';
-import { Ban, Check, Download, Eye, FileText, FileUp, Layers, Loader2, Trash2 } from 'lucide-react';
+import {
+  AlertOctagon,
+  Ban,
+  Check,
+  Download,
+  Eye,
+  FileText,
+  FileUp,
+  Layers,
+  Loader2,
+  Trash2,
+} from 'lucide-react';
 import { type GetServerSideProps } from 'next';
 import { CldImage } from 'next-cloudinary';
 import Head from 'next/head';
@@ -146,289 +157,299 @@ export default function AccomplishmentReport() {
           <OrganizationSidebar />
 
           <main className="flex-1 pb-24">
-            <section className="container flex max-w-screen-lg flex-col justify-center gap-2 px-4 py-6 md:px-8">
-              <header className="flex items-center gap-4 md:gap-2">
-                {organization?.imageId ? (
-                  <CldImage
-                    width="48"
-                    height="48"
-                    src={organization.imageId}
-                    alt="Organization Logo"
-                    className="rounded-full"
-                  />
-                ) : (
-                  <FileText className="h-12 w-12" />
-                )}
+            {semester ? (
+              <section className="container flex max-w-screen-lg flex-col justify-center gap-2 px-4 py-6 md:px-8">
+                <header className="flex items-center gap-4 md:gap-2">
+                  {organization?.imageId ? (
+                    <CldImage
+                      width="48"
+                      height="48"
+                      src={organization.imageId}
+                      alt="Organization Logo"
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <FileText className="h-12 w-12" />
+                  )}
 
-                <div className="flex flex-col justify-center">
-                  <h1 className="text-3xl font-semibold">
-                    Accomplishment Report &ndash;{' '}
-                    <span className={statusTextColor}>{AR?.status.replace(/_/g, ' ')}</span>
-                  </h1>
+                  <div className="flex flex-col justify-center">
+                    <h1 className="text-3xl font-semibold">
+                      Accomplishment Report &ndash;{' '}
+                      <span className={statusTextColor}>{AR?.status.replace(/_/g, ' ')}</span>
+                    </h1>
 
-                  <p className="text-sm capitalize text-muted-foreground">
-                    {semester?.term.toLowerCase()} Semester {semester?.yearStart}-
-                    {semester?.yearEnd}
-                  </p>
-                </div>
-              </header>
+                    <p className="text-sm capitalize text-muted-foreground">
+                      {semester?.term.toLowerCase()} Semester {semester?.yearStart}-
+                      {semester?.yearEnd}
+                    </p>
+                  </div>
+                </header>
 
-              <div className="flex items-center justify-end gap-2">
-                <TooltipProvider delayDuration={0} disableHoverableContent>
-                  <Tooltip>
-                    <CustomDialog
-                      handleContinue={handleGenerate}
-                      emoji="🚨"
-                      description={
-                        <>
-                          The report generation may{' '}
-                          <span className="font-semibold text-destructive">TAKE A LONG TIME</span>{' '}
-                          depending on the report size. Do you want to proceed?
-                        </>
-                      }
-                    >
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="c-secondary"
-                          size="icon"
-                          disabled={
-                            AR?.status === SemReportStatus.TURNED_IN ||
-                            AR?.status === SemReportStatus.COMPLETED ||
-                            (uploads?.length ?? 0) < 1 ||
-                            isGenerating
-                          }
-                        >
-                          {isGenerating ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Layers className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </TooltipTrigger>
-                    </CustomDialog>
-
-                    <TooltipContent side="top">
-                      <p>Generate</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <UploadButton
-                      className={buttonVariants({ variant: 'c-secondary', size: 'icon' })}
-                      folder="accomplishment-reports"
-                      resourceType={ResourceType.PDF}
-                      onSuccess={
-                        ((result) => {
-                          updateAR.mutate({
-                            compiled: result.info?.secure_url,
-                            compiledId: result.info?.public_id,
-                          });
-                        }) satisfies OnSuccessUpload
-                      }
-                      disabled={
-                        AR?.status === SemReportStatus.TURNED_IN ||
-                        AR?.status === SemReportStatus.COMPLETED
-                      }
-                    >
-                      <TooltipTrigger asChild>
-                        <FileUp className="h-4 w-4" />
-                      </TooltipTrigger>
-                    </UploadButton>
-
-                    <TooltipContent side="top">
-                      <p>Upload</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <CustomDialog
-                      handleContinue={() => updateAR.mutate({ compiled: null, compiledId: null })}
-                      emoji="🚨"
-                      description="This action cannot be undone. This will permanently delete your generated accomplishment report from our servers."
-                    >
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          disabled={
-                            AR?.status === SemReportStatus.TURNED_IN ||
-                            AR?.status === SemReportStatus.COMPLETED ||
-                            !AR?.compiled
-                          }
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                    </CustomDialog>
-
-                    <TooltipContent side="top">
-                      <p>Delete</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      {AR?.status !== SemReportStatus.TURNED_IN ? (
-                        <Button
-                          variant="c-primary"
-                          size="icon"
-                          onClick={() => turnInAR.mutate()}
-                          disabled={!AR?.compiled || AR?.status === SemReportStatus.COMPLETED}
-                        >
-                          <Check className="h-4 w-4" />
-                        </Button>
-                      ) : (
-                        <CustomDialog
-                          handleContinue={() => cancelAR.mutate()}
-                          description="This action will cancel your accomplishment report submission."
-                        >
-                          <Button variant="destructive" size="icon">
-                            <Ban className="h-4 w-4" />
+                <div className="flex items-center justify-end gap-2">
+                  <TooltipProvider delayDuration={0} disableHoverableContent>
+                    <Tooltip>
+                      <CustomDialog
+                        handleContinue={handleGenerate}
+                        emoji="🚨"
+                        description={
+                          <>
+                            The report generation may{' '}
+                            <span className="font-semibold text-destructive">TAKE A LONG TIME</span>{' '}
+                            depending on the report size. Do you want to proceed?
+                          </>
+                        }
+                      >
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="c-secondary"
+                            size="icon"
+                            disabled={
+                              AR?.status === SemReportStatus.TURNED_IN ||
+                              AR?.status === SemReportStatus.COMPLETED ||
+                              (uploads?.length ?? 0) < 1 ||
+                              isGenerating
+                            }
+                          >
+                            {isGenerating ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Layers className="h-4 w-4" />
+                            )}
                           </Button>
-                        </CustomDialog>
-                      )}
-                    </TooltipTrigger>
+                        </TooltipTrigger>
+                      </CustomDialog>
 
-                    <TooltipContent side="top">
-                      <p>Turn in</p>
-                    </TooltipContent>
-                  </Tooltip>
+                      <TooltipContent side="top">
+                        <p>Generate</p>
+                      </TooltipContent>
+                    </Tooltip>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      {AR?.compiled ? (
-                        <Link
-                          href={AR.compiled}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={buttonVariants({ variant: 'outline', size: 'icon' })}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      ) : (
-                        <Button variant="outline" size="icon" disabled>
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </TooltipTrigger>
+                    <Tooltip>
+                      <UploadButton
+                        className={buttonVariants({ variant: 'c-secondary', size: 'icon' })}
+                        folder="accomplishment-reports"
+                        resourceType={ResourceType.PDF}
+                        onSuccess={
+                          ((result) => {
+                            updateAR.mutate({
+                              compiled: result.info?.secure_url,
+                              compiledId: result.info?.public_id,
+                            });
+                          }) satisfies OnSuccessUpload
+                        }
+                        disabled={
+                          AR?.status === SemReportStatus.TURNED_IN ||
+                          AR?.status === SemReportStatus.COMPLETED
+                        }
+                      >
+                        <TooltipTrigger asChild>
+                          <FileUp className="h-4 w-4" />
+                        </TooltipTrigger>
+                      </UploadButton>
 
-                    <TooltipContent side="top">
-                      <p>Preview</p>
-                    </TooltipContent>
-                  </Tooltip>
+                      <TooltipContent side="top">
+                        <p>Upload</p>
+                      </TooltipContent>
+                    </Tooltip>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      {AR?.compiled ? (
-                        <a
-                          href={AR.compiled}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={buttonVariants({ variant: 'outline', size: 'icon' })}
-                          download={`${organization?.acronym}_AR_${semester?.term}_${semester?.yearStart}-${semester?.yearEnd}`}
-                        >
-                          <Download className="h-4 w-4" />
-                        </a>
-                      ) : (
-                        <Button variant="outline" size="icon" disabled>
-                          <Download className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </TooltipTrigger>
+                    <Tooltip>
+                      <CustomDialog
+                        handleContinue={() => updateAR.mutate({ compiled: null, compiledId: null })}
+                        emoji="🚨"
+                        description="This action cannot be undone. This will permanently delete your generated accomplishment report from our servers."
+                      >
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            disabled={
+                              AR?.status === SemReportStatus.TURNED_IN ||
+                              AR?.status === SemReportStatus.COMPLETED ||
+                              !AR?.compiled
+                            }
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                      </CustomDialog>
 
-                    <TooltipContent side="top">
-                      <p>Download</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
+                      <TooltipContent side="top">
+                        <p>Delete</p>
+                      </TooltipContent>
+                    </Tooltip>
 
-              <Separator />
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        {AR?.status !== SemReportStatus.TURNED_IN ? (
+                          <Button
+                            variant="c-primary"
+                            size="icon"
+                            onClick={() => turnInAR.mutate()}
+                            disabled={!AR?.compiled || AR?.status === SemReportStatus.COMPLETED}
+                          >
+                            <Check className="h-4 w-4" />
+                          </Button>
+                        ) : (
+                          <CustomDialog
+                            handleContinue={() => cancelAR.mutate()}
+                            description="This action will cancel your accomplishment report submission."
+                          >
+                            <Button variant="destructive" size="icon">
+                              <Ban className="h-4 w-4" />
+                            </Button>
+                          </CustomDialog>
+                        )}
+                      </TooltipTrigger>
 
-              <div className="flex flex-col justify-center gap-4 py-2">
-                <ARSingleUpload
-                  contentType={ARUploadContentType.FRONT_PAGE}
-                  upload={sortedUploads.FRONT_PAGE?.[0]}
-                />
+                      <TooltipContent side="top">
+                        <p>Turn in</p>
+                      </TooltipContent>
+                    </Tooltip>
 
-                <ARSingleUpload
-                  contentType={ARUploadContentType.PREAMBLE_MISSION_VISION_AND_GOAL}
-                  upload={sortedUploads.PREAMBLE_MISSION_VISION_AND_GOAL?.[0]}
-                />
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        {AR?.compiled ? (
+                          <Link
+                            href={AR.compiled}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={buttonVariants({ variant: 'outline', size: 'icon' })}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        ) : (
+                          <Button variant="outline" size="icon" disabled>
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </TooltipTrigger>
 
-                <ARSingleUpload
-                  contentType={ARUploadContentType.CONSTITUTION_AND_BY_LAWS}
-                  upload={sortedUploads.CONSTITUTION_AND_BY_LAWS?.[0]}
-                />
+                      <TooltipContent side="top">
+                        <p>Preview</p>
+                      </TooltipContent>
+                    </Tooltip>
 
-                <ARSingleUpload
-                  contentType={ARUploadContentType.ACCEPTANCE_LETTER_OF_ADVISERS}
-                  upload={sortedUploads.ACCEPTANCE_LETTER_OF_ADVISERS?.[0]}
-                />
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        {AR?.compiled ? (
+                          <a
+                            href={AR.compiled}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={buttonVariants({ variant: 'outline', size: 'icon' })}
+                            download={`${organization?.acronym}_AR_${semester?.term}_${semester?.yearStart}-${semester?.yearEnd}`}
+                          >
+                            <Download className="h-4 w-4" />
+                          </a>
+                        ) : (
+                          <Button variant="outline" size="icon" disabled>
+                            <Download className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </TooltipTrigger>
 
-                <ARSingleUpload
-                  contentType={ARUploadContentType.ORGANIZATIONAL_CHART}
-                  upload={sortedUploads.ORGANIZATIONAL_CHART?.[0]}
-                />
+                      <TooltipContent side="top">
+                        <p>Download</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.CURRICULUM_VITAE_OF_OFFICERS}
-                  uploads={sortedUploads.CURRICULUM_VITAE_OF_OFFICERS ?? []}
-                />
+                <Separator />
 
-                <ARSingleUpload
-                  contentType={ARUploadContentType.CALENDAR_OF_ACTIVITIES}
-                  upload={sortedUploads.CALENDAR_OF_ACTIVITIES?.[0]}
-                />
+                <div className="flex flex-col justify-center gap-4 py-2">
+                  <ARSingleUpload
+                    contentType={ARUploadContentType.FRONT_PAGE}
+                    upload={sortedUploads.FRONT_PAGE?.[0]}
+                  />
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.APPROVED_ACTIVITY_PROPOSALS}
-                  uploads={sortedUploads.APPROVED_ACTIVITY_PROPOSALS ?? []}
-                />
+                  <ARSingleUpload
+                    contentType={ARUploadContentType.PREAMBLE_MISSION_VISION_AND_GOAL}
+                    upload={sortedUploads.PREAMBLE_MISSION_VISION_AND_GOAL?.[0]}
+                  />
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.APPROVED_PROJECT_PROPOSALS}
-                  uploads={sortedUploads.APPROVED_PROJECT_PROPOSALS ?? []}
-                />
+                  <ARSingleUpload
+                    contentType={ARUploadContentType.CONSTITUTION_AND_BY_LAWS}
+                    upload={sortedUploads.CONSTITUTION_AND_BY_LAWS?.[0]}
+                  />
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.APPROVED_RESOLUTIONS}
-                  uploads={sortedUploads.APPROVED_RESOLUTIONS ?? []}
-                />
+                  <ARSingleUpload
+                    contentType={ARUploadContentType.ACCEPTANCE_LETTER_OF_ADVISERS}
+                    upload={sortedUploads.ACCEPTANCE_LETTER_OF_ADVISERS?.[0]}
+                  />
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.APPROVED_OTHER_LETTERS}
-                  uploads={sortedUploads.APPROVED_OTHER_LETTERS ?? []}
-                />
+                  <ARSingleUpload
+                    contentType={ARUploadContentType.ORGANIZATIONAL_CHART}
+                    upload={sortedUploads.ORGANIZATIONAL_CHART?.[0]}
+                  />
 
-                <ARSingleUpload
-                  contentType={ARUploadContentType.SUMMARY_OF_CONDUCTED_EVENTS}
-                  upload={sortedUploads.SUMMARY_OF_CONDUCTED_EVENTS?.[0]}
-                />
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.CURRICULUM_VITAE_OF_OFFICERS}
+                    uploads={sortedUploads.CURRICULUM_VITAE_OF_OFFICERS ?? []}
+                  />
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.COMMUNITY_EXTENSION_SERVICES}
-                  uploads={sortedUploads.COMMUNITY_EXTENSION_SERVICES ?? []}
-                />
+                  <ARSingleUpload
+                    contentType={ARUploadContentType.CALENDAR_OF_ACTIVITIES}
+                    upload={sortedUploads.CALENDAR_OF_ACTIVITIES?.[0]}
+                  />
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.MINUTES_OF_THE_MEETING}
-                  uploads={sortedUploads.MINUTES_OF_THE_MEETING ?? []}
-                />
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.APPROVED_ACTIVITY_PROPOSALS}
+                    uploads={sortedUploads.APPROVED_ACTIVITY_PROPOSALS ?? []}
+                  />
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.CERTIFICATES}
-                  uploads={sortedUploads.CERTIFICATES ?? []}
-                />
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.APPROVED_PROJECT_PROPOSALS}
+                    uploads={sortedUploads.APPROVED_PROJECT_PROPOSALS ?? []}
+                  />
 
-                <ARMultipleUploads
-                  contentType={ARUploadContentType.FEEDBACK_FORM}
-                  uploads={sortedUploads.FEEDBACK_FORM ?? []}
-                />
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.APPROVED_RESOLUTIONS}
+                    uploads={sortedUploads.APPROVED_RESOLUTIONS ?? []}
+                  />
 
-                <ExternalActivityProposals />
-              </div>
-            </section>
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.APPROVED_OTHER_LETTERS}
+                    uploads={sortedUploads.APPROVED_OTHER_LETTERS ?? []}
+                  />
+
+                  <ARSingleUpload
+                    contentType={ARUploadContentType.SUMMARY_OF_CONDUCTED_EVENTS}
+                    upload={sortedUploads.SUMMARY_OF_CONDUCTED_EVENTS?.[0]}
+                  />
+
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.COMMUNITY_EXTENSION_SERVICES}
+                    uploads={sortedUploads.COMMUNITY_EXTENSION_SERVICES ?? []}
+                  />
+
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.MINUTES_OF_THE_MEETING}
+                    uploads={sortedUploads.MINUTES_OF_THE_MEETING ?? []}
+                  />
+
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.CERTIFICATES}
+                    uploads={sortedUploads.CERTIFICATES ?? []}
+                  />
+
+                  <ARMultipleUploads
+                    contentType={ARUploadContentType.FEEDBACK_FORM}
+                    uploads={sortedUploads.FEEDBACK_FORM ?? []}
+                  />
+
+                  <ExternalActivityProposals />
+                </div>
+              </section>
+            ) : (
+              <section className="container flex h-full max-w-screen-lg flex-col items-center justify-center gap-2 px-4 py-6 md:px-8">
+                <AlertOctagon className="h-32 w-32 text-destructive" />
+
+                <h1 className="text-center text-3xl text-destructive">
+                  There is no active semester for Accomplishment Report!
+                </h1>
+              </section>
+            )}
           </main>
         </div>
       </div>

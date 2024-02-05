@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import AdminNavBar from '~/components/admin-navigation-bar';
 import AdminSideBarMenu from '~/components/admin-side-bar-menu';
+import { cn } from '~/lib/utils';
 import { meta, paths } from '~/meta';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
@@ -27,13 +28,16 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 export default function AdminDashboardPage() {
+  const router = useRouter();
+
   const getOrgQuery = api.admin.org.get.useQuery({ includeReports: true });
   const data = getOrgQuery.data ?? [];
 
+  const getSemester = api.admin.reportSemester.get.useQuery({ current: true });
+  const semester = getSemester.data?.[0];
+
   const getReportQuery = api.admin.report.get.useQuery({ includeCreatedBy: true });
   const report = getReportQuery.data ?? [];
-
-  const router = useRouter();
 
   return (
     <>
@@ -143,7 +147,13 @@ export default function AdminDashboardPage() {
           <div className="col-span-1 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Current Semester:</div>
             <div className="flex items-center gap-2 ">
-              <div className="text-2xl font-semibold text-yellow">First Semester (2023 - 2024)</div>
+              <div className="text-2xl font-semibold capitalize text-yellow">
+                {semester
+                  ? `${semester.term.toLowerCase()} Semester (${semester.yearStart} - ${
+                      semester.yearEnd
+                    })`
+                  : 'N/A'}
+              </div>
               <button
                 type="button"
                 onClick={() => router.push(`${paths.ADMIN}${paths.SEMESTER}${paths.CREATE}`)}
@@ -158,7 +168,22 @@ export default function AdminDashboardPage() {
           <div className="col-span-1 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
             <div className="text-lg font-bold">Accomplishment Report Submission Date:</div>
             <div className="flex items-center gap-2 ">
-              <div className="text-2xl font-semibold text-yellow">10/25/2023</div>
+              <div
+                className={cn(
+                  'text-2xl font-semibold',
+                  semester?.dueDateAR
+                    ? semester.dueDateAR > new Date()
+                      ? 'text-c-primary'
+                      : 'text-destructive'
+                    : 'text-c-secondary'
+                )}
+              >
+                {semester?.dueDateAR?.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                }) ?? 'N/A'}
+              </div>
               {/* <button type="button" className="hover:text-yellow active:scale-95"> */}
               <CalendarDays />
               {/* </button> */}
@@ -166,9 +191,24 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="col-span-1 row-span-1 flex flex-col items-center justify-center gap-2 rounded-sm px-4 py-2 shadow-[0_1px_5px_0px_rgba(0,0,0,0.50)]">
-            <div className="text-lg font-bold">Financial Report Submission Date::</div>
+            <div className="text-lg font-bold">Financial Report Submission Date:</div>
             <div className="flex items-center gap-2 ">
-              <div className="text-2xl font-semibold text-yellow">10/25/2023</div>
+              <div
+                className={cn(
+                  'text-2xl font-semibold',
+                  semester?.dueDateFS
+                    ? semester.dueDateFS > new Date()
+                      ? 'text-c-primary'
+                      : 'text-destructive'
+                    : 'text-c-secondary'
+                )}
+              >
+                {semester?.dueDateFS?.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                }) ?? 'N/A'}
+              </div>
               {/* <button type="button" className="hover:text-yellow active:scale-95"> */}
               <CalendarDays />
               {/* </button> */}

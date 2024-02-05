@@ -30,6 +30,7 @@ export const getServerSideProps = (async (ctx) => {
 }) satisfies GetServerSideProps;
 
 type CreateSemesterInputs = z.infer<typeof schemas.admin.reportSemester.create>;
+type UpdateSemesterInputs = z.infer<typeof schemas.admin.reportSemester.update>;
 
 export default function CreateSemPage() {
   const router = useRouter();
@@ -47,13 +48,39 @@ export default function CreateSemPage() {
     },
   });
 
+  const updateSemesterForm = useForm<UpdateSemesterInputs>({
+    resolver: zodResolver(schemas.admin.reportSemester.update),
+    values: {
+      id: semester?.id ?? '',
+      yearStart: semester?.yearStart,
+      yearEnd: semester?.yearEnd,
+      term: semester?.term,
+      dueDateAR: semester?.dueDateAR?.toISOString().split('T')[0],
+      dueDateFS: semester?.dueDateFS?.toISOString().split('T')[0],
+    },
+  });
+
   const createSemester = api.admin.reportSemester.create.useMutation({
     onSuccess: async () => {
       toast({ variant: 'c-primary', description: '✔️ Semester has been created.' });
       await utils.admin.reportSemester.invalidate();
       router.push(`${paths.ADMIN}`);
     },
+    onError: ({ data, message }) => {
+      toast({
+        variant: 'c-primary',
+        title: `${data?.httpStatus} ${data?.code}`,
+        description: message,
+      });
+    },
+  });
 
+  const updateSemester = api.admin.reportSemester.update.useMutation({
+    onSuccess: async () => {
+      toast({ variant: 'c-primary', description: '✔️ Semester has been updated.' });
+      await utils.admin.reportSemester.invalidate();
+      router.push(`${paths.ADMIN}`);
+    },
     onError: ({ data, message }) => {
       toast({
         variant: 'c-primary',
@@ -84,98 +111,193 @@ export default function CreateSemPage() {
         <AdminSidebar />
 
         <div className="container flex max-w-screen-lg flex-col gap-4 px-4 py-6 md:px-8">
-          <form
-            id="main-content"
-            className="mx-4 my-4 w-full"
-            onSubmit={createSemesterForm.handleSubmit(
-              (values) => {
-                if (createSemester.isLoading) return;
+          {semester ? (
+            <form
+              id="main-content"
+              className="mx-4 my-4 w-full"
+              onSubmit={updateSemesterForm.handleSubmit(
+                (values) => {
+                  if (updateSemester.isLoading) return;
 
-                createSemester.mutate(values);
-              },
-              (err) => console.error(err)
-            )}
-          >
-            <div className="text-2xl font-bold">Create New Semester</div>
-            <div className="mt-8 flex flex-col gap-4">
-              <div className="flex gap-4">
-                <label htmlFor="year-start">Year start:</label>
-                <select
-                  id="year-start"
-                  className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1"
-                  {...createSemesterForm.register('yearStart')}
-                >
-                  {getYearArray().map((year) => (
-                    <option id={year.toString()} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
+                  updateSemester.mutate(values);
+                },
+                (err) => console.error(err)
+              )}
+            >
+              <div className="text-2xl font-bold">Update Current Semester</div>
+              <div className="mt-8 flex flex-col gap-4">
+                <div className="flex gap-4">
+                  <label htmlFor="year-start">Year start:</label>
+                  <select
+                    id="year-start"
+                    className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1"
+                    {...updateSemesterForm.register('yearStart')}
+                  >
+                    {getYearArray().map((year) => (
+                      <option id={year.toString()} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex gap-4">
+                  <label htmlFor="year-end">Year end:</label>
+                  <select
+                    id="year-end"
+                    className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1"
+                    {...updateSemesterForm.register('yearEnd')}
+                  >
+                    {getYearArray().map((year) => (
+                      <option id={year.toString()} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex gap-4">
+                  <label htmlFor="term">Term:</label>
+                  <select
+                    id="term"
+                    className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1 capitalize"
+                    {...updateSemesterForm.register('term')}
+                  >
+                    {Object.values(SemesterTerm).map((term) => (
+                      <option id={term} value={term}>
+                        {term.toLowerCase()}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex gap-4">
+                  <label htmlFor="dueDateAR">Accomplishment Report Due Date:</label>
+                  <input
+                    type="date"
+                    id="dueDateAR"
+                    className="rounded-sm border border-input bg-transparent px-1"
+                    {...updateSemesterForm.register('dueDateAR')}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <label htmlFor="dueDateFS">Financial Statement Due Date:</label>
+                  <input
+                    type="date"
+                    id="dueDateFS"
+                    className="rounded-sm border border-input bg-transparent px-1"
+                    {...updateSemesterForm.register('dueDateFS')}
+                  />
+                </div>
               </div>
-              <div className="flex gap-4">
-                <label htmlFor="year-end">Year end:</label>
-                <select
-                  id="year-end"
-                  className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1"
-                  {...createSemesterForm.register('yearEnd')}
-                >
-                  {getYearArray().map((year) => (
-                    <option id={year.toString()} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex gap-4">
-                <label htmlFor="term">Term:</label>
-                <select
-                  id="term"
-                  className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1 capitalize"
-                  {...createSemesterForm.register('term')}
-                >
-                  {Object.values(SemesterTerm).map((term) => (
-                    <option id={term} value={term}>
-                      {term.toLowerCase()}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex gap-4">
-                <label htmlFor="dueDateAR">Accomplishment Report Due Date:</label>
-                <input
-                  type="datetime-local"
-                  id="dueDateAR"
-                  className="rounded-sm border border-input bg-transparent px-1"
-                  {...createSemesterForm.register('dueDateAR')}
-                />
-              </div>
-              <div className="flex gap-4">
-                <label htmlFor="dueDateFS">Financial Statement Due Date:</label>
-                <input
-                  type="datetime-local"
-                  id="dueDateFS"
-                  className="rounded-sm border border-input bg-transparent px-1"
-                  {...createSemesterForm.register('dueDateFS')}
-                />
-              </div>
-            </div>
 
-            <div className="flex justify-end gap-4">
-              <button
-                type="button"
-                onClick={() => router.push(`${paths.ADMIN}`)}
-                className="mt-4 rounded-sm border border-gray bg-gray px-3 active:scale-95"
-              >
-                Back
-              </button>
-              <button
-                type="submit"
-                className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
-              >
-                Create
-              </button>
-            </div>
-          </form>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => router.push(`${paths.ADMIN}`)}
+                  className="mt-4 rounded-sm border border-gray bg-gray px-3 active:scale-95"
+                >
+                  Back
+                </button>
+                <button
+                  type="submit"
+                  className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Save changes
+                </button>
+              </div>
+            </form>
+          ) : (
+            <form
+              id="main-content"
+              className="mx-4 my-4 w-full"
+              onSubmit={createSemesterForm.handleSubmit(
+                (values) => {
+                  if (createSemester.isLoading) return;
+
+                  createSemester.mutate(values);
+                },
+                (err) => console.error(err)
+              )}
+            >
+              <div className="text-2xl font-bold">Create New Semester</div>
+              <div className="mt-8 flex flex-col gap-4">
+                <div className="flex gap-4">
+                  <label htmlFor="year-start">Year start:</label>
+                  <select
+                    id="year-start"
+                    className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1"
+                    {...createSemesterForm.register('yearStart')}
+                  >
+                    {getYearArray().map((year) => (
+                      <option id={year.toString()} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex gap-4">
+                  <label htmlFor="year-end">Year end:</label>
+                  <select
+                    id="year-end"
+                    className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1"
+                    {...createSemesterForm.register('yearEnd')}
+                  >
+                    {getYearArray().map((year) => (
+                      <option id={year.toString()} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex gap-4">
+                  <label htmlFor="term">Term:</label>
+                  <select
+                    id="term"
+                    className="w-full max-w-[12.5rem] rounded-sm border border-input bg-transparent px-1 capitalize"
+                    {...createSemesterForm.register('term')}
+                  >
+                    {Object.values(SemesterTerm).map((term) => (
+                      <option id={term} value={term}>
+                        {term.toLowerCase()}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex gap-4">
+                  <label htmlFor="dueDateAR">Accomplishment Report Due Date:</label>
+                  <input
+                    type="date"
+                    id="dueDateAR"
+                    className="rounded-sm border border-input bg-transparent px-1"
+                    {...createSemesterForm.register('dueDateAR')}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <label htmlFor="dueDateFS">Financial Statement Due Date:</label>
+                  <input
+                    type="date"
+                    id="dueDateFS"
+                    className="rounded-sm border border-input bg-transparent px-1"
+                    {...createSemesterForm.register('dueDateFS')}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => router.push(`${paths.ADMIN}`)}
+                  className="mt-4 rounded-sm border border-gray bg-gray px-3 active:scale-95"
+                >
+                  Back
+                </button>
+                <button
+                  type="submit"
+                  className="mt-4 rounded-sm border border-yellow bg-yellow px-3 active:scale-95"
+                >
+                  Create
+                </button>
+              </div>
+            </form>
+          )}
 
           <Separator />
 
@@ -194,7 +316,7 @@ export default function CreateSemPage() {
           <Button
             variant="c-secondary"
             size="lg"
-            onClick={() => router.push(`${paths.ADMIN}${paths.SEMESTER}`)}
+            onClick={() => router.push(`${paths.ADMIN}${paths.SEMESTER}/archives`)}
           >
             Semester Archives
           </Button>
