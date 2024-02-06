@@ -37,11 +37,10 @@ export default function PreviewImage({ children, updateForm }: Props) {
             <div className="flex justify-center">
               {updateForm.watch('receiptId') && (
                 <CldImage
-                  width="100"
-                  height="100"
+                  width="192"
+                  height="192"
                   src={updateForm.watch('receiptId') ?? ''}
                   alt="Receipt"
-                  className="h-48 w-48"
                 />
               )}
             </div>

@@ -31,13 +31,12 @@ export default function MonthNotes({
   const outflowRowFS = getOutflowRowFSQuery?.data;
   const sortedOutflowRowFS = sortOutflowRowFS(outflowRowFS ?? []);
 
-  const viewportHeight = window.innerHeight;
-
-
   return (
     <>
       <div
-        className={`mx-auto my-0 mb-32 flex min-h-[200vh] w-[700px] flex-col items-center gap-4 p-4 leading-5`}
+        className={`${
+          sortedOutflowRowFS?.length > 2 ? 'mb-32 min-h-[200vh]' : 'mb-16 min-h-[100vh]'
+        } mx-auto my-0 flex  w-[700px] flex-col items-center gap-4 p-4 leading-5`}
       >
         <div className="flex flex-col items-center">
           <div className="font-bold">{orgSignatoryInfo?.organization.name}</div>

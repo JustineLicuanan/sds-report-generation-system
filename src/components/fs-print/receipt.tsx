@@ -41,20 +41,19 @@ export default function Receipt({
           RECEIPTS
         </div>
 
-        <div className="mb-16 flex min-h-[100vh]  flex-col items-center justify-center  text-6xl">
+        <div className="mb-16 flex min-h-[100vh] flex-col items-center justify-center  text-6xl">
           COLLECTIONS
         </div>
-        <div className="mb-16 flex min-h-[100vh] flex-col items-center gap-4 ">
+        <div className="my-8 flex min-h-[100vh] flex-col items-center gap-4 ">
           {inflowCollectionRowFS?.map((collectionRow, collectionRowIdxR) => (
             <div key={collectionRowIdxR} className="w-full">
               {collectionRow?.receiptId ? (
                 <div className="h-48 w-48">
                   <CldImage
-                    width="96"
-                    height="96"
+                    width="192"
+                    height="192"
                     src={collectionRow?.receiptId ?? ''}
                     alt={`Collection Receipt`}
-                    className="h-48 w-48"
                   />
                 </div>
               ) : (
@@ -68,7 +67,9 @@ export default function Receipt({
             <div className="flex flex-col items-center gap-4">
               <div>Verified and Checked by:</div>
               <div className="mt-4 flex flex-col items-center">
-                <div>{orgSignatoryInfo?.treasurer === '' ? '[NAME]' : orgSignatoryInfo?.treasurer}</div>
+                <div>
+                  {orgSignatoryInfo?.treasurer === '' ? '[NAME]' : orgSignatoryInfo?.treasurer}
+                </div>
                 <div>{orgSignatoryInfo?.organization.acronym} Treasurer</div>
               </div>
               <div className="mt-4 flex flex-col items-center font-bold">
@@ -93,17 +94,16 @@ export default function Receipt({
         <div className="mb-16 flex min-h-[100vh]  flex-col items-center justify-center  text-6xl ">
           IGP
         </div>
-        <div className="mb-16 flex min-h-[100vh] flex-col items-center gap-4 text-6xl ">
+        <div className="my-16 flex min-h-[100vh] flex-col items-center gap-4 text-6xl ">
           {inflowIgpRowFS?.map((IgpRow, IgpRowIdxR) => (
             <div key={IgpRowIdxR} className="w-full">
               {IgpRow?.receiptId ? (
                 <div className="h-48 w-48">
                   <CldImage
-                    width="96"
-                    height="96"
+                    width="192"
+                    height="192"
                     src={IgpRow?.receiptId ?? ''}
                     alt={`IGP Receipt`}
-                    className="h-48 w-48"
                   />
                 </div>
               ) : (
@@ -118,22 +118,24 @@ export default function Receipt({
             <div className="flex flex-col items-center gap-4">
               <div>Verified and Checked by:</div>
               <div className="mt-4 flex flex-col items-center">
-                <div>[NAME]</div>
-                <div>[ORG] Treasurer</div>
+                <div>
+                  {orgSignatoryInfo?.treasurer === '' ? '[NAME]' : orgSignatoryInfo?.treasurer}
+                </div>
+                <div>{orgSignatoryInfo?.organization.acronym} Treasurer</div>
               </div>
               <div className="mt-4 flex flex-col items-center font-bold">
-                <div>[NAME]</div>
+                <div>{signatories['CSG Treasurer']}</div>
                 <div>CSG Treasurer</div>
               </div>
             </div>
             <div className="flex flex-col items-center gap-4">
               <div>Audited by:</div>
               <div className="mt-4 flex flex-col items-center">
-                <div>[NAME]</div>
-                <div>[ORG] Auditor</div>
+                <div>{orgSignatoryInfo?.auditor === '' ? '[NAME]' : orgSignatoryInfo?.auditor}</div>
+                <div>{orgSignatoryInfo?.organization.acronym} Auditor</div>
               </div>
               <div className="mt-4 flex flex-col items-center font-bold">
-                <div>[NAME]</div>
+                <div>{signatories['CSG Auditor']}</div>
                 <div>CSG Auditor</div>
               </div>
             </div>
@@ -149,7 +151,7 @@ export default function Receipt({
             <div className="mb-16 flex min-h-[100vh]  flex-col items-center justify-center text-center text-6xl capitalize">
               {outflowRow[0].toLowerCase().replace(/_/g, ' ')} Receipts
             </div>
-            <div className="mb-32 flex min-h-[100vh] flex-col items-center gap-4">
+            <div className="my-16 flex min-h-[100vh] flex-col items-center gap-4">
               {outflowRow[1].map((row, outflowRowIdxR) => (
                 <div key={outflowRowIdxR}>
                   {row?.receiptId ? (
@@ -173,26 +175,26 @@ export default function Receipt({
                 <div className="flex flex-col items-center gap-4">
                   <div>Verified and Checked by:</div>
                   <div className="mt-4 flex flex-col items-center">
-                    <div className="font-bold">
+                    <div>
                       {orgSignatoryInfo?.treasurer === '' ? '[NAME]' : orgSignatoryInfo?.treasurer}
                     </div>
-                    <div>[ORG] Treasurer</div>
+                    <div>{orgSignatoryInfo?.organization.acronym} Treasurer</div>
                   </div>
                   <div className="mt-4 flex flex-col items-center font-bold">
-                    <div className="font-bold">
-                      {orgSignatoryInfo?.adviser1 === '' ? '[NAME]' : orgSignatoryInfo?.adviser1}
-                    </div>
+                    <div>{signatories['CSG Treasurer']}</div>
                     <div>CSG Treasurer</div>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-4">
                   <div>Audited by:</div>
                   <div className="mt-4 flex flex-col items-center">
-                    <div>[NAME]</div>
-                    <div>[ORG] Auditor</div>
+                    <div>
+                      {orgSignatoryInfo?.auditor === '' ? '[NAME]' : orgSignatoryInfo?.auditor}
+                    </div>
+                    <div>{orgSignatoryInfo?.organization.acronym} Auditor</div>
                   </div>
                   <div className="mt-4 flex flex-col items-center font-bold">
-                    <div>[NAME]</div>
+                    <div>{signatories['CSG Auditor']}</div>
                     <div>CSG Auditor</div>
                   </div>
                 </div>
