@@ -1,27 +1,6 @@
-# SD Services SS
+# SDS Report Generation System
 
-This is a scheduling system project.
-
-## Usage
-
-```sh
-# STEP 1: Copy `.env.example` to `.env`
-$ cp .env.example .env
-
-# STEP 1.1: Configure the variables in `.env` file
-
-# STEP 1.2: Create a MySQL / MariaDB database based on your `.env` file
-
-# STEP 2: Install dependencies with pnpm
-$ pnpm i
-
-# STEP 3: Migrate & seed the database
-$ pnpm db:push
-$ 
-
-# STEP 4: Congratulations! Now, you can run the dev server
-$ pnpm dev
-```
+This is a report generation system capstone project that is built with Next.js React.
 
 ## What's next?
 
@@ -29,15 +8,19 @@ If you are not familiar with the different technologies used in this project, pl
 respective docs.
 
 - [Next.js](https://nextjs.org)
+- [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
-
-## Upcoming Changes
-
-- Make it more mobile responsive
-- Change the web page link for user and admin in some pages e.g logs.
+- [tRPC](https://trpc.io)
 
 ## Changelog
+
+### Version 1.1.2 🎉
+
+- feat: deploy to production
+- style: improve mobile responsiveness
+- fix: resolve broken links
+- fix: resolve lint & type errors
 
 ### Version 0.12.0
 
